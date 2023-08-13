@@ -1,0 +1,6 @@
+[submodule "src/@eco-flow/editor/flow-manager"]
+	path = src/@eco-flow/editor/flow-manager
+	url = https://github.com/RomelSikdar/flow-manager.git
+[submodule "src/@eco-flow/editor/schema-builder"]
+	path = src/@eco-flow/editor/schema-builder
+	url = https://github.com/RomelSikdar/schema-builder.git
