@@ -1,0 +1,23 @@
+{
+  "name": "@eco-flow/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./index.ts",
+  "types": "./types/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tslib": "^2.6.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@eco-flow/config": "file:../config",
+    "@eco-flow/core": "file:"
+  }
+}
