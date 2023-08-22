@@ -102,13 +102,11 @@ export class Config implements cfgInterface.Config {
   }
 
   async listBackupConfigs(): Promise<string[]> {
-    return (await glob(this.configDir + "/backup_*.json"))
-      .map((file) => file.replace(/\\/g, "/"))
-      .map((file) => {
-        const filePathSplit = file.split("/");
-        const length = filePathSplit.length;
-        return filePathSplit[length - 1];
-      });
+    return (await glob(this.configDir + "/backup_*.json")).map((file) => {
+      const filePathSplit = file.split(/\\/g);
+      const length = filePathSplit.length;
+      return filePathSplit[length - 1];
+    });
   }
 
   async deleteConfigFile(ConfigFileName: string): Promise<string[]> {
