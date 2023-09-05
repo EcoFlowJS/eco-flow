@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
+  "bin": {
+    "ecoflow": "./src/bin/index.ts"
+  },
   "scripts": {
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
@@ -25,6 +28,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "commander": "^11.0.0",
     "glob": "^10.3.4",
     "winston": "^3.10.0"
   }

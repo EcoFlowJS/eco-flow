@@ -1,6 +1,4 @@
-import { Config } from "./config";
-import { Logger } from "./utils/logger";
+import { EcoFlow } from "./core";
 
-new Config();
-let alog = new Logger(ecoFlow.config);
-alog.info({ abstract: false });
+new EcoFlow().start();
+console.log("Hello World!");
