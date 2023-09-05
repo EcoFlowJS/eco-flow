@@ -1,5 +1,5 @@
 import { Application, NextFunction } from "express";
-import { ILoggingConfig } from "./logger.interface";
+import { ILoggingConfig } from "../../utils/logger/lib/logger.interface";
 
 export interface configSettings {
   flowFile?: string;

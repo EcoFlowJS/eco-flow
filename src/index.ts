@@ -1,6 +1,5 @@
 import { Config } from "./config";
-import { LogLevel } from "./interfaces/logger.interface";
-import { Logger } from "./utils/Logger";
+import { Logger } from "./utils/logger";
 
 new Config();
 let alog = new Logger(ecoFlow.config);

@@ -1,4 +1,20 @@
-import { configSettings } from "../../interfaces/config.interface";
+/*!
+ * Copyright
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
+
+import { configSettings } from "./config.interface";
 import path from "path";
 import fs from "fs";
 import { homedir } from "os";
@@ -23,6 +39,7 @@ export class Config {
 
   /**
    * Initializes the Global Instance of the Config object with empty configuration settings.
+   * @memberof Config
    */
   private initConfig(): Config {
     if (typeof global.ecoFlow === "undefined") global.ecoFlow = {};
@@ -34,6 +51,7 @@ export class Config {
 
   /**
    * Load the config file and if notg it exists in the config directory then load default config.
+   * @memberof Config
    */
   private loadConfig(): void {
     let config = this.defaultConfig;
@@ -49,6 +67,8 @@ export class Config {
   }
 
   /**
+   * Extract the configuration from from the config object and return it as a string.
+   * @memberof Config
    * @param object object containing configuration information.
    * @param key name of the configuration object.
    * @param isTypedArray boolean indicating if the configuration object is encoded as a typed array.
@@ -74,7 +94,47 @@ export class Config {
   }
 
   /**
+   * Save the configuration object to the configuration directory.
+   * @memberof Config
+   * @param cfg Configuration information to be stored in the config.
+   */
+  private saveConfig(cfg: configSettings = this.config): void {
+    fs.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
+      encoding: "utf8",
+    });
+  }
+
+  /**
+   * Create the Base or Default Configuration file in the configutation directory.
+   * @memberof Config
+   */
+  private createConfigFile(): void {
+    if (!fs.existsSync(this.configDir)) {
+      fs.mkdirSync(this.configDir, { recursive: true });
+
+      this.saveConfig();
+    }
+  }
+
+  /**
+   * Configuration Settings to up updated.
+   * @memberof Config
+   * @param cfg Configuration information to be updated in the config file in the config directory.
+   */
+  private updateConfigFile(cfg: configSettings): void {
+    if (fs.existsSync(this.configFile)) {
+      const backupConfigPath = path.join(
+        this.configDir,
+        "backup_" + new Date().getTime() + ".json"
+      );
+      fs.renameSync(this.configFile, backupConfigPath);
+    }
+    this.saveConfig(cfg);
+  }
+
+  /**
    * Returns the configuration object for a given key. If the configuration object is present it will be returned else will be undefined.
+   * @memberof Config
    * @param key string name of the configuration.
    * @returns object or string containing configuration information.
    */
@@ -93,43 +153,8 @@ export class Config {
   }
 
   /**
-   * Save the configuration object to the configuration directory.
-   * @param cfg Configuration information to be stored in the config.
-   */
-  private saveConfig(cfg: configSettings = this.config): void {
-    fs.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
-      encoding: "utf8",
-    });
-  }
-
-  /**
-   * Create the Base or Default Configuration file in the configutation directory.
-   */
-  private createConfigFile(): void {
-    if (!fs.existsSync(this.configDir)) {
-      fs.mkdirSync(this.configDir, { recursive: true });
-
-      this.saveConfig();
-    }
-  }
-
-  /**
-   * Configuration Settings to up updated.
-   * @param cfg Configuration information to be updated in the config file in the config directory.
-   */
-  private updateConfigFile(cfg: configSettings): void {
-    if (fs.existsSync(this.configFile)) {
-      const backupConfigPath = path.join(
-        this.configDir,
-        "backup_" + new Date().getTime() + ".json"
-      );
-      fs.renameSync(this.configFile, backupConfigPath);
-    }
-    this.saveConfig(cfg);
-  }
-
-  /**
    * Configuration Settings to save or update to the config file in the config directory.
+   * @memberof Config
    * @param cfg Configuration Settings to up stored or update.
    * @returns object or string containing all configuration information.
    */
@@ -149,6 +174,7 @@ export class Config {
 
   /**
    * List all the available backup configs availabe.
+   * @memberof Config
    * @returns Array of backup configurations names.
    */
   async listBackupConfigs(): Promise<string[]> {
@@ -161,6 +187,7 @@ export class Config {
 
   /**
    * Delete the backup config file if it exists and returns list of backup configurations present in the config directory.
+   * @memberof Config
    * @param ConfigFileName Name of the backuped Configuration to be deleted.
    * @returns Array of backup configurations names.
    */
