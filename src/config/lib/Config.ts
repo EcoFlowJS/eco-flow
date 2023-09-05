@@ -10,13 +10,25 @@ import defaultConfig from "./default.config";
  * for the application component that will be used to run the application.
  */
 export class Config {
-  defaultConfig: configSettings;
-  configDir =
+  private defaultConfig: configSettings;
+  private configDir =
     process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow/config";
-  configFile = path.join(this.configDir, "ecoflow.json");
+  private configFile = path.join(this.configDir, "ecoflow.json");
+  private config!: configSettings;
   constructor() {
     this.defaultConfig = defaultConfig;
-    this.loadConfig();
+    this.initConfig().loadConfig();
+    return this;
+  }
+
+  /**
+   * Initializes the Global Instance of the Config object with empty configuration settings.
+   */
+  private initConfig(): Config {
+    if (typeof global.ecoFlow === "undefined") global.ecoFlow = {};
+
+    if (typeof global.ecoFlow.config === "undefined")
+      global.ecoFlow.config = {};
     return this;
   }
 
@@ -30,7 +42,10 @@ export class Config {
       ...this.defaultConfig,
       ...config,
     };
-    global.config = config;
+
+    global.ecoFlow.config = config;
+
+    this.config = global.ecoFlow.config;
   }
 
   /**
@@ -73,7 +88,7 @@ export class Config {
       throw new Error(
         "Error getting configuration with key value null or undefined"
       );
-
+    let config: configSettings = this.config;
     return this.getConfig({ config }, key, true);
   }
 
@@ -81,7 +96,7 @@ export class Config {
    * Save the configuration object to the configuration directory.
    * @param cfg Configuration information to be stored in the config.
    */
-  private saveConfig(cfg: unknown = { config }): void {
+  private saveConfig(cfg: configSettings = this.config): void {
     fs.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
     });
@@ -121,12 +136,9 @@ export class Config {
   setConfig(cfg: configSettings): configSettings {
     if (!fs.existsSync(this.configFile)) this.createConfigFile();
 
-    {
-      config;
-    }
     const updatedConfig: configSettings = {
       ...this.defaultConfig,
-      ...config,
+      ...this.config,
       ...cfg,
     };
 

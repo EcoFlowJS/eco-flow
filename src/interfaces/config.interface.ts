@@ -1,5 +1,5 @@
 import { Application, NextFunction } from "express";
-import { LLoggingConfig } from "./logger.interface";
+import { ILoggingConfig } from "./logger.interface";
 
 export interface configSettings {
   flowFile?: string;
@@ -65,7 +65,7 @@ export interface configSettings {
     enabled?: boolean;
     ui?: boolean;
   };
-  logging?: LLoggingConfig;
+  logging?: ILoggingConfig;
 
   // TO-DO Editor Settings
 

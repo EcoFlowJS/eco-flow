@@ -1,5 +1,6 @@
 import { homedir } from "os";
 import { configSettings } from "../../interfaces/config.interface";
+import { LogLevel } from "../../interfaces/logger.interface";
 const baseUserDir =
   process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
@@ -177,11 +178,10 @@ const defaultConfig: configSettings = {
   },
   /** Configure the logging output */
   logging: {
-    /** Only console logging is currently supported */
-    console: {
-      enabled: true,
-      level: "info",
-    },
+    enabled: true,
+    level: LogLevel.INFO,
+    format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
+    console: true,
   },
   /** Configure how the runtime will handle external npm modules.
    * This covers:
