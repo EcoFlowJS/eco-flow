@@ -1,4 +1,4 @@
-import { Application, NextFunction } from "express";
+import { Application, NextFunction, Request, Response } from "express";
 import { ILoggingConfig } from "../../utils/logger/lib/logger.interface";
 
 export interface configSettings {

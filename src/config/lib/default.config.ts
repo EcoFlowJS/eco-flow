@@ -2,7 +2,7 @@ import { homedir } from "os";
 import { configSettings } from "./config.interface";
 import { LogLevel } from "../../utils/logger/lib/logger.interface";
 const baseUserDir =
-  process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
+  process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
 const defaultConfig: configSettings = {
   /*******************************************************************************

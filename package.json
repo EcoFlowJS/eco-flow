@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "bin": {
-    "ecoflow": "./src/bin/index.ts"
+    "ecoflow": "./dist/bin/index.js"
   },
   "scripts": {
     "build": "tsc --build",
