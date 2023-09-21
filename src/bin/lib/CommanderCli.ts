@@ -26,11 +26,11 @@ export class CommanderCli {
       command.action((options: CommandOptions, cmd: Command) => {
         let opts: { [key: string]: any } = {};
         let parent = cmd.parent;
-        opts[cmd.name()] = { ...options };
+        opts["_" + cmd.name()] = { ...options };
         while (parent != null) {
           let tmp: { [key: string]: any } = { ...opts };
           opts = {};
-          opts[parent.name()] = { ...tmp };
+          opts["_" + parent.name()] = { ...tmp };
           parent = parent.parent;
         }
         this.opts = { ...this.opts, ...opts };
@@ -97,6 +97,6 @@ export class CommanderCli {
    * @returns object of option arguments passed.
    */
   get commands(): { [key: string]: any } {
-    return this.opts.ecoflow;
+    return this.opts._ecoflow;
   }
 }

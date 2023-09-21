@@ -1,8 +1,9 @@
-import { Config } from "../../config";
-import { Logger } from "../../utils/logger";
+import { EcoFlowArgs } from "../interfaces/EcoFlow.interface";
 
 export class EcoFlow {
-  constructor(args: { [key: string]: any } = {}) {}
+  constructor(args: EcoFlowArgs = {}) {
+    if (typeof args.hasOwnProperty("cli")) console.log(args.cli);
+  }
 
   private init() {}
 

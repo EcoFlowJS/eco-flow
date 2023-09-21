@@ -24,6 +24,8 @@ import defaultConfig from "./default.config";
 /**
  * Configuration for the application environment that will be used to configure the application environment
  * for the application component that will be used to run the application.
+ * @param Directory The directory where the application will save the configuration files.
+ * @param Name The name of the configuration file that will be saved.
  */
 export class Config {
   private defaultConfig: configSettings;
@@ -31,7 +33,20 @@ export class Config {
     process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow/config";
   private configFile = path.join(this.configDir, "ecoflow.json");
   private config!: configSettings;
-  constructor() {
+
+  constructor(Directory?: string, Name?: string) {
+    if (
+      typeof Directory !== "undefined" &&
+      fs.existsSync(Directory) &&
+      fs.lstatSync(Directory).isDirectory()
+    )
+      this.configDir = Directory;
+
+    if(typeof Name !== "undefined") {
+      Name = Name + ".json";
+      this.configFile = path.join(this.configDir, Name);
+    }
+
     this.defaultConfig = defaultConfig;
     this.initConfig().loadConfig();
     return this;
