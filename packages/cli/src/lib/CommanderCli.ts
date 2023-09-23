@@ -1,7 +1,7 @@
 import { Command, CommandOptions } from "commander";
 import baseCommands from "../commands/command";
 import adminCommand from "../commands/admin";
-import { EcoFlow } from "../../core";
+import { EcoFlow } from "@eco-flow/core";
 
 /**
  * Command manager for the command manager service provider interface of the application component.

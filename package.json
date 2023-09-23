@@ -2,8 +2,9 @@
   "name": "eco-flow",
   "version": "1.0.0",
   "description": "",
+  "main": "./dist/ecoflow.js",
   "bin": {
-    "ecoflow": "./dist/index.js"
+    "ecoflow": "./dist/ecoflow.js"
   },
   "scripts": {
     "build": "tsc --build --force",
@@ -32,6 +33,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@eco-flow/cli": "^1.0.0",
+    "@eco-flow/core": "^1.0.0",
+    "@eco-flow/utils": "^1.0.0",
     "commander": "^11.0.0",
     "glob": "^10.3.4",
     "lodash": "^4.17.21",

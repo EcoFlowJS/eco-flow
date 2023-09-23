@@ -1,0 +1,19 @@
+{
+  "name": "@eco-flow/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --force",
+    "watch": "tsc --watch",
+    "cleanBuild": "tsc --build --clean && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eco-flow/cli": "^1.0.0",
+    "@eco-flow/config": "^1.0.0"
+  }
+}

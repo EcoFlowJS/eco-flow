@@ -1,5 +1,5 @@
 import { Option, Command } from "commander";
-import { configSettings } from "../../config/lib/config.interface";
+import { configSettings } from "@eco-flow/config";
 const program = new Command("ecoflow");
 export default program;
 
