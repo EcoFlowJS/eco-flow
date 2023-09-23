@@ -1,5 +1,5 @@
 import { Application, NextFunction, Request, Response } from "express";
-import { ILoggingConfig } from "../../utils/logger/lib/logger.interface";
+import { ILoggingConfig } from "@eco-flow/utils";
 
 export interface configSettings {
   flowFile?: string;

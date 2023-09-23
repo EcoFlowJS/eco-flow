@@ -2,22 +2,26 @@
   "name": "eco-flow",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
   "bin": {
-    "ecoflow": "./dist/bin/index.js"
+    "ecoflow": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc --build",
-    "build:clean": "tsc --build --clean",
+    "build": "tsc --build --force",
+    "build:clean": "tsc --build --clean && npm run build",
     "start": "npm run build:clean && node .",
     "development": "nodemon ./src/index.ts",
     "dev": "npm run development"
   },
+  "workspaces": [
+    "packages/*",
+    "packages/*/*"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.4",
+    "@types/lodash": "^4.14.199",
     "@types/node": "^20.5.8",
     "@types/node-ipc": "^9.2.0",
     "@types/react": "^18.2.21",
@@ -30,6 +34,7 @@
   "dependencies": {
     "commander": "^11.0.0",
     "glob": "^10.3.4",
+    "lodash": "^4.17.21",
     "winston": "^3.10.0"
   }
 }

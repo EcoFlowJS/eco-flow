@@ -1,6 +1,6 @@
 import { homedir } from "os";
 import { configSettings } from "./config.interface";
-import { LogLevel } from "../../utils/logger/lib/logger.interface";
+import { LogLevel } from "@eco-flow/utils";
 const baseUserDir =
   process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 

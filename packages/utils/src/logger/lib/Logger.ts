@@ -16,7 +16,7 @@
 
 import winston, { createLogger, format, transports } from "winston";
 const { combine, timestamp, label, prettyPrint, printf, colorize } = format;
-import { configSettings } from "../../../config/lib/config.interface";
+import { configSettings } from "@eco-flow/config";
 import {
   ILoggingConfig,
   ILoggingDefaultConfig,

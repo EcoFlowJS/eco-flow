@@ -1,6 +1,6 @@
-[submodule "src/editors/flow-manager"]
-	path = src/editors/flow-manager
+[submodule "editors/flow-manager"]
+	path = editors/flow-manager
 	url = https://github.com/RomelSikdar/flow-manager.git
-[submodule "src/editors/schema-builder"]
-	path = src/editors/schema-builder
+[submodule "editors/schema-builder"]
+	path = editors/schema-builder
 	url = https://github.com/RomelSikdar/schema-builder.git

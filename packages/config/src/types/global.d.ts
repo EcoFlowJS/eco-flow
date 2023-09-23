@@ -1,4 +1,4 @@
-import { configSettings } from "../config/lib/config.interface";
+import { configSettings } from "../lib/config.interface";
 
 export {};
 
