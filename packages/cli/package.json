@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --build --force",
     "watch": "tsc --watch",
-    "cleanBuild": "tsc --clean && npm run build"
+    "cleanBuild": "tsc --build --clean && npm run build"
   },
   "keywords": [],
   "author": "",
