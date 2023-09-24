@@ -1,8 +1,8 @@
 import { Command } from "commander";
-const program = new Command("admin");
-export default program;
+const adminCommand = new Command("admin");
+export default adminCommand;
 
-program
+adminCommand
   .description("This is a subcommand with options")
   .passThroughOptions(true)
   .option("-s, --directory <directory>", "Specify a directory")

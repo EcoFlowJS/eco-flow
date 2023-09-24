@@ -1,9 +1,9 @@
 import { Option, Command } from "commander";
 import { configSettings } from "@eco-flow/config";
-const program = new Command("ecoflow");
-export default program;
+const baseCommand = new Command("ecoflow");
+export default baseCommand;
 
-program
+baseCommand
   .configureHelp({ showGlobalOptions: true })
   .addOption(new Option("-h, --host <address>", "Set a specific host binding"))
   .addOption(new Option("-p, --port <number>", "Port to listen on").env("PORT"))

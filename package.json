@@ -2,9 +2,9 @@
   "name": "eco-flow",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/ecoflow.js",
+  "main": "./dist/index.js",
   "bin": {
-    "ecoflow": "./dist/ecoflow.js"
+    "ecoflow": "./dist/bin/ecoflow.js"
   },
   "scripts": {
     "build": "tsc --build --force",

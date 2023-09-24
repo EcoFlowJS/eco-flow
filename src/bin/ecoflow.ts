@@ -1,12 +1,11 @@
 #! /usr/bin/env node
 import fs from "fs";
-import { CommanderCli } from "@eco-flow/cli";
+import { CommanderCli, ICommand } from "@eco-flow/cli";
 import { LogLevel } from "@eco-flow/utils";
 import { EcoFlow } from "@eco-flow/core";
-import { ICommand } from "@eco-flow/cli";
 import { has } from "lodash";
 
-let commands = new CommanderCli().parseArgs().commands;
+let commands = new CommanderCli().parseArgs().args;
 let issetCommand = (key: string) => has(commands, key);
 let isAdminCommand = issetCommand("_admin");
 

@@ -1,18 +1,25 @@
 import { Command, CommandOptions } from "commander";
-import baseCommands from "../commands/command";
-import adminCommand from "../commands/admin";
 import { EcoFlow } from "@eco-flow/core";
+import baseCommand from "../commands/command";
+import adminCommand from "../commands/admin";
 
 /**
  * Command manager for the command manager service provider interface of the application component.
  * This class is responsible for managing the command manager service provider interface of the application component
  * and provides the command manager service provider interface to manage the application component using the command manager.
+ * @param {Command} baseCommand List of base commands to be used by the command manager.
+ * @param {Command} command Array of subcommands to be used by the command manager.
  */
 export class CommanderCli {
-  private command: Command = baseCommands;
+  private command: Command = baseCommand;
+  private commands!: Command[];
   private opts: { [key: string]: any } = {};
   constructor() {
-    this.initCommanders();
+    if (typeof baseCommand !== "undefined") {
+      this.command = baseCommand;
+      this.commands = [adminCommand];
+      this.initCommanders();
+    }
   }
 
   /**
@@ -55,7 +62,7 @@ export class CommanderCli {
       )
       .configureHelp({
         visibleOptions: (cmd) => {
-          return [...baseCommands.options];
+          return [...this.command.options];
         },
       })
       .helpOption("-?, --help", "Show this help message")
@@ -68,7 +75,9 @@ export class CommanderCli {
    * @returns instance of CommanderCli class.
    */
   private initSubcommands(): CommanderCli {
-    this.command.addCommand(adminCommand);
+    this.commands.forEach((command: Command) => {
+      this.command.addCommand(command);
+    });
     return this;
   }
 
@@ -77,7 +86,7 @@ export class CommanderCli {
    * @returns instance of CommanderCli class.
    */
   private initCommanders(): CommanderCli {
-    this.addParser([baseCommands, adminCommand])
+    this.addParser([this.command, ...this.commands])
       .configureCommanders()
       .initSubcommands();
     return this;
@@ -96,7 +105,7 @@ export class CommanderCli {
    * Return the passed option arguments to objects.
    * @returns object of option arguments passed.
    */
-  get commands(): { [key: string]: any } {
+  get args(): { [key: string]: any } {
     return this.opts._ecoflow;
   }
 }
