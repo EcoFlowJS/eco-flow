@@ -19,6 +19,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@eco-flow/types": "^1.0.0",
     "@eco-flow/utils": "^1.0.0",
     "glob": "^10.3.6"
   }

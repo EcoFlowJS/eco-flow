@@ -16,15 +16,15 @@
 
 import winston, { createLogger, format, transports } from "winston";
 const { combine, timestamp, label, prettyPrint, printf, colorize } = format;
-import { configSettings } from "@eco-flow/config";
 import {
+  configSettings,
   ILoggingConfig,
   ILoggingDefaultConfig,
-  LogLevel,
-} from "./logger.interface";
+} from "@eco-flow/types";
 import { homedir } from "os";
 import fs from "fs";
 import { LogLevelName } from "./logger.const";
+import { LogLevel } from "./logLevels";
 
 /**
  * Default configuration for logging output. This configuration is used by the logging
@@ -357,3 +357,4 @@ export class Logger {
     return this;
   }
 }
+

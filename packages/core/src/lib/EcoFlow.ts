@@ -1,4 +1,5 @@
-import { EcoFlowArgs } from "../interfaces/EcoFlow.interface";
+import { Config } from "@eco-flow/config";
+import { EcoFlowArgs } from "@eco-flow/types";
 
 export class EcoFlow {
   constructor(args: EcoFlowArgs = {}) {
@@ -11,6 +12,7 @@ export class EcoFlow {
     console.log("====================================");
     console.log("working...");
     console.log("====================================");
+    new Config();
   }
 
   static get Version(): string {

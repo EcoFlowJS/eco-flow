@@ -1,7 +1,7 @@
 import { Application, NextFunction, Request, Response } from "express";
-import { ILoggingConfig } from "@eco-flow/utils";
+import { ILoggingConfig } from "../utils/logger";
 
-export interface configSettings {
+export type configSettings = {
   flowFile?: string;
   credentialSecret?: string;
   flowFilePretty?: boolean;
@@ -82,4 +82,4 @@ export interface configSettings {
 
   api_port?: string | number;
   api_base_url?: string;
-}
+};

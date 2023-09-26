@@ -1,8 +1,9 @@
 #! /usr/bin/env node
 import fs from "fs";
-import { CommanderCli, ICommand } from "@eco-flow/cli";
-import { LogLevel } from "@eco-flow/utils";
+import { ICommand } from "@eco-flow/types";
+import { CommanderCli } from "@eco-flow/cli";
 import { EcoFlow } from "@eco-flow/core";
+import { LogLevel } from "@eco-flow/utils";
 import { has } from "lodash";
 
 let commands = new CommanderCli().parseArgs().args;

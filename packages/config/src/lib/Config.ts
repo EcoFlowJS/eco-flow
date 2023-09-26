@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-import { configSettings } from "./config.interface";
+import { configSettings } from "@eco-flow/types";
 import path from "path";
 import fs from "fs";
 import { homedir } from "os";

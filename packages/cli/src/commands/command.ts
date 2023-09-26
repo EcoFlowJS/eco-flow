@@ -1,5 +1,4 @@
 import { Option, Command } from "commander";
-import { configSettings } from "@eco-flow/config";
 const baseCommand = new Command("ecoflow");
 export default baseCommand;
 
@@ -27,9 +26,3 @@ baseCommand
   )
   .addOption(new Option("-v, --verbose", "Enable verbose output"))
   .helpOption("-?, --help", "Show this help message");
-
-export interface ICommand extends configSettings {
-  auth?: boolean;
-  configDir?: string;
-  configName?: string;
-}

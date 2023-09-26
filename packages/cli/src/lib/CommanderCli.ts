@@ -1,5 +1,4 @@
 import { Command, CommandOptions } from "commander";
-import { EcoFlow } from "@eco-flow/core";
 import baseCommand from "../commands/command";
 import adminCommand from "../commands/admin";
 
@@ -52,8 +51,8 @@ export class CommanderCli {
    */
   private configureCommanders(): CommanderCli {
     this.command
-      .version(EcoFlow.Version)
-      .addHelpText("beforeAll", `Eco-Flow v${EcoFlow.Version}`)
+      .version(CommanderCli.Version)
+      .addHelpText("beforeAll", `Eco-Flow v${CommanderCli.Version}`)
       .usage(
         `[-?] [-h] [--settings settings.js] [--userDir DIR]
                [--port PORT] [--title TITLE] [--safe] [flows.json]
@@ -107,5 +106,9 @@ export class CommanderCli {
    */
   get args(): { [key: string]: any } {
     return this.opts._ecoflow;
+  }
+
+  static get Version(): string {
+    return "1.0";
   }
 }

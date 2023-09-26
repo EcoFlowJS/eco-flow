@@ -1,4 +1,4 @@
-export interface ILoggingConfig {
+export type ILoggingConfig = {
   enabled: boolean;
   level: number;
   format?: string;
@@ -19,9 +19,9 @@ export interface ILoggingConfig {
     port?: number;
     path?: string;
   };
-}
+};
 
-export interface ILoggingDefaultConfig {
+export type ILoggingDefaultConfig = {
   enabled: boolean;
   level: number;
   format: string;
@@ -42,12 +42,4 @@ export interface ILoggingDefaultConfig {
     port: number;
     path: string;
   };
-}
-
-export enum LogLevel {
-  ERROR = 0,
-  WARNING = 1,
-  INFO = 2,
-  VERBOSE = 4,
-  DEBUG = 5,
-}
+};

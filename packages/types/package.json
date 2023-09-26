@@ -1,0 +1,17 @@
+{
+  "name": "@eco-flow/types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./index.js",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eco-flow/types": "^1.0.0",
+    "typescript": "^5.2.2"
+  }
+}
