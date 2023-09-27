@@ -1,9 +1,12 @@
 {
   "name": "@eco-flow/cli",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
+  "bin": {
+    "ecoflow": "./dist/bin/index.js"
+  },
   "scripts": {
     "build": "tsc --build --force",
     "watch": "tsc --watch",
@@ -13,9 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/config": "^1.0.0",
-    "@eco-flow/core": "^1.0.0",
-    "@eco-flow/types": "^1.0.0",
+    "@eco-flow/types": "^0.0.1",
     "commander": "^11.0.0"
   }
 }

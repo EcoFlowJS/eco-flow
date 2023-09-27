@@ -1,7 +1,6 @@
 {
-  "name": "@eco-flow/core",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@eco-flow/ecoflow",
+  "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -13,8 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/cli": "^1.0.0",
-    "@eco-flow/config": "^1.0.0",
-    "@eco-flow/types": "^1.0.0"
-  }
+    "@eco-flow/types": "^0.0.1"
+  },
+  "description": ""
 }

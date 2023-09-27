@@ -1,5 +1,5 @@
 import { Application, NextFunction, Request, Response } from "express";
-import { ILoggingConfig } from "../utils/logger";
+import { ILoggingConfig } from "../../utils/logger";
 
 export type configSettings = {
   flowFile?: string;

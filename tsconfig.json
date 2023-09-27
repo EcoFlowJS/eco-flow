@@ -110,22 +110,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["./src/**/*"],
-  "exclude": ["./dist"],
-  "references": [
-    {
-      "path": "./packages/cli"
-    },
-    {
-      "path": "./packages/config"
-    },
-    {
-      "path": "./packages/core"
-    },
-    {
-      "path": "./packages/types"
-    },
-    {
-      "path": "./packages/utils"
-    }
-  ]
+  "exclude": ["./dist"]
 }

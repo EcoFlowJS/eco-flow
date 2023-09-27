@@ -1,4 +1,4 @@
-import { Config } from "@eco-flow/config";
+import { Config } from "../config";
 import { EcoFlowArgs } from "@eco-flow/types";
 
 export class EcoFlow {

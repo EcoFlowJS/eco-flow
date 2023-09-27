@@ -1,6 +1,6 @@
 {
   "name": "@eco-flow/utils",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
@@ -16,7 +16,7 @@
     "tslib": "^2.6.2"
   },
   "dependencies": {
-    "@eco-flow/config": "^1.0.0",
+    "@eco-flow/types": "^0.0.1",
     "winston": "^3.10.0"
   }
 }

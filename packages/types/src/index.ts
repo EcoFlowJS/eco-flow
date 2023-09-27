@@ -1,8 +1,7 @@
-import { ecoFlow } from "./core";
+import { ecoFlow } from "./ecoflow";
 
 export * from "./cli";
-export * from "./config";
-export * from "./core";
+export * from "./ecoflow";
 export * from "./utils";
 
 export {};

@@ -1,5 +1,7 @@
 import { ICommand } from "../cli";
-import { configSettings } from "../config";
+import { configSettings } from "./config";
+
+export * from "./config";
 
 export interface EcoFlowArgs {
   cli?: ICommand;

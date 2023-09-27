@@ -1,17 +1,18 @@
 {
   "name": "@eco-flow/types",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
   "main": "./index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --build --force",
+    "watch": "tsc --watch",
+    "cleanBuild": "tsc --build --clean && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/types": "^1.0.0",
     "typescript": "^5.2.2"
-  }
+  },
+  "description": ""
 }

@@ -42,7 +42,7 @@ export class Config {
     )
       this.configDir = Directory;
 
-    if(typeof Name !== "undefined") {
+    if (typeof Name !== "undefined") {
       Name = Name + ".json";
       this.configFile = path.join(this.configDir, Name);
     }
