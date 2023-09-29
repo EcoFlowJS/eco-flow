@@ -10,5 +10,13 @@
   },
   "affected": {
     "defaultBase": "main"
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "cleanBuild": {
+      "dependsOn": ["^build"]
+    }
   }
 }

@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "build": "tsc --build --force",
-    "build:clean": "tsc --build --clean && npm run build",
-    "start": "npm run build:clean && node .",
-    "development": "nodemon ./src/index.ts",
-    "dev": "npm run development"
+    "build": "nx run-many --target=build",
+    "watch:cli": "cd ./packages/cli && npm run watch",
+    "watch:types": "cd ./packages/types && npm run watch",
+    "watch:utils": "cd ./packages/utils && npm run watch",
+    "watch:ecoflow": "cd ./packages/ecoflow && npm run watch",
+    "prewatch": "npm run build",
+    "watch": "nx run-many --target=build && concurrently \"npm run watch:cli\" \"npm run watch:types\" \"npm run watch:utils\" \"npm run watch:ecoflow\""
   },
   "workspaces": [
     "packages/*",
@@ -16,26 +18,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/express": "^4.17.17",
-    "@types/jest": "^29.5.4",
-    "@types/lodash": "^4.14.199",
-    "@types/node": "^20.5.8",
-    "@types/node-ipc": "^9.2.0",
-    "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
     "nx": "16.9.1",
     "nx-cloud": "latest"
   },
-  "dependencies": {
-    "commander": "^11.0.0",
-    "glob": "^10.3.4",
-    "lodash": "^4.17.21",
-    "winston": "^3.10.0"
-  },
-  "main": "index.js",
   "keywords": []
 }
