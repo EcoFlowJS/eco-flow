@@ -6,7 +6,12 @@ import { EcoFlow } from "@eco-flow/ecoflow";
 import { LogLevel } from "@eco-flow/utils";
 import { has } from "lodash";
 
-let commands = new CommanderCli().parseArgs().args;
+let Commander = new CommanderCli()
+  .usesMsgs(`[-?] [-h] [--settings settings.js] [--userDir DIR]
+               [--port PORT] [--title TITLE] [--safe] [flows.json]
+
+       ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]`);
+let commands = Commander.parseArgs().args;
 let issetCommand = (key: string) => has(commands, key);
 let isAdminCommand = issetCommand("_admin");
 

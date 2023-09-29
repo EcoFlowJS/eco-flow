@@ -1,6 +1,7 @@
-import { Command, CommandOptions } from "commander";
+import { Command, CommandOptions, Option } from "commander";
 import baseCommand from "../commands/command";
 import adminCommand from "../commands/admin";
+import { EcoFlow } from "@eco-flow/ecoflow";
 
 /**
  * Command manager for the command manager service provider interface of the application component.
@@ -51,17 +52,14 @@ export class CommanderCli {
    */
   private configureCommanders(): CommanderCli {
     this.command
-      .version(CommanderCli.Version)
-      .addHelpText("beforeAll", `Eco-Flow v${CommanderCli.Version}`)
-      .usage(
-        `[-?] [-h] [--settings settings.js] [--userDir DIR]
-               [--port PORT] [--title TITLE] [--safe] [flows.json]
-
-        ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]`
-      )
+      .version(EcoFlow.Version)
+      .addHelpText("beforeAll", `Eco-Flow v${EcoFlow.Version}`)
       .configureHelp({
         visibleOptions: (cmd) => {
-          return [...this.command.options];
+          return [
+            ...this.command.options,
+            new Option("-?, --help", "Show this help message"),
+          ];
         },
       })
       .helpOption("-?, --help", "Show this help message")
@@ -101,14 +99,20 @@ export class CommanderCli {
   }
 
   /**
+   * Command uses description of the command to be displayed in the command menu.
+   * @param str {String} command description string to be displayed in the menu item.
+   * @returns {CommanderCli} instance of CommanderCli class.
+   */
+  usesMsgs(str: string): CommanderCli {
+    this.command.usage(str);
+    return this;
+  }
+
+  /**
    * Return the passed option arguments to objects.
    * @returns object of option arguments passed.
    */
   get args(): { [key: string]: any } {
     return this.opts._ecoflow;
-  }
-
-  static get Version(): string {
-    return "1.0";
   }
 }

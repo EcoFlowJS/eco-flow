@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.1",
     "nodemon": "^3.0.1",
     "nx": "16.9.1",
     "nx-cloud": "latest"
