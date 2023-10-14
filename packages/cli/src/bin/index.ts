@@ -2,7 +2,7 @@
 import fs from "fs";
 import { ICommand } from "@eco-flow/types";
 import { CommanderCli } from "../";
-import { EcoFlow } from "@eco-flow/ecoflow";
+import EcoFlow, { EcoFactory } from "@eco-flow/ecoflow";
 import { LogLevel } from "@eco-flow/utils";
 import { has } from "lodash";
 
@@ -59,3 +59,4 @@ if (issetCommand("verbose") && typeof commands.verbose === "boolean")
   };
 
 new EcoFlow({ cli: defaultsCliCommands }).start();
+

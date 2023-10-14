@@ -8,6 +8,7 @@ export interface EcoFlowArgs {
   [key: string]: any;
 }
 
-export type ecoFlow = {
+export interface ecoFlow {
   config?: configSettings;
+  [key: string]: unknown;
 };
