@@ -1,4 +1,4 @@
 import { EcoFlow } from "./lib/EcoFlow";
-import EcoFactory from "./lib/factory";
+import EcoContainer from "./lib/EcoContainer";
 export default EcoFlow;
-export { EcoFactory };
+export { EcoContainer };

@@ -2,7 +2,7 @@
 import fs from "fs";
 import { ICommand } from "@eco-flow/types";
 import { CommanderCli } from "../";
-import EcoFlow, { EcoFactory } from "@eco-flow/ecoflow";
+import EcoFlow from "@eco-flow/ecoflow";
 import { LogLevel } from "@eco-flow/utils";
 import { has } from "lodash";
 
