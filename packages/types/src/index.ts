@@ -7,10 +7,12 @@ export * from "./utils";
 export {};
 
 declare global {
-  var ecoFlow: ecoFlow;
+  var ecoFlow: loadedEcoFlow;
   namespace NodeJS {
     interface Global {
-      strapi: ecoFlow;
+      ecoFlow: loadedEcoFlow;
     }
   }
 }
+
+export type loadedEcoFlow = Required<ecoFlow>;

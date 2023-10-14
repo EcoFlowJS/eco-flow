@@ -26,10 +26,7 @@ export class EcoFlow {
     );
     const configCli = omit(this.cliArgs, ["configDir", "configName", "auth"]);
     this.tempUpdateConfig(configCli);
-    this.container
-      .register("logger", new Logger(ecoFlow.config!))
-      .register("abc", abc)
-      .get("abc");
+    this.container.register("logger", new Logger(ecoFlow.config!));
   }
 
   private tempUpdateConfig(config: configSettings) {
@@ -57,5 +54,9 @@ export class EcoFlow {
 class abc {
   constructor() {
     console.log("hi");
+  }
+
+  lol() {
+    console.log("yo");
   }
 }

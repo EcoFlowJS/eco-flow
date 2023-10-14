@@ -18,16 +18,12 @@ export default class EcoContainer implements IEcoContainer {
 
     if (this.registered.has(name)) {
       const resolver = this.registered.get(name);
-
-      if (typeof resolver === "function") {
-        this.resolved.set(name, new resolver());
-      } else {
-        this.resolved.set(name, resolver);
-      }
-
+      if (typeof resolver === "function")
+        this.resolved.set(name, new (resolver as any)(ecoFlow, args));
+      else this.resolved.set(name, resolver);
       return this.resolved.get(name);
     }
 
-    throw new Error(`Could not resolve service ${name}`);
+    return undefined;
   }
 }
