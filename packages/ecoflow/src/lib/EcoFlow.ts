@@ -33,8 +33,9 @@ export class EcoFlow {
     ecoFlow.config = merge(ecoFlow.config, config);
   }
 
-  start(): void {
+  start(): EcoFlow {
     this.init();
+    return this;
   }
 
   get config(): Config {
@@ -48,15 +49,5 @@ export class EcoFlow {
   static get Version(): string {
     let packageVersion: string = require("../../package.json").version;
     return packageVersion;
-  }
-}
-
-class abc {
-  constructor() {
-    console.log("hi");
-  }
-
-  lol() {
-    console.log("yo");
   }
 }

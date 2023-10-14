@@ -15,4 +15,4 @@ declare global {
   }
 }
 
-export type loadedEcoFlow = Required<ecoFlow>;
+export type loadedEcoFlow = ecoFlow;
