@@ -14,7 +14,8 @@ export type loadedEcoFlow = Required<EcoFlow>;
 
 export interface EcoFlow {
   isAuth: boolean;
-  config: Config;
-  logger: Logger;
+  get config(): Config;
+  get logger(): Logger;
+  get Version(): string;
 }
 

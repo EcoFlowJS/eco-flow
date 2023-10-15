@@ -32,12 +32,8 @@ class EcoFlow implements IEcoFlow {
     const configCli = omit(this.cliArgs, ["configDir", "configName", "auth"]);
 
     this.container = new EcoContainer();
-
     this.container
-      .register(
-        "config",
-        new Config(this.cliArgs.configDir, this.cliArgs.configName, configCli)
-      )
+      .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger());
   }
 
@@ -52,6 +48,11 @@ class EcoFlow implements IEcoFlow {
 
   get logger() {
     return this.container.get("logger");
+  }
+
+  get Version(): string {
+    let packageVersion: string = require("../../package.json").version;
+    return packageVersion;
   }
 
   static get Version(): string {
