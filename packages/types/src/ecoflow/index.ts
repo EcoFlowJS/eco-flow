@@ -1,4 +1,5 @@
 import { ICommand } from "../cli";
+import { Server } from "../service";
 import { Logger } from "../utils";
 import { Config } from "./config";
 
@@ -16,6 +17,7 @@ export type loadedEcoFlow = Required<EcoFlow>;
 
 export interface EcoFlow {
   isAuth: boolean;
+  server: Server;
   get config(): Config;
   get logger(): Logger;
   get Version(): string;

@@ -3,6 +3,7 @@ import { loadedEcoFlow } from "./ecoflow";
 export * from "./cli";
 export * from "./ecoflow";
 export * from "./utils";
+export * from "./service";
 
 export {};
 

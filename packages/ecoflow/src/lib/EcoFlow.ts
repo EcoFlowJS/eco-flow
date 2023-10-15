@@ -5,40 +5,44 @@ import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
 import EcoContainer from "./EcoContainer";
 import { EcoFlow as IEcoFlow } from "@eco-flow/types";
+import { Server } from "../service/EcoServer";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
   isAuth: boolean = false;
-  private cliArgs: ICommand = {};
+
+  server: Server;
+
   private container!: EcoContainer;
+
   constructor(args: EcoOptions = {}) {
     global.ecoFlow = this;
-    if (has(args, "cli")) this.cliArgs = { ...args.cli };
-  }
-
-  private init() {
     dotenv.config();
-    if (!has(this.cliArgs, "configDir")) {
+    let cliArgs: ICommand = {};
+    if (has(args, "cli")) cliArgs = { ...args.cli };
+
+    if (!has(cliArgs, "configDir")) {
       if (has(process.env, "configDir"))
-        this.cliArgs.configDir = process.env.configDir;
+        cliArgs.configDir = process.env.configDir;
     }
 
     let configDir = undefined;
     let configName = undefined;
 
-    if (has(this.cliArgs, "auth")) this.isAuth = true;
-    if (has(this.cliArgs, "configDir")) configDir = this.cliArgs.configDir;
-    if (has(this.cliArgs, "configName")) configName = this.cliArgs.configName;
-    const configCli = omit(this.cliArgs, ["configDir", "configName", "auth"]);
+    if (has(cliArgs, "auth")) this.isAuth = true;
+    if (has(cliArgs, "configDir")) configDir = cliArgs.configDir;
+    if (has(cliArgs, "configName")) configName = cliArgs.configName;
+    const configCli = omit(cliArgs, ["configDir", "configName", "auth"]);
 
     this.container = new EcoContainer();
     this.container
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger());
+
+    this.server = new Server(this);
   }
 
   start(): EcoFlow {
-    this.init();
     return this;
   }
 
