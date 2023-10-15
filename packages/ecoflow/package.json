@@ -16,6 +16,8 @@
     "@eco-flow/utils": "^0.0.1",
     "dotenv": "^16.3.1",
     "glob": "^10.3.10",
+    "koa": "^2.14.2",
+    "koa-router": "^11.0.2",
     "lodash": "^4.17.21"
   },
   "description": ""
