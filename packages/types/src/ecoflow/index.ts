@@ -3,7 +3,9 @@ import { Logger } from "../utils";
 import { Config } from "./config";
 
 export * from "./config";
+export * from "./helper";
 export * from "./EcoContainer";
+export * from "./EcoFactory";
 
 export interface EcoOptions {
   cli?: ICommand;
