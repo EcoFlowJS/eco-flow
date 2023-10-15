@@ -14,12 +14,13 @@
  * limitations under the License.
  **/
 
-import { configSettings } from "@eco-flow/types";
+import { configSettings, Config as IConfig } from "@eco-flow/types";
 import path from "path";
 import fs from "fs";
 import { homedir } from "os";
 import { glob } from "glob";
 import defaultConfig from "./default.config";
+import { merge } from "lodash";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment
@@ -27,14 +28,14 @@ import defaultConfig from "./default.config";
  * @param Directory The directory where the application will save the configuration files.
  * @param Name The name of the configuration file that will be saved.
  */
-export class Config {
+export class Config implements IConfig {
   private defaultConfig: configSettings;
   private configDir =
     process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow/config";
   private configFile = path.join(this.configDir, "ecoflow.json");
-  private config!: configSettings;
+  _config: configSettings = {};
 
-  constructor(Directory?: string, Name?: string) {
+  constructor(Directory?: string, Name?: string, tempConfig?: configSettings) {
     if (
       typeof Directory !== "undefined" &&
       fs.existsSync(Directory) &&
@@ -48,20 +49,17 @@ export class Config {
     }
 
     this.defaultConfig = defaultConfig;
-    this.initConfig().loadConfig();
+    this.loadConfig();
+    if (typeof tempConfig !== "undefined") this.tempConfigUpdate(tempConfig);
     return this;
   }
 
   /**
-   * Initializes the Global Instance of the Config object with empty configuration settings.
-   * @memberof Config
+   * Update the configuration of the application based on the temporary configuration.
+   * @param tempConfig temporary configuration options object containing the configuration settings to update the configuration.
    */
-  private initConfig(): Config {
-    if (typeof global.ecoFlow === "undefined") global.ecoFlow = {};
-
-    if (typeof global.ecoFlow.config === "undefined")
-      global.ecoFlow.config = {};
-    return this;
+  private tempConfigUpdate(tempConfig: configSettings) {
+    merge(this._config, tempConfig);
   }
 
   /**
@@ -76,9 +74,7 @@ export class Config {
       ...config,
     };
 
-    global.ecoFlow.config = config;
-
-    this.config = global.ecoFlow.config;
+    this._config = config;
   }
 
   /**
@@ -113,7 +109,7 @@ export class Config {
    * @memberof Config
    * @param cfg Configuration information to be stored in the config.
    */
-  private saveConfig(cfg: configSettings = this.config): void {
+  private saveConfig(cfg: configSettings = this._config): void {
     fs.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
     });
@@ -163,7 +159,7 @@ export class Config {
       throw new Error(
         "Error getting configuration with key value null or undefined"
       );
-    let config: configSettings = this.config;
+    let config: configSettings = this._config;
     return this.getConfig({ config }, key, true);
   }
 
@@ -178,7 +174,7 @@ export class Config {
 
     const updatedConfig: configSettings = {
       ...this.defaultConfig,
-      ...this.config,
+      ...this._config,
       ...cfg,
     };
 

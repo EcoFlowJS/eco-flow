@@ -19,7 +19,7 @@ const { combine, timestamp, label, prettyPrint, printf, colorize } = format;
 import {
   configSettings,
   ILoggingConfig,
-  ILoggingDefaultConfig,
+  Logger as ILogger,
 } from "@eco-flow/types";
 import { homedir } from "os";
 import fs from "fs";
@@ -31,7 +31,7 @@ import { LogLevel } from "./logLevels";
  * subsystem to configure logging configuration for the application level logging subsystem
  * and provides a default configuration for the application level logging subsystem.
  */
-const defaultConfig: ILoggingDefaultConfig = {
+const defaultConfig: ILoggingConfig = {
   enabled: true,
   level: LogLevel.INFO,
   format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
@@ -70,7 +70,7 @@ const defaultConfig: ILoggingDefaultConfig = {
  * Logger for the application environment that will be used to log to the application level log output
  * for the application component that will be used to run the application.
  */
-export class Logger {
+export class Logger implements ILogger {
   private loggerConfig!: ILoggingConfig;
   private logger!: winston.Logger;
   private isEnabled!: boolean;
@@ -93,9 +93,9 @@ export class Logger {
    * Logger for the application environment that will be used to log to the application level log output
    * for the application component that will be used to run the application.
    * @memberof Logger
-   * @param Configuration object containing configuration settings for logging configuration settings for this instances.
    */
-  constructor({ logging }: configSettings) {
+  constructor() {
+    const logging = ecoFlow.config._config.logging;
     if (typeof logging !== "undefined")
       this.loggerConfig = { ...defaultConfig, ...logging };
     this.initLogger();
@@ -128,68 +128,68 @@ export class Logger {
     this.format =
       typeof this.loggerConfig.format === "string"
         ? this.loggerConfig.format
-        : defaultConfig.format;
+        : defaultConfig.format!;
 
     this.isLable =
       typeof this.loggerConfig.lable?.enable === "boolean"
         ? this.loggerConfig.lable.enable
-        : defaultConfig.lable.enable;
+        : defaultConfig.lable!.enable;
 
     this.lable =
       this.loggerConfig.lable?.enable === true &&
       typeof this.loggerConfig.lable.lable === "string"
         ? this.loggerConfig.lable.lable
-        : defaultConfig.lable.lable;
+        : defaultConfig.lable!.lable!;
 
     this.isConsole =
       typeof this.loggerConfig.console !== "undefined"
         ? this.loggerConfig.console
-        : defaultConfig.console;
+        : defaultConfig.console!;
 
     this.isPrettyPrint =
       typeof this.loggerConfig.prettyPrint !== "undefined"
         ? this.loggerConfig.prettyPrint
-        : defaultConfig.prettyPrint;
+        : defaultConfig.prettyPrint!;
 
     this.isFile =
       typeof this.loggerConfig.file !== "undefined"
         ? this.loggerConfig.file.enabled
-        : defaultConfig.file.enabled;
+        : defaultConfig.file!.enabled;
 
     this.filelocation =
       this.loggerConfig.file?.enabled === true &&
       typeof this.loggerConfig.file.location !== "undefined"
         ? this.loggerConfig.file.location
-        : defaultConfig.file.location;
+        : defaultConfig.file!.location!;
 
     this.fileName =
       this.loggerConfig.file?.enabled === true &&
       typeof this.loggerConfig.file.filename !== "undefined"
         ? this.loggerConfig.file.filename
-        : defaultConfig.file.filename;
+        : defaultConfig.file!.filename!;
 
     this.isWeb =
       typeof this.loggerConfig.web !== "undefined"
         ? this.loggerConfig.web.enabled
-        : defaultConfig.web.enabled;
+        : defaultConfig.web!.enabled;
 
     this.webHost =
       this.loggerConfig.web?.enabled === true &&
       typeof this.loggerConfig.web.host === "string"
         ? typeof this.loggerConfig.web.host
-        : defaultConfig.web.host;
+        : defaultConfig.web!.host!;
 
     this.webPort =
       this.loggerConfig.web?.enabled === true &&
       typeof this.loggerConfig.web.port === "number"
         ? this.loggerConfig.web.port
-        : defaultConfig.web.port;
+        : defaultConfig.web!.port!;
 
     this.webPath =
       this.loggerConfig.web?.enabled === true &&
       typeof this.loggerConfig.web.path === "string"
         ? typeof this.loggerConfig.web.path
-        : defaultConfig.web.path;
+        : defaultConfig.web!.path!;
 
     return this;
   }

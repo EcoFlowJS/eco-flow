@@ -1,4 +1,4 @@
-import { IEcoContainer } from "@eco-flow/types";
+import { EcoContainer as IEcoContainer } from "@eco-flow/types";
 
 export default class EcoContainer implements IEcoContainer {
   registered = new Map<string, unknown>();
@@ -19,7 +19,7 @@ export default class EcoContainer implements IEcoContainer {
     if (this.registered.has(name)) {
       const resolver = this.registered.get(name);
       if (typeof resolver === "function")
-        this.resolved.set(name, new (resolver as any)(ecoFlow, args));
+        this.resolved.set(name, new (resolver as any)({ ecoFlow }, args));
       else this.resolved.set(name, resolver);
       return this.resolved.get(name);
     }

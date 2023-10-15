@@ -2,6 +2,7 @@ import { Command, CommandOptions, Option } from "commander";
 import baseCommand from "../commands/command";
 import adminCommand from "../commands/admin";
 import EcoFlow from "@eco-flow/ecoflow";
+import { CommanderCli as ICommanderCli } from "@eco-flow/types";
 
 /**
  * Command manager for the command manager service provider interface of the application component.
@@ -10,7 +11,7 @@ import EcoFlow from "@eco-flow/ecoflow";
  * @param {Command} baseCommand List of base commands to be used by the command manager.
  * @param {Command} command Array of subcommands to be used by the command manager.
  */
-export class CommanderCli {
+export class CommanderCli implements ICommanderCli {
   private command: Command = baseCommand;
   private commands!: Command[];
   private opts: { [key: string]: any } = {};

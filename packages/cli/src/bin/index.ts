@@ -57,6 +57,4 @@ if (issetCommand("verbose") && typeof commands.verbose === "boolean")
     enabled: true,
     level: LogLevel.VERBOSE,
   };
-
-global.EcoFlow = new EcoFlow({ cli: defaultsCliCommands }).start();
-
+new EcoFlow({ cli: defaultsCliCommands }).start();

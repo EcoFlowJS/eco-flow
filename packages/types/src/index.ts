@@ -1,4 +1,4 @@
-import { ecoFlow } from "./ecoflow";
+import { loadedEcoFlow } from "./ecoflow";
 
 export * from "./cli";
 export * from "./ecoflow";
@@ -14,5 +14,3 @@ declare global {
     }
   }
 }
-
-export type loadedEcoFlow = ecoFlow;

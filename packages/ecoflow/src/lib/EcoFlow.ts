@@ -1,15 +1,18 @@
 import { Config } from "../config";
-import { EcoFlowArgs, ICommand, configSettings } from "@eco-flow/types";
-import { has, omit, merge, set } from "lodash";
-import dotenv, { config } from "dotenv";
+import { EcoOptions, ICommand } from "@eco-flow/types";
+import { has, omit } from "lodash";
+import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
-import EcoFactory from "./EcoContainer";
 import EcoContainer from "./EcoContainer";
+import { EcoFlow as IEcoFlow } from "@eco-flow/types";
 
-export class EcoFlow {
+export type loadedEcoFlow = Required<EcoFlow>;
+class EcoFlow implements IEcoFlow {
+  isAuth: boolean = false;
   private cliArgs: ICommand = {};
   private container!: EcoContainer;
-  constructor(args: EcoFlowArgs = {}) {
+  constructor(args: EcoOptions = {}) {
+    global.ecoFlow = this;
     if (has(args, "cli")) this.cliArgs = { ...args.cli };
   }
 
@@ -19,18 +22,23 @@ export class EcoFlow {
       if (has(process.env, "configDir"))
         this.cliArgs.configDir = process.env.configDir;
     }
-    this.container = new EcoContainer();
-    this.container.register(
-      "config",
-      new Config(this.cliArgs.configDir, this.cliArgs.configName)
-    );
-    const configCli = omit(this.cliArgs, ["configDir", "configName", "auth"]);
-    this.tempUpdateConfig(configCli);
-    this.container.register("logger", new Logger(ecoFlow.config!));
-  }
 
-  private tempUpdateConfig(config: configSettings) {
-    ecoFlow.config = merge(ecoFlow.config, config);
+    let configDir = undefined;
+    let configName = undefined;
+
+    if (has(this.cliArgs, "auth")) this.isAuth = true;
+    if (has(this.cliArgs, "configDir")) configDir = this.cliArgs.configDir;
+    if (has(this.cliArgs, "configName")) configName = this.cliArgs.configName;
+    const configCli = omit(this.cliArgs, ["configDir", "configName", "auth"]);
+
+    this.container = new EcoContainer();
+
+    this.container
+      .register(
+        "config",
+        new Config(this.cliArgs.configDir, this.cliArgs.configName, configCli)
+      )
+      .register("logger", new Logger());
   }
 
   start(): EcoFlow {
@@ -38,12 +46,12 @@ export class EcoFlow {
     return this;
   }
 
-  get config(): Config {
+  get config() {
     return this.container.get("config");
   }
 
-  get logger(): Logger {
-    return this.container.get("loggger");
+  get logger() {
+    return this.container.get("logger");
   }
 
   static get Version(): string {
@@ -51,3 +59,5 @@ export class EcoFlow {
     return packageVersion;
   }
 }
+
+export default EcoFlow;

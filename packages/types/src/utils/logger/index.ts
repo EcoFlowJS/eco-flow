@@ -1,2 +1,3 @@
 export * from "./loggingConfig";
-export * from "./loggingDefaultConfig";
+export * from "./logLevels";
+export * from "./Logger";

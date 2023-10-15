@@ -1,14 +1,20 @@
 import { ICommand } from "../cli";
-import { configSettings } from "./config";
+import { Logger } from "../utils";
+import { Config } from "./config";
 
 export * from "./config";
+export * from "./EcoContainer";
 
-export interface EcoFlowArgs {
+export interface EcoOptions {
   cli?: ICommand;
   [key: string]: any;
 }
 
-export interface ecoFlow {
-  config?: configSettings;
-  [key: string]: unknown;
-};
+export type loadedEcoFlow = Required<EcoFlow>;
+
+export interface EcoFlow {
+  isAuth: boolean;
+  config: Config;
+  logger: Logger;
+}
+
