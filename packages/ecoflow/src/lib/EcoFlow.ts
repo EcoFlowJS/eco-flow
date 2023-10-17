@@ -49,10 +49,6 @@ class EcoFlow implements IEcoFlow {
     return this;
   }
 
-  stop(): EcoFlow {
-    return this;
-  }
-
   get config() {
     return this.container.get("config");
   }
