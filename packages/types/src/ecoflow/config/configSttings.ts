@@ -1,61 +1,41 @@
-import { Application, NextFunction, Request, Response } from "express";
+import koaCors from "@koa/cors";
 import { ILoggingConfig } from "../../utils/logger";
 
-export type configSettings = {
-  flowFile?: string;
-  credentialSecret?: string;
-  flowFilePretty?: boolean;
+export interface configSettings {
+  //Base configuration
   userDir?: string;
-  nodesDir?: string;
-  adminAuth?: {
-    type: string;
-    users: {
-      username: string;
-      password: string;
-      permissions: string;
-    }[];
-  };
-  https?: {
-    key: string;
-    cert: string;
-  };
-  httpsRefreshInterval?: number;
-  requireHttps?: boolean;
-  httpNodeAuth?: {
-    user: string;
-    pass: string;
-  };
-  httpStaticAuth?: {
-    user: string;
-    pass: string;
-  };
+  moduleDir?: string;
 
-  Port?: string | number;
+  //Flow configuration
+  flowFile?: string;
+  flowFilePretty?: boolean;
+
+  //Modules configuration
+
+  //Admin configuration
+  adminAuth?: string;
+
+  //HHTP HTTPS configuration
   Host?: string;
-  httpServerOptions?: Application;
-  httpAdminRoot?: string;
-  httpAdminMiddleware?: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => void;
-  httpNodeRoot?: string;
-  httpNodeCors?: {
-    origin: string;
-    methods: string[];
+  Port?: string | number;
+  https?: {
+    enabled: boolean;
+    key?: string;
+    cert?: string;
   };
-  httpNodeMiddleware?: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => void;
+  httpCors?: koaCors.Options;
+
+  //Router configuration
+  httpAdminRoot?: string;
+  httpModuleRoot?: string;
   httpStatic?:
     | string
     | {
         path: string;
         root: string;
       }[];
-  httpStaticRoot?: string;
+
+  //Application configuration
   lang?: string;
   diagnostics?: {
     enabled?: boolean;
@@ -65,21 +45,71 @@ export type configSettings = {
     enabled?: boolean;
     ui?: boolean;
   };
+
+  //Logger configuration
   logging?: ILoggingConfig;
 
-  // TO-DO Editor Settings
-
-  fileWorkingDirectory?: string;
-  functionExternalModules?: boolean;
-  functionGlobalContext?: {};
-  nodeMessageBufferMaxLength?: number;
-  debugMaxLength?: number;
-  execMaxBufferSize?: number;
-  httpRequestTimeout?: number;
-  webSocketReconnectTime?: number;
-  serialReconnectTime?: number;
-  inboundWebSocketTimeout?: number;
-
+  //API configuration
   api_port?: string | number;
   api_base_url?: string;
-};
+}
+
+export namespace configOptions {
+  //Base configuration
+  export let userDir: string | undefined;
+  export let moduleDir: string | undefined;
+
+  //Flow configuration
+  export let flowFile: string | undefined;
+  export let flowFilePretty: boolean | undefined;
+
+  //Modules configuration
+
+  //Admin configuration
+  export let adminAuth: string | undefined;
+
+  //HHTP HTTPS configuration
+  export let Host: string | undefined;
+  export let Port: string | number | undefined;
+  export let https:
+    | {
+        enabled: boolean;
+        key?: string;
+        cert?: string;
+      }
+    | undefined;
+  export let httpCors: koaCors.Options | undefined;
+
+  //Router configuration
+  export let httpAdminRoot: string | undefined;
+  export let httpModuleRoot: string | undefined;
+  export let httpStatic:
+    | string
+    | {
+        path: string;
+        root: string;
+      }[]
+    | undefined;
+
+  //Application configuration
+  export let lang: string | undefined;
+  export let diagnostics:
+    | {
+        enabled?: boolean;
+        ui?: boolean;
+      }
+    | undefined;
+  export let runtimeState:
+    | {
+        enabled?: boolean;
+        ui?: boolean;
+      }
+    | undefined;
+
+  //Logger configuration
+  export let logging: ILoggingConfig | undefined;
+
+  //API configuration
+  export let api_port: string | number | undefined;
+  export let api_base_url: string | undefined;
+}
