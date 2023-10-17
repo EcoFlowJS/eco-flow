@@ -17,7 +17,7 @@ const defaultConfig: configSettings = {
   //credentialSecret: "a-secret-key",
   flowFilePretty: true,
   userDir: baseUserDir,
-  nodesDir: baseUserDir + "/nodes",
+  moduleDir: baseUserDir + "/nodes",
   /*******************************************************************************
    * Security
    *  - adminAuth
@@ -102,9 +102,9 @@ const defaultConfig: configSettings = {
    * See https://github.com/troygoode/node-cors#configuration-options for
    * details on its contents. The following is a basic permissive set of options:
    */
-  httpNodeCors: {
+  httpCors: {
     origin: "*",
-    methods: ["GET", "PUT", "POST", "DELETE"],
+    allowMethods: ["GET", "PUT", "POST", "DELETE"],
   },
   /** The following property can be used to add a custom middleware function
    * in front of all http in nodes. This allows custom authentication to be
@@ -282,7 +282,7 @@ const defaultConfig: configSettings = {
   /** The working directory to handle relative file paths from within the File nodes
    * defaults to the working directory of the process.
    */
-  fileWorkingDirectory: process.cwd().replace(/\\/g, "/"),
+  // fileWorkingDirectory: process.cwd().replace(/\\/g, "/"),
   /** Allow the Function node to load additional npm modules directly */
   // functionExternalModules: true,
   /** The following property can be used to set predefined values in Global Context.
@@ -298,23 +298,6 @@ const defaultConfig: configSettings = {
   /** The maximum number of messages nodes will buffer internally as part of their
    * operation. This applies across a range of nodes that operate on message sequences.
    * defaults to no limit. A value of 0 also means no limit is applied.
-   */
-  nodeMessageBufferMaxLength: 0,
-  /** The maximum length, in characters, of any message sent to the debug sidebar tab */
-  debugMaxLength: 1000,
-  /** Maximum buffer size for the exec node. Defaults to 10Mb */
-  execMaxBufferSize: 10000000,
-  /** Timeout in milliseconds for HTTP request connections. Defaults to 120s */
-  httpRequestTimeout: 120000,
-  /** Retry time in milliseconds for Web-Socket connections */
-  webSocketReconnectTime: 15000,
-  /** Timeout in milliseconds for inbound WebSocket connections that do not
-   * match any configured node. Defaults to 5000
-   */
-  inboundWebSocketTimeout: 5000,
-  /** The following property can be used to verify WebSocket connection attempts.
-   * This allows, for example, the HTTP request headers to be checked to ensure
-   * they include valid authentication information.
    */
   /*******************************************************************************
    * API Settings
