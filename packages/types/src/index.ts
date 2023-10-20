@@ -1,5 +1,6 @@
 import { loadedEcoFlow } from "./ecoflow";
 
+export * from "./api";
 export * from "./cli";
 export * from "./ecoflow";
 export * from "./utils";

@@ -37,6 +37,7 @@ export interface configSettings {
         path: string;
         root: string;
       }[];
+  httpStaticRoot?: string;
 
   //Application configuration
   lang?: string;
@@ -87,7 +88,6 @@ export namespace configOptions {
   export let systemRouterOptions: RouterOptions | undefined;
   export let apiRouterOptions: RouterOptions | undefined;
   export let httpAdminRoot: string | undefined;
-  export let httpModuleRoot: string | undefined;
   export let httpStatic:
     | string
     | {
@@ -95,6 +95,7 @@ export namespace configOptions {
         root: string;
       }[]
     | undefined;
+  export let httpStaticRoot: string | undefined;
 
   //Application configuration
   export let lang: string | undefined;

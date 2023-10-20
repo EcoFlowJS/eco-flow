@@ -1,6 +1,11 @@
+import { homedir } from "os";
+import path from "path";
+import fs from "fs";
 import { EcoServer, EcoRouter as IEcoRouter } from "@eco-flow/types";
-import KoaRouter, { RouterOptions } from "@koa/router";
 import { DefaultState, DefaultContext } from "koa";
+import KoaRouter, { RouterOptions } from "@koa/router";
+import mount from "koa-mount";
+import staticServe from "koa-static";
 
 export class EcoRouter implements IEcoRouter {
   systemRouter: KoaRouter<DefaultState, DefaultContext>;
@@ -8,21 +13,64 @@ export class EcoRouter implements IEcoRouter {
 
   constructor(svr: EcoServer) {
     const defaultRouter = this.createRouter();
-    let config = ecoFlow.config._config;
-    let configSystem: RouterOptions = { ...config.systemRouterOptions };
-    let configAPI: RouterOptions = { ...config.apiRouterOptions };
+    let {
+      userDir,
+      systemRouterOptions,
+      apiRouterOptions,
+      httpAdminRoot,
+      httpStatic,
+      httpStaticRoot,
+    } = ecoFlow.config._config;
 
-    if (ecoFlow._.isEmpty(configSystem)) configSystem.prefix = "/system";
-    if (ecoFlow._.isEmpty(configAPI)) configAPI.prefix = "/api";
-    if (!ecoFlow._.has(configSystem, "prefix")) configSystem.prefix = "/system";
-    if (!ecoFlow._.has(configAPI, "prefix")) configAPI.prefix = "/api";
+    if (ecoFlow._.isEmpty(systemRouterOptions)) {
+      systemRouterOptions = {};
+      systemRouterOptions.prefix = "/systemAPI";
+    }
+    if (ecoFlow._.isEmpty(apiRouterOptions)) {
+      apiRouterOptions = {};
+      apiRouterOptions.prefix = "/api";
+    }
+    if (!ecoFlow._.has(systemRouterOptions, "prefix"))
+      systemRouterOptions.prefix = "/systemAPI";
+    if (!ecoFlow._.has(apiRouterOptions, "prefix"))
+      apiRouterOptions.prefix = "/api";
 
-    this.systemRouter = this.createRouter(configSystem);
-    this.apiRouter = this.createRouter(configAPI);
+    this.systemRouter = this.createRouter(systemRouterOptions);
+    this.apiRouter = this.createRouter(apiRouterOptions);
+
     defaultRouter.all("(.*)", (ctx) => {
       ctx.body = { error: "Unknown API request." };
       ctx.status = 404;
     });
+
+    if (ecoFlow._.isEmpty(httpStatic)) httpStatic = "/public";
+
+    if (typeof httpStatic === "string") {
+      const baseDir = ecoFlow._.isEmpty(userDir)
+        ? process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow"
+        : userDir;
+      let root: string = path.join(baseDir!, "public");
+      if (!fs.existsSync(root)) fs.mkdirSync(root, { recursive: true });
+      if (
+        !ecoFlow._.isEmpty(httpStaticRoot) &&
+        ecoFlow._.isString(httpStaticRoot)
+      )
+        root = httpStaticRoot;
+
+      if (!httpStatic.startsWith("/")) httpStatic = "/" + httpStatic.trim();
+
+      svr.use(mount(httpStatic, staticServe(root)));
+    }
+
+    if (Array.isArray(httpStatic)) {
+      httpStatic.forEach((obj) => {
+        if (ecoFlow._.isEmpty(obj.path.trim())) return;
+        if (!fs.existsSync(obj.root))
+          fs.mkdirSync(obj.root, { recursive: true });
+        if (!obj.path.startsWith("/")) obj.path = "/" + obj.path.trim();
+        svr.use(mount(obj.path, staticServe(obj.root)));
+      });
+    }
 
     svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
