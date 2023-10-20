@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
 import EcoContainer from "./EcoContainer";
 import { EcoFlow as IEcoFlow } from "@eco-flow/types";
-import { Server } from "../service/EcoServer";
+import { EcoServer } from "../service/EcoServer";
+import { EcoRouter } from "../service/EcoRouter";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
@@ -13,7 +14,8 @@ class EcoFlow implements IEcoFlow {
 
   _: typeof _ = _;
 
-  server: Server;
+  server: EcoServer;
+  router: EcoRouter;
 
   private container!: EcoContainer;
 
@@ -31,9 +33,9 @@ class EcoFlow implements IEcoFlow {
     let configDir = undefined;
     let configName = undefined;
 
-    if (this._.has(cliArgs, "auth")) this.isAuth = true;
-    if (this._.has(cliArgs, "configDir")) configDir = cliArgs.configDir;
-    if (this._.has(cliArgs, "configName")) configName = cliArgs.configName;
+    if (!this._.isEmpty(cliArgs.auth)) this.isAuth = cliArgs.auth!;
+    if (!this._.isEmpty(cliArgs.configDir)) configDir = cliArgs.configDir;
+    if (!this._.isEmpty(cliArgs.configName)) configName = cliArgs.configName;
     const configCli = this._.omit(cliArgs, ["configDir", "configName", "auth"]);
 
     this.container = new EcoContainer();
@@ -41,7 +43,8 @@ class EcoFlow implements IEcoFlow {
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger());
 
-    this.server = new Server();
+    this.server = new EcoServer();
+    this.router = new EcoRouter(this.server);
   }
 
   start(): EcoFlow {
@@ -53,7 +56,7 @@ class EcoFlow implements IEcoFlow {
     return this.container.get("config");
   }
 
-  get logger() {
+  get log() {
     return this.container.get("logger");
   }
 

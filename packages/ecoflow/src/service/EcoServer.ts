@@ -3,8 +3,9 @@ import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
 import _ from "lodash";
 import koaCors from "@koa/cors";
-import { Server as IServer, configOptions } from "@eco-flow/types";
-export class Server extends Koa implements IServer {
+import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
+
+export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
   private _isHttps: boolean = false;
   private _host!: typeof configOptions.Host;
@@ -12,6 +13,18 @@ export class Server extends Koa implements IServer {
   private _httpCors!: koaCors.Options;
   private _server!: HttpServer | HttpsServer;
 
+  /**
+   * EcoFlow Server Library interface implementation for HTTP/HTTPS connections and APIs requests.
+   * @param {object} [options] Application options
+   * @param {string} [options.env='development'] Environment
+   * @param {string[]} [options.keys] Signed cookie keys
+   * @param {boolean} [options.proxy] Trust proxy headers
+   * @param {number} [options.subdomainOffset] Subdomain offset
+   * @param {string} [options.proxyIpHeader] Proxy IP header, defaults to X-Forwarded-For
+   * @param {number} [options.maxIpsCount] Max IPs read from proxy IP header, default to 0 (means infinity)
+   * @memberof EcoServer
+   * @returns {EcoServer} instance of EcoServer
+   */
   constructor(options?: {
     env?: string | undefined;
     keys?: string[] | undefined;
@@ -24,6 +37,11 @@ export class Server extends Koa implements IServer {
     this.processConfig();
   }
 
+  /**
+   * Process config from EcoFlow environment. This method is called automatically before the server is started and restart of the server process.
+   * @memberof EcoServer
+   * @returns {void}
+   */
   private processConfig() {
     const { https, Host, Port, httpCors } = ecoFlow.config._config;
     if (!_.isEmpty(https) && https.enabled) {
@@ -37,6 +55,11 @@ export class Server extends Koa implements IServer {
     if (_.isNumber(Port)) this._port = Port;
     if (!_.isEmpty(httpCors)) this._httpCors = httpCors;
   }
+
+  /**
+   * Start the server process for the application to process HTTP/HTTPS requests.
+   * @returns { httpServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse>| httpsServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse> } Server instance.
+   */
   startServer():
     | httpServer.Server<
         typeof httpServer.IncomingMessage,
@@ -55,28 +78,36 @@ export class Server extends Koa implements IServer {
       parseInt(this._port!.toString()),
       this._host,
       () => {
-        ecoFlow.logger.info(
+        ecoFlow.log.info(
           `Server listening on ${this._isHttps ? "https" : "http"}://${
             this._host
           }:${this._port}`
         );
-        ecoFlow.logger.info("====================================");
+        ecoFlow.log.info("====================================");
       }
     );
   }
 
+  /**
+   * Close the running HTTP/HTTPS server process and disconnect all connections.
+   * @returns { void }
+   */
   closeServer(): void {
     this._server.close((err) => {
       if (err) throw err;
-      ecoFlow.logger.info(
+      ecoFlow.log.info(
         `Stopping server on ${this._isHttps ? "https" : "http"}://${
           this._host
         }:${this._port}`
       );
-      ecoFlow.logger.info("====================================");
+      ecoFlow.log.info("====================================");
     });
   }
 
+  /**
+   * Restarts the HTTP/HTTPS server process and all connections.
+   * @returns {Promise} Server instance.
+   */
   async restartServer(): Promise<
     | httpServer.Server<
         typeof httpServer.IncomingMessage,
@@ -87,16 +118,16 @@ export class Server extends Koa implements IServer {
         typeof httpServer.ServerResponse
       >
   > {
-    ecoFlow.logger.info("Restarting server........");
+    ecoFlow.log.info("Restarting server........");
     return new Promise((resolve, reject) => {
       this._server.close((err) => {
         if (err) reject(err);
-        ecoFlow.logger.info(
+        ecoFlow.log.info(
           `Stopping server on ${this._isHttps ? "https" : "http"}://${
             this._host
           }:${this._port}`
         );
-        ecoFlow.logger.info("====================================");
+        ecoFlow.log.info("====================================");
         this.processConfig();
         resolve(this.startServer());
       });

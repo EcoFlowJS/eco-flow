@@ -110,5 +110,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["./src/**/*"],
-  "exclude": ["./dist", "run.ts"]
+  "exclude": ["./dist", "../../run.ts"]
 }

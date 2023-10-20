@@ -1,7 +1,7 @@
 import Koa from "koa";
 import httpServer from "http";
 import httpsServer from "https";
-export interface Server extends Koa {
+export interface EcoServer extends Koa {
   startServer():
     | httpServer.Server<
         typeof httpServer.IncomingMessage,

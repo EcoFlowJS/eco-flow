@@ -1,5 +1,5 @@
 import { ICommand } from "../cli";
-import { Server } from "../service";
+import { EcoRouter, EcoServer } from "./service";
 import { Logger } from "../utils";
 import { Config } from "./config";
 import _ from "lodash";
@@ -8,6 +8,7 @@ export * from "./config";
 export * from "./helper";
 export * from "./EcoContainer";
 export * from "./EcoFactory";
+export * from "./service";
 
 export interface EcoOptions {
   cli?: ICommand;
@@ -19,9 +20,10 @@ export type loadedEcoFlow = Required<EcoFlow>;
 export interface EcoFlow {
   isAuth: boolean;
   _: typeof _;
-  server: Server;
+  server: EcoServer;
+  router: EcoRouter;
   get config(): Config;
-  get logger(): Logger;
+  get log(): Logger;
   get Version(): string;
 }
 

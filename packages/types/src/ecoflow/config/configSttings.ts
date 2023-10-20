@@ -1,5 +1,6 @@
 import koaCors from "@koa/cors";
 import { ILoggingConfig } from "../../utils/logger";
+import { RouterOptions } from "express";
 
 export interface configSettings {
   //Base configuration
@@ -26,6 +27,8 @@ export interface configSettings {
   httpCors?: koaCors.Options;
 
   //Router configuration
+  systemRouterOptions?: RouterOptions;
+  apiRouterOptions?: RouterOptions;
   httpAdminRoot?: string;
   httpModuleRoot?: string;
   httpStatic?:
@@ -81,6 +84,8 @@ export namespace configOptions {
   export let httpCors: koaCors.Options | undefined;
 
   //Router configuration
+  export let systemRouterOptions: RouterOptions | undefined;
+  export let apiRouterOptions: RouterOptions | undefined;
   export let httpAdminRoot: string | undefined;
   export let httpModuleRoot: string | undefined;
   export let httpStatic:
