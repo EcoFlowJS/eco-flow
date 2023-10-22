@@ -76,11 +76,6 @@ const defaultConfig: configSettings = {
    * to http://expressjs.com/en/api.html#app.settings.table
    */
   // httpServerOptions: { },
-  /** By default, the UI is available at http://localhost:1880/
-   * The following property can be used to specify a different root path.
-   * If set to false, this is disabled.
-   */
-  httpAdminRoot: "/admin",
   /** The following property can be used to add a custom middleware function
    * in front of all admin http routes. For example, to set custom http
    * headers. It can be a single function or an array of middleware functions.
@@ -306,6 +301,11 @@ const defaultConfig: configSettings = {
    ******************************************************************************/
   api_port: process.env.apiPort || 4000,
   api_base_url: "api",
+
+  //Editor Configuration
+  editor: {
+    enabled: true,
+  },
 };
 
 export default defaultConfig;

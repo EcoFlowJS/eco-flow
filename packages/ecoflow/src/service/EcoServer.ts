@@ -25,14 +25,20 @@ export class EcoServer extends Koa implements IEcoServer {
    * @memberof EcoServer
    * @returns {EcoServer} instance of EcoServer
    */
-  constructor(options?: {
-    env?: string | undefined;
-    keys?: string[] | undefined;
-    proxy?: boolean | undefined;
-    subdomainOffset?: number | undefined;
-    proxyIpHeader?: string | undefined;
-    maxIpsCount?: number | undefined;
-  }) {
+  constructor(
+    options: {
+      env?: string | undefined;
+      keys?: string[] | undefined;
+      proxy?: boolean | undefined;
+      subdomainOffset?: number | undefined;
+      proxyIpHeader?: string | undefined;
+      maxIpsCount?: number | undefined;
+    } = {}
+  ) {
+    if (ecoFlow._.isEmpty(options.env))
+      if (ecoFlow._.has(process.env, "ECO_ENV") && process.env.ECO_ENV)
+        options.env = "production";
+
     super(options);
     this.processConfig();
   }

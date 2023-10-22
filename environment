@@ -1,2 +1,3 @@
 configDir | config starage directory
 loggerDir | Log directory
+ECO_ENV | EcoFlow env

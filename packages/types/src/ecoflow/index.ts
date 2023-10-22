@@ -3,9 +3,11 @@ import { EcoRouter, EcoServer } from "./service";
 import { Logger } from "../utils";
 import { Config } from "./config";
 import _ from "lodash";
+import { EcoContainer } from "./EcoContainer";
+import { EcoHelper } from "./EcoHelper";
 
 export * from "./config";
-export * from "./helper";
+export * from "./EcoHelper";
 export * from "./EcoContainer";
 export * from "./EcoFactory";
 export * from "./service";
@@ -22,8 +24,10 @@ export interface EcoFlow {
   _: typeof _;
   server: EcoServer;
   router: EcoRouter;
+  container: EcoContainer;
   get config(): Config;
   get log(): Logger;
+  get helper(): EcoHelper;
   get Version(): string;
 }
 

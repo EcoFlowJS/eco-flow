@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { API, EcoOptions, ICommand } from "@eco-flow/types";
+import { EcoOptions, ICommand } from "@eco-flow/types";
 import _ from "lodash";
 import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
@@ -7,7 +7,7 @@ import EcoContainer from "./EcoContainer";
 import { EcoFlow as IEcoFlow } from "@eco-flow/types";
 import { EcoServer } from "../service/EcoServer";
 import { EcoRouter } from "../service/EcoRouter";
-import { EcoAPIController } from "@eco-flow/api";
+import { EcoHelper } from "./EcoHelper";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
@@ -18,7 +18,7 @@ class EcoFlow implements IEcoFlow {
   server: EcoServer;
   router: EcoRouter;
 
-  private container!: EcoContainer;
+  container: EcoContainer;
 
   constructor(args: EcoOptions = {}) {
     global.ecoFlow = this;
@@ -42,11 +42,11 @@ class EcoFlow implements IEcoFlow {
     this.container = new EcoContainer();
     this.container
       .register("config", new Config(configDir, configName, configCli))
-      .register("logger", new Logger());
+      .register("logger", new Logger())
+      .register("helper", new EcoHelper(this));
 
     this.server = new EcoServer();
     this.router = new EcoRouter(this.server);
-
   }
 
   start(): EcoFlow {
@@ -60,6 +60,10 @@ class EcoFlow implements IEcoFlow {
 
   get log() {
     return this.container.get("logger");
+  }
+
+  get helper() {
+    return this.container.get("helper");
   }
 
   get Version(): string {

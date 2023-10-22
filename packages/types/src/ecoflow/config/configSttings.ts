@@ -29,7 +29,6 @@ export interface configSettings {
   //Router configuration
   systemRouterOptions?: RouterOptions;
   apiRouterOptions?: RouterOptions;
-  httpAdminRoot?: string;
   httpModuleRoot?: string;
   httpStatic?:
     | string
@@ -56,6 +55,14 @@ export interface configSettings {
   //API configuration
   api_port?: string | number;
   api_base_url?: string;
+
+  //Editors configuration
+  editor?: {
+    enabled: boolean;
+    admin?: boolean;
+    flow?: boolean;
+    schema?: boolean;
+  };
 }
 
 export namespace configOptions {
@@ -118,4 +125,14 @@ export namespace configOptions {
   //API configuration
   export let api_port: string | number | undefined;
   export let api_base_url: string | undefined;
+
+  //Editor configuration
+  export let editor:
+    | {
+        enabled: boolean;
+        admin?: boolean;
+        flow?: boolean;
+        schema?: boolean;
+      }
+    | undefined;
 }

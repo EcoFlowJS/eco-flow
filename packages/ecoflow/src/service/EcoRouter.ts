@@ -17,7 +17,6 @@ export class EcoRouter implements IEcoRouter {
       userDir,
       systemRouterOptions,
       apiRouterOptions,
-      httpAdminRoot,
       httpStatic,
       httpStaticRoot,
     } = ecoFlow.config._config;
@@ -72,6 +71,7 @@ export class EcoRouter implements IEcoRouter {
       });
     }
 
+    ecoFlow.helper.loadEditor();
     svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
     svr.use(defaultRouter.routes()).use(defaultRouter.allowedMethods());
@@ -85,12 +85,4 @@ export class EcoRouter implements IEcoRouter {
   createRouter(opt?: RouterOptions): KoaRouter {
     return new KoaRouter(opt);
   }
-
-  loadAdminEditor(): void {}
-
-  loadFlowEditor(): void {}
-
-  loadSchemaEditor(): void {}
-
-  loadAllEditors(): void {}
 }
