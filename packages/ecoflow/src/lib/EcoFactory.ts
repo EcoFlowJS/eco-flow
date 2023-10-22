@@ -1,5 +1,5 @@
 import { EcoFactory as IEcoFactory } from "@eco-flow/types";
-import Router from "koa-router";
+import Router from "@koa/router";
 export class EcoFactory implements IEcoFactory {
   constructor() {}
 

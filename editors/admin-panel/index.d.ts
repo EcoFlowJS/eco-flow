@@ -1,5 +1,3 @@
 import { EcoFlow } from "@eco-flow/types";
 
-function serve({ server }: EcoFlow): void;
-
-export default serve;
+export default function serve({ server }: EcoFlow): void;

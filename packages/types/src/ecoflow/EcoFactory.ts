@@ -1,4 +1,4 @@
-import Router from "koa-router";
+import Router from "@koa/router";
 
 export interface EcoFactory {
   createEcoController(): void;

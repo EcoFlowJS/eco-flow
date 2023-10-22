@@ -85,4 +85,12 @@ export class EcoRouter implements IEcoRouter {
   createRouter(opt?: RouterOptions): KoaRouter {
     return new KoaRouter(opt);
   }
+
+  loadAdminEditor(): void {}
+
+  loadFlowEditor(): void {}
+
+  loadSchemaEditor(): void {}
+
+  loadAllEditors(): void {}
 }

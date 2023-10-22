@@ -1,6 +1,6 @@
 import koaCors from "@koa/cors";
 import { ILoggingConfig } from "../../utils/logger";
-import { RouterOptions } from "express";
+import { RouterOptions } from "@koa/router";
 
 export interface configSettings {
   //Base configuration

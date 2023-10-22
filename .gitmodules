@@ -1,6 +1,9 @@
-[submodule "editors/flow-manager"]
-	path = editors/flow-manager
-	url = https://github.com/RomelSikdar/flow-manager.git
-[submodule "editors/schema-builder"]
-	path = editors/schema-builder
-	url = https://github.com/RomelSikdar/schema-builder.git
+[submodule "editors/schema-editor"]
+	path = editors/schema-editor
+	url = https://github.com/RomelSikdar/schema-editor.git
+[submodule "editors/flow-editor"]
+	path = editors/flow-editor
+	url = https://github.com/RomelSikdar/flow-editor.git
+[submodule "editors/admin-panel"]
+	path = editors/admin-panel
+	url = https://github.com/RomelSikdar/admin-panel.git

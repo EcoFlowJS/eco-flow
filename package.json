@@ -15,7 +15,9 @@
   },
   "workspaces": [
     "packages/*",
-    "packages/*/*"
+    "packages/*/*",
+    "editors/*",
+    "editors/*/*"
   ],
   "author": "",
   "license": "ISC",
