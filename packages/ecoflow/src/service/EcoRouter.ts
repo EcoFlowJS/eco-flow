@@ -37,6 +37,7 @@ export class EcoRouter implements IEcoRouter {
     this.systemRouter = this.createRouter(systemRouterOptions);
     this.apiRouter = this.createRouter(apiRouterOptions);
 
+    defaultRouter.get("/", (ctx) => ctx.redirect("/admin"));
     defaultRouter.all("(.*)", (ctx) => {
       ctx.body = { error: "Unknown API request." };
       ctx.status = 404;
