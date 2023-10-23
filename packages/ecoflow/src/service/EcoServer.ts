@@ -86,7 +86,7 @@ export class EcoServer extends Koa implements IEcoServer {
       () => {
         ecoFlow.log.info(
           `Server listening on ${this._isHttps ? "https" : "http"}://${
-            this._host
+            this._host === "0.0.0.0" ? "localhost" : this._host
           }:${this._port}`
         );
         ecoFlow.log.info("====================================");
@@ -103,7 +103,7 @@ export class EcoServer extends Koa implements IEcoServer {
       if (err) throw err;
       ecoFlow.log.info(
         `Stopping server on ${this._isHttps ? "https" : "http"}://${
-          this._host
+          this._host === "0.0.0.0" ? "localhost" : this._host
         }:${this._port}`
       );
       ecoFlow.log.info("====================================");
@@ -130,7 +130,7 @@ export class EcoServer extends Koa implements IEcoServer {
         if (err) reject(err);
         ecoFlow.log.info(
           `Stopping server on ${this._isHttps ? "https" : "http"}://${
-            this._host
+            this._host === "0.0.0.0" ? "localhost" : this._host
           }:${this._port}`
         );
         ecoFlow.log.info("====================================");

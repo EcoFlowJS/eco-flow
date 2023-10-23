@@ -69,8 +69,8 @@ const defaultConfig: configSettings = {
    *  - httpStatic
    *  - httpStaticRoot
    ******************************************************************************/
-  Port: process.env.PORT || 1000,
-  Host: "127.0.0.1",
+  Port: process.env.PORT || 4000,
+  Host: "0.0.0.0",
   /** The following property can be used to pass custom options to the Express.js
    * server used by Node-RED. For a full list of available options, refer
    * to http://expressjs.com/en/api.html#app.settings.table
