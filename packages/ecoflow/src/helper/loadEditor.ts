@@ -4,7 +4,7 @@ import loadSchema from "@eco-flow/schema-editor";
 import { EcoFlow } from "@eco-flow/types";
 
 export const loadEditor = ({ server }: EcoFlow): void => {
-  if (ecoFlow.server.env === "developmen") return;
+  if (ecoFlow.server.env === "development") return;
   let { editor } = ecoFlow.config._config;
 
   if (ecoFlow._.isEmpty(editor)) editor = { enabled: true };
