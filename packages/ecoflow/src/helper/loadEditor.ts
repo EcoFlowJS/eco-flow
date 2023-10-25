@@ -1,7 +1,6 @@
 import loadAdmin from "@eco-flow/admin-panel";
 import loadFlow from "@eco-flow/flow-editor";
 import loadSchema from "@eco-flow/schema-editor";
-import loadErrors from "@eco-flow/error-components";
 import { EcoFlow } from "@eco-flow/types";
 
 export const loadEditor = ({ server }: EcoFlow): void => {
@@ -15,7 +14,6 @@ export const loadEditor = ({ server }: EcoFlow): void => {
   editor.flow = ecoFlow._.isEmpty(editor.flow) ? true : editor.flow;
   editor.schema = ecoFlow._.isEmpty(editor.schema) ? true : editor.schema;
 
-  loadErrors(server);
   if (editor.admin) loadAdmin(server);
   if (editor.flow) loadFlow(server);
   if (editor.schema) loadSchema(server);
