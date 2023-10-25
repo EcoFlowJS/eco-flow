@@ -12,7 +12,8 @@
     "editor:start:admin": "cd ./editors/admin-panel && npm run dev",
     "editor:start:flow": "cd ./editors/flow-editor && npm run dev",
     "editor:start:schema": "cd ./editors/schema-editor && npm run dev",
-    "ediotr:start": "concurrently \"npm run editor:start:flow\" \"npm run editor:start:schema\" \"npm run editor:start:admin\"",
+    "editor:start:errors": "cd ./editors/error-components && npm run dev",
+    "ediotr:start": "concurrently \"npm run editor:start:errors\" \"npm run editor:start:flow\" \"npm run editor:start:schema\" \"npm run editor:start:admin\"",
     "prewatch": "npm run build",
     "watch": "concurrently \"npm run watch:cli\" \"npm run watch:types\" \"npm run watch:utils\" \"npm run watch:ecoflow\" \"npm run watch:api\"",
     "dev": "concurrently \"nodemon ./run.ts\" \"npm run ediotr:start\""
@@ -32,5 +33,8 @@
     "nx-cloud": "latest",
     "ts-node": "^10.9.1"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "@eco-flow/error-components": "^0.0.0"
+  }
 }
