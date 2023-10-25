@@ -9,3 +9,7 @@
 [submodule "editors/admin-panel"]
 	path = editors/admin-panel
 	url = https://github.com/RomelSikdar/admin-panel.git
+	
+[submodule "editors/error-components"]
+	path = editors/error-components
+	url = https://github.com/RomelSikdar/error-components.git
