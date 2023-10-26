@@ -7,7 +7,7 @@ import proxy from "koa-proxies";
 export const loadEditor = ({ server }: EcoFlow): void => {
   if (ecoFlow.server.env === "development") {
     server.use(
-      proxy("/", {
+      proxy("/admin", {
         target: "http://localhost:3000/",
         changeOrigin: true,
       })
