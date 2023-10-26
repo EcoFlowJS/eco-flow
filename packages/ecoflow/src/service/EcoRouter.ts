@@ -13,6 +13,7 @@ export class EcoRouter implements IEcoRouter {
 
   constructor(svr: EcoServer) {
     const defaultRouter = this.createRouter();
+
     let {
       userDir,
       systemRouterOptions,
@@ -38,10 +39,6 @@ export class EcoRouter implements IEcoRouter {
     this.apiRouter = this.createRouter(apiRouterOptions);
 
     defaultRouter.get("/", (ctx) => ctx.redirect("/admin"));
-    defaultRouter.all("(.*)", (ctx) => {
-      ctx.body = { error: "Unknown API request." };
-      ctx.status = 404;
-    });
 
     if (ecoFlow._.isEmpty(httpStatic)) httpStatic = "/public";
 
@@ -76,6 +73,15 @@ export class EcoRouter implements IEcoRouter {
     svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
     svr.use(defaultRouter.routes()).use(defaultRouter.allowedMethods());
+    svr.use((ctx) => {
+      switch (ctx.status) {
+        case 404:
+          ctx.body = { error: "Unknown API request." };
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   /**

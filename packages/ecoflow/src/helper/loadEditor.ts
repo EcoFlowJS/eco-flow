@@ -2,9 +2,17 @@ import loadAdmin from "@eco-flow/admin-panel";
 import loadFlow from "@eco-flow/flow-editor";
 import loadSchema from "@eco-flow/schema-editor";
 import { EcoFlow } from "@eco-flow/types";
+import proxy from "koa-proxies";
 
 export const loadEditor = ({ server }: EcoFlow): void => {
-  if (ecoFlow.server.env === "development") return;
+  if (ecoFlow.server.env === "development") {
+    server.use(
+      proxy("/", {
+        target: "http://localhost:3000/",
+        changeOrigin: true,
+      })
+    );
+  }
   let { editor } = ecoFlow.config._config;
 
   if (ecoFlow._.isEmpty(editor)) editor = { enabled: true };
