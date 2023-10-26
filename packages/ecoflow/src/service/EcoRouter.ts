@@ -69,10 +69,10 @@ export class EcoRouter implements IEcoRouter {
       });
     }
 
-    ecoFlow.helper.loadEditor();
     svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
     svr.use(defaultRouter.routes()).use(defaultRouter.allowedMethods());
+    ecoFlow.helper.loadEditor();
     svr.use((ctx) => {
       switch (ctx.status) {
         case 404:

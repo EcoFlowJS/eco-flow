@@ -8,10 +8,11 @@ export const loadEditor = ({ server }: EcoFlow): void => {
   if (ecoFlow.server.env === "development") {
     server.use(
       proxy("/admin", {
-        target: "http://localhost:3000/",
+        target: "http://localhost:3000",
         changeOrigin: true,
       })
     );
+    return;
   }
   let { editor } = ecoFlow.config._config;
 

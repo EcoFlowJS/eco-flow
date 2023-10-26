@@ -7,6 +7,7 @@ export class EcoHelper implements IEcoHelper {
   constructor(context: EcoFlow) {
     this.context = context;
   }
+
   loadEditor(): void {
     loadEditor(this.context);
   }
