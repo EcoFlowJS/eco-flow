@@ -1,3 +1,1 @@
-export interface EcoHelper {
-  loadEditor(): void;
-}
+export interface EcoHelper {}

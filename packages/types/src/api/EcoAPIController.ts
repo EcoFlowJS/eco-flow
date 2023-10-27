@@ -8,9 +8,19 @@ export interface EcoAPIController {
 
 export interface API {
   path: string | RegExp;
-  methods: string[];
-  middleware:
+  methods: "Router" | methods;
+  middleware?:
     | Router.Middleware<DefaultState, DefaultContext>
     | Array<Router.Middleware<DefaultState, DefaultContext>>;
+  router?: Router<DefaultState, DefaultContext>;
   opts?: Router.LayerOptions;
 }
+type methods = (
+  | "HEAD"
+  | "OPTIONS"
+  | "GET"
+  | "PUT"
+  | "PATCH"
+  | "POST"
+  | "DELETE"
+)[];

@@ -18,6 +18,7 @@ const defaultConfig: configSettings = {
   flowFilePretty: true,
   userDir: baseUserDir,
   moduleDir: baseUserDir + "/nodes",
+  envDir: baseUserDir + "/environment",
   /*******************************************************************************
    * Security
    *  - adminAuth

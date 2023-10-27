@@ -8,10 +8,13 @@ import mount from "koa-mount";
 import staticServe from "koa-static";
 
 export class EcoRouter implements IEcoRouter {
+  private server: EcoServer;
+
   systemRouter: KoaRouter<DefaultState, DefaultContext>;
   apiRouter: KoaRouter<DefaultState, DefaultContext>;
 
   constructor(svr: EcoServer) {
+    this.server = svr;
     const defaultRouter = this.createRouter();
 
     let {
@@ -72,8 +75,8 @@ export class EcoRouter implements IEcoRouter {
     svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
     svr.use(defaultRouter.routes()).use(defaultRouter.allowedMethods());
-    ecoFlow.helper.loadEditor();
-    svr.use((ctx) => {
+    svr.use(async (ctx, next) => {
+      await next();
       switch (ctx.status) {
         case 404:
           ctx.body = { error: "Unknown API request." };
@@ -89,7 +92,7 @@ export class EcoRouter implements IEcoRouter {
    * @param opt {RouterOptions} Options to configure the router with the given options object.
    * @returns {KoaRouter}
    */
-  createRouter(opt?: RouterOptions): KoaRouter {
+  private createRouter(opt?: RouterOptions): KoaRouter {
     return new KoaRouter(opt);
   }
 }

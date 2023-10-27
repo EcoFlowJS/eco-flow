@@ -8,6 +8,9 @@ import { EcoFlow as IEcoFlow } from "@eco-flow/types";
 import { EcoServer } from "../service/EcoServer";
 import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
+import { homedir } from "os";
+import fs from "fs";
+import loadAdmin from "@eco-flow/admin-panel";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
@@ -17,6 +20,7 @@ class EcoFlow implements IEcoFlow {
 
   server: EcoServer;
   router: EcoRouter;
+  helper: EcoHelper;
 
   container: EcoContainer;
 
@@ -42,11 +46,32 @@ class EcoFlow implements IEcoFlow {
     this.container = new EcoContainer();
     this.container
       .register("config", new Config(configDir, configName, configCli))
-      .register("logger", new Logger())
-      .register("helper", new EcoHelper(this));
+      .register("logger", new Logger());
+
+    let envDir =
+      process.env.configDir ||
+      homedir().replace(/\\/g, "/") + "/.ecoflow/environment";
+    envDir = this._.isEmpty(this.config._config.envDir)
+      ? envDir
+      : this.config._config.envDir;
+
+    this.loadUserEnvironment(envDir);
 
     this.server = new EcoServer();
     this.router = new EcoRouter(this.server);
+    console.log(this.router);
+
+    this.helper = new EcoHelper(this);
+
+    this.helper.loadEditor();
+    this.helper.loadSystemRoutes();
+  }
+
+  private loadUserEnvironment(path: string) {
+    while (path.charAt(path.length - 1) === "/")
+      path = path.substring(0, path.length - 1);
+    if (!fs.existsSync(path + "/.environment")) return;
+    dotenv.config({ path: path + "/.environment" });
   }
 
   start(): EcoFlow {
@@ -60,10 +85,6 @@ class EcoFlow implements IEcoFlow {
 
   get log() {
     return this.container.get("logger");
-  }
-
-  get helper() {
-    return this.container.get("helper");
   }
 
   get Version(): string {

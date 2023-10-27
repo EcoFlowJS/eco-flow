@@ -5,7 +5,7 @@ import { EcoFlow } from "@eco-flow/types";
 import proxy from "koa-proxies";
 
 export const loadEditor = ({ server }: EcoFlow): void => {
-  if (ecoFlow.server.env === "development") {
+  if (server.env === "developmen") {
     server.use(
       proxy("/admin", {
         target: "http://localhost:3000",

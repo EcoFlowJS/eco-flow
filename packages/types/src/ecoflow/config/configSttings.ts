@@ -6,6 +6,7 @@ export interface configSettings {
   //Base configuration
   userDir?: string;
   moduleDir?: string;
+  envDir?: string;
 
   //Flow configuration
   flowFile?: string;

@@ -1,5 +1,6 @@
 import { EcoHelper as IEcoHelper } from "@eco-flow/types";
 import { loadEditor } from "../helper/loadEditor";
+import loadApiRoutes from "../api";
 import EcoFlow from "./EcoFlow";
 
 export class EcoHelper implements IEcoHelper {
@@ -10,5 +11,9 @@ export class EcoHelper implements IEcoHelper {
 
   loadEditor(): void {
     loadEditor(this.context);
+  }
+
+  loadSystemRoutes(): void {
+    loadApiRoutes(this.context.router);
   }
 }

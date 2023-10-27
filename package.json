@@ -16,7 +16,9 @@
     "ediotr:start": "concurrently \"npm run editor:start:errors\" \"npm run editor:start:flow\" \"npm run editor:start:schema\" \"npm run editor:start:admin\"",
     "prewatch": "npm run build",
     "watch": "concurrently \"npm run watch:cli\" \"npm run watch:types\" \"npm run watch:utils\" \"npm run watch:ecoflow\" \"npm run watch:api\"",
-    "dev": "concurrently \"nodemon ./run.ts\" \"npm run ediotr:start\""
+    "dev:backend": "nodemon ./run.ts",
+    "dev:frontend": "npm run ediotr:start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "workspaces": [
     "packages/*",

@@ -24,10 +24,9 @@ export interface EcoFlow {
   _: typeof _;
   server: EcoServer;
   router: EcoRouter;
+  helper: EcoHelper;
   container: EcoContainer;
   get config(): Config;
   get log(): Logger;
-  get helper(): EcoHelper;
   get Version(): string;
 }
-
