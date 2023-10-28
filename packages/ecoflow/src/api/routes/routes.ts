@@ -1,18 +1,15 @@
-import { API } from "@eco-flow/types";
-import { isSetup } from "../controller/base.controller";
+import { Routes } from "@eco-flow/types";
+import authRouter from "./auth";
 import setupRouter from "./setup";
+import { isNewInitialization } from "../controller/base.controller";
+import { EcoSystemAPIBuilder } from "@eco-flow/api";
 
-const routes: API[] = [
-  {
-    path: "/isSetup",
-    methods: ["POST"],
-    middleware: [isSetup],
-  },
-  {
-    path: "/setup",
-    methods: "Router",
-    router: setupRouter,
-  },
-];
+const apiBuilder = new EcoSystemAPIBuilder();
+apiBuilder
+  .createGETRoute("/isNewSetup", isNewInitialization)
+  .createRouterRoute("/setup", setupRouter)
+  .createRouterRoute("/auth", authRouter);
 
-export default routes;
+const apiBaseRoutes: Routes[] = apiBuilder.route;
+
+export default apiBaseRoutes;

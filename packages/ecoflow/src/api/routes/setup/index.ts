@@ -1,7 +1,7 @@
-import Router from "@koa/router";
+import { baseController } from "../../controller/setup/setup.base.controller";
+import { EcoRouter } from "../../../service/EcoRouter";
 
-const setupRouter = new Router();
-
-setupRouter.get("/", (ctx) => (ctx.body = "Hello World"));
-
+const setupRouter = EcoRouter.createRouter();
 export default setupRouter;
+
+setupRouter.get(["/", "/home"], baseController);

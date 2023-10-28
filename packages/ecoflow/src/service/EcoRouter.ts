@@ -8,14 +8,11 @@ import mount from "koa-mount";
 import staticServe from "koa-static";
 
 export class EcoRouter implements IEcoRouter {
-  private server: EcoServer;
-
   systemRouter: KoaRouter<DefaultState, DefaultContext>;
   apiRouter: KoaRouter<DefaultState, DefaultContext>;
 
   constructor(svr: EcoServer) {
-    this.server = svr;
-    const defaultRouter = this.createRouter();
+    const defaultRouter = EcoRouter.createRouter();
 
     let {
       userDir,
@@ -38,8 +35,8 @@ export class EcoRouter implements IEcoRouter {
     if (!ecoFlow._.has(apiRouterOptions, "prefix"))
       apiRouterOptions.prefix = "/api";
 
-    this.systemRouter = this.createRouter(systemRouterOptions);
-    this.apiRouter = this.createRouter(apiRouterOptions);
+    this.systemRouter = EcoRouter.createRouter(systemRouterOptions);
+    this.apiRouter = EcoRouter.createRouter(apiRouterOptions);
 
     defaultRouter.get("/", (ctx) => ctx.redirect("/admin"));
 
@@ -92,7 +89,7 @@ export class EcoRouter implements IEcoRouter {
    * @param opt {RouterOptions} Options to configure the router with the given options object.
    * @returns {KoaRouter}
    */
-  private createRouter(opt?: RouterOptions): KoaRouter {
+  static createRouter(opt?: RouterOptions): KoaRouter {
     return new KoaRouter(opt);
   }
 }

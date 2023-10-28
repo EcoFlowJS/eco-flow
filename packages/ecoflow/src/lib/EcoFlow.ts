@@ -59,7 +59,6 @@ class EcoFlow implements IEcoFlow {
 
     this.server = new EcoServer();
     this.router = new EcoRouter(this.server);
-    console.log(this.router);
 
     this.helper = new EcoHelper(this);
 

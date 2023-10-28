@@ -98,15 +98,28 @@ export class EcoServer extends Koa implements IEcoServer {
    * Close the running HTTP/HTTPS server process and disconnect all connections.
    * @returns { void }
    */
-  closeServer(): void {
-    this._server.close((err) => {
-      if (err) throw err;
-      ecoFlow.log.info(
-        `Stopping server on ${this._isHttps ? "https" : "http"}://${
-          this._host === "0.0.0.0" ? "localhost" : this._host
-        }:${this._port}`
-      );
-      ecoFlow.log.info("====================================");
+  async closeServer(): Promise<void> {
+    ecoFlow.log.info(
+      `Stopping server on ${this._isHttps ? "https" : "http"}://${
+        this._host === "0.0.0.0" ? "localhost" : this._host
+      }:${this._port}`
+    );
+    ecoFlow.log.info("====================================");
+    return new Promise((resolve, reject) => {
+      this._server.closeAllConnections();
+      this._server.close((err) => {
+        if (err) reject(err);
+        resolve(
+          (() => {
+            ecoFlow.log.info(
+              `Server Stopped on ${this._isHttps ? "https" : "http"}://${
+                this._host === "0.0.0.0" ? "localhost" : this._host
+              }:${this._port}`
+            );
+            ecoFlow.log.info("====================================");
+          })()
+        );
+      });
     });
   }
 
@@ -124,19 +137,14 @@ export class EcoServer extends Koa implements IEcoServer {
         typeof httpServer.ServerResponse
       >
   > {
-    ecoFlow.log.info("Restarting server........");
+    ecoFlow.log.info("Restarting server process...");
+    ecoFlow.log.info("====================================");
     return new Promise((resolve, reject) => {
-      this._server.close((err) => {
-        if (err) reject(err);
-        ecoFlow.log.info(
-          `Stopping server on ${this._isHttps ? "https" : "http"}://${
-            this._host === "0.0.0.0" ? "localhost" : this._host
-          }:${this._port}`
-        );
-        ecoFlow.log.info("====================================");
-        this.processConfig();
-        resolve(this.startServer());
-      });
+      this.closeServer()
+        .then(() => {
+          resolve(this.startServer());
+        })
+        .catch((err) => reject(err));
     });
   }
 }
