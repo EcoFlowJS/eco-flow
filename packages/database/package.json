@@ -1,25 +1,26 @@
 {
-  "name": "@eco-flow/types",
-  "version": "0.0.1",
-  "main": "./index.js",
+  "name": "@eco-flow/database",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "tsc --build --force",
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@types/koa__cors": "^4.0.1",
-    "@koa/router": "^11.0.2",
-    "@types/koa": "^2.13.9",
-    "knex": "^3.0.1"
+    "@eco-flow/types": "^0.0.1",
+    "knex": "^3.0.1",
+    "mysql": "^2.18.1",
+    "oracledb": "^6.2.0",
+    "pg": "^8.11.3",
+    "sqlite3": "^5.1.6",
+    "tedious": "^16.6.0"
   }
 }

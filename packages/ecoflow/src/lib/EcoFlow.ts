@@ -10,6 +10,7 @@ import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
 import { homedir } from "os";
 import fs from "fs";
+import { Database } from "@eco-flow/database";
 import loadAdmin from "@eco-flow/admin-panel";
 
 export type loadedEcoFlow = Required<EcoFlow>;
@@ -46,7 +47,14 @@ class EcoFlow implements IEcoFlow {
     this.container = new EcoContainer();
     this.container
       .register("config", new Config(configDir, configName, configCli))
-      .register("logger", new Logger());
+      .register("logger", new Logger())
+      .register("database", new Database().DB);
+
+    ////////////////////////////////////////////////
+
+    console.log(this.database);
+
+    ////////////////////////////////////////////////
 
     let envDir =
       process.env.configDir ||
@@ -80,6 +88,10 @@ class EcoFlow implements IEcoFlow {
 
   get config() {
     return this.container.get("config");
+  }
+
+  get database() {
+    return this.container.get("database");
   }
 
   get log() {
