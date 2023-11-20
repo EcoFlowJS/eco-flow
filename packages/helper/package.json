@@ -1,6 +1,6 @@
 {
-  "name": "@eco-flow/utils",
-  "version": "0.0.1",
+  "name": "@eco-flow/helper",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
@@ -9,15 +9,9 @@
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tslib": "^2.6.2"
-  },
-  "dependencies": {
-    "@eco-flow/helper": "^1.0.0",
-    "@eco-flow/types": "^0.0.1",
-    "winston": "^3.10.0"
+    "typescript": "^5.2.2"
   }
 }

@@ -1,4 +1,4 @@
-import { Helper } from "../../helper";
+import { Helper } from "@eco-flow/helper";
 
 export class JsonBuilder {
   private value: { [key: string | number]: any };
