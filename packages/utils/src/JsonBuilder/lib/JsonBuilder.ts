@@ -26,11 +26,30 @@ export class JsonBuilder {
     return this.value;
   }
 
-  static stringify(value: object): string {
-    return JSON.stringify(new JsonBuilder(value).stringifyHelper(), null, 2);
+  static stringify(
+    value: object,
+    replacer?:
+      | ((number | string)[] | null)
+      | ((this: any, key: string, value: any) => any),
+    space?: string | number
+  ): string {
+    if (typeof replacer === "function")
+      return JSON.stringify(
+        new JsonBuilder(value).stringifyHelper(),
+        replacer,
+        space
+      );
+    return JSON.stringify(
+      new JsonBuilder(value).stringifyHelper(),
+      replacer,
+      space
+    );
   }
 
-  static parse(value: string): object {
-    return new JsonBuilder(JSON.parse(value)).parseHelper();
+  static parse(
+    value: string,
+    reviver?: (this: any, key: string, value: any) => any
+  ): object {
+    return new JsonBuilder(JSON.parse(value, reviver)).parseHelper();
   }
 }
