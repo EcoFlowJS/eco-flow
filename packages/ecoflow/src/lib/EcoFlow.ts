@@ -27,7 +27,6 @@ class EcoFlow implements IEcoFlow {
 
   constructor(args: EcoOptions = {}) {
     global.ecoFlow = this;
-    dotenv.config();
     let cliArgs: ICommand = {};
     if (this._.has(args, "cli")) cliArgs = { ...args.cli };
 
@@ -77,8 +76,10 @@ class EcoFlow implements IEcoFlow {
   private loadUserEnvironment(path: string) {
     while (path.charAt(path.length - 1) === "/")
       path = path.substring(0, path.length - 1);
-    if (!fs.existsSync(path + "/.environment")) return;
-    dotenv.config({ path: path + "/.environment" });
+    if (fs.existsSync(path + "/ecoflow.environments.env"))
+      dotenv.config({ path: path + "/ecoflow.environments.env" });
+    if (fs.existsSync(path + "/user.environments.env"))
+      dotenv.config({ path: path + "/user.environments.env" });
   }
 
   start(): EcoFlow {

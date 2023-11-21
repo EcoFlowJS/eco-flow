@@ -1,2 +1,2 @@
 export * from "./logger";
-export * from "./JsonBuilder";
+export * from "./builder";
