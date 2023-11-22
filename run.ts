@@ -1,4 +1,4 @@
-// import EcoFlow from "./packages/ecoflow/src";
-
-// new EcoFlow().start();
-import { Builder } from "@eco-flow/utils";
+import EcoFlow from "./packages/ecoflow/src";
+(async () => {
+  await new EcoFlow().start();
+})();
