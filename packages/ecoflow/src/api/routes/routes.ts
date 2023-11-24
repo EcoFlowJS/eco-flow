@@ -6,7 +6,7 @@ import { EcoSystemAPIBuilder } from "@eco-flow/api";
 
 const apiBuilder = new EcoSystemAPIBuilder();
 apiBuilder
-  .createGETRoute("/isNewSetup", isNewInitialization)
+  // .createGETRoute("/isNewSetup", isNewInitialization)
   .createRouterRoute("/setup", setupRouter)
   .createRouterRoute("/auth", authRouter);
 

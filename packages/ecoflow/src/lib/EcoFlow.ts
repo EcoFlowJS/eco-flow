@@ -9,20 +9,18 @@ import { EcoServer } from "../service/EcoServer";
 import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
 import { homedir } from "os";
-import fs from "fs";
+import fse from "fs-extra";
+import path from "path";
 import { Database } from "@eco-flow/database";
-import loadAdmin from "@eco-flow/admin-panel";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
+  private helper: EcoHelper;
+
   isAuth: boolean = false;
-
   _: typeof _ = _;
-
   server: EcoServer;
   router: EcoRouter;
-  helper: EcoHelper;
-
   container: EcoContainer;
 
   constructor(args: EcoOptions = {}) {
@@ -38,7 +36,8 @@ class EcoFlow implements IEcoFlow {
     let configDir = undefined;
     let configName = undefined;
 
-    if (!this._.isEmpty(cliArgs.auth)) this.isAuth = cliArgs.auth!;
+    if (this._.isBoolean(cliArgs.auth) && cliArgs.auth)
+      this.isAuth = cliArgs.auth!;
     if (!this._.isEmpty(cliArgs.configDir)) configDir = cliArgs.configDir;
     if (!this._.isEmpty(cliArgs.configName)) configName = cliArgs.configName;
     const configCli = this._.omit(cliArgs, ["configDir", "configName", "auth"]);
@@ -55,35 +54,42 @@ class EcoFlow implements IEcoFlow {
 
     ////////////////////////////////////////////////
 
-    let envDir =
-      process.env.configDir ||
-      homedir().replace(/\\/g, "/") + "/.ecoflow/environment";
-    envDir = this._.isEmpty(this.config._config.envDir)
-      ? envDir
-      : this.config._config.envDir;
-
-    this.loadUserEnvironment(envDir);
-
     this.server = new EcoServer();
-    this.router = new EcoRouter(this.server);
-
+    this.router = new EcoRouter();
     this.helper = new EcoHelper(this);
 
-    this.helper.loadEditor();
-    this.helper.loadSystemRoutes();
+    this.loadEnvironments();
   }
 
-  private loadUserEnvironment(path: string) {
-    while (path.charAt(path.length - 1) === "/")
-      path = path.substring(0, path.length - 1);
-    if (fs.existsSync(path + "/ecoflow.environments.env"))
-      dotenv.config({ path: path + "/ecoflow.environments.env" });
-    if (fs.existsSync(path + "/user.environments.env"))
-      dotenv.config({ path: path + "/user.environments.env" });
+  private loadEnvironments() {
+    const envDir = this._.isEmpty(this.config._config.envDir)
+      ? process.env.configDir ||
+        homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
+      : fse.lstatSync(this.config._config.envDir).isDirectory()
+      ? this.config._config.envDir
+      : process.env.configDir ||
+        homedir().replace(/\\/g, "/") + "/.ecoflow/environment";
+
+    const ecosystemEnv = path.join(envDir, "/ecoflow.environments.env");
+    const userEnv = path.join(envDir, "/user.environments.env");
+    fse.ensureFileSync(ecosystemEnv);
+    fse.ensureFileSync(userEnv);
+
+    //import environments
+    dotenv.config({ path: ecosystemEnv });
+    dotenv.config({ path: userEnv });
   }
 
-  start(): EcoFlow {
-    this.server.startServer();
+  async start(): Promise<EcoFlow> {
+    if (this.helper.isCreateApp()) {
+      await this.helper.generateFiles();
+      this.loadEnvironments();
+    }
+    await this.server.startServer();
+    await this.router.initRouter(this.server);
+
+    await this.helper.loadEditor();
+    await this.helper.loadSystemRoutes();
     return this;
   }
 

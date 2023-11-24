@@ -8,10 +8,10 @@ import mount from "koa-mount";
 import staticServe from "koa-static";
 
 export class EcoRouter implements IEcoRouter {
-  systemRouter: KoaRouter<DefaultState, DefaultContext>;
-  apiRouter: KoaRouter<DefaultState, DefaultContext>;
+  systemRouter!: KoaRouter<DefaultState, DefaultContext>;
+  apiRouter!: KoaRouter<DefaultState, DefaultContext>;
 
-  constructor(svr: EcoServer) {
+  initRouter(svr: EcoServer) {
     const defaultRouter = EcoRouter.createRouter();
 
     let {

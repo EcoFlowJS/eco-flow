@@ -1,5 +1,5 @@
 import loadApiRoutes from "../api";
 
-export const loadSystemRoutes = () => {
+export default () => {
   loadApiRoutes();
 };

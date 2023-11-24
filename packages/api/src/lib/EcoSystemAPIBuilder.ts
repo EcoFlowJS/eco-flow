@@ -13,7 +13,7 @@ import { DefaultContext, DefaultState } from "koa";
 export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   private routes: Routes[];
   constructor(routes: Routes[] = []) {
-    this.routes = routes!;
+    this.routes = routes;
   }
 
   /**

@@ -4,10 +4,22 @@ import loadSchema from "@eco-flow/schema-editor";
 import { EcoFlow } from "@eco-flow/types";
 import proxy from "koa-proxies";
 
-export const loadEditor = ({ server }: EcoFlow): void => {
-  if (server.env === "developmen") {
+export default ({ server, isAuth }: EcoFlow): void => {
+  if (server.env === "development") {
     server.use(
       proxy("/admin", {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      })
+    );
+    server.use(
+      proxy("/editor/flow", {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      })
+    );
+    server.use(
+      proxy("/editor/schema", {
         target: "http://localhost:3000",
         changeOrigin: true,
       })
@@ -19,7 +31,8 @@ export const loadEditor = ({ server }: EcoFlow): void => {
   if (ecoFlow._.isEmpty(editor)) editor = { enabled: true };
   if (!editor.enabled) return;
 
-  editor.admin = ecoFlow._.isEmpty(editor.admin) ? true : editor.admin;
+  if (isAuth)
+    editor.admin = ecoFlow._.isEmpty(editor.admin) ? true : editor.admin;
   editor.flow = ecoFlow._.isEmpty(editor.flow) ? true : editor.flow;
   editor.schema = ecoFlow._.isEmpty(editor.schema) ? true : editor.schema;
 

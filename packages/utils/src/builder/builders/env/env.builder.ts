@@ -69,7 +69,7 @@ export class EnvBuilder {
   static async generateSystemEnv(envPath: string, ENV: Environment[]) {
     try {
       await fse.ensureDir(envPath);
-      fse.writeFile(
+      await fse.writeFile(
         path.join(envPath, "ecoflow.environments.env"),
         new EnvBuilder().generateENVs(ENV, "SYS")
       );
@@ -78,7 +78,7 @@ export class EnvBuilder {
     }
   }
 
-  static getSystemEnvNameList(): string[] {
+  static get getSystemEnvNameList(): string[] {
     let list: Array<string> = [];
     for (const [name] of Object.entries(process.env)) {
       if (name.startsWith("ECOFLOW_SYS_"))
@@ -87,7 +87,7 @@ export class EnvBuilder {
     return list;
   }
 
-  static getSystemEnv(): Environment[] {
+  static get getSystemEnv(): Environment[] {
     let list: Array<Environment> = [];
     for (const [name, value] of Object.entries(process.env)) {
       if (name.startsWith("ECOFLOW_SYS_"))
@@ -100,7 +100,7 @@ export class EnvBuilder {
   }
 
   static async setSystemEnv(envPath: string, ENV: Environment[]) {
-    let existingENVList = EnvBuilder.getSystemEnv();
+    let existingENVList = EnvBuilder.getSystemEnv;
     let existingENVs: Environment[] = [];
     existingENVList.forEach((value) => {
       const remove = _.remove(
@@ -114,7 +114,7 @@ export class EnvBuilder {
     });
 
     try {
-      fse.writeFile(
+      await fse.writeFile(
         path.join(envPath, "ecoflow.environments.env"),
         await new EnvBuilder().updateEnvironment(
           envPath,
@@ -132,7 +132,7 @@ export class EnvBuilder {
   static async generateUserEnv(envPath: string, ENV: Environment[]) {
     try {
       await fse.ensureDir(envPath);
-      fse.writeFile(
+      await fse.writeFile(
         path.join(envPath, "user.environments.env"),
         new EnvBuilder().generateENVs(ENV, "USER")
       );
@@ -141,7 +141,7 @@ export class EnvBuilder {
     }
   }
 
-  static getUserEnvs(): Environment[] {
+  static get getUserEnvs(): Environment[] {
     let list: Environment[] = [];
     for (const [name, value] of Object.entries(process.env)) {
       if (name.startsWith("ECOFLOW_USER_"))
@@ -153,7 +153,7 @@ export class EnvBuilder {
     return list;
   }
 
-  static getUserEnvNameList(): string[] {
+  static get getUserEnvNameList(): string[] {
     let list: Array<string> = [];
     for (const [name] of Object.entries(process.env)) {
       if (name.startsWith("ECOFLOW_USER_"))
@@ -163,7 +163,7 @@ export class EnvBuilder {
   }
 
   static async setUserEnv(envPath: string, ENV: Environment[]): Promise<void> {
-    let existingENVList = EnvBuilder.getUserEnvs();
+    let existingENVList = EnvBuilder.getUserEnvs;
     let existingENVs: Environment[] = [];
     existingENVList.forEach((value) => {
       const remove = _.remove(
@@ -177,7 +177,7 @@ export class EnvBuilder {
     });
 
     try {
-      fse.writeFile(
+      await fse.writeFile(
         path.join(envPath, "user.environments.env"),
         await new EnvBuilder().updateEnvironment(
           envPath,
