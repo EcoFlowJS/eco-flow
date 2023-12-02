@@ -6,8 +6,10 @@ export type { Knex } from "knex";
 export class DriverKnex implements IDriverKnex {
   private connection!: Knex<any, any[]>;
 
+  private initDBClientDriver({ client }: DBConfig): void {}
+
   createConnection(config: DBConfig) {
-    this.connection = knex(config);
+    // this.connection = knex(config);
   }
 
   get schemaBuilder(): Knex.SchemaBuilder {
