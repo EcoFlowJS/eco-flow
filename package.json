@@ -20,7 +20,8 @@
     "watch": "concurrently \"npm run watch:cli\" \"npm run watch:types\" \"npm run watch:utils\" \"npm run watch:ecoflow\" \"npm run watch:api\" \"npm run watch:database\" \"npm run watch:helpers\"",
     "dev:backend": "nodemon ./run.ts",
     "dev:frontend": "npm run ediotr:start",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "start:Development": "concurrently \"npm run watch\" \" npm run dev\""
   },
   "workspaces": [
     "packages/*",

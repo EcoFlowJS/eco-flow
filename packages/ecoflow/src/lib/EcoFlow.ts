@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { EcoOptions, ICommand } from "@eco-flow/types";
+import { ClassType, DriverKnex, EcoOptions, ICommand } from "@eco-flow/types";
 import _ from "lodash";
 import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
@@ -46,11 +46,13 @@ class EcoFlow implements IEcoFlow {
     this.container
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger())
-      .register("database", new Database().DB);
+      .register("database", new Database());
 
     ////////////////////////////////////////////////
 
-    console.log(this.database);
+    let abc: ClassType<DriverKnex> = this.database.initConnection("knextest");
+    let driver = new abc();
+    console.log(driver.knex);
 
     ////////////////////////////////////////////////
 

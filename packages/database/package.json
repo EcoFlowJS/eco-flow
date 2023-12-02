@@ -12,15 +12,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/knex": "^0.16.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@eco-flow/types": "^0.0.1",
-    "knex": "^3.0.1",
-    "mysql": "^2.18.1",
-    "oracledb": "^6.2.0",
-    "pg": "^8.11.3",
-    "sqlite3": "^5.1.6",
-    "tedious": "^16.6.0"
+    "knex": "^3.0.1"
   }
 }

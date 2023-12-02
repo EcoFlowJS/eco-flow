@@ -11,6 +11,11 @@ export * from "./EcoContainer";
 export * from "./EcoFactory";
 export * from "./service";
 
+export interface ClassType<InstanceType extends {} = any> extends Function {
+  new (...args: any[]): InstanceType;
+  prototype: InstanceType;
+}
+
 export interface EcoOptions {
   cli?: ICommand;
   [key: string]: any;
