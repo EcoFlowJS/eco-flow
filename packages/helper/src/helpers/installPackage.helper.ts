@@ -1,7 +1,5 @@
 import {
   ChildProcess,
-  ChildProcessByStdio,
-  ChildProcessWithoutNullStreams,
   SpawnOptions,
   SpawnOptionsWithStdioTuple,
   SpawnOptionsWithoutStdio,
@@ -9,7 +7,6 @@ import {
   StdioPipe,
   spawn,
 } from "child_process";
-import { Readable, Writable } from "node:stream";
 import { EventEmitter } from "stream";
 
 export default (
