@@ -1,7 +1,6 @@
 import { Config } from "../config";
 import {
   ClassType,
-  DriverKnex,
   DriverMongoose,
   EcoOptions,
   ICommand,
