@@ -1,78 +1,35 @@
-import {
-  ChildProcess,
-  SpawnOptions,
-  SpawnOptionsWithStdioTuple,
-  SpawnOptionsWithoutStdio,
-  StdioNull,
-  StdioPipe,
-  spawn,
-} from "child_process";
-import { EventEmitter } from "stream";
+import fse from "fs-extra";
+import { detectPackageManager, addDependency, PackageManager } from "nypm";
+import path from "path";
 
-export default (
-  command: string,
-  args: string[],
-  options:
-    | SpawnOptionsWithoutStdio
-    | SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
-    | SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioNull>
-    | SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioPipe>
-    | SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioPipe>
-    | SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioNull>
-    | SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioNull>
-    | SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioPipe>
-    | SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>
-    | SpawnOptions
-): IinstallPackageHelper => {
-  const event = new EventEmitter();
-  const spawnProcess = spawn(command, args, options);
-  spawnProcess.stdout?.on("data", (data) => event.emit("stdout:data", data));
-  spawnProcess.stdout?.on("close", (data: any) =>
-    event.emit("stdout:close", data)
-  );
-  spawnProcess.stdout?.on("end", (data: any) => event.emit("stdout:end", data));
-  spawnProcess.stdout?.on("error", (data) => event.emit("stdout:error", data));
-  spawnProcess.stdout?.on("pause", (data: any) =>
-    event.emit("stdout:pasue", data)
-  );
-  spawnProcess.stdout?.on("readable", (data: any) =>
-    event.emit("stdout:readable", data)
-  );
-  spawnProcess.stdout?.on("resume", (data: any) =>
-    event.emit("stdout:resume", data)
-  );
+export default async (
+  installDir: string,
+  packageNames: string | string[]
+): Promise<void> => {
+  await fse.ensureDir(installDir);
+  await fse.ensureFile(path.join(installDir, "package-lock.json"));
+  let packageManager = await detectPackageManager(installDir);
 
-  spawnProcess.stderr?.on("data", (data) => event.emit("stderr:data", data));
-  spawnProcess.stderr?.on("close", (data: any) =>
-    event.emit("stderr:close", data)
-  );
-  spawnProcess.stderr?.on("end", (data: any) => event.emit("stderr:end", data));
-  spawnProcess.stderr?.on("error", (data) => event.emit("stderr:error", data));
-  spawnProcess.stderr?.on("pause", (data: any) =>
-    event.emit("stderr:pasue", data)
-  );
-  spawnProcess.stderr?.on("readable", (data: any) =>
-    event.emit("stderr:readable", data)
-  );
-  spawnProcess.stderr?.on("resume", (data: any) =>
-    event.emit("stderr:resume", data)
-  );
-
-  return {
-    process: spawnProcess,
-    event: event,
-    stdout: spawnProcess.stdout,
-    stderr: spawnProcess.stderr,
-    stdin: spawnProcess.stdin,
-    stdio: spawnProcess.stdio,
-  };
+  await addPackages(packageNames, installDir, packageManager);
 };
 
-export interface IinstallPackageHelper {
-  process: ChildProcess;
-  event: EventEmitter;
-  stdout: ChildProcess["stdout"];
-  stderr: ChildProcess["stderr"];
-  stdin: ChildProcess["stdin"];
-  stdio: ChildProcess["stdio"];
-}
+const addPackages = async (
+  packageNames: string | string[],
+  cwd: string,
+  packageManager: PackageManager | undefined
+) => {
+  if (typeof packageManager === "undefined") return;
+  if (typeof cwd === "undefined") return;
+  if (typeof packageNames === "undefined") return;
+
+  if (Array.isArray(packageNames))
+    await packageNames.forEach(
+      async (packageName) => await addPackages(packageName, cwd, packageManager)
+    );
+
+  if (typeof packageNames === "string")
+    await addDependency(packageNames, {
+      cwd: cwd,
+      packageManager: packageManager,
+    });
+};

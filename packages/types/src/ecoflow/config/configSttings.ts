@@ -7,6 +7,7 @@ export interface configSettings {
   userDir?: string;
   moduleDir?: string;
   envDir?: string;
+  DB_DriverDir?: string;
 
   //Flow configuration
   flowFile?: string;
@@ -70,6 +71,8 @@ export namespace configOptions {
   //Base configuration
   export let userDir: string | undefined;
   export let moduleDir: string | undefined;
+  export let envDir: string | undefined;
+  export let DB_DriverDir: string | undefined;
 
   //Flow configuration
   export let flowFile: string | undefined;

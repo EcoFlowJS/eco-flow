@@ -1,15 +1,7 @@
 import stringToFunction from "../helpers/stringToFunction.helper";
 import functionToString from "../helpers/functionToString.helper";
-import installPackageHelper, {
-  IinstallPackageHelper,
-} from "../helpers/installPackage.helper";
-import {
-  SpawnOptions,
-  SpawnOptionsWithStdioTuple,
-  SpawnOptionsWithoutStdio,
-  StdioNull,
-  StdioPipe,
-} from "child_process";
+import installPackageHelper from "../helpers/installPackage.helper";
+import { keys } from "ts-transformer-keys";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -20,22 +12,10 @@ export class Helper {
     return functionToString(value);
   }
 
-  static installPackageHelper(
+  static async installPackageHelper(
     installDir: string,
-    command: string,
-    args: string[],
-    options:
-      | SpawnOptionsWithoutStdio
-      | SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>
-      | SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioNull>
-      | SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioPipe>
-      | SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioPipe>
-      | SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioNull>
-      | SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioNull>
-      | SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioPipe>
-      | SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>
-      | SpawnOptions = {}
-  ): IinstallPackageHelper {
-    return installPackageHelper(command, args, options);
+    packageNames: string | string[]
+  ): Promise<void> {
+    await installPackageHelper(installDir, packageNames);
   }
 }

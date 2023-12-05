@@ -1,6 +1,7 @@
 import { homedir } from "os";
 import { configSettings } from "@eco-flow/types";
 import { LogLevel } from "@eco-flow/utils";
+import path from "path";
 const baseUserDir =
   process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
@@ -19,6 +20,7 @@ const defaultConfig: configSettings = {
   userDir: baseUserDir,
   moduleDir: baseUserDir + "/nodes",
   envDir: baseUserDir + "/environment",
+  DB_DriverDir: path.join(baseUserDir, "DB_Driver"),
   /*******************************************************************************
    * Security
    *  - adminAuth

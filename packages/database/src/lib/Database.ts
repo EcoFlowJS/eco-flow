@@ -13,6 +13,9 @@ export class Database implements IDatabase {
       case "knex":
         this.connections.set(name, require("../drivers").DriverKnex);
         break;
+      case "mongoose":
+        this.connections.set(name, require("../drivers").DriverMongoose);
+        break;
     }
 
     return this.connections.get(name)!;

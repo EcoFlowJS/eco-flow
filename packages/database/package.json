@@ -16,6 +16,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@eco-flow/helper": "^1.0.0",
     "@eco-flow/types": "^0.0.1",
     "knex": "^3.0.1"
   }

@@ -1,5 +1,11 @@
 import { Config } from "../config";
-import { ClassType, DriverKnex, EcoOptions, ICommand } from "@eco-flow/types";
+import {
+  ClassType,
+  DriverKnex,
+  DriverMongoose,
+  EcoOptions,
+  ICommand,
+} from "@eco-flow/types";
 import _ from "lodash";
 import dotenv from "dotenv";
 import { Logger } from "@eco-flow/utils";
@@ -50,9 +56,12 @@ class EcoFlow implements IEcoFlow {
 
     ////////////////////////////////////////////////
 
-    let abc: ClassType<DriverKnex> = this.database.initConnection("knextest");
+    let abc: ClassType<DriverMongoose> = this.database.initConnection(
+      "mongotext",
+      "mongoose"
+    );
     let driver = new abc();
-    console.log(driver.knex);
+    console.log(driver);
 
     ////////////////////////////////////////////////
 

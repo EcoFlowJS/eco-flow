@@ -20,5 +20,5 @@ export interface DriverKnex {
 }
 
 export interface DBConfig extends Knex.Config {
-  client?: "mysql" | "pg" | "sqlite3" | "mssql" | typeof Client;
+  client?: "mysql" | "pg" | "sqlite3" | typeof Client;
 }
