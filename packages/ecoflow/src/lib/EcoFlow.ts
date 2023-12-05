@@ -60,6 +60,11 @@ class EcoFlow implements IEcoFlow {
       "mongoose"
     );
     let driver = new abc();
+    console.log(
+      new (driver.buildModel("test", { definition: { name: String } }))({
+        name: "test",
+      })
+    );
     console.log(driver);
 
     ////////////////////////////////////////////////

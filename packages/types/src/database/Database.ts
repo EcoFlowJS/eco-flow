@@ -7,5 +7,5 @@ export interface Database {
   updateDatabaseConnection: (name: string, driver: DatabaseDriver) => void;
 }
 
-export type DatabaseDriver = "knex";
+export type DatabaseDriver = "knex" | "mongoose";
 export type DatabaseConnection = Map<string, ClassType>;
