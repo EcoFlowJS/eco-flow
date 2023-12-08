@@ -1,6 +1,6 @@
 import { Config } from "../config";
 import {
-  ClassType,
+  DriverDB,
   DriverMongoose,
   EcoOptions,
   ICommand,
@@ -55,7 +55,7 @@ class EcoFlow implements IEcoFlow {
 
     ////////////////////////////////////////////////
 
-    let abc: ClassType<DriverMongoose> = this.database.initConnection(
+    let abc: DriverDB<DriverMongoose> = this.database.initConnection(
       "mongotext",
       "mongoose"
     );
