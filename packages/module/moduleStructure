@@ -36,7 +36,7 @@ ModuleName +
                         defaultValue: [defaultValue]
                     }]
                 ]
-                controller: [
+                controller?: [
                     Array[{
                         _id: [NodeControllerID Ramdom Generated]
                         controller: [ControllerID]
@@ -45,11 +45,11 @@ ModuleName +
                         pramsFromWire?: [...IWireID] 
                     }]
                 ]
-                isTriggerNode?: [
+                isWire?: [
                     {
-                        _id: [isTriggerNodeID Ramdom Generated]
+                        _id: [isWireID Ramdom Generated]
                         triggerWithInputs?: [Boolean default(false)]
-
+                        toWire: [IWireID]
                     }
                 ]
                 inputWirePort: [
@@ -65,13 +65,29 @@ ModuleName +
                         controllerID: [NodeControllerID Ramdom Generated]
                     }]
                 ]
-                isDebug?: [
+                fromWire?: [
                     {
-                        _id: [isDebugNodeID Ramdom Generated]
+                        _id: [fromWireID Ramdom Generated]
                         debugWithOutput?: [Boolean default(false)]
-                        debug: [IWireID]
+                        from: [IWireID]
                     }
                 ]
+                refNodeID?: [hiddensNodesID]
+            }]
+        ]
+        hiddensNodes: [
+            Array[{
+                _id: [NodeID Ramdom Generated]
+                Name: [NodeName]
+                inputParameters: [
+                    Array[{
+                        _id: [pramsId Ramdom Generated]
+                        name: [pramsName]
+                        type: [PramsType]
+                        defaultValue: [defaultValue]
+                    }]
+                ]
+                linkNode: [NodeID]
             }]
         ]
     ]
