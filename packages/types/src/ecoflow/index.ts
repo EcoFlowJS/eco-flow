@@ -5,6 +5,7 @@ import { Config } from "./config";
 import _ from "lodash";
 import { EcoContainer } from "./EcoContainer";
 import { Database } from "../database";
+import { EcoModule } from "../module";
 
 export * from "./config";
 export * from "./EcoContainer";
@@ -31,6 +32,7 @@ export interface EcoFlow {
   container: EcoContainer;
   get config(): Config;
   get database(): Database;
+  get ecoModule(): EcoModule;
   get log(): Logger;
   get Version(): string;
 }

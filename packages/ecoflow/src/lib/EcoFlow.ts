@@ -17,6 +17,7 @@ import { homedir } from "os";
 import fse from "fs-extra";
 import path from "path";
 import { Database } from "@eco-flow/database";
+import EcoModule from "@eco-flow/module";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
@@ -51,21 +52,12 @@ class EcoFlow implements IEcoFlow {
     this.container
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger())
-      .register("database", new Database());
+      .register("database", new Database())
+      .register("module", new EcoModule());
 
     ////////////////////////////////////////////////
 
-    let abc: DriverDB<DriverMongoose> = this.database.initConnection(
-      "mongotext",
-      "mongoose"
-    );
-    let driver = new abc();
-    console.log(
-      new (driver.buildModel("test", { definition: { name: String } }))({
-        name: "test",
-      })
-    );
-    console.log(driver);
+    console.log(this.ecoModule);
 
     ////////////////////////////////////////////////
 
@@ -80,13 +72,13 @@ class EcoFlow implements IEcoFlow {
     const envDir = this._.isEmpty(this.config._config.envDir)
       ? process.env.configDir ||
         homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
-      : fse.lstatSync(this.config._config.envDir).isDirectory()
+      : fse.lstatSync(this.config._config.envDir!).isDirectory()
       ? this.config._config.envDir
       : process.env.configDir ||
         homedir().replace(/\\/g, "/") + "/.ecoflow/environment";
 
-    const ecosystemEnv = path.join(envDir, "/ecoflow.environments.env");
-    const userEnv = path.join(envDir, "/user.environments.env");
+    const ecosystemEnv = path.join(envDir!, "/ecoflow.environments.env");
+    const userEnv = path.join(envDir!, "/user.environments.env");
     fse.ensureFileSync(ecosystemEnv);
     fse.ensureFileSync(userEnv);
 
@@ -108,15 +100,19 @@ class EcoFlow implements IEcoFlow {
     return this;
   }
 
-  get config() {
+  get config(): Config {
     return this.container.get("config");
   }
 
-  get database() {
+  get database(): Database {
     return this.container.get("database");
   }
 
-  get log() {
+  get ecoModule(): EcoModule {
+    return this.container.get("module");
+  }
+
+  get log(): Logger {
     return this.container.get("logger");
   }
 
