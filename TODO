@@ -1,2 +1,43 @@
 @eco-flow/api/ECOAPIBuilder   -> Strapi Type Builder
 @eco-flow/Databse
+
+
+[
+    {
+        name: "flow",
+        nodes: [{
+            _id: "gvdsffedgdjkhfbng",
+            moduleID: "gsyuigfydsfgjkf", //type Request
+            value: ["/", "GET"],
+            nextNode: ["gvdsffedg","gvdsffedgdjkhfbngdfgh","gvdsffedgasdf"]
+        },
+        {
+            _id:"gvdsffedgdjkhfbngdfgh",
+            moduleID: "gsyuigfydsfgjkfe35t6edr", //type Middleware
+            refID: "gvdsffedgdjkhfbng"
+            nextNode: "",
+        },
+        {
+            _id:"gvdsffedg",
+            moduleID: "fythbdgfh", //type Response
+            refID: "gvdsffedgdjkhfbng"
+        },
+        {
+            _id:"gvdsffedgasdf",
+            moduleID: "fythbdgfh", //type Debug
+            refID: ["gvdsffedgdjkhfbng", "hifjughnsfdgdsf"]
+        },
+        {
+            _id: "hifjughn",
+            moduleID: "gsyuigfydsfgjkf", //type Request
+            value: ["/hello", "GET"],
+            nextNode: ""
+        },
+        {
+            _id: "hifjughnsfdgdsf",
+            moduleID: "gsyuigfydsfgjkf", //type Request
+            value: ["/hello2", "GET"],
+            nextNode: "gvdsffedgasdf"
+        }
+    },
+]

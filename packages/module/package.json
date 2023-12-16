@@ -13,11 +13,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/md5": "^2.3.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@eco-flow/types": "^0.0.1",
     "fs-extra": "^11.2.0",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
     "uuid": "^9.0.1"
   }
 }
