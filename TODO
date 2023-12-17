@@ -1,5 +1,5 @@
 @eco-flow/api/ECOAPIBuilder   -> Strapi Type Builder
-@eco-flow/Databse
+@eco-flow/Databse[Check left]
 
 
 [
@@ -8,8 +8,8 @@
         nodes: [{
             _id: "gvdsffedgdjkhfbng",
             moduleID: "gsyuigfydsfgjkf", //type Request
-            value: ["/", "GET"],
-            nextNode: ["gvdsffedg","gvdsffedgdjkhfbngdfgh","gvdsffedgasdf"]
+            value: ["/", "GET"]
+            nextNode: ["gvdsffedgdjkhfbngdfgh","gvdsffedgdjkhfbngdfghdfg"]
         },
         {
             _id:"gvdsffedgdjkhfbngdfgh",
@@ -18,26 +18,24 @@
             nextNode: "",
         },
         {
+            _id:"gvdsffedgdjkhfbngdfghdfg",
+            moduleID: "gsyuigfydsfgjkfe35t6edr", //type Middleware
+            refID: "gvdsffedgdjkhfbng"
+            nextNode: "",
+        },
+        {
             _id:"gvdsffedg",
             moduleID: "fythbdgfh", //type Response
-            refID: "gvdsffedgdjkhfbng"
-        },
-        {
-            _id:"gvdsffedgasdf",
-            moduleID: "fythbdgfh", //type Debug
-            refID: ["gvdsffedgdjkhfbng", "hifjughnsfdgdsf"]
-        },
-        {
-            _id: "hifjughn",
-            moduleID: "gsyuigfydsfgjkf", //type Request
-            value: ["/hello", "GET"],
-            nextNode: ""
-        },
-        {
-            _id: "hifjughnsfdgdsf",
-            moduleID: "gsyuigfydsfgjkf", //type Request
-            value: ["/hello2", "GET"],
-            nextNode: "gvdsffedgasdf"
+            refID: ""
         }
     },
 ]
+
+Request(){
+    Middleware(this)
+}
+
+
+Middleware(refID){
+
+}

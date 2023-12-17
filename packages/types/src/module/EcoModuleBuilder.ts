@@ -1,7 +1,7 @@
 import { Module } from "./EcoModule";
 
 export interface EcoModuleBuilder {
-  build(): Promise<{ [key: string]: Module }[]>;
-
+  processControllers(controllerPath: string): Function;
+  build(): Promise<Module[]>;
   get version(): string;
 }

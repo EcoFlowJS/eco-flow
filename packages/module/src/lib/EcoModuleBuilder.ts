@@ -6,14 +6,17 @@ import {
 import path from "path";
 import md5 from "md5";
 import _ from "lodash";
+import fse from "fs-extra";
 
 export class EcoModuleBuilder implements IEcoModuleBuilder {
   private modules: Module[] = [];
   private moduleGroup!: Module["tag"];
+  private modulePath: string;
   private manifest: ModuleManifest;
   private packageJson: { [key: string]: any };
 
   constructor(ModulePath: string, moduleName: string) {
+    this.modulePath = path.join(ModulePath, moduleName);
     this.manifest = require(path.join(ModulePath, moduleName, "manifest.json"));
     this.packageJson = require(path.join(
       ModulePath,
@@ -40,6 +43,7 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
     this.moduleGroup = {
       _id: id,
       name: name,
+      version: this.version,
     };
 
     return [id, name];
@@ -49,10 +53,28 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
     return new Promise<void | string>((resolve, reject) => {
       try {
         const specs = this.manifest.specs;
-        const groupID = this.moduleGroup._id;
-        const groupName = this.moduleGroup.name;
         this.manifest.specs.forEach((spec) => {
           // TODO: process specs from manifest
+          // console.log(spec);
+          let controller: Function | undefined;
+          if (typeof spec.controller !== "undefined")
+            controller = this.processControllers(
+              path.join(this.modulePath, spec.controller)
+            );
+
+          const moduleSpecs: Module = {
+            _id: this.generateModuleID(spec.name),
+            name: spec.name,
+            type: spec.type,
+            tag: this.moduleGroup,
+          };
+          if (!_.isUndefined(spec.describtion))
+            moduleSpecs.describtion = spec.describtion;
+          if (!_.isUndefined(spec.controller))
+            moduleSpecs.controller = controller;
+          if (!_.isUndefined(spec.inputs)) moduleSpecs.input = spec.inputs;
+
+          this.modules.push(moduleSpecs);
         });
         resolve();
       } catch (err) {
@@ -61,38 +83,27 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
     });
   }
 
-  // private async _buildChildrens(): Promise<void> {
-  //   return new Promise<void>((resolve, reject) => {
-  //     try {
-  //       if (_.isEmpty(this.manifest.children)) {
-  //         resolve();
-  //         return;
-  //       } else {
-  //         this.manifest.children.forEach((child) => this.buildChild(child));
-  //         resolve();
-  //       }
-  //     } catch (e) {
-  //       reject(e);
-  //     }
-  //   });
-  // }
-
-  // private buildChild(child: ModuleChildNode) {
-  //   console.log("Child");
-  // }
-
-  async build(): Promise<{ [key: string]: Module }[]> {
-    let modules: { [key: string]: Module }[] = [];
+  async build(): Promise<Module[]> {
+    let modules: Module[] = [];
     const [id, name] = this._initBuild();
     await this._processSpecs();
 
     this.modules.forEach((node) => {
-      let tempNode: { [key: string]: Module } = {};
-      tempNode[id] = node;
-      modules.push(tempNode);
+      modules.push(node);
     });
-
     return modules;
+  }
+
+  processControllers(controllerPath: string): Function {
+    let controller: Function = (ctx: any) => ctx;
+    if (!fse.existsSync(controllerPath)) return controller;
+    try {
+      const tempController = require(controllerPath);
+      if (!_.isFunction(tempController)) return controller;
+      return tempController;
+    } catch {
+      return controller;
+    }
   }
 
   get version(): string {

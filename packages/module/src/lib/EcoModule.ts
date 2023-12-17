@@ -6,7 +6,7 @@ import path from "path";
 import fse from "fs-extra";
 
 export class EcoModule implements IEcoModule {
-  private modules: Map<string, Module> = new Map<string, Module>();
+  private modules: Module[] = [];
   private modulePath: string;
   private moduleActualPath: string;
 
@@ -27,7 +27,8 @@ export class EcoModule implements IEcoModule {
             this.moduleActualPath,
             moduleName
           );
-          console.log(await ecoModuleBuilder.build());
+          this.modules = await ecoModuleBuilder.build();
+          // console.log(this.modules);
         });
         resolve();
       } catch (err) {
@@ -85,11 +86,9 @@ export class EcoModule implements IEcoModule {
   }
 
   async getModule(moduleID: string): Promise<Module> {
-    throw new Error("Method not implemented.");
-  }
-
-  async getSubmodules(subModuleID: string): Promise<Module[]> {
-    throw new Error("Method not implemented");
+    return new Promise<Module>((resolve, reject) => {
+      resolve(this.modules.filter((m) => m._id === moduleID)[0]);
+    });
   }
 
   get listAvailablePackages(): string[] {

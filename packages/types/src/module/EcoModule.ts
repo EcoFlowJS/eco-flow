@@ -5,7 +5,6 @@ export interface EcoModule {
   removePackage(packageName: string): Promise<void>;
 
   getModule(moduleID: string): Promise<Module>;
-  getSubmodules(subModuleID: string): Promise<Module[]>;
 
   get getModules(): Module[];
   get listAvailablePackages(): string[];
@@ -18,9 +17,11 @@ export interface Module {
   tag: {
     _id: string;
     name: string;
+    version: string;
   };
   type: ModuleSpecs["type"];
-  input?: any[];
+  describtion?: string;
+  input?: ModuleSpecsInputs[];
   controller?: Function;
 }
 
@@ -32,11 +33,19 @@ export interface ModuleManifest {
 export interface ModuleSpecs {
   name: string;
   type: "Request" | "Middleware" | "Response" | "Debug";
-  controllerPath?: string;
+  describtion?: string;
+  controller?: string;
   inputs?: ModuleSpecsInputs[];
 }
 
 export interface ModuleSpecsInputs {
   name: string;
   type: "Text" | "Options";
+  options?: Array<ModuleSpecsInputsOptions> | string;
+  [key: string]: any;
+}
+
+export interface ModuleSpecsInputsOptions {
+  name: string;
+  value: string;
 }
