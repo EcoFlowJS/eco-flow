@@ -52,7 +52,7 @@ export class Config implements IConfig {
    */
   private loadConfig(): void {
     if (!fse.existsSync(this.configFile)) {
-      this.saveConfig(defaultConfig);
+      this.createDefaultConfigFile();
     }
     let config = {
       ...require(this.configFile),
@@ -93,8 +93,9 @@ export class Config implements IConfig {
    * @memberof Config
    * @param cfg Configuration information to be stored in the config.
    */
-  private saveConfig(cfg: configSettings = this._config): void {
-    fse.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
+  private async saveConfig(cfg: configSettings = this._config): Promise<void> {
+    await fse.ensureDir(this.configDir);
+    await fse.writeFile(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
     });
   }
@@ -103,9 +104,17 @@ export class Config implements IConfig {
    * Create the Base or Default Configuration file in the configutation directory.
    * @memberof Config
    */
-  private async createConfigFile(): Promise<void> {
-    await fse.ensureDir(this.configDir);
-    this.saveConfig();
+  private createDefaultConfigFile(): void {
+    if (!fse.existsSync(this.configFile)) {
+      fse.ensureDirSync(this.configDir);
+      fse.writeFileSync(
+        this.configFile,
+        JSON.stringify(defaultConfig, null, 2),
+        {
+          encoding: "utf8",
+        }
+      );
+    }
   }
 
   /**
@@ -121,7 +130,7 @@ export class Config implements IConfig {
       );
       await fse.copyFile(this.configFile, backupConfigPath);
     }
-    this.saveConfig(cfg);
+    await this.saveConfig(cfg);
   }
 
   /**
@@ -151,16 +160,15 @@ export class Config implements IConfig {
    * @returns {Promise<configSettings>} Promise resolving all configuration information.
    */
   async setConfig(cfg: configSettings): Promise<configSettings> {
-    if (!(await fse.exists(this.configFile))) await this.createConfigFile();
-
-    const updatedConfig: configSettings = {
+    this._config = {
+      ...defaultConfig,
       ...this._config,
       ...cfg,
     };
 
-    await this.updateConfigFile(updatedConfig);
+    await this.updateConfigFile(this._config);
 
-    return updatedConfig;
+    return this._config;
   }
 
   /**
