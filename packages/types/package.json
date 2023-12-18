@@ -21,6 +21,7 @@
     "@types/koa": "^2.13.9",
     "@types/koa__cors": "^4.0.1",
     "knex": "^3.0.1",
-    "mongoose": "^8.0.2"
+    "mongoose": "^8.0.2",
+    "query-registry": "^2.6.0"
   }
 }
