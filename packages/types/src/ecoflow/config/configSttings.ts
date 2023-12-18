@@ -13,12 +13,7 @@ export interface configSettings {
   flowFile?: string;
   flowFilePretty?: boolean;
 
-  //Modules configuration
-
-  //Admin configuration
-  adminAuth?: string;
-
-  //HHTP HTTPS configuration
+  //HTTP HTTPS configuration
   Host?: string;
   Port?: string | number;
   https?: {
@@ -31,7 +26,6 @@ export interface configSettings {
   //Router configuration
   systemRouterOptions?: RouterOptions;
   apiRouterOptions?: RouterOptions;
-  httpModuleRoot?: string;
   httpStatic?:
     | string
     | {
@@ -46,16 +40,11 @@ export interface configSettings {
     enabled?: boolean;
     ui?: boolean;
   };
-  runtimeState?: {
-    enabled?: boolean;
-    ui?: boolean;
-  };
 
   //Logger configuration
   logging?: ILoggingConfig;
 
   //API configuration
-  api_port?: string | number;
   api_base_url?: string;
 
   //Editors configuration
@@ -77,11 +66,6 @@ export namespace configOptions {
   //Flow configuration
   export let flowFile: string | undefined;
   export let flowFilePretty: boolean | undefined;
-
-  //Modules configuration
-
-  //Admin configuration
-  export let adminAuth: string | undefined;
 
   //HHTP HTTPS configuration
   export let Host: string | undefined;
@@ -116,18 +100,11 @@ export namespace configOptions {
         ui?: boolean;
       }
     | undefined;
-  export let runtimeState:
-    | {
-        enabled?: boolean;
-        ui?: boolean;
-      }
-    | undefined;
 
   //Logger configuration
   export let logging: ILoggingConfig | undefined;
 
   //API configuration
-  export let api_port: string | number | undefined;
   export let api_base_url: string | undefined;
 
   //Editor configuration

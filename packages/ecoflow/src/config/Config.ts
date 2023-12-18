@@ -1,26 +1,10 @@
-/*!
- * Copyright
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- **/
-
-import { configSettings, Config as IConfig } from "@eco-flow/types";
 import path from "path";
-import fs from "fs";
-import { homedir } from "os";
+import fse from "fs-extra";
 import { glob } from "glob";
-import defaultConfig from "./default.config";
+import { homedir } from "os";
 import { merge } from "lodash";
+import defaultConfig from "./default.config";
+import { configSettings, Config as IConfig } from "@eco-flow/types";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment
@@ -29,17 +13,18 @@ import { merge } from "lodash";
  * @param Name The name of the configuration file that will be saved.
  */
 export class Config implements IConfig {
-  private defaultConfig: configSettings;
   private configDir =
     process.env.configDir || homedir().replace(/\\/g, "/") + "/.ecoflow/config";
   private configFile = path.join(this.configDir, "ecoflow.json");
+
+  //Global configuration settings of the application.
   _config: configSettings = {};
 
   constructor(Directory?: string, Name?: string, tempConfig?: configSettings) {
     if (
       typeof Directory !== "undefined" &&
-      fs.existsSync(Directory) &&
-      fs.lstatSync(Directory).isDirectory()
+      fse.existsSync(Directory) &&
+      fse.lstatSync(Directory).isDirectory()
     )
       this.configDir = Directory;
 
@@ -48,7 +33,6 @@ export class Config implements IConfig {
       this.configFile = path.join(this.configDir, Name);
     }
 
-    this.defaultConfig = defaultConfig;
     this.loadConfig();
     if (typeof tempConfig !== "undefined") this.tempConfigUpdate(tempConfig);
     return this;
@@ -67,11 +51,11 @@ export class Config implements IConfig {
    * @memberof Config
    */
   private loadConfig(): void {
-    let config = this.defaultConfig;
-    if (fs.existsSync(this.configFile)) config = require(this.configFile);
-    config = {
-      ...this.defaultConfig,
-      ...config,
+    if (!fse.existsSync(this.configFile)) {
+      this.saveConfig(defaultConfig);
+    }
+    let config = {
+      ...require(this.configFile),
     };
 
     this._config = config;
@@ -110,7 +94,7 @@ export class Config implements IConfig {
    * @param cfg Configuration information to be stored in the config.
    */
   private saveConfig(cfg: configSettings = this._config): void {
-    fs.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
+    fse.writeFileSync(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
     });
   }
@@ -119,12 +103,9 @@ export class Config implements IConfig {
    * Create the Base or Default Configuration file in the configutation directory.
    * @memberof Config
    */
-  private createConfigFile(): void {
-    if (!fs.existsSync(this.configDir)) {
-      fs.mkdirSync(this.configDir, { recursive: true });
-
-      this.saveConfig();
-    }
+  private async createConfigFile(): Promise<void> {
+    await fse.ensureDir(this.configDir);
+    this.saveConfig();
   }
 
   /**
@@ -132,13 +113,13 @@ export class Config implements IConfig {
    * @memberof Config
    * @param cfg Configuration information to be updated in the config file in the config directory.
    */
-  private updateConfigFile(cfg: configSettings): void {
-    if (fs.existsSync(this.configFile)) {
+  private async updateConfigFile(cfg: configSettings): Promise<void> {
+    if (await fse.exists(this.configFile)) {
       const backupConfigPath = path.join(
         this.configDir,
         "backup_" + new Date().getTime() + ".json"
       );
-      fs.renameSync(this.configFile, backupConfigPath);
+      await fse.copyFile(this.configFile, backupConfigPath);
     }
     this.saveConfig(cfg);
   }
@@ -147,7 +128,7 @@ export class Config implements IConfig {
    * Returns the configuration object for a given key. If the configuration object is present it will be returned else will be undefined.
    * @memberof Config
    * @param key string name of the configuration.
-   * @returns object or string containing configuration information.
+   * @returns {Object | String} containing configuration information.
    */
   get(key: string): any {
     if (
@@ -167,18 +148,17 @@ export class Config implements IConfig {
    * Configuration Settings to save or update to the config file in the config directory.
    * @memberof Config
    * @param cfg Configuration Settings to up stored or update.
-   * @returns object or string containing all configuration information.
+   * @returns {Promise<configSettings>} Promise resolving all configuration information.
    */
-  setConfig(cfg: configSettings): configSettings {
-    if (!fs.existsSync(this.configFile)) this.createConfigFile();
+  async setConfig(cfg: configSettings): Promise<configSettings> {
+    if (!(await fse.exists(this.configFile))) await this.createConfigFile();
 
     const updatedConfig: configSettings = {
-      ...this.defaultConfig,
       ...this._config,
       ...cfg,
     };
 
-    this.updateConfigFile(updatedConfig);
+    await this.updateConfigFile(updatedConfig);
 
     return updatedConfig;
   }
@@ -186,7 +166,7 @@ export class Config implements IConfig {
   /**
    * List all the available backup configs availabe.
    * @memberof Config
-   * @returns Array of backup configurations names.
+   * @returns {Promise<string[]>} Promise resolving array containing names of backup configurations files.
    */
   async listBackupConfigs(): Promise<string[]> {
     return (await glob(this.configDir + "/backup_*.json")).map((file) => {
@@ -200,11 +180,15 @@ export class Config implements IConfig {
    * Delete the backup config file if it exists and returns list of backup configurations present in the config directory.
    * @memberof Config
    * @param ConfigFileName Name of the backuped Configuration to be deleted.
-   * @returns Array of backup configurations names.
+   * @returns {Promise<string[]> } Promise resolving array containing names of backup configurations files.
    */
   async deleteConfigFile(ConfigFileName: string): Promise<string[]> {
-    if (fs.existsSync(this.configDir + "/" + ConfigFileName))
-      fs.unlinkSync(this.configDir + "/" + ConfigFileName);
+    ConfigFileName = !ConfigFileName.endsWith(".json")
+      ? ConfigFileName + ".json"
+      : ConfigFileName;
+
+    if (await fse.exists(this.configDir + "/" + ConfigFileName))
+      await fse.unlink(this.configDir + "/" + ConfigFileName);
     return await this.listBackupConfigs();
   }
 }
