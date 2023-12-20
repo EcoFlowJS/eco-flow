@@ -44,9 +44,6 @@ export interface configSettings {
   //Logger configuration
   logging?: ILoggingConfig;
 
-  //API configuration
-  api_base_url?: string;
-
   //Editors configuration
   editor?: {
     enabled: boolean;
@@ -103,9 +100,6 @@ export namespace configOptions {
 
   //Logger configuration
   export let logging: ILoggingConfig | undefined;
-
-  //API configuration
-  export let api_base_url: string | undefined;
 
   //Editor configuration
   export let editor:
