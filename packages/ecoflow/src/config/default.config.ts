@@ -73,7 +73,7 @@ const defaultConfig: configSettings = {
   // },
 
   // apiRouterOptions: {
-  //   prefix: "", //Prefix for all routes
+  //   prefix: "", //Prefix for all routes. Default is /api
   //   methods: [], //Methods which should be supported by the router.
   //   routerPath: "/", //Path to the router which should be used for all routes
   //   sensitive: false, //Whether or not routing should be case-sensitive.
@@ -126,12 +126,6 @@ const defaultConfig: configSettings = {
     //   path: "/", //Logging path
     // }
   },
-
-  /*******************************************************************************
-   * API Settings
-   *  - api_base_url
-   ******************************************************************************/
-  api_base_url: "api",
 
   /*******************************************************************************
    * Editor Settings
