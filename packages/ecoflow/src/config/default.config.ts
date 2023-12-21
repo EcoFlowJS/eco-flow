@@ -1,11 +1,11 @@
 import { homedir } from "os";
-import { configSettings } from "@eco-flow/types";
+import { configOptions } from "@eco-flow/types";
 import { LogLevel } from "@eco-flow/utils";
 import path from "path";
 const baseUserDir =
   process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
-const defaultConfig: configSettings = {
+const defaultConfig: configOptions = {
   /*******************************************************************************
    * User Directory Settings
    *  - userDir

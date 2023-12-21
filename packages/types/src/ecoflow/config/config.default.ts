@@ -1,8 +1,8 @@
 import koaCors from "@koa/cors";
-import { ILoggingConfig } from "../../utils/logger";
+import { loggerOptions } from "../../utils/logger";
 import { RouterOptions } from "@koa/router";
 
-export interface configSettings {
+export interface configOptions {
   //Base configuration
   userDir?: string;
   moduleDir?: string;
@@ -42,7 +42,7 @@ export interface configSettings {
   };
 
   //Logger configuration
-  logging?: ILoggingConfig;
+  logging?: loggerOptions;
 
   //Editors configuration
   editor?: {
@@ -99,7 +99,7 @@ export namespace configOptions {
     | undefined;
 
   //Logger configuration
-  export let logging: ILoggingConfig | undefined;
+  export let logging: loggerOptions | undefined;
 
   //Editor configuration
   export let editor:

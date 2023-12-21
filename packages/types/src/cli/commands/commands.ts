@@ -1,4 +1,4 @@
-import { ILoggingConfig } from "../../utils";
+import { loggerOptions } from "../../utils";
 
 export interface ICommand {
   Host?: string;
@@ -7,5 +7,5 @@ export interface ICommand {
   configDir?: string;
   configName?: string;
   userDir?: string;
-  logging?: ILoggingConfig;
+  logging?: loggerOptions;
 }

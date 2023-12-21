@@ -1,8 +1,8 @@
-import { configSettings } from "./configSttings";
+import { configOptions } from "./config.default";
 
 export interface Config {
   //Global configuration settings of the application.
-  _config: configSettings;
+  _config: configOptions;
 
   /**
    * Returns the configuration object for a given key. If the configuration object is present it will be returned else will be undefined.
@@ -16,9 +16,9 @@ export interface Config {
    * Configuration Settings to save or update to the config file in the config directory.
    * @memberof Config
    * @param cfg Configuration Settings to up stored or update.
-   * @returns {Promise<configSettings>} Promise resolving all configuration information.
+   * @returns {Promise<configOptions>} Promise resolving all configuration information.
    */
-  setConfig(cfg: configSettings): Promise<configSettings>;
+  setConfig(cfg: configOptions): Promise<configOptions>;
 
   /**
    * List all the available backup configs availabe.

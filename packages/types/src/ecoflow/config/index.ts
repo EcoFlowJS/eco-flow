@@ -1,2 +1,2 @@
-export * from "./configSttings";
+export * from "./config.default";
 export * from "./Config";

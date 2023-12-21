@@ -4,7 +4,7 @@ import { glob } from "glob";
 import { homedir } from "os";
 import { merge } from "lodash";
 import defaultConfig from "./default.config";
-import { configSettings, Config as IConfig } from "@eco-flow/types";
+import { configOptions, Config as IConfig } from "@eco-flow/types";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment
@@ -18,9 +18,9 @@ export class Config implements IConfig {
   private configFile = path.join(this.configDir, "ecoflow.json");
 
   //Global configuration settings of the application.
-  _config: configSettings = {};
+  _config: configOptions = {};
 
-  constructor(Directory?: string, Name?: string, tempConfig?: configSettings) {
+  constructor(Directory?: string, Name?: string, tempConfig?: configOptions) {
     if (
       typeof Directory !== "undefined" &&
       fse.existsSync(Directory) &&
@@ -42,7 +42,7 @@ export class Config implements IConfig {
    * Update the configuration of the application based on the temporary configuration.
    * @param tempConfig temporary configuration options object containing the configuration settings to update the configuration.
    */
-  private tempConfigUpdate(tempConfig: configSettings) {
+  private tempConfigUpdate(tempConfig: configOptions) {
     merge(this._config, tempConfig);
   }
 
@@ -93,7 +93,7 @@ export class Config implements IConfig {
    * @memberof Config
    * @param cfg Configuration information to be stored in the config.
    */
-  private async saveConfig(cfg: configSettings = this._config): Promise<void> {
+  private async saveConfig(cfg: configOptions = this._config): Promise<void> {
     await fse.ensureDir(this.configDir);
     await fse.writeFile(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
@@ -122,7 +122,7 @@ export class Config implements IConfig {
    * @memberof Config
    * @param cfg Configuration information to be updated in the config file in the config directory.
    */
-  private async updateConfigFile(cfg: configSettings): Promise<void> {
+  private async updateConfigFile(cfg: configOptions): Promise<void> {
     if (await fse.exists(this.configFile)) {
       const backupConfigPath = path.join(
         this.configDir,
@@ -149,7 +149,7 @@ export class Config implements IConfig {
       throw new Error(
         "Error getting configuration with key value null or undefined"
       );
-    let config: configSettings = this._config;
+    let config: configOptions = this._config;
     return this.getConfig({ config }, key, true);
   }
 
@@ -159,7 +159,7 @@ export class Config implements IConfig {
    * @param cfg Configuration Settings to up stored or update.
    * @returns {Promise<configSettings>} Promise resolving all configuration information.
    */
-  async setConfig(cfg: configSettings): Promise<configSettings> {
+  async setConfig(cfg: configOptions): Promise<configOptions> {
     this._config = {
       ...defaultConfig,
       ...this._config,

@@ -1,33 +1,13 @@
-import {
-  Database as IDatabase,
-  DatabaseConnection,
-  DatabaseDriver,
-  ClassType,
-} from "@eco-flow/types";
+import { Database as IDatabase, DB_Drivers } from "@eco-flow/types";
 
 export class Database implements IDatabase {
-  private connections: DatabaseConnection = new Map<string, ClassType>();
+  createConnections(name: string, driver: DB_Drivers) {}
 
-  initConnection(name: string, driver: DatabaseDriver = "knex"): ClassType {
-    switch (driver) {
-      case "knex":
-        this.connections.set(name, require("../drivers").DriverKnex);
-        break;
-      case "mongoose":
-        this.connections.set(name, require("../drivers").DriverMongoose);
-        break;
-    }
+  initConnection() {}
 
-    return this.connections.get(name)!;
-  }
+  getDatabaseConnection(name: string): void {}
 
-  getDatabaseConnection(name: string): ClassType {
-    return this.connections.get(name)!;
-  }
+  removeDatabaseConnection(name: string): void {}
 
-  removeDatabaseConnection(name: string): void {
-    this.connections.delete(name);
-  }
-
-  updateDatabaseConnection(name: string, driver: DatabaseDriver = "knex") {}
+  updateDatabaseConnection(name: string, driver: DB_Drivers) {}
 }

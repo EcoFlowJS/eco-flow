@@ -17,8 +17,8 @@
 import winston, { createLogger, format, transports } from "winston";
 const { combine, timestamp, label, prettyPrint, printf, colorize } = format;
 import {
-  configSettings,
-  ILoggingConfig,
+  configOptions,
+  loggerOptions,
   Logger as ILogger,
 } from "@eco-flow/types";
 import { homedir } from "os";
@@ -31,7 +31,7 @@ import { LogLevel } from "./logLevels";
  * subsystem to configure logging configuration for the application level logging subsystem
  * and provides a default configuration for the application level logging subsystem.
  */
-const defaultConfig: ILoggingConfig = {
+const defaultConfig: loggerOptions = {
   enabled: true,
   level: LogLevel.INFO,
   format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
@@ -71,7 +71,7 @@ const defaultConfig: ILoggingConfig = {
  * for the application component that will be used to run the application.
  */
 export class Logger implements ILogger {
-  private loggerConfig!: ILoggingConfig;
+  private loggerConfig!: loggerOptions;
   private logger!: winston.Logger;
   private isEnabled!: boolean;
   private level!: number;
@@ -273,7 +273,7 @@ export class Logger implements ILogger {
    * @param Configuration object containing configuration settings for logging configuration settings for this instances.
    * @returns instance of Logger class.
    */
-  updateConfig({ logging }: configSettings): Logger {
+  updateConfig({ logging }: configOptions): Logger {
     if (typeof logging !== "undefined")
       this.loggerConfig = { ...defaultConfig, ...logging };
 
@@ -357,4 +357,3 @@ export class Logger implements ILogger {
     return this;
   }
 }
-

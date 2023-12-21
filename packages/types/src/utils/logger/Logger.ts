@@ -1,8 +1,8 @@
-import { configSettings } from "../../ecoflow";
+import { configOptions } from "../../ecoflow";
 
 export interface Logger {
   setVerbose(verbose?: boolean): Logger;
-  updateConfig({ logging }: configSettings): Logger;
+  updateConfig({ logging }: configOptions): Logger;
   log(message: { level?: number; message: any }): Logger;
   error(message: any): Logger;
   warn(message: any): Logger;

@@ -1,4 +1,4 @@
-export type ILoggingConfig = {
+export type loggerOptions = {
   enabled: boolean;
   level: number;
   format?: string;
