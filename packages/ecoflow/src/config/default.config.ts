@@ -17,6 +17,7 @@ const defaultConfig: configOptions = {
   moduleDir: baseUserDir + "/nodes", // Directory where all nodes are installed and stored.
   envDir: baseUserDir + "/environment", // Directory where all environment variables are stored.
   DB_DriverDir: path.join(baseUserDir, "DB_Driver"), // Directory where all Database Driver files are installed and stored.
+  DB_ConnectionsDir: path.join(baseUserDir, "Database"), // Directory where all Database Connection files are stored.
 
   /*******************************************************************************
    * Flow File Settings

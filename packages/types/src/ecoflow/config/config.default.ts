@@ -8,6 +8,7 @@ export interface configOptions {
   moduleDir?: string;
   envDir?: string;
   DB_DriverDir?: string;
+  DB_ConnectionsDir?: string;
 
   //Flow configuration
   flowFile?: string;
@@ -59,6 +60,7 @@ export namespace configOptions {
   export let moduleDir: string | undefined;
   export let envDir: string | undefined;
   export let DB_DriverDir: string | undefined;
+  export let DB_ConnectionsDir: string | undefined;
 
   //Flow configuration
   export let flowFile: string | undefined;
