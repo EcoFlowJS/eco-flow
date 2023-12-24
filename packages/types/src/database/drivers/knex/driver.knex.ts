@@ -13,8 +13,8 @@ export interface DriverKnex {
         }
       | undefined
   ): Knex.QueryBuilder;
-  get rawBuilder(): Knex.RawBuilder;
-  get refBuilder(): Knex.RefBuilder;
+  rawBuilder(value: Knex.Value): Knex.Raw<any>;
+  refBuilder(value: string): knex.Knex.Ref<string, { [x: string]: string }>;
   get functionHelper(): Knex.FunctionHelper;
   get knex(): typeof knex;
 }
