@@ -8,11 +8,6 @@ import mongoose, {
 } from "mongoose";
 
 export interface DriverMongoose {
-  createConnection(
-    uri: string,
-    options: mongoose.ConnectOptions | undefined
-  ): Promise<typeof mongoose>;
-
   get getMongoose(): typeof mongoose;
 
   get getSchema(): typeof mongoose.Schema;

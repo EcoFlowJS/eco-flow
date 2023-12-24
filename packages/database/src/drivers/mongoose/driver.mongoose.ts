@@ -11,9 +11,9 @@ import mongoose, {
 export class DriverMongoose implements IDriverMongoose {
   async createConnection(
     uri: string,
-    options: mongoose.ConnectOptions | undefined
+    options?: mongoose.ConnectOptions
   ): Promise<typeof mongoose> {
-    return mongoose.connect(uri, options);
+    return await mongoose.connect(uri, options);
   }
 
   get getSchema(): typeof mongoose.Schema {

@@ -1,23 +1,22 @@
+import { MongooseOptions } from "mongoose";
 import { DriverKnex, DriverMongoose, Knex } from "./drivers";
 
 export interface Database {
-  createConnections: (
-    driver: DB_Drivers,
-    con: String | ConnectionConfig
-  ) => Promise<[boolean, DriverKnex | DriverMongoose | null]>;
   initConnection: () => Promise<void>;
-  getDatabaseConnection: (name: string) => void;
+  getDatabaseConnection: (name: string) => any;
   addDatabaseConnection: (
     name: string,
     driver: DB_Drivers,
-    connection: String | ConnectionConfig
-  ) => void;
-  removeDatabaseConnection: (name: string) => void;
+    connection: ConnectionConfig
+  ) => Promise<void>;
+  removeDatabaseConnection: (name: string) => Promise<void>;
   updateDatabaseConnection: (
     name: string,
     driver: DB_Drivers,
-    connection: String | ConnectionConfig
-  ) => void;
+    connection: ConnectionConfig
+  ) => Promise<void>;
+  isKnex(connection: any): boolean;
+  isMongoose(connection: any): boolean;
 }
 
 export type DB_Drivers = "MYSQL" | "PGSQL" | "SQLite" | "MONGO";
@@ -31,7 +30,7 @@ export type DatabaseConnection = DriverKnex | DriverMongoose;
 export interface DatabaseConnectionConfig {
   name: string;
   driver: DB_Drivers;
-  connections: String | ConnectionConfig;
+  connections: ConnectionConfig;
 }
 
 export interface ConnectionConfig {
@@ -44,4 +43,5 @@ export interface ConnectionConfig {
   ssl?: boolean;
   filename?: string;
   flags?: Array<any>;
+  mongooseOptions?: MongooseOptions;
 }
