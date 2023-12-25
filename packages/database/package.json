@@ -18,6 +18,7 @@
   "dependencies": {
     "@eco-flow/helper": "^1.0.0",
     "@eco-flow/types": "^0.0.1",
+    "@eco-flow/utils": "^0.0.1",
     "fs-extra": "^11.2.0",
     "knex": "^3.0.1",
     "mongoose": "^8.0.2",
