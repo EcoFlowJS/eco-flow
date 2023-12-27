@@ -1,6 +1,7 @@
 import loadAdmin from "@eco-flow/admin-panel";
 import loadFlow from "@eco-flow/flow-editor";
 import loadSchema from "@eco-flow/schema-editor";
+import loadLanding from "@eco-flow/landing-page";
 import loadEditorsApiRoutes from "../api";
 import {
   EcoFlow,
@@ -37,8 +38,21 @@ export class EcoEditors implements IEcoEditors {
     this.server.use(router.routes()).use(router.allowedMethods());
   }
 
+  private defaultRedirect() {
+    const baseRouter = EcoRouter.createRouter();
+    baseRouter.get("/", (ctx) => ctx.redirect("/auth"));
+    this.server.use(baseRouter.routes()).use(baseRouter.allowedMethods());
+  }
+
   loadEditors(): void {
-    if (this.server.env === "developmen") {
+    if (this.server.env === "development") {
+      this.defaultRedirect();
+      this.server.use(
+        proxy("/auth", {
+          target: "http://localhost:3000",
+          changeOrigin: true,
+        })
+      );
       this.server.use(
         proxy("/admin", {
           target: "http://localhost:3000",
@@ -81,7 +95,8 @@ export class EcoEditors implements IEcoEditors {
     if (!editor.enabled) return;
 
     this.initializeEditorsRouter();
-
+    this.defaultRedirect();
+    loadLanding(this.server);
     if (editor.admin) loadAdmin(this.server);
     if (editor.flow) loadFlow(this.server);
     if (editor.schema) loadSchema(this.server);
