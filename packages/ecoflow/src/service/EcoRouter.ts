@@ -8,37 +8,23 @@ import mount from "koa-mount";
 import staticServe from "koa-static";
 
 export class EcoRouter implements IEcoRouter {
-  systemRouter!: KoaRouter<DefaultState, DefaultContext>;
+  systemRouter: KoaRouter<DefaultState, DefaultContext> | undefined;
   apiRouter!: KoaRouter<DefaultState, DefaultContext>;
 
   initRouter(svr: EcoServer) {
     const defaultRouter = EcoRouter.createRouter();
 
-    let {
-      userDir,
-      systemRouterOptions,
-      apiRouterOptions,
-      httpStatic,
-      httpStaticRoot,
-    } = ecoFlow.config._config;
+    let { userDir, apiRouterOptions, httpStatic, httpStaticRoot } =
+      ecoFlow.config._config;
 
-    if (ecoFlow._.isEmpty(systemRouterOptions)) {
-      systemRouterOptions = {};
-      systemRouterOptions.prefix = "/systemAPI";
-    }
     if (ecoFlow._.isEmpty(apiRouterOptions)) {
       apiRouterOptions = {};
       apiRouterOptions.prefix = "/api";
     }
-    if (!ecoFlow._.has(systemRouterOptions, "prefix"))
-      systemRouterOptions.prefix = "/systemAPI";
     if (!ecoFlow._.has(apiRouterOptions, "prefix"))
       apiRouterOptions.prefix = "/api";
 
-    this.systemRouter = EcoRouter.createRouter(systemRouterOptions);
     this.apiRouter = EcoRouter.createRouter(apiRouterOptions);
-
-    defaultRouter.get("/", (ctx) => ctx.redirect("/admin"));
 
     if (ecoFlow._.isEmpty(httpStatic)) httpStatic = "/public";
 
@@ -69,7 +55,6 @@ export class EcoRouter implements IEcoRouter {
       });
     }
 
-    svr.use(this.systemRouter.routes()).use(this.systemRouter.allowedMethods());
     svr.use(this.apiRouter.routes()).use(this.apiRouter.allowedMethods());
     svr.use(defaultRouter.routes()).use(defaultRouter.allowedMethods());
     svr.use(async (ctx, next) => {

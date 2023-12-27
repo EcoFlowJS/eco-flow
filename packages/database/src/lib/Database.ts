@@ -238,26 +238,23 @@ export class Database implements IDatabase {
   }
 
   async initConnection(): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
-      try {
-        const savedConfig = _.cloneDeep(await this.getConfigurations());
-        if (_.isEmpty(savedConfig)) return;
-        for (const config of savedConfig) {
-          if (
-            typeof config.driver !== "undefined" &&
-            typeof config.connections !== "undefined"
-          )
-            await this.addConnection(
-              config.name,
-              config.driver,
-              config.connections
-            );
-        }
-        resolve();
-      } catch (err) {
-        reject(err);
+    try {
+      const savedConfig = _.cloneDeep(await this.getConfigurations());
+      if (_.isEmpty(savedConfig)) return;
+      for (const config of savedConfig) {
+        if (
+          typeof config.driver !== "undefined" &&
+          typeof config.connections !== "undefined"
+        )
+          await this.addConnection(
+            config.name,
+            config.driver,
+            config.connections
+          );
       }
-    });
+    } catch (err) {
+      ecoFlow.log.error(err);
+    }
   }
 
   getDatabaseConnection(name: string): any {

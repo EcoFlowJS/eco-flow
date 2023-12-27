@@ -311,6 +311,7 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
    */
   static register(routes: Routes[]): void {
     const { systemRouter } = ecoFlow.router;
+    if (ecoFlow._.isUndefined(systemRouter)) return;
     routes.forEach((route) => {
       if (ecoFlow._.isEmpty(route.path)) return;
       if (ecoFlow._.isEmpty(route.type)) return;

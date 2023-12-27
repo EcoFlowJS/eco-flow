@@ -1,10 +1,9 @@
-import loadEditor from "../helper/editor.helper";
 import EcoFlow from "./EcoFlow";
-import loadSystemRoutes from "../helper/systemRoutes.helper";
 import isCreateApp from "../helper/isCreateApp.helper";
 import generateFiles from "../helper/generateFiles.helper";
 import { EcoSystemAPIBuilder } from "@eco-flow/api";
 import { isNewInitialization } from "../api/controller/base.controller";
+import { EcoEditors } from "../service/EcoEditors";
 
 export class EcoHelper {
   private context: EcoFlow;
@@ -13,11 +12,11 @@ export class EcoHelper {
   }
 
   loadEditor(): void {
-    loadEditor(this.context);
+    new EcoEditors(this.context).loadEditors();
   }
 
   loadSystemRoutes(): void {
-    loadSystemRoutes();
+    EcoEditors.loadEditorsRoutes();
   }
 
   isCreateApp(): boolean {
