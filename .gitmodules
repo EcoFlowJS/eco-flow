@@ -9,3 +9,6 @@
 [submodule "editors/admin-panel"]
 	path = editors/admin-panel
 	url = https://github.com/RomelSikdar/admin-panel.git
+[submodule "editors/landing-page"]
+	path = editors/landing-page
+	url = https://github.com/RomelSikdar/ecoflow-landing-page.git
