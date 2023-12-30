@@ -12,3 +12,6 @@
 [submodule "editors/landing-page"]
 	path = editors/landing-page
 	url = https://github.com/RomelSikdar/ecoflow-landing-page.git
+[submodule "editors/components-lib"]
+	path = editors/components-lib
+	url = https://github.com/RomelSikdar/ecoflow-components
