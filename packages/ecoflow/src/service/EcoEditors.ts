@@ -47,6 +47,7 @@ export class EcoEditors implements IEcoEditors {
   loadEditors(): void {
     if (this.server.env === "development") {
       this.defaultRedirect();
+      this.initializeEditorsRouter();
       this.server.use(
         proxy("/auth", {
           target: "http://localhost:3000",
