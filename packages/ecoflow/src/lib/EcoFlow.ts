@@ -60,6 +60,7 @@ class EcoFlow implements IEcoFlow {
       loadEnvironments();
     }
     await this.server.startServer();
+    await this.server.initializePassport();
     await this.database.initConnection();
     await this.router.initRouter(this.server);
 

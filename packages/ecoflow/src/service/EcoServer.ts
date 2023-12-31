@@ -1,9 +1,13 @@
 import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
 import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
+import { IStrategyOptions } from "passport-local";
+import { Passport } from "./Passport";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -12,6 +16,7 @@ export class EcoServer extends Koa implements IEcoServer {
   private _port!: typeof configOptions.Port;
   private _httpCors!: koaCors.Options;
   private _server!: HttpServer | HttpsServer;
+  passport: typeof passport = passport;
 
   /**
    * EcoFlow Server Library interface implementation for HTTP/HTTPS connections and APIs requests.
@@ -79,6 +84,7 @@ export class EcoServer extends Koa implements IEcoServer {
     if (this._isHttps)
       this._server = httpsServer.createServer(this._https!, this.callback());
     this.use(koaCors(this._httpCors));
+    this.use(bodyParser());
 
     return this._server.listen(
       parseInt(this._port!.toString()),
@@ -146,5 +152,9 @@ export class EcoServer extends Koa implements IEcoServer {
         })
         .catch((err) => reject(err));
     });
+  }
+
+  async initializePassport(options: IStrategyOptions = {}): Promise<void> {
+    new Passport(this, options).init();
   }
 }

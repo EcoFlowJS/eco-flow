@@ -16,6 +16,7 @@
     "@eco-flow/api": "^0.0.1",
     "@eco-flow/database": "^0.1.0",
     "@eco-flow/flow-editor": "^0.1.0",
+    "@eco-flow/helper": "^1.0.0",
     "@eco-flow/module": "^1.0.0",
     "@eco-flow/schema-editor": "^0.1.0",
     "@eco-flow/types": "^0.0.1",
@@ -30,18 +31,23 @@
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.1",
     "koa-mount": "^4.0.0",
+    "koa-passport": "^6.0.0",
     "koa-proxies": "^0.12.3",
+    "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
-    "koa2-nginx": "^2.0.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "passport-local": "^1.0.0"
   },
   "description": "",
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",
     "@types/koa__cors": "^4.0.1",
     "@types/koa__router": "^12.0.2",
-    "@types/koa-bodyparser": "^4.3.11",
+    "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-mount": "^4.0.4",
-    "@types/koa-static": "^4.0.3"
+    "@types/koa-passport": "^6.0.3",
+    "@types/koa-session": "^6.4.5",
+    "@types/koa-static": "^4.0.3",
+    "@types/passport-local": "^1.0.38"
   }
 }
