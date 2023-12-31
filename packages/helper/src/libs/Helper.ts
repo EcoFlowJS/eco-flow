@@ -4,6 +4,9 @@ import installPackageHelper from "../helpers/installPackage.helper";
 import removePackageHelper from "../helpers/removePackage.helper";
 import fetchFromEnv from "../helpers/fetchFromEnv";
 import getRandomInt from "../helpers/getRandomInt";
+import generateJwtToken from "../helpers/generateJwtToken";
+import { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken";
+import verifyJwtToken from "../helpers/verifyJwtToken";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -34,5 +37,19 @@ export class Helper {
 
   static getRandomInt(min: number, max: number): number {
     return getRandomInt(min, max);
+  }
+
+  static generateJwtToken(
+    value: string | object | Buffer,
+    options?: SignOptions
+  ): string {
+    return generateJwtToken(value, options);
+  }
+
+  static verifyJwtToken(
+    token: string,
+    options?: VerifyOptions
+  ): JwtPayload | string | null {
+    return verifyJwtToken(token, options);
   }
 }

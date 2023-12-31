@@ -16,7 +16,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "fs-extra": "^11.2.0",
+    "jsonwebtoken": "^9.0.2",
     "nypm": "^0.3.3"
   }
 }

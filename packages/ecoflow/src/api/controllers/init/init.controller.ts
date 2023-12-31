@@ -1,9 +1,16 @@
 import { Context } from "koa";
 
 export const initStatus = async (ctx: Context) => {
-  let appStatus: any = {
-    isAuth: ecoFlow.isAuth,
-    isNewClient: await ecoFlow.service.UserService.isNoUser(),
+  const isAuth = !ecoFlow.isAuth;
+  const isNoUser = await ecoFlow.service.UserService.isNoUser();
+  let getAccessToken: string | undefined = undefined;
+
+  if (isAuth && !isNoUser)
+    getAccessToken = process.env.ECOFLOW_SYS_NOAUTH_ACCESS_TOKEN!;
+
+  ctx.body = {
+    isAuth: isAuth,
+    isNewClient: isNoUser,
+    getAccessToken: getAccessToken,
   };
-  ctx.body = appStatus;
 };

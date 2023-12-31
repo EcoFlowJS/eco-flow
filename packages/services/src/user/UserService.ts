@@ -24,7 +24,7 @@ export class UserService implements IUserService {
 
   constructor() {
     this.dataBase = ecoFlow.database;
-    this.connection = this.dataBase.getDatabaseConnection("_sysDB");
+    this.connection = this.dataBase.getDatabaseConnection("mongo24");
   }
 
   async isNoUser(): Promise<boolean> {
