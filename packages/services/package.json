@@ -13,5 +13,9 @@
     "typescript": "^5.3.3"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@eco-flow/types": "^0.0.1",
+    "mongoose": "^8.0.3"
+  }
 }

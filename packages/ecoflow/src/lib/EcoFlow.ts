@@ -8,6 +8,7 @@ import { EcoServer } from "../service/EcoServer";
 import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
 import { Database } from "@eco-flow/database";
+import { Service } from "@eco-flow/services";
 import EcoModule from "@eco-flow/module";
 import loadEnvironments from "../helper/env.helper";
 
@@ -45,7 +46,8 @@ class EcoFlow implements IEcoFlow {
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger())
       .register("database", new Database())
-      .register("module", new EcoModule());
+      .register("module", new EcoModule())
+      .register("service", new Service());
 
     this.server = new EcoServer();
     this.router = new EcoRouter();
@@ -81,6 +83,10 @@ class EcoFlow implements IEcoFlow {
 
   get ecoModule(): EcoModule {
     return this.container.get("module");
+  }
+
+  get service(): Service {
+    return this.container.get("service");
   }
 
   get log(): Logger {

@@ -19,6 +19,7 @@
     "@eco-flow/helper": "^1.0.0",
     "@eco-flow/module": "^1.0.0",
     "@eco-flow/schema-editor": "^0.1.0",
+    "@eco-flow/services": "^0.0.1",
     "@eco-flow/types": "^0.0.1",
     "@eco-flow/utils": "^0.0.1",
     "@koa/cors": "^4.0.0",

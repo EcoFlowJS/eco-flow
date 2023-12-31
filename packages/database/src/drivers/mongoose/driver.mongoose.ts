@@ -2,6 +2,8 @@ import { DriverMongoose as IDriverMongoose } from "@eco-flow/types";
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
+  Connection,
+  Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
@@ -9,11 +11,13 @@ import mongoose, {
 } from "mongoose";
 
 export class DriverMongoose implements IDriverMongoose {
+  private conn!: Connection;
   async createConnection(
     uri: string,
     options?: mongoose.ConnectOptions
-  ): Promise<typeof mongoose> {
-    return await mongoose.connect(uri, options);
+  ): Promise<Connection> {
+    this.conn = await mongoose.createConnection(uri, options);
+    return this.conn;
   }
 
   get getSchema(): typeof mongoose.Schema {
@@ -24,8 +28,8 @@ export class DriverMongoose implements IDriverMongoose {
     return mongoose;
   }
 
-  get getConnection(): typeof mongoose.Connection {
-    return mongoose.Connection;
+  get getConnection(): mongoose.Connection {
+    return this.conn;
   }
 
   get getDocument(): typeof mongoose.Document {
@@ -62,7 +66,7 @@ export class DriverMongoose implements IDriverMongoose {
     collection?: string,
     options?: CompileModelOptions
   ): typeof mongoose.Model {
-    return mongoose.model(
+    return this.conn.model(
       name,
       new this.getSchema(schema.definition, schema.options),
       collection,

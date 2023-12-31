@@ -1,6 +1,7 @@
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
+  Connection,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
@@ -12,7 +13,7 @@ export interface DriverMongoose {
 
   get getSchema(): typeof mongoose.Schema;
 
-  get getConnection(): typeof mongoose.Connection;
+  get getConnection(): mongoose.Connection;
 
   get getDocument(): typeof mongoose.Document;
 
