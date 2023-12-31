@@ -1,0 +1,7 @@
+"/systemApi/init/status" >
+  {
+    isAuth,
+    isNewAPP, // [Check if default userEsists ],
+    getAccessToken,
+    getRefreshToken,
+  };

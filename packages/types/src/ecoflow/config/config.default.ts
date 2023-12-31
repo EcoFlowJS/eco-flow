@@ -1,6 +1,7 @@
 import koaCors from "@koa/cors";
 import { loggerOptions } from "../../utils/logger";
 import { RouterOptions } from "@koa/router";
+import { ConnectionConfig, DB_Drivers } from "../../database";
 
 export interface configOptions {
   //Base configuration
@@ -50,6 +51,12 @@ export interface configOptions {
     admin?: boolean;
     flow?: boolean;
     schema?: boolean;
+  };
+
+  //System Database configuration
+  database?: {
+    driver: DB_Drivers;
+    configuration: ConnectionConfig;
   };
 }
 
@@ -108,6 +115,14 @@ export namespace configOptions {
         admin?: boolean;
         flow?: boolean;
         schema?: boolean;
+      }
+    | undefined;
+
+  //System Database configuration
+  export let database:
+    | {
+        driver: DB_Drivers;
+        configuration: ConnectionConfig;
       }
     | undefined;
 }

@@ -55,7 +55,7 @@ class EcoFlow implements IEcoFlow {
   }
 
   async start(): Promise<EcoFlow> {
-    if (this.helper.isCreateApp()) {
+    if (!this.helper.isCreateApp()) {
       await this.helper.generateFiles();
       loadEnvironments();
     }

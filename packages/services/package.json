@@ -1,0 +1,17 @@
+{
+  "name": "@eco-flow/services",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --force",
+    "watch": "tsc --watch",
+    "cleanBuild": "tsc --build --clean && npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "author": "",
+  "license": "ISC"
+}

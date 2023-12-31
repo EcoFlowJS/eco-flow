@@ -56,25 +56,27 @@ export class Database implements IDatabase {
   private async addConnection(
     name: string,
     driver: DB_Drivers,
-    connection: ConnectionConfig
+    connection: ConnectionConfig,
+    isSystem: boolean = false
   ): Promise<[boolean, String | { error: any }]> {
-    return new Promise<[boolean, String | { error: any }]>(async (resolve) => {
-      try {
-        const [status, DBconnection] = await this.createConnections(
-          driver,
-          connection
-        );
+    while (/[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g.test(name.charAt(0)) && !isSystem)
+      name = name.substring(1);
 
-        if (status && DBconnection != null && !this.connections.has(name)) {
-          this.connections.set(name, DBconnection);
-          resolve([true, "Connection Successfully"]);
-        } else if (this.connections.has(name))
-          resolve([false, "Connection already exists"]);
-        else resolve([false, "Connection Failed"]);
-      } catch (error) {
-        resolve([false, { error: error }]);
-      }
-    });
+    try {
+      const [status, DBconnection] = await this.createConnections(
+        driver,
+        connection
+      );
+
+      if (status && DBconnection != null && !this.connections.has(name)) {
+        this.connections.set(name, DBconnection);
+        return [true, "Connection Successfully"];
+      } else if (this.connections.has(name))
+        return [false, "Connection already exists"];
+      else return [false, "Connection Failed"];
+    } catch (error) {
+      return [false, { error: error }];
+    }
   }
 
   private async createConnections(
@@ -237,7 +239,33 @@ export class Database implements IDatabase {
       : [false, "Connection Updation failed!"];
   }
 
+  private async initSystemConnection(): Promise<void> {
+    const { database, DB_Directory } = ecoFlow.config._config;
+    let { driver, configuration } = database!;
+    driver = _.isUndefined(driver) ? "SQLite" : driver;
+    configuration = _.isUndefined(configuration)
+      ? {
+          filename: path.join(
+            DB_Directory!,
+            "DB_connections",
+            "ecoflowDB.sqlite"
+          ),
+        }
+      : configuration;
+
+    const [status, msg] = await this.addConnection(
+      "_sysDB",
+      driver,
+      configuration,
+      true
+    );
+
+    if (status) ecoFlow.log.info("System DataBase " + msg);
+    else ecoFlow.log.error(msg);
+  }
+
   async initConnection(): Promise<void> {
+    await this.initSystemConnection();
     try {
       const savedConfig = _.cloneDeep(await this.getConfigurations());
       if (_.isEmpty(savedConfig)) return;

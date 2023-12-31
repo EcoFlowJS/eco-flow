@@ -5,10 +5,9 @@ import { EcoSystemAPIBuilder } from "@eco-flow/api";
 import initRouter from "./init";
 
 const apiBuilder = new EcoSystemAPIBuilder();
-apiBuilder
-  .createRouterRoute("/init", initRouter)
-  .createRouterRoute("/setup", setupRouter)
-  .createRouterRoute("/auth", authRouter);
+apiBuilder.createRouterRoute("/init", initRouter);
+// .createRouterRoute("/setup", setupRouter)
+// .createRouterRoute("/auth", authRouter);
 
 const apiBaseRoutes: Routes[] = apiBuilder.route;
 

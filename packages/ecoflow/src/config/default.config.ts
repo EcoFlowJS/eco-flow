@@ -138,6 +138,18 @@ const defaultConfig: configOptions = {
     flow: true, //Enable or Disable flow editor.
     schema: true, //Enable or Disable schema editor.
   },
+
+  database: {
+    driver: "SQLite",
+    configuration: {
+      filename: path.join(
+        baseUserDir,
+        "Database",
+        "DB_connections",
+        "ecoflowDB.sqlite"
+      ),
+    },
+  },
 };
 
 export default defaultConfig;

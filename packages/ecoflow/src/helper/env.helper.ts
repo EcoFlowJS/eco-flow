@@ -8,10 +8,12 @@ export default () => {
   const envDir = _.isEmpty(ecoFlow.config._config.envDir)
     ? process.env.configDir ||
       homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
-    : fse.lstatSync(ecoFlow.config._config.envDir!).isDirectory()
-    ? ecoFlow.config._config.envDir
-    : process.env.configDir ||
-      homedir().replace(/\\/g, "/") + "/.ecoflow/environment";
+    : fse.existsSync(ecoFlow.config._config.envDir!)
+    ? fse.lstatSync(ecoFlow.config._config.envDir!).isDirectory()
+      ? ecoFlow.config._config.envDir
+      : process.env.configDir ||
+        homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
+    : fse.ensureDirSync(ecoFlow.config._config.envDir!);
 
   const ecosystemEnv = path.join(envDir!, "/ecoflow.environments.env");
   const userEnv = path.join(envDir!, "/user.environments.env");

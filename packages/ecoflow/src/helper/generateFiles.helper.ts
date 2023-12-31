@@ -25,8 +25,6 @@ export default async ({ config, log }: EcoFlow) => {
     { name: "CRYPTION_KEY", value: generateASecret() },
     { name: "ADMINCLI_TOKEN", value: generateToken("admin") },
     { name: "NOAUTH_ACCESS_TOKEN", value: generateToken("admin") },
-    { name: "DB_CLIENT", value: "sqlite3" },
-    { name: "DB_FILENAME", value: path.join(DB_Path, "ecoFlow.db") },
   ]);
 
   log.info("Files Created Starting Server");
