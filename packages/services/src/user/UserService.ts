@@ -3,7 +3,7 @@ import {
   DatabaseConnection,
   UserService as IUserService,
 } from "@eco-flow/types";
-import { userModelMongoose } from "./model/userModel";
+import { userModelKnex, userModelMongoose } from "./model/userModel";
 import { Schema } from "mongoose";
 
 const schema = new Schema({
@@ -24,14 +24,17 @@ export class UserService implements IUserService {
 
   constructor() {
     this.dataBase = ecoFlow.database;
-    this.connection = this.dataBase.getDatabaseConnection("mongo24");
+    this.connection = this.dataBase.getDatabaseConnection("_sysDB");
   }
 
   async isNoUser(): Promise<boolean> {
-    if (this.dataBase.isMongoose(this.connection)) {
-      console.log(await userModelMongoose(this.connection).countDocuments());
-    }
+    let response = true;
+    if (this.dataBase.isMongoose(this.connection))
+      if ((await userModelMongoose(this.connection).countDocuments()) > 0)
+        response = false;
 
-    return false;
+    if (this.dataBase.isKnex(this.connection))
+      if ((await userModelKnex(this.connection)) > 0) response = false;
+    return response;
   }
 }

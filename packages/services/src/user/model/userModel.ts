@@ -1,10 +1,10 @@
-import { DriverMongoose } from "@eco-flow/types";
+import { DriverKnex, DriverMongoose } from "@eco-flow/types";
 import userSchema from "../schema/userSchema";
 export const userModelMongoose = (connection: DriverMongoose) => {
-  let user;
   if (connection.getConnection.models.users)
-    user = connection.getConnection.model("users");
-  else user = connection.buildModel("users", { definition: userSchema });
-
-  return user;
+    return connection.getConnection.model("users");
+  else return connection.buildModel("users", { definition: userSchema });
 };
+
+export const userModelKnex = async (connection: DriverKnex) =>
+  (await connection.queryBuilder("users").count())[0]["count(*)"];
