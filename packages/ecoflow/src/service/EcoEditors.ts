@@ -1,7 +1,7 @@
 import loadAdmin from "@eco-flow/admin-panel";
 import loadFlow from "@eco-flow/flow-editor";
 import loadSchema from "@eco-flow/schema-editor";
-import loadLanding from "@eco-flow/landing-page";
+import loadLanding from "@eco-flow/base-panel";
 import loadEditorsApiRoutes from "../api";
 import {
   EcoFlow,

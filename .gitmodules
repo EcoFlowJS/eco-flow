@@ -11,7 +11,7 @@
 	url = https://github.com/RomelSikdar/admin-panel.git
 [submodule "editors/base-panel"]
 	path = editors/base-panel
-	url = https://github.com/RomelSikdar/ecoflow-landing-page.git
+	url = https://github.com/RomelSikdar/ecoflow-base-panel.git
 [submodule "editors/components-lib"]
 	path = editors/components-lib
 	url = https://github.com/RomelSikdar/ecoflow-components

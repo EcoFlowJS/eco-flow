@@ -14,6 +14,7 @@
   "dependencies": {
     "@eco-flow/admin-panel": "^0.1.0",
     "@eco-flow/api": "^0.0.1",
+    "@eco-flow/base-panel": "^0.1.0",
     "@eco-flow/database": "^0.1.0",
     "@eco-flow/flow-editor": "^0.1.0",
     "@eco-flow/helper": "^1.0.0",
