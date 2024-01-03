@@ -6,8 +6,8 @@ import httpsServer, { Server as HttpsServer } from "https";
 import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
-import { IStrategyOptions } from "passport-local";
 import { Passport } from "./Passport";
+import { StrategyOptions } from "passport-jwt";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -154,7 +154,7 @@ export class EcoServer extends Koa implements IEcoServer {
     });
   }
 
-  async initializePassport(options: IStrategyOptions = {}): Promise<void> {
+  async initializePassport(options?: StrategyOptions): Promise<void> {
     new Passport(this, options).init();
   }
 }

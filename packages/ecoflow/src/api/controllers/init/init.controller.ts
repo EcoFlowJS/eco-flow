@@ -5,8 +5,7 @@ export const initStatus = async (ctx: Context) => {
   const isNoUser = await ecoFlow.service.UserService.isNoUser();
   let getAccessToken: string | undefined = undefined;
 
-  if (isAuth && !isNoUser)
-    getAccessToken = process.env.ECOFLOW_SYS_NOAUTH_ACCESS_TOKEN!;
+  if (!isAuth) getAccessToken = process.env.ECOFLOW_SYS_NOAUTH_ACCESS_TOKEN!;
 
   ctx.body = {
     isAuth: isAuth,

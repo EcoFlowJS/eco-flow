@@ -2,7 +2,7 @@ import Koa from "koa";
 import httpServer from "http";
 import httpsServer from "https";
 import passport from "koa-passport";
-import { IStrategyOptions, IStrategyOptionsWithRequest } from "passport-local";
+import { StrategyOptions } from "passport-jwt";
 export interface EcoServer extends Koa {
   passport: typeof passport;
   startServer():
@@ -25,5 +25,5 @@ export interface EcoServer extends Koa {
         typeof httpServer.ServerResponse
       >
   >;
-  initializePassport(options: IStrategyOptions): Promise<void>;
+  initializePassport(options: StrategyOptions): Promise<void>;
 }
