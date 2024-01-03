@@ -11,6 +11,7 @@ import type { Context } from "koa";
 import setCookieHelper from "../helpers/setCookieHelper";
 import { SetOption } from "@eco-flow/types";
 import listAllCookies from "../helpers/listAllCookies";
+import getCookieHelper from "../helpers/getCookieHelper";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -67,6 +68,13 @@ export class Helper {
     value: string,
     options?: SetOption
   ): Promise<void> {
-    await setCookieHelper(ctx, name, value, options);
+    return await setCookieHelper(ctx, name, value, options);
+  }
+
+  static async getCookie(
+    ctx: Context,
+    name: string
+  ): Promise<string | undefined> {
+    return await getCookieHelper(ctx, name);
   }
 }

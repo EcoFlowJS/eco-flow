@@ -6,5 +6,5 @@ export const userModelMongoose = (connection: DriverMongoose) => {
   else return connection.buildModel("users", { definition: userSchema });
 };
 
-export const userModelKnex = async (connection: DriverKnex) =>
-  (await connection.queryBuilder("users").count())[0]["count(*)"];
+export const userModelKnex = (connection: DriverKnex) =>
+  connection.queryBuilder("users");

@@ -35,13 +35,22 @@ export class EcoEditors implements IEcoEditors {
       systemRouterOptions.prefix = "/systemApi";
     }
 
-    Builder.ENV.setSystemEnv(envDir!, [
-      {
-        name: "CLIENT_API_ENDPOINT",
-        value: this.server.baseUrl + systemRouterOptions.prefix,
-      },
-    ]);
+    const setEnv = () => {
+      Builder.ENV.setSystemEnv(envDir!, [
+        {
+          name: "CLIENT_API_ENDPOINT",
+          value: this.server.baseUrl + systemRouterOptions!.prefix,
+        },
+      ]);
+      ecoFlow.log.info("Client API endpoint Configured...");
+    };
 
+    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT)) setEnv();
+    else if (
+      process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT !==
+      this.server.baseUrl + systemRouterOptions!.prefix
+    )
+      setEnv();
     const router = EcoRouter.createRouter(systemRouterOptions);
     this.router.systemRouter = router;
     this.server.use(router.routes()).use(router.allowedMethods());
