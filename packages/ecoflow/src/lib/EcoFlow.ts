@@ -68,6 +68,10 @@ class EcoFlow implements IEcoFlow {
     await this.router.initRouter(this.server);
 
     await this.ecoModule.register();
+    console
+      .log
+      // Helper.generateJwtToken({ _id: "admin" }, { expiresIn: "10h" })
+      ();
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();

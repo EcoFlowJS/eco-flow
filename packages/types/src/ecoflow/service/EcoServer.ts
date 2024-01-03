@@ -25,5 +25,7 @@ export interface EcoServer extends Koa {
         typeof httpServer.ServerResponse
       >
   >;
+  get baseUrl(): string;
+  get isSecure(): boolean;
   initializePassport(options: StrategyOptions): Promise<void>;
 }

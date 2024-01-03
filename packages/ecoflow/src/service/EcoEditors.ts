@@ -12,6 +12,7 @@ import {
 import _ from "lodash";
 import proxy from "koa-proxies";
 import { EcoRouter } from "./EcoRouter";
+import { Builder } from "@eco-flow/utils";
 
 export class EcoEditors implements IEcoEditors {
   private server: IEcoServer;
@@ -24,14 +25,22 @@ export class EcoEditors implements IEcoEditors {
   }
 
   private initializeEditorsRouter(): void {
-    let { systemRouterOptions } = ecoFlow.config._config;
+    let { systemRouterOptions, envDir } = ecoFlow.config._config;
     if (_.isEmpty(systemRouterOptions)) {
       systemRouterOptions = {};
       systemRouterOptions.prefix = "/systemApi";
     }
 
-    if (!ecoFlow._.has(systemRouterOptions, "prefix"))
+    if (!ecoFlow._.has(systemRouterOptions, "prefix")) {
       systemRouterOptions.prefix = "/systemApi";
+    }
+
+    Builder.ENV.setSystemEnv(envDir!, [
+      {
+        name: "CLIENT_API_ENDPOINT",
+        value: this.server.baseUrl + systemRouterOptions.prefix,
+      },
+    ]);
 
     const router = EcoRouter.createRouter(systemRouterOptions);
     this.router.systemRouter = router;

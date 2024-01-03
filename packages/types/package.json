@@ -24,7 +24,6 @@
     "koa-passport": "^6.0.0",
     "mongoose": "^8.0.2",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0",
     "query-registry": "^2.6.0"
   }
 }

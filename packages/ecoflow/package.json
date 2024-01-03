@@ -38,8 +38,7 @@
     "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
-    "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-jwt": "^4.0.1"
   },
   "description": "",
   "devDependencies": {
@@ -51,7 +50,6 @@
     "@types/koa-passport": "^6.0.3",
     "@types/koa-session": "^6.4.5",
     "@types/koa-static": "^4.0.3",
-    "@types/passport-jwt": "^4.0.0",
-    "@types/passport-local": "^1.0.38"
+    "@types/passport-jwt": "^4.0.0"
   }
 }

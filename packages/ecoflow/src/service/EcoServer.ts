@@ -154,6 +154,16 @@ export class EcoServer extends Koa implements IEcoServer {
     });
   }
 
+  get baseUrl(): string {
+    return `${this._isHttps ? "https" : "http"}://${
+      this._host === "0.0.0.0" ? "localhost" : this._host
+    }:${this._port}`;
+  }
+
+  get isSecure(): boolean {
+    return this._isHttps;
+  }
+
   async initializePassport(options?: StrategyOptions): Promise<void> {
     new Passport(this, options).init();
   }

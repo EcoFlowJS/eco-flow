@@ -4,19 +4,6 @@ import {
   UserService as IUserService,
 } from "@eco-flow/types";
 import { userModelKnex, userModelMongoose } from "./model/userModel";
-import { Schema } from "mongoose";
-
-const schema = new Schema({
-  name: String,
-  username: {
-    required: true,
-    type: String,
-  },
-  password: {
-    required: true,
-    type: String,
-  },
-});
 
 export class UserService implements IUserService {
   private dataBase: Database;

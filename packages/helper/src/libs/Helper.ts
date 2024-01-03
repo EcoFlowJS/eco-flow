@@ -7,6 +7,10 @@ import getRandomInt from "../helpers/getRandomInt";
 import generateJwtToken from "../helpers/generateJwtToken";
 import { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken";
 import verifyJwtToken from "../helpers/verifyJwtToken";
+import type { Context } from "koa";
+import setCookieHelper from "../helpers/setCookieHelper";
+import { SetOption } from "@eco-flow/types";
+import listAllCookies from "../helpers/listAllCookies";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -51,5 +55,18 @@ export class Helper {
     options?: VerifyOptions
   ): JwtPayload | string | null {
     return verifyJwtToken(token, options);
+  }
+
+  static listAllCookies(cookie: Context["headers"]["cookie"]): Array<any> {
+    return listAllCookies(cookie);
+  }
+
+  static async setCookie(
+    ctx: Context,
+    name: string,
+    value: string,
+    options?: SetOption
+  ): Promise<void> {
+    await setCookieHelper(ctx, name, value, options);
   }
 }
