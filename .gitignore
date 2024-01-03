@@ -2,6 +2,7 @@
 build/Release
 
 # Dependency directories
+.nx/
 node_modules/
 dist/
 jspm_packages/
