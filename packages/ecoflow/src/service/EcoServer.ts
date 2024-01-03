@@ -85,7 +85,6 @@ export class EcoServer extends Koa implements IEcoServer {
       this._server = httpsServer.createServer(this._https!, this.callback());
     this.use(koaCors(this._httpCors));
     this.use(bodyParser());
-
     return this._server.listen(
       parseInt(this._port!.toString()),
       this._host,

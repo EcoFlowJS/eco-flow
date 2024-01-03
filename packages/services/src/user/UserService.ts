@@ -21,7 +21,8 @@ export class UserService implements IUserService {
         response = false;
 
     if (this.dataBase.isKnex(this.connection))
-      if ((await userModelKnex(this.connection)) > 0) response = false;
+      if ((await userModelKnex(this.connection).count())[0]["count(*)"] > 0)
+        response = false;
     return response;
   }
 }

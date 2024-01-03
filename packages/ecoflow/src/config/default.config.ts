@@ -49,7 +49,7 @@ const defaultConfig: configOptions = {
     // exposeHeaders: [], //`Access-Control-Expose-Headers`
     // allowHeaders: [], // Access-Control-Allow-Headers`
     // maxAge: 0, //`Access-Control-Max-Age` in seconds
-    // credentials: true, //`Access-Control-Allow-Credentials`
+    credentials: true, //`Access-Control-Allow-Credentials`
     // keepHeadersOnError: false, //Add set headers to `err.header` if an error is thrown
     // secureContext: true, //Add `Cross-Origin-Opener-Policy` & `Cross-Origin-Embedder-Policy` to response headers
     // privateNetworkAccess: true, //Handle `Access-Control-Request-Private-Network` request by return `Access-Control-Allow-Private-Network`
