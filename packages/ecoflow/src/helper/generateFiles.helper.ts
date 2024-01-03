@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 const generateASecret = (): string => crypto.randomBytes(16).toString("base64");
 
 const generateToken = (id: string, salt: string): string =>
-  jwt.sign({ _id: id }, salt, { expiresIn: "9999Y" });
+  jwt.sign({ _id: id, accessRoot: true }, salt, { expiresIn: "9999Y" });
 
 export default async ({ config, log }: EcoFlow) => {
   log.info("Generating Files...");

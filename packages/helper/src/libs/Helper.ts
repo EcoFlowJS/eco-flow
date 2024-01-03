@@ -12,6 +12,8 @@ import setCookieHelper from "../helpers/setCookieHelper";
 import { SetOption } from "@eco-flow/types";
 import listAllCookies from "../helpers/listAllCookies";
 import getCookieHelper from "../helpers/getCookieHelper";
+import compareHashHelper from "../helpers/compareHashHelper";
+import createHashHelper from "../helpers/createHashHelper";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -56,6 +58,14 @@ export class Helper {
     options?: VerifyOptions
   ): JwtPayload | string | null {
     return verifyJwtToken(token, options);
+  }
+
+  static async createHash(val: any): Promise<string> {
+    return await createHashHelper(val);
+  }
+
+  static async compareHash(val: string, hash: string): Promise<boolean> {
+    return await compareHashHelper(val, hash);
   }
 
   static listAllCookies(cookie: Context["headers"]["cookie"]): Array<any> {

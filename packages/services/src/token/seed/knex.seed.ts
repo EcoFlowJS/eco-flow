@@ -5,7 +5,7 @@ export default async (connection: DriverKnex) => {
     table.increments();
     table.string("userId");
     table.string("token");
-    table.dateTime("expires_at");
-    table.timestamps();
+    table.datetime("expires_at");
+    table.timestamps(true, true);
   });
 };
