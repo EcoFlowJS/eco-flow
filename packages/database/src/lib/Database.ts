@@ -351,4 +351,12 @@ export class Database implements IDatabase {
   isMongoose(connection: any): connection is IDriverMongoose {
     return connection instanceof DriverMongoose;
   }
+
+  get connectionNameList(): string[] {
+    return [...this.connections.keys()].filter((val) => !val.startsWith("_"));
+  }
+
+  get counntConnections(): number {
+    return this.connectionNameList.length;
+  }
 }

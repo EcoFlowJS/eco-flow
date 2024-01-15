@@ -17,6 +17,9 @@ export interface Database {
   ): Promise<[boolean, string]>;
   isKnex(connection: any): connection is DriverKnex;
   isMongoose(connection: any): connection is DriverMongoose;
+
+  get connectionNameList(): string[];
+  get counntConnections(): number;
 }
 
 export type DB_Drivers = "MYSQL" | "PGSQL" | "SQLite" | "MONGO";

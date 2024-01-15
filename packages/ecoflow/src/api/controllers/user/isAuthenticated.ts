@@ -2,27 +2,31 @@ import { Context, Next } from "koa";
 import passport from "koa-passport";
 import _ from "lodash";
 
-export default async (ctx: Context, next: Next) => {
-  return passport.authenticate("_ecoFlowPassport", (err, result) => {
-    const response = Object.create({});
+export default async function isAuthenticated(ctx: Context, next: Next) {
+  return passport.authenticate("_ecoFlowPassport", async (err, result) => {
     if (err) {
-      response["error"] = true;
-      response["payload"] = err.toString();
       ctx.status = 401;
+      ctx.body = {
+        error: true,
+        payload: err.toString(),
+      };
     }
 
     if (typeof result === "boolean" && !result) {
-      response["error"] = true;
-      response["payload"] = "Token Expired";
       ctx.status = 401;
+      ctx.body = {
+        error: true,
+        payload: "Token Expired",
+      };
     }
 
     if (typeof result === "object" && !_.isEmpty(result)) {
-      response["success"] = true;
-      response["payload"] = result;
       ctx.status = 200;
+      ctx.body = {
+        success: true,
+        payload: result,
+      };
+      await next();
     }
-
-    ctx.body = response;
   })(ctx, next);
-};
+}
