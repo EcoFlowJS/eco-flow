@@ -3,6 +3,16 @@ import { Context, Next } from "koa";
 import _ from "lodash";
 
 export default async (ctx: Context, next: Next) => {
+  const { isAuth } = ecoFlow;
+  if (!isAuth) {
+    ctx.status = 200;
+    ctx.body = {
+      success: true,
+      payload: process.env.ECOFLOW_SYS_NOAUTH_ACCESS_TOKEN,
+    };
+    return;
+  }
+
   const { TokenServices } = ecoFlow.service;
   const options = ecoFlow.server.isSecure
     ? {
