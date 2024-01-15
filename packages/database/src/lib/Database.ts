@@ -358,7 +358,7 @@ export class Database implements IDatabase {
 
   get connectionList(): ConnectionList[] {
     return [...this.connections.keys()]
-      // .filter((val) => !val.startsWith("_"))
+      .filter((val) => !val.startsWith("_"))
       .map((val) => {
         return { connectionsName: val, driver: this.drivers.get(val)! };
       });
