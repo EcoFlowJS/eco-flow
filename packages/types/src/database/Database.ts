@@ -18,8 +18,13 @@ export interface Database {
   isKnex(connection: any): connection is DriverKnex;
   isMongoose(connection: any): connection is DriverMongoose;
 
-  get connectionNameList(): string[];
+  get connectionList(): ConnectionList[];
   get counntConnections(): number;
+}
+
+export interface ConnectionList {
+  connectionsName: string;
+  driver: DB_Drivers;
 }
 
 export type DB_Drivers = "MYSQL" | "PGSQL" | "SQLite" | "MONGO";

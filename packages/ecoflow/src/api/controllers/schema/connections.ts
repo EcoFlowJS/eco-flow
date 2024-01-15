@@ -4,7 +4,7 @@ const getConnections = async (ctx: Context, next: Next) => {
   const { database } = ecoFlow;
   ctx.status = 200;
   ctx.body = {
-    payload: database.connectionNameList,
+    payload: database.connectionList,
     count: database.counntConnections,
   };
 };

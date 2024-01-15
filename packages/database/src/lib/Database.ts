@@ -7,6 +7,7 @@ import {
   DriverMongoose as IDriverMongoose,
   DriverKnex as IDriverKnex,
   DBConfig,
+  ConnectionList,
 } from "@eco-flow/types";
 import fse from "fs-extra";
 import path from "path";
@@ -20,6 +21,7 @@ export class Database implements IDatabase {
     string,
     DatabaseConnection
   >();
+  private drivers: Map<string, DB_Drivers> = new Map<string, DB_Drivers>();
 
   private async getConfigurations(): Promise<DatabaseConnectionConfig[]> {
     if (_.isEmpty(ecoFlow.config._config.DB_Directory))
@@ -70,6 +72,7 @@ export class Database implements IDatabase {
 
       if (status && DBconnection != null && !this.connections.has(name)) {
         this.connections.set(name, DBconnection);
+        this.drivers.set(name, driver);
         return [true, "Connection Successfully"];
       } else if (this.connections.has(name))
         return [false, "Connection already exists"];
@@ -233,6 +236,7 @@ export class Database implements IDatabase {
       return [false, "Connection not connected to database!"];
 
     this.connections.set(name, DBconnection!);
+    this.drivers.set(name, driver);
 
     return this.connections.has(name)
       ? [true, "Connection Updation Successful!"]
@@ -352,11 +356,15 @@ export class Database implements IDatabase {
     return connection instanceof DriverMongoose;
   }
 
-  get connectionNameList(): string[] {
-    return [...this.connections.keys()].filter((val) => !val.startsWith("_"));
+  get connectionList(): ConnectionList[] {
+    return [...this.connections.keys()]
+      // .filter((val) => !val.startsWith("_"))
+      .map((val) => {
+        return { connectionsName: val, driver: this.drivers.get(val)! };
+      });
   }
 
   get counntConnections(): number {
-    return this.connectionNameList.length;
+    return this.connectionList.length;
   }
 }
