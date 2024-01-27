@@ -9,10 +9,16 @@ const getConnections = async (ctx: Context, next: Next) => {
   };
 };
 
-const createConnection = async (ctx: Context, next: Next) => {};
+const createConnection = async (ctx: Context, next: Next) => {
+  ctx.body = ctx.request.body;
+};
 
-const updateConnection = async (ctx: Context, next: Next) => {};
+const updateConnection = async (ctx: Context, next: Next) => {
+  ctx.body = ctx.request.body;
+};
 
-const deleteConnection = async (ctx: Context, next: Next) => {};
+const deleteConnection = async (ctx: Context, next: Next) => {
+  ctx.body = ctx.request.body;
+};
 
 export { getConnections, createConnection, updateConnection, deleteConnection };
