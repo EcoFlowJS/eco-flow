@@ -48,7 +48,9 @@ export class Database implements IDatabase {
 
     if (!(await fse.exists(configLocation))) return [];
 
-    const configs: DatabaseConnectionConfig[] = require(configLocation);
+    const configs: DatabaseConnectionConfig[] = JSON.parse(
+      <string>(<unknown>await fse.readFile(configLocation, "utf8"))
+    );
 
     if (configs.length === 0) return [];
 
@@ -65,7 +67,7 @@ export class Database implements IDatabase {
       name = name.substring(1);
 
     try {
-      const [status, DBconnection] = await this.createConnections(
+      const [status, DBconnection, error] = await this.createConnections(
         driver,
         connection
       );
@@ -76,7 +78,7 @@ export class Database implements IDatabase {
         return [true, "Connection Successfully"];
       } else if (this.connections.has(name))
         return [false, "Connection already exists"];
-      else return [false, "Connection Failed"];
+      else return [false, error];
     } catch (error) {
       return [false, { error: error }];
     }
@@ -85,8 +87,8 @@ export class Database implements IDatabase {
   private async createConnections(
     driver: DB_Drivers,
     con: ConnectionConfig
-  ): Promise<[boolean, IDriverKnex | IDriverMongoose | null]> {
-    if (typeof con === "undefined") return [false, null];
+  ): Promise<[boolean, IDriverKnex | IDriverMongoose | null, any]> {
+    if (typeof con === "undefined") return [false, null, null];
     if (typeof con === "object") {
       Object.keys(con).forEach((key) => {
         (<any>con)[key] = Helper.fetchFromEnv((<any>con)[key].toString());
@@ -104,9 +106,10 @@ export class Database implements IDatabase {
               : con.connectionString!,
             con.mongooseOptions
           );
-          return [true, mongo];
+
+          return [true, mongo, null];
         } catch (error) {
-          return [false, error];
+          return [false, null, error];
         }
       case "MYSQL":
         return await this.processKnexClient("mysql", con);
@@ -114,15 +117,15 @@ export class Database implements IDatabase {
         return await this.processKnexClient("pg", con);
       default:
         ecoFlow.log.info("Invalid DataBase Driver");
-        return [false, null];
+        return [false, null, null];
     }
   }
 
   private async processKnexClient(
     client: DBConfig["client"],
     config: ConnectionConfig
-  ): Promise<[boolean, IDriverKnex | IDriverMongoose]> {
-    return new Promise<[boolean, IDriverKnex | IDriverMongoose]>(
+  ): Promise<[boolean, IDriverKnex | IDriverMongoose | null, any]> {
+    return new Promise<[boolean, IDriverKnex | IDriverMongoose | null, any]>(
       async (resolve) => {
         try {
           const driver = new DriverKnex();
@@ -132,13 +135,17 @@ export class Database implements IDatabase {
             client: client,
             connection: {
               ...config,
+              ssl:
+                typeof config.ssl !== "undefined" && config.ssl
+                  ? { rejectUnauthorized: false }
+                  : false,
             },
             useNullAsDefault: true,
           });
           await driver.rawBuilder("SELECT 1");
-          resolve([true, driver]);
+          resolve([true, driver, null]);
         } catch (error) {
-          resolve([false, error]);
+          resolve([false, null, error]);
         }
       }
     );

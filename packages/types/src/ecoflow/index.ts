@@ -12,6 +12,7 @@ export * from "./config";
 export * from "./EcoContainer";
 export * from "./EcoFactory";
 export * from "./service";
+export * from "./api";
 
 export interface ClassType<InstanceType extends {} = any> extends Function {
   new (...args: any[]): InstanceType;

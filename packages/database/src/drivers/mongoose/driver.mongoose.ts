@@ -3,7 +3,6 @@ import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
   Connection,
-  Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
@@ -16,8 +15,16 @@ export class DriverMongoose implements IDriverMongoose {
     uri: string,
     options?: mongoose.ConnectOptions
   ): Promise<Connection> {
-    this.conn = await mongoose.createConnection(uri, options);
-    return this.conn;
+    return new Promise<Connection>((resolve, reject) => {
+      this.conn = mongoose.createConnection(uri, options);
+      this.conn.on("connected", () => {
+        resolve(this.conn);
+      });
+      this.conn.on("error", (err) => reject(err.message));
+      process.on("unhandledRejection", (reason, promise) => {
+        reject((<any>reason).message);
+      });
+    });
   }
 
   get getSchema(): typeof mongoose.Schema {

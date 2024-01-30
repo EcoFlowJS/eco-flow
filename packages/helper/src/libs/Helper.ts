@@ -14,10 +14,15 @@ import listAllCookies from "../helpers/listAllCookies";
 import getCookieHelper from "../helpers/getCookieHelper";
 import compareHashHelper from "../helpers/compareHashHelper";
 import createHashHelper from "../helpers/createHashHelper";
+import xssFilterHelper from "../helpers/xssFilterHelper";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
     return stringToFunction(value);
+  }
+
+  static xssFilterHelper(value: string): string {
+    return xssFilterHelper(value);
   }
 
   static functionToString(value: Function): string | unknown {
