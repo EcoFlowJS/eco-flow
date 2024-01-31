@@ -3,6 +3,9 @@ import { DriverKnex, DriverMongoose, Knex } from "./drivers";
 
 export interface Database {
   initConnection(): Promise<void>;
+  getDatabaseConfig(
+    ConnectionName?: string
+  ): Promise<DatabaseConnectionConfig[]>;
   getDatabaseConnection(name: string): any;
   addDatabaseConnection(
     name: string,

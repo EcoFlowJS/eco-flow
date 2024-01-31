@@ -2,6 +2,8 @@ import { EcoRouter } from "../../../service/EcoRouter";
 import {
   createConnection,
   deleteConnection,
+  getConnectionConfig,
+  getConnectionConfigs,
   getConnections,
   updateConnection,
 } from "../../controllers/schema/connections";
@@ -12,6 +14,9 @@ export default schemaRouter;
 
 schemaRouter.get("/", (ctx) => (ctx.body = "Schema Router"));
 schemaRouter.get("/connections", isAuthenticated, getConnections);
-schemaRouter.post("/connections", isAuthenticated, createConnection);
-schemaRouter.put("/connections", isAuthenticated, updateConnection);
-schemaRouter.delete("/connections", isAuthenticated, deleteConnection);
+schemaRouter.post("/connection", isAuthenticated, createConnection);
+schemaRouter.put("/connection", isAuthenticated, updateConnection);
+schemaRouter.delete("/connection", isAuthenticated, deleteConnection);
+
+schemaRouter.get("/connectionConfigs", isAuthenticated, getConnectionConfigs);
+schemaRouter.get("/connectionConfig/:id", isAuthenticated, getConnectionConfig);

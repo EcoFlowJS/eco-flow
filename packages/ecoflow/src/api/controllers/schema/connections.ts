@@ -12,6 +12,33 @@ const getConnections = async (ctx: Context, next: Next) => {
   };
 };
 
+const getConnectionConfig = async (ctx: Context, next: Next) => {
+  const { database } = ecoFlow;
+  ctx.status = 200;
+  if (typeof ctx.params.id === "undefined") {
+    ctx.body = {
+      payload: [],
+      count: 0,
+    };
+    return;
+  }
+  const ConnectionConfig = await database.getDatabaseConfig(ctx.params.id);
+  ctx.body = {
+    payload: ConnectionConfig,
+    count: ConnectionConfig.length,
+  };
+};
+
+const getConnectionConfigs = async (ctx: Context, next: Next) => {
+  const { database } = ecoFlow;
+  ctx.status = 200;
+  const ConnectionConfig = await database.getDatabaseConfig();
+  ctx.body = {
+    payload: ConnectionConfig,
+    count: ConnectionConfig.length,
+  };
+};
+
 const createConnection = async (ctx: Context, next: Next) => {
   try {
     const [name, driver, connection] = getConnectionsDetails(
@@ -63,4 +90,11 @@ const deleteConnection = async (ctx: Context, next: Next) => {
   ctx.body = ctx.request.body;
 };
 
-export { getConnections, createConnection, updateConnection, deleteConnection };
+export {
+  getConnectionConfig,
+  getConnectionConfigs,
+  getConnections,
+  createConnection,
+  updateConnection,
+  deleteConnection,
+};

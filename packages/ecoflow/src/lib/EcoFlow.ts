@@ -74,6 +74,7 @@ class EcoFlow implements IEcoFlow {
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();
+    this.log.info("Server Ready to use!!!");
     return this;
   }
 

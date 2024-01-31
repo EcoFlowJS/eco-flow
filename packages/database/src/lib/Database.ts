@@ -296,6 +296,14 @@ export class Database implements IDatabase {
     }
   }
 
+  async getDatabaseConfig(
+    ConnectionName?: string
+  ): Promise<DatabaseConnectionConfig[]> {
+    const config = await this.getConfigurations();
+    if (_.isUndefined(ConnectionName)) return config;
+    return config.filter((val) => val.name === ConnectionName);
+  }
+
   getDatabaseConnection(name: string): any {
     return this.connections.get(name);
   }
