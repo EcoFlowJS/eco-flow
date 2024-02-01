@@ -40,12 +40,13 @@ const getConnectionConfigs = async (ctx: Context, next: Next) => {
 };
 
 const createConnection = async (ctx: Context, next: Next) => {
+  const { database } = ecoFlow;
   try {
     const [name, driver, connection] = getConnectionsDetails(
       <ConnectionDefinations>ctx.request.body
     );
 
-    const [status, message] = await ecoFlow.database.addDatabaseConnection(
+    const [status, message] = await database.addDatabaseConnection(
       name,
       driver,
       {
@@ -68,6 +69,10 @@ const createConnection = async (ctx: Context, next: Next) => {
         success: true,
         payload: {
           message: message,
+          connectionList: {
+            payload: database.connectionList,
+            count: database.counntConnections,
+          },
         },
       };
     }
@@ -83,11 +88,92 @@ const createConnection = async (ctx: Context, next: Next) => {
 };
 
 const updateConnection = async (ctx: Context, next: Next) => {
-  ctx.body = ctx.request.body;
+  const { database } = ecoFlow;
+  try {
+    const [name, driver, connection] = getConnectionsDetails(
+      <ConnectionDefinations>ctx.request.body
+    );
+
+    const [status, message] = await database.updateDatabaseConnection(
+      name,
+      driver,
+      {
+        ...connection,
+      }
+    );
+
+    ctx.status = 200;
+    if (!status) {
+      ctx.body = {
+        error: true,
+        payload: {
+          message: message,
+        },
+      };
+    }
+
+    if (status) {
+      ctx.body = {
+        success: true,
+        payload: {
+          message: message,
+          connectionList: {
+            payload: database.connectionList,
+            count: database.counntConnections,
+          },
+        },
+      };
+    }
+  } catch (err) {
+    ctx.status = 200;
+    ctx.body = {
+      error: true,
+      payload: {
+        message: err,
+      },
+    };
+  }
 };
 
 const deleteConnection = async (ctx: Context, next: Next) => {
-  ctx.body = ctx.request.body;
+  const { database, _ } = ecoFlow;
+  const db = database.getDatabaseConnection(
+    (<any>ctx.request.body!).ConnectionName
+  );
+  if (_.isUndefined(db)) {
+    ctx.body = {
+      error: true,
+      payload: {
+        message: "Connection Name Not Found",
+      },
+    };
+    return;
+  }
+
+  const [status, message] = await database.removeDatabaseConnection(
+    (<any>ctx.request.body!).ConnectionName
+  );
+
+  if (!status) {
+    ctx.body = {
+      error: true,
+      payload: {
+        message: message,
+      },
+    };
+    return;
+  }
+
+  ctx.body = {
+    success: true,
+    payload: {
+      message: message,
+      connectionList: {
+        payload: database.connectionList,
+        count: database.counntConnections,
+      },
+    },
+  };
 };
 
 export {
