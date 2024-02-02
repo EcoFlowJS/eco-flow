@@ -6,7 +6,7 @@ import {
   getConnectionConfigs,
   getConnections,
   updateConnection,
-} from "../../controllers/schema/connections";
+} from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
 const schemaRouter = EcoRouter.createRouter();

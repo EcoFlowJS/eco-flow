@@ -56,7 +56,12 @@ export class EcoServer extends Koa implements IEcoServer {
   private processConfig() {
     const { https, Host, Port, httpCors } = ecoFlow.config._config;
     if (!_.isEmpty(https) && https.enabled) {
-      if (_.has(https, "keyt") && _.has(https, "cert")) {
+      if (
+        _.has(https, "key") &&
+        _.has(https, "cert") &&
+        !_.isEmpty(https.key) &&
+        !_.isEmpty(https.cert)
+      ) {
         this._isHttps = true;
         this._https = https;
       }
@@ -64,7 +69,7 @@ export class EcoServer extends Koa implements IEcoServer {
 
     if (!_.isEmpty(Host)) this._host = Host;
     if (_.isNumber(Port)) this._port = Port;
-    if (!_.isEmpty(httpCors)) this._httpCors = httpCors;
+    if (!_.isEmpty(httpCors) && httpCors.enabled) this._httpCors = httpCors;
   }
 
   /**

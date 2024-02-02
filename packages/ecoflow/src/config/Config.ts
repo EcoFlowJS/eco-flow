@@ -199,4 +199,12 @@ export class Config implements IConfig {
       await fse.unlink(this.configDir + "/" + ConfigFileName);
     return await this.listBackupConfigs();
   }
+
+  /**
+   * Returns the Default configuration settings
+   * @returns {configOptions} containing default configuration information.
+   */
+  getDefaultConfigs(): configOptions {
+    return defaultConfig;
+  }
 }
