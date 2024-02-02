@@ -11,7 +11,6 @@ import { Database } from "@eco-flow/database";
 import { Service } from "@eco-flow/services";
 import EcoModule from "@eco-flow/module";
 import loadEnvironments from "../helper/env.helper";
-import Helper from "@eco-flow/helper";
 
 export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
