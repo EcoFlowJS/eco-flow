@@ -29,7 +29,7 @@ export const initStatus = async (ctx: Context) => {
       user = "Administrator";
       envLoadHelper();
     } else {
-      user = Token._id;
+      user = Token._id ==="admin"?"Administrator":Token._id;
     }
   }
 
