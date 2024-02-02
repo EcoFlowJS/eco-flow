@@ -11,9 +11,3 @@ export interface ConnectionDefinations {
   isSSL: boolean;
   Database: string;
 }
-
-export interface ConnectionResponse {
-  error?: boolean;
-  success?: boolean;
-  payload?: any;
-}

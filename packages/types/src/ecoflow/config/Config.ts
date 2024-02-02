@@ -5,6 +5,12 @@ export interface Config {
   _config: configOptions;
 
   /**
+   * Returns the Default configuration settings
+   * @returns {configOptions} containing default configuration information.
+   */
+  getDefaultConfigs(): configOptions;
+
+  /**
    * Returns the configuration object for a given key. If the configuration object is present it will be returned else will be undefined.
    * @memberof Config
    * @param key string name of the configuration.

@@ -3,6 +3,10 @@ import { loggerOptions } from "../../utils/logger";
 import { RouterOptions } from "@koa/router";
 import { ConnectionConfig, DB_Drivers } from "../../database";
 
+interface httpCors extends koaCors.Options {
+  enabled: boolean;
+}
+
 export interface configOptions {
   //Base configuration
   userDir?: string;
@@ -22,7 +26,7 @@ export interface configOptions {
     key?: string;
     cert?: string;
   };
-  httpCors?: koaCors.Options;
+  httpCors?: httpCors;
 
   //Router configuration
   systemRouterOptions?: RouterOptions;
@@ -81,7 +85,7 @@ export namespace configOptions {
         cert?: string;
       }
     | undefined;
-  export let httpCors: koaCors.Options | undefined;
+  export let httpCors: httpCors | undefined;
 
   //Router configuration
   export let systemRouterOptions: RouterOptions | undefined;
