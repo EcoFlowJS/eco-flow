@@ -36,6 +36,7 @@ const getConfig = async (ctx: Context) => {
 };
 
 const updateConfig = async (ctx: Context) => {
+  // ecoFlow.server.closeServer();
   ctx.body = ctx.request.body;
 };
 

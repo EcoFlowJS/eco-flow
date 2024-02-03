@@ -55,7 +55,7 @@ export class Config implements IConfig {
       this.createDefaultConfigFile();
     }
     let config = {
-      ...require(this.configFile),
+      ...JSON.parse(fse.readFileSync(this.configFile, "utf8")),
     };
 
     this._config = config;

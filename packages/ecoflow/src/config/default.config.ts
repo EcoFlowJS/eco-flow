@@ -105,7 +105,7 @@ const defaultConfig: configOptions = {
     enabled: true, //Enable or Disable logging output.
     level: LogLevel.INFO, //Logging level.
     format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
-    // prettyPrint: false, //Pretty print the logging output.
+    prettyPrint: false, //Pretty print the logging output.
     lable: {
       //Global logging lable
       enable: true, //Enable logging lable
@@ -139,15 +139,21 @@ const defaultConfig: configOptions = {
     schema: true, //Enable or Disable schema editor.
   },
 
+  // database: {
+  //   driver: "SQLite",
+  //   configuration: {
+  //     filename: path.join(
+  //       baseUserDir,
+  //       "Database",
+  //       "DB_connections",
+  //       "ecoflowDB.sqlite"
+  //     ),
+  //   },
+  // },
   database: {
-    driver: "SQLite",
+    driver: "MONGO",
     configuration: {
-      filename: path.join(
-        baseUserDir,
-        "Database",
-        "DB_connections",
-        "ecoflowDB.sqlite"
-      ),
+      connectionString: "env(ROMEL)",
     },
   },
 };
