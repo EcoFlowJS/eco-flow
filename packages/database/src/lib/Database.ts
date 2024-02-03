@@ -86,14 +86,16 @@ export class Database implements IDatabase {
 
   private async createConnections(
     driver: DB_Drivers,
-    con: ConnectionConfig
+    connection: ConnectionConfig
   ): Promise<[boolean, IDriverKnex | IDriverMongoose | null, any]> {
+    const con = { ...connection };
     if (typeof con === "undefined") return [false, null, null];
     if (typeof con === "object") {
       Object.keys(con).forEach((key) => {
         (<any>con)[key] = Helper.fetchFromEnv((<any>con)[key].toString());
       });
     }
+
     switch (driver) {
       case "SQLite":
         return await this.processKnexClient("sqlite3", con);
