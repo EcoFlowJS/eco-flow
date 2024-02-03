@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import parseServerConfigHelper from "../../helpers/parseServerConfigHelper";
 
 const getAllConfigs = async (ctx: Context) => {
   const { config } = ecoFlow;
@@ -37,7 +38,19 @@ const getConfig = async (ctx: Context) => {
 
 const updateConfig = async (ctx: Context) => {
   // ecoFlow.server.closeServer();
-  ctx.body = ctx.request.body;
+  ctx.status = 200;
+  try {
+    const configs = await parseServerConfigHelper({
+      ...(<any>ctx.request.body),
+    });
+
+    ctx.body = ctx.request.body;
+  } catch (error) {
+    ctx.body = {
+      error: true,
+      payload: error,
+    };
+  }
 };
 
 export { getConfig, updateConfig, getAllConfigs };

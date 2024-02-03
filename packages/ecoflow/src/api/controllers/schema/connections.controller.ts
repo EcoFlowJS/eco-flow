@@ -1,6 +1,6 @@
 import Helper from "@eco-flow/helper";
 import { Context, Next } from "koa";
-import getConnectionsDetails from "./getConnectionsDetails";
+import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
 import { ConnectionDefinations } from "@eco-flow/types";
 
 const getConnections = async (ctx: Context, next: Next) => {
