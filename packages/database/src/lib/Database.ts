@@ -63,10 +63,11 @@ export class Database implements IDatabase {
     connection: ConnectionConfig,
     isSystem: boolean = false
   ): Promise<[boolean, String | { error: any }]> {
+    const { log } = ecoFlow;
     while (/[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g.test(name.charAt(0)) && !isSystem)
       name = name.substring(1);
-
     try {
+      log.info(`Adding Databaase Connection ${name}`);
       const [status, DBconnection, error] = await this.createConnections(
         driver,
         connection
@@ -75,10 +76,15 @@ export class Database implements IDatabase {
       if (status && DBconnection != null && !this.connections.has(name)) {
         this.connections.set(name, DBconnection);
         this.drivers.set(name, driver);
+        log.info(`Databaase Connection Added named : ${name}`);
         return [true, "Connection Successfully"];
-      } else if (this.connections.has(name))
+      } else if (this.connections.has(name)) {
+        log.info(`Databaase Connection already exists with name : ${name}`);
         return [false, "Connection already exists"];
-      else return [false, error];
+      } else {
+        log.info(`Error while adding Databaase Connection with name : ${name}`);
+        return [false, error];
+      }
     } catch (error) {
       return [false, { error: error }];
     }
