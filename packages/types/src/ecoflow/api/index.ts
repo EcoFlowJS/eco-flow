@@ -1,6 +1,6 @@
 export * from "./Schema";
 
-export interface ConnectionResponse {
+export interface ApiResponse {
   error?: boolean;
   success?: boolean;
   payload?: any;
