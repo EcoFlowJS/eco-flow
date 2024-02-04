@@ -337,6 +337,18 @@ export class Database implements IDatabase {
     return [status, msg.toString()];
   }
 
+  async validateConnection(
+    driver: DB_Drivers,
+    connection: ConnectionConfig
+  ): Promise<boolean> {
+    try {
+      const [status] = await this.createConnections(driver, connection);
+      return status;
+    } catch {
+      return false;
+    }
+  }
+
   async removeDatabaseConnection(name: string): Promise<[boolean, String]> {
     const [status, msg] = this.removeConnection(name);
 

@@ -7,6 +7,10 @@ export interface Database {
     ConnectionName?: string
   ): Promise<DatabaseConnectionConfig[]>;
   getDatabaseConnection(name: string): any;
+  validateConnection(
+    driver: DB_Drivers,
+    connection: ConnectionConfig
+  ): Promise<boolean>;
   addDatabaseConnection(
     name: string,
     driver: DB_Drivers,
