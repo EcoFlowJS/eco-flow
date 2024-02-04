@@ -133,6 +133,14 @@ export class Config implements IConfig {
     await this.saveConfig(cfg);
   }
 
+  get getConfigPath(): string {
+    return path.dirname(this.configFile);
+  }
+
+  get getConfigFileName(): string {
+    return path.basename(this.configFile);
+  }
+
   /**
    * Returns the configuration object for a given key. If the configuration object is present it will be returned else will be undefined.
    * @memberof Config
@@ -169,6 +177,25 @@ export class Config implements IConfig {
     await this.updateConfigFile(this._config);
 
     return this._config;
+  }
+
+  async createBackup(): Promise<void> {
+    const { log } = ecoFlow;
+    const existingConfig = JSON.parse(
+      await fse.readFile(this.configFile, "utf8")
+    );
+    const currentDate = new Date().toLocaleDateString().replace(/\//gi, "-");
+    const configPath = this.getConfigPath;
+    const fileName = `backup_${currentDate}.json`;
+
+    log.info("Backing configuration at : " + configPath);
+    await fse.writeFile(
+      path.join(configPath, fileName),
+      JSON.stringify(existingConfig, null, 2),
+      {
+        encoding: "utf8",
+      }
+    );
   }
 
   /**

@@ -4,6 +4,10 @@ export interface Config {
   //Global configuration settings of the application.
   _config: configOptions;
 
+  get getConfigPath(): string;
+
+  get getConfigFileName(): string;
+
   /**
    * Returns the Default configuration settings
    * @returns {configOptions} containing default configuration information.
@@ -25,6 +29,8 @@ export interface Config {
    * @returns {Promise<configOptions>} Promise resolving all configuration information.
    */
   setConfig(cfg: configOptions): Promise<configOptions>;
+
+  createBackup(): Promise<void>;
 
   /**
    * List all the available backup configs availabe.
