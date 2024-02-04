@@ -37,14 +37,22 @@ const getConfig = async (ctx: Context) => {
 };
 
 const updateConfig = async (ctx: Context) => {
-  // ecoFlow.server.closeServer();
   ctx.status = 200;
   try {
+    const { config, log } = ecoFlow;
+
     const configs = await parseServerConfigHelper({
       ...(<any>ctx.request.body),
     });
 
-    ctx.body = ctx.request.body;
+    await config.createBackup();
+    log.info("Writing new configuration ");
+    await config.setConfig(configs);
+
+    ctx.body = {
+      success: true,
+      payload: "Configuration updated successfully.",
+    };
   } catch (error) {
     ctx.body = {
       error: true,
