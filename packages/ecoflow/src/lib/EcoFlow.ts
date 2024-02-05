@@ -12,7 +12,6 @@ import { Service } from "@eco-flow/services";
 import EcoModule from "@eco-flow/module";
 import loadEnvironments from "../helper/env.helper";
 
-export type loadedEcoFlow = Required<EcoFlow>;
 class EcoFlow implements IEcoFlow {
   private helper: EcoHelper;
 
@@ -57,22 +56,23 @@ class EcoFlow implements IEcoFlow {
   }
 
   async start(): Promise<EcoFlow> {
+    this.log.info("====================================");
+    this.log.info("Starting Application....");
+
     if (!this.helper.isCreateApp()) {
       await this.helper.generateFiles();
       loadEnvironments();
     }
-    await this.server.startServer();
-    await this.server.initializePassport();
+
     await this.database.initConnection();
     await this.router.initRouter(this.server);
 
     await this.ecoModule.register();
-    // console.log(
-    //   Helper.generateJwtToken({ _id: "admin" }, { expiresIn: "10h" })
-    // );
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();
+    await this.server.initializePassport();
+    await this.server.startServer();
     this.log.info("Server Ready to use!!!");
     return this;
   }

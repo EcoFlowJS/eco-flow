@@ -12,32 +12,29 @@ export class EcoRouter implements IEcoRouter {
   apiRouter!: KoaRouter<DefaultState, DefaultContext>;
 
   initRouter(svr: EcoServer) {
+    const { config, _ } = ecoFlow;
     const defaultRouter = EcoRouter.createRouter();
 
     let { userDir, apiRouterOptions, httpStatic, httpStaticRoot } =
-      ecoFlow.config._config;
+      config._config;
 
-    if (ecoFlow._.isEmpty(apiRouterOptions)) {
+    if (_.isEmpty(apiRouterOptions)) {
       apiRouterOptions = {};
       apiRouterOptions.prefix = "/api";
     }
-    if (!ecoFlow._.has(apiRouterOptions, "prefix"))
-      apiRouterOptions.prefix = "/api";
+    if (!_.has(apiRouterOptions, "prefix")) apiRouterOptions.prefix = "/api";
 
     this.apiRouter = EcoRouter.createRouter(apiRouterOptions);
 
-    if (ecoFlow._.isEmpty(httpStatic)) httpStatic = "/public";
+    if (_.isEmpty(httpStatic)) httpStatic = "/public";
 
     if (typeof httpStatic === "string") {
-      const baseDir = ecoFlow._.isEmpty(userDir)
+      const baseDir = _.isEmpty(userDir)
         ? process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow"
         : userDir;
       let root: string = path.join(baseDir!, "public");
       if (!fs.existsSync(root)) fs.mkdirSync(root, { recursive: true });
-      if (
-        !ecoFlow._.isEmpty(httpStaticRoot) &&
-        ecoFlow._.isString(httpStaticRoot)
-      )
+      if (!_.isEmpty(httpStaticRoot) && _.isString(httpStaticRoot))
         root = httpStaticRoot;
 
       if (!httpStatic.startsWith("/")) httpStatic = "/" + httpStatic.trim();
@@ -47,7 +44,7 @@ export class EcoRouter implements IEcoRouter {
 
     if (Array.isArray(httpStatic)) {
       httpStatic.forEach((obj) => {
-        if (ecoFlow._.isEmpty(obj.path.trim())) return;
+        if (_.isEmpty(obj.path.trim())) return;
         if (!fs.existsSync(obj.root))
           fs.mkdirSync(obj.root, { recursive: true });
         if (!obj.path.startsWith("/")) obj.path = "/" + obj.path.trim();

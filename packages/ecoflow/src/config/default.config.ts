@@ -139,21 +139,15 @@ const defaultConfig: configOptions = {
     schema: true, //Enable or Disable schema editor.
   },
 
-  // database: {
-  //   driver: "SQLite",
-  //   configuration: {
-  //     filename: path.join(
-  //       baseUserDir,
-  //       "Database",
-  //       "DB_connections",
-  //       "ecoflowDB.sqlite"
-  //     ),
-  //   },
-  // },
   database: {
-    driver: "MONGO",
+    driver: "SQLite",
     configuration: {
-      connectionString: "env(ROMEL)",
+      filename: path.join(
+        baseUserDir,
+        "Database",
+        "DB_connections",
+        "ecoflowDB.sqlite"
+      ),
     },
   },
 };

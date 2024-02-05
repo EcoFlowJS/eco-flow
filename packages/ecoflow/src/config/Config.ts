@@ -94,7 +94,10 @@ export class Config implements IConfig {
    * @param cfg Configuration information to be stored in the config.
    */
   private async saveConfig(cfg: configOptions = this._config): Promise<void> {
+    const { log } = ecoFlow;
+
     await fse.ensureDir(this.configDir);
+    log.info("Writing new configuration ");
     await fse.writeFile(this.configFile, JSON.stringify(cfg, null, 2), {
       encoding: "utf8",
     });
@@ -123,13 +126,11 @@ export class Config implements IConfig {
    * @param cfg Configuration information to be updated in the config file in the config directory.
    */
   private async updateConfigFile(cfg: configOptions): Promise<void> {
+    const { log } = ecoFlow;
     if (await fse.exists(this.configFile)) {
-      const backupConfigPath = path.join(
-        this.configDir,
-        "backup_" + new Date().getTime() + ".json"
-      );
-      await fse.copyFile(this.configFile, backupConfigPath);
-    }
+      await this.createBackup();
+    } else
+      log.info("Config file not found at : " + path.dirname(this.configFile));
     await this.saveConfig(cfg);
   }
 
@@ -181,21 +182,18 @@ export class Config implements IConfig {
 
   async createBackup(): Promise<void> {
     const { log } = ecoFlow;
-    const existingConfig = JSON.parse(
-      await fse.readFile(this.configFile, "utf8")
-    );
-    const currentDate = new Date().toLocaleDateString().replace(/\//gi, "-");
+
+    const currentDate = `${new Date()
+      .toLocaleDateString()
+      .replace(/\//gi, "-")}.${new Date()
+      .toLocaleTimeString()
+      .replace(/(:| )/gi, "-")}`;
     const configPath = this.getConfigPath;
     const fileName = `backup_${currentDate}.json`;
 
-    log.info("Backing configuration at : " + configPath);
-    await fse.writeFile(
-      path.join(configPath, fileName),
-      JSON.stringify(existingConfig, null, 2),
-      {
-        encoding: "utf8",
-      }
-    );
+    log.info("Backing up configuration at : " + configPath);
+    await fse.copyFile(this.configFile, path.join(configPath, fileName));
+    log.info("Backed up configuration at : " + path.join(configPath, fileName));
   }
 
   /**

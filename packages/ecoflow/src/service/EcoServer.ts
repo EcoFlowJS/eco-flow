@@ -8,6 +8,8 @@ import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
 import { Passport } from "./Passport";
 import { StrategyOptions } from "passport-jwt";
+import childProcess from "child_process";
+import path from "path";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -16,6 +18,7 @@ export class EcoServer extends Koa implements IEcoServer {
   private _port!: typeof configOptions.Port;
   private _httpCors!: koaCors.Options;
   private _server!: HttpServer | HttpsServer;
+  private _serverStatus: "Online" | "Offline" = "Offline";
   passport: typeof passport = passport;
 
   /**
@@ -70,74 +73,19 @@ export class EcoServer extends Koa implements IEcoServer {
     if (!_.isEmpty(Host)) this._host = Host;
     if (_.isNumber(Port)) this._port = Port;
     if (!_.isEmpty(httpCors) && httpCors.enabled) this._httpCors = httpCors;
+
+    this._server = httpServer.createServer(this.callback());
+    if (this._isHttps)
+      this._server = httpsServer.createServer(this._https!, this.callback());
+    this.use(koaCors(this._httpCors));
+    this.use(bodyParser());
   }
 
   /**
    * Start the server process for the application to process HTTP/HTTPS requests.
    * @returns { httpServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse>| httpsServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse> } Server instance.
    */
-  startServer():
-    | httpServer.Server<
-        typeof httpServer.IncomingMessage,
-        typeof httpServer.ServerResponse
-      >
-    | httpsServer.Server<
-        typeof httpServer.IncomingMessage,
-        typeof httpServer.ServerResponse
-      > {
-    this._server = httpServer.createServer(this.callback());
-    if (this._isHttps)
-      this._server = httpsServer.createServer(this._https!, this.callback());
-    this.use(koaCors(this._httpCors));
-    this.use(bodyParser());
-    return this._server.listen(
-      parseInt(this._port!.toString()),
-      this._host,
-      () => {
-        ecoFlow.log.info(
-          `Server listening on ${this._isHttps ? "https" : "http"}://${
-            this._host === "0.0.0.0" ? "localhost" : this._host
-          }:${this._port}`
-        );
-        ecoFlow.log.info("====================================");
-      }
-    );
-  }
-
-  /**
-   * Close the running HTTP/HTTPS server process and disconnect all connections.
-   * @returns { void }
-   */
-  async closeServer(): Promise<void> {
-    ecoFlow.log.info(
-      `Stopping server on ${this._isHttps ? "https" : "http"}://${
-        this._host === "0.0.0.0" ? "localhost" : this._host
-      }:${this._port}`
-    );
-    ecoFlow.log.info("====================================");
-    return new Promise((resolve, reject) => {
-      this._server.closeAllConnections();
-      this._server.close((err) => {
-        if (err) reject(err);
-        resolve(
-          (() => {
-            ecoFlow.log.info(
-              `Server Stopped on ${this._isHttps ? "https" : "http"}://${
-                this._host === "0.0.0.0" ? "localhost" : this._host
-              }:${this._port}`
-            );
-            ecoFlow.log.info("====================================");
-          })()
-        );
-      });
-    });
-  }
-
-  /**
-   * Restarts the HTTP/HTTPS server process and all connections.
-   * @returns {Promise} Server instance.
-   */
-  async restartServer(): Promise<
+  async startServer(): Promise<
     | httpServer.Server<
         typeof httpServer.IncomingMessage,
         typeof httpServer.ServerResponse
@@ -147,15 +95,87 @@ export class EcoServer extends Koa implements IEcoServer {
         typeof httpServer.ServerResponse
       >
   > {
-    ecoFlow.log.info("Restarting server process...");
-    ecoFlow.log.info("====================================");
-    return new Promise((resolve, reject) => {
+    const { log } = ecoFlow;
+    const server = await this._server.listen(
+      parseInt(this._port!.toString()),
+      this._host
+    );
+    log.info(
+      `Server listening on ${this._isHttps ? "https" : "http"}://${
+        this._host === "0.0.0.0" ? "localhost" : this._host
+      }:${this._port}`
+    );
+    log.info("====================================");
+    this._serverStatus = "Online";
+    return server;
+  }
+
+  /**
+   * Close the running HTTP/HTTPS server process and disconnect all connections.
+   * @returns { void }
+   */
+  async closeServer(exit: boolean = false): Promise<void> {
+    const { log } = ecoFlow;
+    log.info(
+      `Stopping server on ${this._isHttps ? "https" : "http"}://${
+        this._host === "0.0.0.0" ? "localhost" : this._host
+      }:${this._port}`
+    );
+    log.info("====================================");
+    return new Promise<void>((resolve, reject) => {
+      this._server.closeAllConnections();
+      this._server.close((err) => {
+        if (err) reject(err);
+        this._serverStatus = "Offline";
+        log.info(
+          `Server Stopped on ${this._isHttps ? "https" : "http"}://${
+            this._host === "0.0.0.0" ? "localhost" : this._host
+          }:${this._port}`
+        );
+        log.info("====================================");
+        resolve();
+        // setTimeout(() => process.exit(), 1000);
+      });
+    });
+  }
+
+  /**
+   * Restarts the HTTP/HTTPS server process and all connections.
+   * @returns {Promise} Server instance.
+   */
+  async restartServer(): Promise<void> {
+    const { log } = ecoFlow;
+    log.info("Restarting server process...");
+    log.info("====================================");
+    return new Promise<void>((resolve, reject) => {
+      process.on("exit", () => {
+        childProcess
+          .spawn(
+            "node",
+            process.argv[0].endsWith("node") ||
+              process.argv[0].endsWith("node.exe")
+              ? process.argv.slice(1)
+              : process.argv,
+            {
+              cwd: process.cwd(),
+              detached: true,
+              stdio: "inherit",
+              shell: process.platform === "win32" ? true : false,
+            }
+          )
+          .unref();
+      });
       this.closeServer()
         .then(() => {
-          resolve(this.startServer());
+          resolve();
+          process.exit(0);
         })
         .catch((err) => reject(err));
     });
+  }
+
+  async initializePassport(options?: StrategyOptions): Promise<void> {
+    await new Passport(this, options).init();
   }
 
   get baseUrl(): string {
@@ -168,7 +188,7 @@ export class EcoServer extends Koa implements IEcoServer {
     return this._isHttps;
   }
 
-  async initializePassport(options?: StrategyOptions): Promise<void> {
-    new Passport(this, options).init();
+  get serverState(): "Online" | "Offline" {
+    return this._serverStatus;
   }
 }

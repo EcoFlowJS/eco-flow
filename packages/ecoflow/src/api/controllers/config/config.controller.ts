@@ -45,8 +45,6 @@ const updateConfig = async (ctx: Context) => {
       ...(<any>ctx.request.body),
     });
 
-    await config.createBackup();
-    log.info("Writing new configuration ");
     await config.setConfig(configs);
 
     ctx.body = {
