@@ -2,7 +2,11 @@ import { Command, CommandOptions, Option } from "commander";
 import baseCommand from "../commands/command";
 import adminCommand from "../commands/admin";
 import EcoFlow from "@eco-flow/ecoflow";
-import { CommanderCli as ICommanderCli } from "@eco-flow/types";
+import {
+  CliService as ICliService,
+  CommanderCli as ICommanderCli,
+} from "@eco-flow/types";
+import { CliService } from "./CliService";
 
 /**
  * Command manager for the command manager service provider interface of the application component.
@@ -15,6 +19,7 @@ export class CommanderCli implements ICommanderCli {
   private command: Command = baseCommand;
   private commands!: Command[];
   private opts: { [key: string]: any } = {};
+
   constructor() {
     if (typeof baseCommand !== "undefined") {
       this.command = baseCommand;
@@ -56,7 +61,7 @@ export class CommanderCli implements ICommanderCli {
       .version(EcoFlow.Version)
       .addHelpText("beforeAll", `Eco-Flow v${EcoFlow.Version}`)
       .configureHelp({
-        visibleOptions: (cmd) => {
+        visibleOptions: (_cmd: any) => {
           return [
             ...this.command.options,
             new Option("-?, --help", "Show this help message"),
@@ -115,5 +120,9 @@ export class CommanderCli implements ICommanderCli {
    */
   get args(): { [key: string]: any } {
     return this.opts._ecoflow;
+  }
+
+  get CliService(): ICliService {
+    return new CliService();
   }
 }

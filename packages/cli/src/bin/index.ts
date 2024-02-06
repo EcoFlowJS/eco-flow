@@ -2,18 +2,18 @@
 import fs from "fs";
 import { ICommand } from "@eco-flow/types";
 import { CommanderCli } from "../";
-import EcoFlow from "@eco-flow/ecoflow";
 import { LogLevel } from "@eco-flow/utils";
 import { has } from "lodash";
 
-let Commander = new CommanderCli()
-  .usesMsgs(`[-?] [-h] [--settings settings.js] [--userDir DIR]
+const Commander = new CommanderCli();
+const commands = Commander.usesMsgs(
+  `[-?] [-h] [--settings settings.js] [--userDir DIR]
                [--port PORT] [--title TITLE] [--safe] [flows.json]
 
-       ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]`);
-let commands = Commander.parseArgs().args;
-let issetCommand = (key: string) => has(commands, key);
-let isAdminCommand = issetCommand("_admin");
+       ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]`
+).parseArgs().args;
+const issetCommand = (key: string) => has(commands, key);
+const isAdminCommand = issetCommand("_admin");
 
 if (isAdminCommand) {
   // TODO: Add support for admin commands in the future for now just console logging the commands.
@@ -22,7 +22,7 @@ if (isAdminCommand) {
   process.exit(0);
 }
 
-let defaultsCliCommands: ICommand = {};
+const defaultsCliCommands: ICommand = Object.create({});
 
 if (issetCommand("host") && typeof commands.host === "string")
   defaultsCliCommands.Host = commands.host;
@@ -57,4 +57,6 @@ if (issetCommand("verbose") && typeof commands.verbose === "boolean")
     enabled: true,
     level: LogLevel.VERBOSE,
   };
-new EcoFlow({ cli: defaultsCliCommands }).start();
+// new EcoFlow({ cli: defaultsCliCommands }).start();
+
+Commander.CliService.startService(defaultsCliCommands);
