@@ -106,6 +106,18 @@ class EcoFlow implements IEcoFlow {
     let packageVersion: string = require("../../package.json").version;
     return packageVersion;
   }
+
+  static get processCommands(): ProcessCommands {
+    return {
+      STOP: "stop",
+      RESTART: "restart",
+    };
+  }
 }
 
 export default EcoFlow;
+
+interface ProcessCommands {
+  STOP: string;
+  RESTART: string;
+}

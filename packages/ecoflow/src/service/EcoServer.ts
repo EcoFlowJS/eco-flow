@@ -8,8 +8,7 @@ import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
 import { Passport } from "./Passport";
 import { StrategyOptions } from "passport-jwt";
-import childProcess from "child_process";
-import path from "path";
+import EcoFlow from "../lib/EcoFlow";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -134,7 +133,13 @@ export class EcoServer extends Koa implements IEcoServer {
         );
         log.info("====================================");
         resolve();
-        // setTimeout(() => process.exit(), 1000);
+        setTimeout(
+          () =>
+            process.send
+              ? process.send(EcoFlow.processCommands.STOP)
+              : process.exit(0),
+          1000
+        );
       });
     });
   }
@@ -148,27 +153,16 @@ export class EcoServer extends Koa implements IEcoServer {
     log.info("Restarting server process...");
     log.info("====================================");
     return new Promise<void>((resolve, reject) => {
-      process.on("exit", () => {
-        childProcess
-          .spawn(
-            "node",
-            process.argv[0].endsWith("node") ||
-              process.argv[0].endsWith("node.exe")
-              ? process.argv.slice(1)
-              : process.argv,
-            {
-              cwd: process.cwd(),
-              detached: true,
-              stdio: "inherit",
-              shell: process.platform === "win32" ? true : false,
-            }
-          )
-          .unref();
-      });
       this.closeServer()
         .then(() => {
           resolve();
-          process.exit(0);
+          setTimeout(
+            () =>
+              process.send
+                ? process.send(EcoFlow.processCommands.RESTART)
+                : process.exit(1),
+            1000
+          );
         })
         .catch((err) => reject(err));
     });

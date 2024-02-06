@@ -19,7 +19,7 @@ const serverCloseRestart = (ctx: Context) => {
 
   switch (Mode) {
     case "restart":
-      setTimeout(() => server.restartServer(), 2 * 1000);
+      setTimeout(() => server.restartServer(), 30 * 1000);
       ctx.body = <ApiResponse>{
         success: true,
         payload: "Server will be restart in 30 seconds",
