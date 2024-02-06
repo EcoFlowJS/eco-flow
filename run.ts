@@ -1,4 +1,2 @@
-import EcoFlow from "./packages/ecoflow/src";
-(async () => {
-  await new EcoFlow().start();
-})();
+import { CommanderCli } from "@eco-flow/cli";
+new CommanderCli().CliService.startService();
