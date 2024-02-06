@@ -211,7 +211,17 @@ export class Logger implements ILogger {
       level: LogLevelName[level],
       format: combine(
         this.isLable ? label({ label: this.lable }) : label(),
-        timestamp(),
+        timestamp({
+          format:
+            new Date().toLocaleDateString().replace(/\//g, "-") +
+            " " +
+            new Date().toLocaleTimeString("en-IN", {
+              hourCycle: "h23",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            }),
+        }),
         formatter,
         this.isPrettyPrint ? prettyPrint() : label()
       ),
@@ -222,7 +232,17 @@ export class Logger implements ILogger {
         new transports.Console({
           format: combine(
             this.isLable ? label({ label: this.lable }) : label(),
-            timestamp(),
+            timestamp({
+              format:
+                new Date().toLocaleDateString().replace(/\//g, "-") +
+                " " +
+                new Date().toLocaleTimeString("en-IN", {
+                  hourCycle: "h23",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                }),
+            }),
             formatter,
             this.isPrettyPrint ? prettyPrint() : label(),
             colorize({ all: true })
