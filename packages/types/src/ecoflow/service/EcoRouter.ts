@@ -1,4 +1,4 @@
-import KoaRouter, { RouterOptions } from "@koa/router";
+import KoaRouter from "@koa/router";
 import { DefaultContext, DefaultState } from "koa";
 
 export interface EcoRouter {
