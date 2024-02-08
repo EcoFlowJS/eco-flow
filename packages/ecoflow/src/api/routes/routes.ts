@@ -5,6 +5,7 @@ import initRouter from "./init";
 import schemaRouter from "./schema";
 import adminRouter from "./admin";
 import serverRouter from "./server";
+import setupRouter from "./setup";
 
 const apiBuilder = new EcoSystemAPIBuilder();
 apiBuilder
@@ -12,7 +13,8 @@ apiBuilder
   .createRouterRoute("/auth", authRouter)
   .createRouterRoute("/schema", schemaRouter)
   .createRouterRoute("/admin", adminRouter)
-  .createRouterRoute("/server", serverRouter);
+  .createRouterRoute("/server", serverRouter)
+  .createRouterRoute("/setup", setupRouter);
 
 const apiBaseRoutes: Routes[] = apiBuilder.route;
 

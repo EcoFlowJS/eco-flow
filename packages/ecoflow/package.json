@@ -31,13 +31,14 @@
     "glob": "^10.3.10",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.14.2",
-    "koa-bodyparser": "^4.4.1",
+    "koa-body": "^6.0.1",
     "koa-mount": "^4.0.0",
     "koa-passport": "^6.0.0",
     "koa-proxies": "^0.12.3",
     "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
     "passport-jwt": "^4.0.1"
   },
   "description": "",
@@ -45,11 +46,11 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/koa__cors": "^5.0.0",
     "@types/koa__router": "^12.0.2",
-    "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-mount": "^4.0.4",
     "@types/koa-passport": "^6.0.3",
     "@types/koa-session": "^6.4.5",
     "@types/koa-static": "^4.0.3",
+    "@types/mime-types": "^2.1.4",
     "@types/passport-jwt": "^4.0.0"
   }
 }
