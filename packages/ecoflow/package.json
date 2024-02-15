@@ -39,7 +39,9 @@
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
     "mime-types": "^2.1.35",
-    "passport-jwt": "^4.0.1"
+    "node-stream-zip": "^1.15.0",
+    "passport-jwt": "^4.0.1",
+    "socket.io": "^4.7.4"
   },
   "description": "",
   "devDependencies": {

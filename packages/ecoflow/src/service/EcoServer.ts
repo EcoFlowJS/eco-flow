@@ -3,6 +3,7 @@ import koaBody from "koa-body";
 import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
+import { Server } from "socket.io";
 import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
@@ -19,6 +20,8 @@ export class EcoServer extends Koa implements IEcoServer {
   private _server!: HttpServer | HttpsServer;
   private _serverStatus: "Online" | "Offline" = "Offline";
   passport: typeof passport = passport;
+  socket!: Server;
+  userSocket!: Server;
 
   /**
    * EcoFlow Server Library interface implementation for HTTP/HTTPS connections and APIs requests.
@@ -78,6 +81,31 @@ export class EcoServer extends Koa implements IEcoServer {
       this._server = httpsServer.createServer(this._https!, this.callback());
     this.use(koaCors(this._httpCors));
     this.use(koaBody({ multipart: true }));
+
+    const socketCors = {
+      origin: this._httpCors.origin?.toString(),
+      methods: this._httpCors.allowMethods,
+      allowedHeaders: this._httpCors.allowHeaders,
+      exposedHeaders: this._httpCors.exposeHeaders,
+      credentials: this._httpCors.credentials ? true : false,
+      maxAge: Number(this._httpCors.maxAge),
+    };
+
+    this.socket = new Server(this._server, {
+      path: "/socket.ecoflow",
+      cors: socketCors,
+    });
+
+    this.userSocket = new Server(this._server, {
+      cors: socketCors,
+    });
+
+    this.socket.on("connection", () =>
+      console.log("WebSocket connected to socket.ecoflow")
+    );
+    this.userSocket.on("connection", () =>
+      console.log("WebSocket connected to UserSocket")
+    );
   }
 
   /**

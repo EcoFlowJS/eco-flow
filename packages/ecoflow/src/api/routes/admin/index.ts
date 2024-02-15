@@ -1,5 +1,5 @@
 import { EcoRouter } from "../../../service/EcoRouter";
-import adminConfigRouter from "./config";
+import adminConfigRouter from "./config/config";
 
 const adminRouter = EcoRouter.createRouter();
 export default adminRouter;

@@ -9,6 +9,7 @@ import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
 import { Database } from "@eco-flow/database";
 import { Service } from "@eco-flow/services";
+import { Server as SocketServer } from "socket.io";
 import EcoModule from "@eco-flow/module";
 import loadEnvironments from "../helper/env.helper";
 
@@ -18,6 +19,7 @@ class EcoFlow implements IEcoFlow {
   isAuth: boolean = false;
   _: typeof _ = _;
   server: EcoServer;
+  socket: SocketServer;
   router: EcoRouter;
   container: EcoContainer;
 
@@ -49,6 +51,7 @@ class EcoFlow implements IEcoFlow {
       .register("service", new Service());
 
     this.server = new EcoServer();
+    this.socket = this.server.userSocket;
     this.router = new EcoRouter();
     this.helper = new EcoHelper(this);
 

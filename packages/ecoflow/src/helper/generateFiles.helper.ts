@@ -14,7 +14,9 @@ export default async ({ config, log }: EcoFlow) => {
   log.info("Generating Files...");
   const { envDir, userDir } = config._config;
   const DB_Path = path.join(userDir!, "database");
+  const uploadDir = path.join(userDir!, "uploads");
   await fse.ensureDir(DB_Path);
+  await fse.ensureDir(uploadDir);
   const TOKEN_SALT = generateASecret();
 
   await Builder.ENV.generateSystemEnv(envDir!, [
