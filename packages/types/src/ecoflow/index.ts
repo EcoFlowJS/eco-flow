@@ -7,6 +7,7 @@ import { EcoContainer } from "./EcoContainer";
 import { Database } from "../database";
 import { EcoModule } from "../module";
 import { Service } from "../services";
+import type { Server } from "socket.io";
 
 export * from "./config";
 export * from "./EcoContainer";
@@ -30,6 +31,7 @@ export interface EcoFlow {
   isAuth: boolean;
   _: typeof _;
   server: EcoServer;
+  socket: Server;
   router: EcoRouter;
   container: EcoContainer;
   get config(): Config;

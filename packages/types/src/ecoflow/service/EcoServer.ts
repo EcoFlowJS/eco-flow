@@ -2,7 +2,9 @@ import Koa from "koa";
 import httpServer from "http";
 import httpsServer from "https";
 import passport from "koa-passport";
-import { StrategyOptions } from "passport-jwt";
+import type { StrategyOptions } from "passport-jwt";
+import type { Server } from "socket.io";
+
 export interface EcoServer extends Koa {
   startServer(): Promise<
     | httpServer.Server<
@@ -21,4 +23,5 @@ export interface EcoServer extends Koa {
   get isSecure(): boolean;
   get serverState(): "Online" | "Offline";
   passport: typeof passport;
+  socket: Server;
 }
