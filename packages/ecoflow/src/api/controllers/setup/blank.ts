@@ -1,6 +1,10 @@
 import { Context } from "koa";
 import { systemDatabaseConfigutations } from "../../helpers/parseServerConfigHelper";
-import { ApiResponse, configOptions } from "@eco-flow/types";
+import {
+  ApiResponse,
+  configOptions,
+  userTableCollection,
+} from "@eco-flow/types";
 
 const databaseValidator = async (ctx: Context) => {
   const { _ } = ecoFlow;
@@ -27,7 +31,7 @@ const databaseValidator = async (ctx: Context) => {
 };
 
 const processSetupController = async (ctx: Context) => {
-  const { database, server, config, log } = ecoFlow;
+  const { database, server, config, log, service } = ecoFlow;
 
   const { databaseInfo, userInfo } = ctx.request.body;
 
@@ -66,11 +70,26 @@ const processSetupController = async (ctx: Context) => {
   }
 
   log.info("creating user credentials...");
+  const userCredentials: userTableCollection = {
+    name: userInfo.name,
+    username: userInfo.username,
+    password: userInfo.password,
+    email: userInfo.email,
+  };
+  const response = await service.UserService.createUser(userCredentials, true);
+  log.info("User credentials created successfully");
 
-  //ToDo: create user credentials.
-  console.log(userInfo);
-
-  ctx.body = {};
+  ctx.body = <ApiResponse>{
+    ...response,
+    payload: response.success
+      ? {
+          msg: response.payload + "Restarting server in 5seconds...",
+          restart: true,
+        }
+      : response.payload,
+  };
+  log.info("Restarting server in 5seconds...");
+  setTimeout(() => server.restartServer(), 5 * 1000);
 };
 
 export { databaseValidator, processSetupController };
