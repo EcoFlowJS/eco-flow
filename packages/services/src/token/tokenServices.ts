@@ -54,22 +54,51 @@ export class TokenServices implements ITokenServices {
     expireIn: Date | number
   ): Promise<void> {
     if (this.dataBase.isMongoose(this.connection)) {
-      await new (tokenModelMongoose(this.connection))({
-        token: token,
-        userId: userId,
-        expires_at: expireIn,
-      }).save();
+      if (
+        (await tokenModelMongoose(this.connection).countDocuments({
+          userId: userId,
+        })) === 0
+      )
+        await new (tokenModelMongoose(this.connection))({
+          token: token,
+          userId: userId,
+          expires_at: expireIn,
+        }).save();
+      else
+        await tokenModelMongoose(this.connection).updateOne(
+          { userId: userId },
+          {
+            token: token,
+            userId: userId,
+            expires_at: expireIn,
+          }
+        );
     }
 
     if (this.dataBase.isKnex(this.connection)) {
       if (!(await this.connection.schemaBuilder.hasTable("tokens")))
         await knexSeed(this.connection);
 
-      await tokenModelKnex(this.connection).insert({
-        userId: userId,
-        token: token,
-        expires_at: expireIn,
-      });
+      if (
+        (
+          await tokenModelKnex(this.connection)
+            .count()
+            .where({ userId: userId })
+        )[0]["count(*)"] === 0
+      )
+        await tokenModelKnex(this.connection).insert({
+          userId: userId,
+          token: token,
+          expires_at: expireIn,
+        });
+      else
+        await tokenModelKnex(this.connection)
+          .update({
+            userId: userId,
+            token: token,
+            expires_at: expireIn,
+          })
+          .where({ userId: userId });
     }
   }
 

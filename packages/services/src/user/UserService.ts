@@ -2,6 +2,7 @@ import {
   ApiResponse,
   Database,
   DatabaseConnection,
+  GetUserInfo,
   UserService as IUserService,
   userTableCollection,
 } from "@eco-flow/types";
@@ -39,6 +40,7 @@ export class UserService implements IUserService {
     userInfo: userTableCollection,
     isAdmin = false
   ): Promise<ApiResponse> {
+    userInfo.username = userInfo.username.toLowerCase();
     userInfo.password = await Helper.createHash(userInfo.password);
     if (isAdmin) userInfo.isPermanent = true;
 
@@ -64,6 +66,35 @@ export class UserService implements IUserService {
         error: true,
         payload: error,
       };
+    }
+  }
+
+  async getUserAllInfo(username: string): Promise<GetUserInfo> {
+    try {
+      const userInfo: GetUserInfo = Object.create({});
+      userInfo.isAvailable = false;
+      username = username.toLowerCase();
+      let user: GetUserInfo["user"][] = [];
+
+      if (this.dataBase.isMongoose(this.connection))
+        user = await userModelMongoose(this.connection).find({
+          username: username,
+          isActive: true,
+        });
+
+      if (this.dataBase.isKnex(this.connection))
+        user = await (await userModelKnex(this.connection))()
+          .select()
+          .where({ username: username, isActive: true });
+
+      if (user.length > 0) {
+        userInfo.isAvailable = true;
+        userInfo.user = user[0];
+      }
+
+      return userInfo;
+    } catch (error) {
+      throw error;
     }
   }
 }

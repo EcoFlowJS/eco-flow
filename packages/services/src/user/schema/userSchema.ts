@@ -1,4 +1,4 @@
-import { DriverKnex, userTableCollection } from "@eco-flow/types";
+import { userTableCollection } from "@eco-flow/types";
 import { Schema } from "mongoose";
 
 const mongooseSchema = new Schema<userTableCollection>({
@@ -10,6 +10,11 @@ const mongooseSchema = new Schema<userTableCollection>({
   password: {
     required: true,
     type: String,
+  },
+  isActive: {
+    required: true,
+    type: Boolean,
+    default: true,
   },
   email: String,
   oldPassword: String,
@@ -29,6 +34,7 @@ const knexSchema = (table: any) => {
   table.string("name");
   table.string("username");
   table.string("password");
+  table.boolean("isActive");
   table.string("email");
   table.string("oldPassword");
   table.boolean("isPermanent");
