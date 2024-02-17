@@ -22,6 +22,7 @@ export default async function isAuthenticated(ctx: Context, next: Next) {
 
     if (typeof result === "object" && !_.isEmpty(result)) {
       ctx.status = 200;
+      ctx.token = result;
       ctx.body = {
         success: true,
         payload: result,

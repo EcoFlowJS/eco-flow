@@ -36,7 +36,7 @@ const loginController = async (ctx: Context) => {
   }
 
   const [access_token, refresh_token, refresh_token_expires_at] =
-    await TokenServices.generateToken(username);
+    await TokenServices.generateToken(username.toLowerCase());
 
   await Helper.setCookie(ctx, "RefreshToken", refresh_token, {
     ...options,
