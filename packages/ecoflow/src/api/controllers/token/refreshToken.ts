@@ -2,7 +2,7 @@ import Helper from "@eco-flow/helper";
 import { Context, Next } from "koa";
 import _ from "lodash";
 
-export default async (ctx: Context, next: Next) => {
+const refreshToken = async (ctx: Context, next: Next) => {
   const { isAuth } = ecoFlow;
   if (!isAuth) {
     ctx.status = 200;
@@ -66,3 +66,5 @@ export default async (ctx: Context, next: Next) => {
     payload: access_token,
   };
 };
+
+export default refreshToken;

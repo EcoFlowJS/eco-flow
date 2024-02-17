@@ -75,6 +75,7 @@ const processSetupController = async (ctx: Context) => {
     username: userInfo.username,
     password: userInfo.password,
     email: userInfo.email,
+    isActive: true,
   };
   const response = await service.UserService.createUser(userCredentials, true);
   log.info("User credentials created successfully");
