@@ -17,42 +17,12 @@ export class TokenServices implements ITokenServices {
     this.connection = this.dataBase.getDatabaseConnection("_sysDB");
   }
 
-  async checkToken(token: string, userId: string): Promise<boolean> {
-    let result = false;
-    if (this.dataBase.isMongoose(this.connection)) {
-      if (
-        (await tokenModelMongoose(this.connection).countDocuments({
-          userId: userId,
-          token: token,
-          expires_at: { $gt: new Date() },
-        })) > 0
-      )
-        result = true;
-    }
-    if (this.dataBase.isKnex(this.connection)) {
-      if (!(await this.connection.schemaBuilder.hasTable("tokens")))
-        await knexSeed(this.connection);
-      if (
-        (
-          await tokenModelKnex(this.connection)
-            .where({
-              userId: userId,
-              token: token,
-            })
-            .where("created_at", ">=", Date.now())
-            .count()
-        )[0]["count(*)"] > 0
-      )
-        result = true;
-    }
-    return result;
-  }
-
   private async setToken(
     token: string,
     userId: string,
     expireIn: Date | number
   ): Promise<void> {
+    userId = userId.toLowerCase();
     if (this.dataBase.isMongoose(this.connection)) {
       if (
         (await tokenModelMongoose(this.connection).countDocuments({
@@ -102,6 +72,38 @@ export class TokenServices implements ITokenServices {
     }
   }
 
+  async checkToken(token: string, userId: string): Promise<boolean> {
+    userId = userId.toLowerCase();
+    let result = false;
+    if (this.dataBase.isMongoose(this.connection)) {
+      if (
+        (await tokenModelMongoose(this.connection).countDocuments({
+          userId: userId,
+          token: token,
+          expires_at: { $gt: new Date() },
+        })) > 0
+      )
+        result = true;
+    }
+    if (this.dataBase.isKnex(this.connection)) {
+      if (!(await this.connection.schemaBuilder.hasTable("tokens")))
+        await knexSeed(this.connection);
+      if (
+        (
+          await tokenModelKnex(this.connection)
+            .where({
+              userId: userId,
+              token: token,
+            })
+            .where("created_at", ">=", Date.now())
+            .count()
+        )[0]["count(*)"] > 0
+      )
+        result = true;
+    }
+    return result;
+  }
+
   async generateToken(_id: string): Promise<[string, string, number]> {
     const access_token_expires_at = new Date().setHours(
       new Date().getHours() + 1
@@ -122,5 +124,13 @@ export class TokenServices implements ITokenServices {
     await this.setToken(refresh_token, _id, refresh_token_expires_at);
 
     return [access_token, refresh_token, refresh_token_expires_at];
+  }
+
+  async removeToken(token: string, userId: string): Promise<void> {
+    if (this.dataBase.isMongoose(this.connection))
+      await tokenModelMongoose(this.connection).deleteOne({ token, userId });
+
+    if (this.dataBase.isKnex(this.connection))
+      await tokenModelKnex(this.connection).delete().where({ token, userId });
   }
 }
