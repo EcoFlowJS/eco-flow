@@ -1,6 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
+import { Environment } from "@eco-flow/types";
 
 export class EnvBuilder {
   private generateEnvName(name: string, type: "SYS" | "USER" = "USER"): string {
@@ -87,7 +88,7 @@ export class EnvBuilder {
     return list;
   }
 
-  static get getSystemEnv(): Environment[] {
+  static get getSystemEnvs(): Environment[] {
     let list: Array<Environment> = [];
     for (const [name, value] of Object.entries(process.env)) {
       if (name.startsWith("ECOFLOW_SYS_"))
@@ -99,8 +100,18 @@ export class EnvBuilder {
     return list;
   }
 
+  static getSystemEnv(envID: string): Environment | null {
+    envID = envID.toLocaleUpperCase();
+    if (typeof process.env[`ECOFLOW_SYS_${envID}`] !== "undefined")
+      return {
+        name: envID,
+        value: process.env[`ECOFLOW_SYS_${envID}`]!,
+      };
+    return null;
+  }
+
   static async setSystemEnv(envPath: string, ENV: Environment[]) {
-    let existingENVList = EnvBuilder.getSystemEnv;
+    let existingENVList = EnvBuilder.getSystemEnvs;
     let existingENVs: Environment[] = [];
     existingENVList.forEach((value) => {
       const remove = _.remove(
@@ -153,6 +164,16 @@ export class EnvBuilder {
     return list;
   }
 
+  static getUserEnv(envID: string): Environment | null {
+    envID = envID.toLocaleUpperCase();
+    if (typeof process.env[`ECOFLOW_USER_${envID}`] !== "undefined")
+      return {
+        name: envID,
+        value: process.env[`ECOFLOW_USER_${envID}`]!,
+      };
+    return null;
+  }
+
   static get getUserEnvNameList(): string[] {
     let list: Array<string> = [];
     for (const [name] of Object.entries(process.env)) {
@@ -191,10 +212,4 @@ export class EnvBuilder {
       throw err;
     }
   }
-}
-
-interface Environment {
-  commentBefore?: string;
-  name: string;
-  value: string;
 }
