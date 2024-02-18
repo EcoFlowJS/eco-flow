@@ -374,7 +374,7 @@ export class Database implements IDatabase {
     if (!status)
       return [status, typeof msg === "string" ? msg : JSON.stringify(msg)];
 
-    if (status)
+    if (status && !name.startsWith("_"))
       await this.saveConfigurations("UPDATE", {
         name: name,
         driver: driver,
