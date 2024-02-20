@@ -1,5 +1,5 @@
 import Koa from "koa";
-import koaBody from "koa-body";
+import koaBody, { HttpMethodEnum } from "koa-body";
 import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
@@ -80,7 +80,19 @@ export class EcoServer extends Koa implements IEcoServer {
     if (this._isHttps)
       this._server = httpsServer.createServer(this._https!, this.callback());
     this.use(koaCors(this._httpCors));
-    this.use(koaBody({ multipart: true }));
+    this.use(
+      koaBody({
+        multipart: true,
+        parsedMethods: [
+          HttpMethodEnum.POST,
+          HttpMethodEnum.PUT,
+          HttpMethodEnum.PATCH,
+          HttpMethodEnum.GET,
+          HttpMethodEnum.HEAD,
+          HttpMethodEnum.DELETE,
+        ],
+      })
+    );
 
     const socketCors = {
       origin: this._httpCors.origin?.toString(),
