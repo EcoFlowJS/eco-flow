@@ -6,6 +6,7 @@ import {
   getSystemEnv,
   getUserEnv,
   getUserEnvs,
+  commitEnvs,
 } from "../../../controllers/environment/environment.controller";
 import isAuthenticated from "../../../controllers/user/isAuthenticated";
 
@@ -20,3 +21,5 @@ environmentRouter.get("/userEnv/:envID", isAuthenticated, getUserEnv);
 
 environmentRouter.get("/systemEnvs", isAuthenticated, getSystemEnvs);
 environmentRouter.get("/systemEnv/:envID", isAuthenticated, getSystemEnv);
+
+environmentRouter.post("/envs", isAuthenticated, commitEnvs);
