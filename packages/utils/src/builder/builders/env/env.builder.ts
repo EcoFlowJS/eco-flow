@@ -21,50 +21,59 @@ export class EnvBuilder {
     type: "SYS" | "USER" = "USER"
   ): string {
     let env = "";
-    ENV.forEach((values) => {
-      if (!_.isEmpty(values.commentBefore))
-        env += "#" + values.commentBefore?.replace(/\n/g, "\n#") + "\n";
-      env +=
-        new EnvBuilder().generateEnvName(values.name, type) +
-        "=" +
-        values.value +
-        "\n";
-    });
+    ENV.map(
+      (value) =>
+        (env += `${new EnvBuilder().generateEnvName(value.name, type)}=${
+          value.value
+        }\n`)
+    );
     return env;
   }
 
   private async updateEnvironment(
     envPath: string,
-    envFileName: string,
-    existingENVs: Environment[],
     ENV: Environment[],
-    type: "SYS" | "USER" = "USER"
-  ): Promise<string> {
-    try {
-      let envFile = path.join(envPath, envFileName);
-      await fse.ensureFile(envFile);
-      let env = await fse.readFile(envFile, {
-        encoding: "utf-8",
+    type: "SYS" | "USER" = "USER",
+    fileOverWrite: boolean = false
+  ): Promise<void> {
+    const existingENVsList =
+      type === "SYS"
+        ? EnvBuilder.getSystemEnvs
+        : type === "USER"
+        ? EnvBuilder.getUserEnvs
+        : [];
+    const newEnvs: Environment[] = [];
+
+    existingENVsList.forEach((envID) => {
+      delete process.env[
+        `${new EnvBuilder().generateEnvName(envID.name, type)}`
+      ];
+    });
+
+    if (!fileOverWrite)
+      existingENVsList.map((env) => {
+        env.name = env.name.toUpperCase();
+        if (typeof ENV !== "undefined") {
+          ENV = ENV.filter((newEnv) => {
+            newEnv.name = newEnv.name.toUpperCase();
+            if (env.name === newEnv.name) {
+              env.value = newEnv.value;
+              return false;
+            }
+            return true;
+          });
+        }
+        newEnvs.push(env);
+        return;
       });
 
-      existingENVs.forEach((value) => {
-        let newENV = new EnvBuilder().generateENVs([value], type);
-        env = env.replace(
-          env.substring(
-            env.search(new EnvBuilder().generateEnvName(value.name, type)),
-            env.indexOf(
-              "\n",
-              env.search(new EnvBuilder().generateEnvName(value.name, type))
-            ) + 1
-          ),
-          newENV
-        );
-      });
+    newEnvs.push(...ENV);
 
-      return (env += new EnvBuilder().generateENVs(ENV, type));
-    } catch (err) {
-      throw err;
-    }
+    type === "SYS"
+      ? await EnvBuilder.generateSystemEnv(envPath, newEnvs)
+      : type === "USER"
+      ? await EnvBuilder.generateUserEnv(envPath, newEnvs)
+      : null;
   }
 
   static async generateSystemEnv(envPath: string, ENV: Environment[]) {
@@ -73,67 +82,6 @@ export class EnvBuilder {
       await fse.writeFile(
         path.join(envPath, "ecoflow.environments.env"),
         new EnvBuilder().generateENVs(ENV, "SYS")
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  static get getSystemEnvNameList(): string[] {
-    let list: Array<string> = [];
-    for (const [name] of Object.entries(process.env)) {
-      if (name.startsWith("ECOFLOW_SYS_"))
-        list.push(name.substring("ECOFLOW_SYS_".length));
-    }
-    return list;
-  }
-
-  static get getSystemEnvs(): Environment[] {
-    let list: Array<Environment> = [];
-    for (const [name, value] of Object.entries(process.env)) {
-      if (name.startsWith("ECOFLOW_SYS_"))
-        list.push({
-          name: name.substring("ECOFLOW_SYS_".length),
-          value: value!,
-        });
-    }
-    return list;
-  }
-
-  static getSystemEnv(envID: string): Environment | null {
-    envID = envID.toLocaleUpperCase();
-    if (typeof process.env[`ECOFLOW_SYS_${envID}`] !== "undefined")
-      return {
-        name: envID,
-        value: process.env[`ECOFLOW_SYS_${envID}`]!,
-      };
-    return null;
-  }
-
-  static async setSystemEnv(envPath: string, ENV: Environment[]) {
-    let existingENVList = EnvBuilder.getSystemEnvs;
-    let existingENVs: Environment[] = [];
-    existingENVList.forEach((value) => {
-      const remove = _.remove(
-        ENV,
-        (n) =>
-          new EnvBuilder().generateEnvName(n.name, "SYS") ===
-          new EnvBuilder().generateEnvName(value.name, "SYS")
-      );
-
-      if (remove.length > 0) existingENVs.push(remove[0]);
-    });
-
-    try {
-      await fse.writeFile(
-        path.join(envPath, "ecoflow.environments.env"),
-        await new EnvBuilder().updateEnvironment(
-          envPath,
-          "ecoflow.environments.env",
-          existingENVs,
-          ENV,
-          "SYS"
-        )
       );
     } catch (err) {
       throw err;
@@ -152,16 +100,44 @@ export class EnvBuilder {
     }
   }
 
+  static get getSystemEnvNameList(): string[] {
+    return Object.keys(process.env).filter((val) =>
+      val.startsWith("ECOFLOW_SYS_")
+    );
+  }
+
+  static get getUserEnvNameList(): string[] {
+    return Object.keys(process.env).filter((val) =>
+      val.startsWith("ECOFLOW_USER_")
+    );
+  }
+
+  static get getSystemEnvs(): Environment[] {
+    return this.getSystemEnvNameList.map((env) => {
+      return <Environment>{
+        name: env.substring("ECOFLOW_SYS_".length),
+        value: process.env[env],
+      };
+    });
+  }
+
   static get getUserEnvs(): Environment[] {
-    let list: Environment[] = [];
-    for (const [name, value] of Object.entries(process.env)) {
-      if (name.startsWith("ECOFLOW_USER_"))
-        list.push({
-          name: name.substring("ECOFLOW_USER_".length),
-          value: value!,
-        });
-    }
-    return list;
+    return this.getUserEnvNameList.map((env) => {
+      return <Environment>{
+        name: env.substring("ECOFLOW_USER_".length),
+        value: process.env[env],
+      };
+    });
+  }
+
+  static getSystemEnv(envID: string): Environment | null {
+    envID = envID.toLocaleUpperCase();
+    if (typeof process.env[`ECOFLOW_SYS_${envID}`] !== "undefined")
+      return {
+        name: envID,
+        value: process.env[`ECOFLOW_SYS_${envID}`]!,
+      };
+    return null;
   }
 
   static getUserEnv(envID: string): Environment | null {
@@ -174,39 +150,34 @@ export class EnvBuilder {
     return null;
   }
 
-  static get getUserEnvNameList(): string[] {
-    let list: Array<string> = [];
-    for (const [name] of Object.entries(process.env)) {
-      if (name.startsWith("ECOFLOW_USER_"))
-        list.push(name.substring("ECOFLOW_USER_".length));
+  static async setSystemEnv(
+    envPath: string,
+    ENV: Environment[],
+    fileOverWrite: boolean = false
+  ) {
+    try {
+      await new EnvBuilder().updateEnvironment(
+        envPath,
+        ENV,
+        "SYS",
+        fileOverWrite
+      );
+    } catch (err) {
+      throw err;
     }
-    return list;
   }
 
-  static async setUserEnv(envPath: string, ENV: Environment[]): Promise<void> {
-    let existingENVList = EnvBuilder.getUserEnvs;
-    let existingENVs: Environment[] = [];
-    existingENVList.forEach((value) => {
-      const remove = _.remove(
-        ENV,
-        (n) =>
-          new EnvBuilder().generateEnvName(n.name, "USER") ===
-          new EnvBuilder().generateEnvName(value.name, "USER")
-      );
-
-      if (remove.length > 0) existingENVs.push(remove[0]);
-    });
-
+  static async setUserEnv(
+    envPath: string,
+    ENV: Environment[],
+    fileOverWrite: boolean = false
+  ): Promise<void> {
     try {
-      await fse.writeFile(
-        path.join(envPath, "user.environments.env"),
-        await new EnvBuilder().updateEnvironment(
-          envPath,
-          "user.environments.env",
-          existingENVs,
-          ENV,
-          "USER"
-        )
+      await new EnvBuilder().updateEnvironment(
+        envPath,
+        ENV,
+        "USER",
+        fileOverWrite
       );
     } catch (err) {
       throw err;
