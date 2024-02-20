@@ -1,6 +1,16 @@
-export default (env: string): string | undefined => {
+import { Builder } from "@eco-flow/utils";
+
+export default (
+  env: string,
+  type: "user" | "system" = "user"
+): string | undefined => {
   if (env.startsWith("env(") && env.endsWith(")")) {
-    return process.env[env.substring(4, env.length - 1)];
+    const name = env.substring(4, env.length - 1);
+    return type === "user"
+      ? Builder.ENV.getUserEnv(name)?.value
+      : type === "system"
+      ? Builder.ENV.getSystemEnv(name)?.value
+      : name;
   }
   return env;
 };

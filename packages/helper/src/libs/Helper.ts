@@ -43,8 +43,11 @@ export class Helper {
     await removePackageHelper(installDir, packageNames);
   }
 
-  static fetchFromEnv(env: string): string | undefined {
-    return fetchFromEnv(env);
+  static fetchFromEnv(
+    env: string,
+    type: "user" | "system" = "user"
+  ): string | undefined {
+    return fetchFromEnv(env, type);
   }
 
   static getRandomInt(min: number, max: number): number {
