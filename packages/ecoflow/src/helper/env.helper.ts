@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import dotenv from "dotenv";
 import { homedir } from "os";
 
-export default () => {
+const loadEnvironments = () => {
   const envDir = _.isEmpty(ecoFlow.config._config.envDir)
     ? process.env.configDir ||
       homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
@@ -24,3 +24,5 @@ export default () => {
   dotenv.config({ path: ecosystemEnv });
   dotenv.config({ path: userEnv });
 };
+
+export default loadEnvironments;
