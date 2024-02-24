@@ -638,7 +638,7 @@ const systemDatabaseConfigutations = async (
         }
         break;
     }
-    configs.database = !_.isEmpty(databaseConfig) ? databaseConfig : undefined;
+    if (!_.isEmpty(databaseConfig)) configs.database = databaseConfig;
   }
 
   return configs;

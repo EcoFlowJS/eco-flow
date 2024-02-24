@@ -45,11 +45,14 @@ const updateConfig = async (ctx: Context) => {
       ...(<any>ctx.request.body),
     });
 
-    await config.setConfig(configs);
+    const newConfigs = await config.setConfig(configs);
 
     ctx.body = {
       success: true,
-      payload: "Configuration updated successfully.",
+      payload: {
+        msg: "Configuration updated successfully.",
+        newConfigs: newConfigs,
+      },
     };
   } catch (error) {
     ctx.body = {
