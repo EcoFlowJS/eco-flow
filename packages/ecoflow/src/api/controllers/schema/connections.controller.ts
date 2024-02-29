@@ -1,7 +1,7 @@
 import Helper from "@eco-flow/helper";
 import { Context, Next } from "koa";
 import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ApiResponse, ConnectionDefinations } from "@eco-flow/types";
 
 const getConnections = async (ctx: Context, next: Next) => {
   const { database } = ecoFlow;
@@ -176,6 +176,44 @@ const deleteConnection = async (ctx: Context, next: Next) => {
   };
 };
 
+const getCollectionOrTable = async (ctx: Context, next: Next) => {
+  const { database } = ecoFlow;
+  const connection = database.getDatabaseConnection(ctx.params.connectionName);
+
+  console.log(connection);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  ctx.status = 200;
+  if (database.isKnex(connection))
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: {
+        type: "KNEX",
+        collectionsORtables: await connection.listTables(),
+      },
+    };
+
+  if (database.isMongoose(connection))
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: {
+        type: "MONGO",
+        collectionsORtables: await connection.listCollections(),
+      },
+    };
+};
+
 export {
   getConnectionConfig,
   getConnectionConfigs,
@@ -183,4 +221,5 @@ export {
   createConnection,
   updateConnection,
   deleteConnection,
+  getCollectionOrTable,
 };

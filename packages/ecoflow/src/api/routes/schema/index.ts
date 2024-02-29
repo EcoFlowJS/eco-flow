@@ -6,6 +6,7 @@ import {
   getConnectionConfigs,
   getConnections,
   updateConnection,
+  getCollectionOrTable,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
@@ -20,3 +21,9 @@ schemaRouter.delete("/connection", isAuthenticated, deleteConnection);
 
 schemaRouter.get("/connectionConfigs", isAuthenticated, getConnectionConfigs);
 schemaRouter.get("/connectionConfig/:id", isAuthenticated, getConnectionConfig);
+
+schemaRouter.get(
+  "/collectionsORtables/:connectionName",
+  isAuthenticated,
+  getCollectionOrTable
+);
