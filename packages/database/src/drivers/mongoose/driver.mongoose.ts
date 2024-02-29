@@ -80,4 +80,11 @@ export class DriverMongoose implements IDriverMongoose {
       options
     );
   }
+
+  async listCollections(): Promise<any> {
+    return (await this.conn.db.listCollections().toArray())
+      .filter((collections) => collections.type === "collection")
+      .map((collections) => collections.name)
+      .sort();
+  }
 }
