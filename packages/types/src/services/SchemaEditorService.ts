@@ -11,6 +11,9 @@ export interface CollectionOrTableResult {
 }
 
 export interface DatabaseDataResult {
-  columns?: string[];
+  columns?: Array<{
+    name: string;
+    type: string;
+  }>;
   data: any;
 }
