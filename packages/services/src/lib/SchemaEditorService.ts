@@ -36,10 +36,17 @@ export class SchemaEditorService implements ISchemaEditorService {
     collectionORtableName: string
   ): Promise<DatabaseDataResult | null> {
     if (this.database.isKnex(this.connection)) {
+      const columns = await this.connection.getColumnInfo(
+        collectionORtableName
+      );
+
       return {
-        columns: Object.keys(
-          await this.connection.getColumnInfo(collectionORtableName)
-        ),
+        columns: Object.keys(columns).map((columnName) => {
+          return {
+            name: columnName,
+            type: columns[columnName].type,
+          };
+        }),
         data: await this.connection
           .queryBuilder(collectionORtableName)
           .select(),
