@@ -76,4 +76,8 @@ export class DriverKnex implements IDriverKnex {
         });
     else throw new Error(`${dialect} not supported`);
   }
+
+  async getColumnInfo(name: string): Promise<any> {
+    return await this.queryBuilder(name).columnInfo();
+  }
 }

@@ -81,7 +81,7 @@ export class DriverMongoose implements IDriverMongoose {
     );
   }
 
-  async listCollections(): Promise<any> {
+  async listCollections(): Promise<string[]> {
     return (await this.conn.db.listCollections().toArray())
       .filter((collections) => collections.type === "collection")
       .map((collections) => collections.name)
