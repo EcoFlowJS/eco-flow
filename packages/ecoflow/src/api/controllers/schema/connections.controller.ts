@@ -2,6 +2,7 @@ import Helper from "@eco-flow/helper";
 import { Context, Next } from "koa";
 import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
 import { ApiResponse, ConnectionDefinations } from "@eco-flow/types";
+import { SchemaEditorService } from "@eco-flow/services";
 
 const getConnections = async (ctx: Context, next: Next) => {
   const { database } = ecoFlow;
@@ -180,7 +181,30 @@ const getCollectionOrTable = async (ctx: Context, next: Next) => {
   const { database } = ecoFlow;
   const connection = database.getDatabaseConnection(ctx.params.connectionName);
 
-  console.log(connection);
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  ctx.status = 200;
+  ctx.body = <ApiResponse>{
+    success: true,
+    payload: await new SchemaEditorService(connection).getCollectionOrTable(),
+  };
+};
+
+const getDatabaseData = async (ctx: Context, next: Next) => {
+  const { database } = ecoFlow;
+  const { connectionName, collectionORtableName } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
 
   if (typeof connection === "undefined") {
     ctx.status = 400;
@@ -195,23 +219,12 @@ const getCollectionOrTable = async (ctx: Context, next: Next) => {
   }
 
   ctx.status = 200;
-  if (database.isKnex(connection))
-    ctx.body = <ApiResponse>{
-      success: true,
-      payload: {
-        type: "KNEX",
-        collectionsORtables: await connection.listTables(),
-      },
-    };
-
-  if (database.isMongoose(connection))
-    ctx.body = <ApiResponse>{
-      success: true,
-      payload: {
-        type: "MONGO",
-        collectionsORtables: await connection.listCollections(),
-      },
-    };
+  ctx.body = <ApiResponse>{
+    success: true,
+    payload: await new SchemaEditorService(connection).getDatabaseData(
+      collectionORtableName
+    ),
+  };
 };
 
 export {
@@ -222,4 +235,5 @@ export {
   updateConnection,
   deleteConnection,
   getCollectionOrTable,
+  getDatabaseData,
 };

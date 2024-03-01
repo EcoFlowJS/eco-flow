@@ -7,6 +7,7 @@ import {
   getConnections,
   updateConnection,
   getCollectionOrTable,
+  getDatabaseData,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
@@ -26,4 +27,10 @@ schemaRouter.get(
   "/collectionsORtables/:connectionName",
   isAuthenticated,
   getCollectionOrTable
+);
+
+schemaRouter.get(
+  "/getDatabaseData/:connectionName/:collectionORtableName",
+  isAuthenticated,
+  getDatabaseData
 );
