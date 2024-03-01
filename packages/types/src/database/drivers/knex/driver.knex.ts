@@ -17,6 +17,7 @@ export interface DriverKnex {
   get functionHelper(): Knex.FunctionHelper;
   get knex(): typeof knex;
   listTables(): Promise<string[]>;
+  getColumnInfo(name: string): Promise<any>;
 }
 
 export interface DBConfig extends Knex.Config {

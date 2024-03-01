@@ -40,5 +40,5 @@ export interface DriverMongoose {
     options?: CompileModelOptions
   ): typeof mongoose.Model;
 
-  listCollections(): Promise<any>;
+  listCollections(): Promise<string[]>;
 }
