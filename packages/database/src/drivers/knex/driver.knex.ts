@@ -14,7 +14,7 @@ export class DriverKnex implements IDriverKnex {
 
   private getMySqlReturnValues(resp: any[]) {
     let prop = this.getMySqlListProp(resp);
-    return prop && resp[0].map((it: { [x: string]: any }) => it[prop!]);
+    return prop && resp[0].map((it: { [x: string]: any }) => it[prop!]).sort();
   }
 
   async createConnection(config: DBConfig) {
@@ -62,7 +62,7 @@ export class DriverKnex implements IDriverKnex {
         .select("tablename") //SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='public'
         .from("pg_catalog.pg_tables")
         .where({ schemaname: "public" })
-        .then((rst) => rst.map((it) => it.tablename));
+        .then((rst) => rst.map((it) => it.tablename).sort());
 
     if (dialect === "sqlite3")
       return this.connection
@@ -72,7 +72,8 @@ export class DriverKnex implements IDriverKnex {
         .then((rst) => {
           return rst
             .filter((it) => it.name != "sqlite_sequence")
-            .map((it) => it["name"]);
+            .map((it) => it["name"])
+            .sort();
         });
     else throw new Error(`${dialect} not supported`);
   }
