@@ -1,10 +1,8 @@
-import Helper from "@eco-flow/helper";
-import { Context, Next } from "koa";
+import { Context } from "koa";
 import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
 import { ApiResponse, ConnectionDefinations } from "@eco-flow/types";
-import { SchemaEditorService } from "@eco-flow/services";
 
-const getConnections = async (ctx: Context, next: Next) => {
+const getConnections = async (ctx: Context) => {
   const { database } = ecoFlow;
   ctx.status = 200;
   ctx.body = {
@@ -13,7 +11,7 @@ const getConnections = async (ctx: Context, next: Next) => {
   };
 };
 
-const getConnectionConfig = async (ctx: Context, next: Next) => {
+const getConnectionConfig = async (ctx: Context) => {
   const { database } = ecoFlow;
   ctx.status = 200;
   if (typeof ctx.params.id === "undefined") {
@@ -30,7 +28,7 @@ const getConnectionConfig = async (ctx: Context, next: Next) => {
   };
 };
 
-const getConnectionConfigs = async (ctx: Context, next: Next) => {
+const getConnectionConfigs = async (ctx: Context) => {
   const { database } = ecoFlow;
   ctx.status = 200;
   const ConnectionConfig = await database.getDatabaseConfig();
@@ -40,7 +38,7 @@ const getConnectionConfigs = async (ctx: Context, next: Next) => {
   };
 };
 
-const createConnection = async (ctx: Context, next: Next) => {
+const createConnection = async (ctx: Context) => {
   const { database } = ecoFlow;
   try {
     const [name, driver, connection] = getConnectionsDetails(
@@ -88,7 +86,7 @@ const createConnection = async (ctx: Context, next: Next) => {
   }
 };
 
-const updateConnection = async (ctx: Context, next: Next) => {
+const updateConnection = async (ctx: Context) => {
   const { database } = ecoFlow;
   try {
     const [name, driver, connection] = getConnectionsDetails(
@@ -136,7 +134,7 @@ const updateConnection = async (ctx: Context, next: Next) => {
   }
 };
 
-const deleteConnection = async (ctx: Context, next: Next) => {
+const deleteConnection = async (ctx: Context) => {
   const { database, _ } = ecoFlow;
   const db = database.getDatabaseConnection(
     (<any>ctx.request.body!).ConnectionName
@@ -177,8 +175,42 @@ const deleteConnection = async (ctx: Context, next: Next) => {
   };
 };
 
-const getCollectionOrTable = async (ctx: Context, next: Next) => {
-  const { database } = ecoFlow;
+const createCollectionsORTable = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const connection = database.getDatabaseConnection(ctx.params.connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    const { name, tableLike } = ctx.request.body;
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).createCollectionsORTable(name, tableLike),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
+const getCollectionOrTable = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
   const connection = database.getDatabaseConnection(ctx.params.connectionName);
 
   if (typeof connection === "undefined") {
@@ -196,12 +228,14 @@ const getCollectionOrTable = async (ctx: Context, next: Next) => {
   ctx.status = 200;
   ctx.body = <ApiResponse>{
     success: true,
-    payload: await new SchemaEditorService(connection).getCollectionOrTable(),
+    payload: await new service.SchemaEditorService(
+      connection
+    ).getCollectionOrTable(),
   };
 };
 
-const getDatabaseData = async (ctx: Context, next: Next) => {
-  const { database } = ecoFlow;
+const getDatabaseData = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
   const { connectionName, collectionORtableName } = ctx.params;
 
   const connection = database.getDatabaseConnection(connectionName);
@@ -221,7 +255,7 @@ const getDatabaseData = async (ctx: Context, next: Next) => {
   ctx.status = 200;
   ctx.body = <ApiResponse>{
     success: true,
-    payload: await new SchemaEditorService(connection).getDatabaseData(
+    payload: await new service.SchemaEditorService(connection).getDatabaseData(
       collectionORtableName
     ),
   };
@@ -234,6 +268,7 @@ export {
   createConnection,
   updateConnection,
   deleteConnection,
+  createCollectionsORTable,
   getCollectionOrTable,
   getDatabaseData,
 };

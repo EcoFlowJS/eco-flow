@@ -8,6 +8,7 @@ import {
   updateConnection,
   getCollectionOrTable,
   getDatabaseData,
+  createCollectionsORTable,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
@@ -27,6 +28,11 @@ schemaRouter.get(
   "/collectionsORtables/:connectionName",
   isAuthenticated,
   getCollectionOrTable
+);
+schemaRouter.post(
+  "/collectionsORtables/:connectionName",
+  isAuthenticated,
+  createCollectionsORTable
 );
 
 schemaRouter.get(
