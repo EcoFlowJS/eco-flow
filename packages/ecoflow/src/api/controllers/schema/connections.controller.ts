@@ -209,6 +209,41 @@ const createCollectionsORTable = async (ctx: Context) => {
   }
 };
 
+const deleteCollectionsORTable = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const connection = database.getDatabaseConnection(ctx.params.connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    const { collectionTable } = ctx.request.body;
+
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).deleteCollectionsORTable(collectionTable),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
 const getCollectionOrTable = async (ctx: Context) => {
   const { database, service } = ecoFlow;
   const connection = database.getDatabaseConnection(ctx.params.connectionName);
@@ -269,6 +304,7 @@ export {
   updateConnection,
   deleteConnection,
   createCollectionsORTable,
+  deleteCollectionsORTable,
   getCollectionOrTable,
   getDatabaseData,
 };
