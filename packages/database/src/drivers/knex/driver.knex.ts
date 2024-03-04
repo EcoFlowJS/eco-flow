@@ -7,13 +7,15 @@ export class DriverKnex implements IDriverKnex {
   private connection!: Knex<any, any[]>;
 
   private getMySqlListProp(resp: any[]) {
-    let vals = resp[0];
-    if (!vals) return;
+    const { _ } = ecoFlow;
+    const vals = resp[0];
+    if (_.isEmpty(vals)) return;
     return Object.keys(vals && vals[0])[0];
   }
 
   private getMySqlReturnValues(resp: any[]) {
-    let prop = this.getMySqlListProp(resp);
+    const prop = this.getMySqlListProp(resp);
+    if (typeof prop === "undefined") return [];
     return prop && resp[0].map((it: { [x: string]: any }) => it[prop!]).sort();
   }
 
@@ -55,7 +57,9 @@ export class DriverKnex implements IDriverKnex {
   async listTables(): Promise<string[]> {
     let dialect = this.connection.client.config.client;
     if (["mysql", "mysql2"].indexOf(dialect) > -1)
-      return this.connection.raw("show tables").then(this.getMySqlReturnValues);
+      return this.connection
+        .raw("show tables")
+        .then((value) => this.getMySqlReturnValues(value));
 
     if (dialect === "postgresql")
       return this.connection
