@@ -3,7 +3,9 @@ import {
   CreateCollectionsORTableResult,
   Database,
   DatabaseDataResult,
+  DeleteCollectionsORTableResult,
   DriverMongoose,
+  EcoFlow,
   Knex,
   SchemaEditor,
 } from "@eco-flow/types";
@@ -12,10 +14,12 @@ import { Connection } from "mongoose";
 export class SchemaEditorService implements SchemaEditor {
   private connection: Knex<any, any[]> | Connection;
   private database: Database;
+  private _: EcoFlow["_"];
   constructor(connection: Knex<any, any[]> | Connection) {
-    const { database } = ecoFlow;
+    const { _, database } = ecoFlow;
     this.connection = connection;
     this.database = database;
+    this._ = _;
   }
 
   async createCollectionsORTable(
@@ -23,6 +27,8 @@ export class SchemaEditorService implements SchemaEditor {
     tableLike?: string
   ): Promise<CreateCollectionsORTableResult | null> {
     if (this.database.isKnex(this.connection)) {
+      if (this._.isEmpty(tableCollectionName))
+        throw "Empty database Collection OR table.";
       try {
         if (typeof tableLike === "undefined" || tableLike === null)
           await this.connection.schemaBuilder.createTable(
@@ -74,6 +80,50 @@ export class SchemaEditorService implements SchemaEditor {
     return null;
   }
 
+  async deleteCollectionsORTable(
+    collectionTable: string
+  ): Promise<DeleteCollectionsORTableResult | null> {
+    if (this._.isEmpty(collectionTable))
+      throw "Empty database Collection OR table.";
+    if (this.database.isKnex(this.connection))
+      try {
+        await this.connection.schemaBuilder.dropTableIfExists(collectionTable);
+
+        return {
+          collectionsORtables: await this.connection.listTables(),
+        };
+      } catch (err) {
+        throw err;
+      }
+
+    if (this.database.isMongoose(this.connection))
+      try {
+        const model = (() => {
+          const connection = this.connection as unknown as DriverMongoose;
+          if (connection.getConnection.models[collectionTable])
+            return connection.getConnection.model(collectionTable);
+          else
+            return connection.buildModel(
+              collectionTable,
+              {
+                definition: {},
+              },
+              collectionTable
+            );
+        })();
+
+        await model.collection.drop();
+
+        return {
+          collectionsORtables: await this.connection.listCollections(),
+        };
+      } catch (err) {
+        throw err;
+      }
+
+    return null;
+  }
+
   async getCollectionOrTable(): Promise<CollectionOrTableResult | null> {
     if (this.database.isKnex(this.connection))
       return {
@@ -93,6 +143,8 @@ export class SchemaEditorService implements SchemaEditor {
   async getDatabaseData(
     collectionORtableName: string
   ): Promise<DatabaseDataResult | null> {
+    if (this._.isEmpty(collectionORtableName))
+      throw "Empty database Collection OR table.";
     if (this.database.isKnex(this.connection)) {
       const columns = await this.connection.getColumnInfo(
         collectionORtableName

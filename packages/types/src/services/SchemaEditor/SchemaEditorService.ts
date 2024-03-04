@@ -14,11 +14,18 @@ export interface SchemaEditor {
   getDatabaseData(
     collectionORtableName: string
   ): Promise<DatabaseDataResult | null>;
+  deleteCollectionsORTable(
+    collectionTable: string
+  ): Promise<DeleteCollectionsORTableResult | null>;
 }
 
 export interface CreateCollectionsORTableResult {
   collectionsORtables: string[];
   currentCollectionTableName: string;
+}
+
+export interface DeleteCollectionsORTableResult {
+  collectionsORtables: string[];
 }
 
 export interface CollectionOrTableResult {
