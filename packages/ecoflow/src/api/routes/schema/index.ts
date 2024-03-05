@@ -9,6 +9,7 @@ import {
   getCollectionOrTable,
   getDatabaseData,
   createCollectionsORTable,
+  renameCollectionsORTable,
   deleteCollectionsORTable,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
@@ -34,6 +35,11 @@ schemaRouter.post(
   "/collectionsORtables/:connectionName",
   isAuthenticated,
   createCollectionsORTable
+);
+schemaRouter.patch(
+  "/collectionsORtables/:connectionName",
+  isAuthenticated,
+  renameCollectionsORTable
 );
 schemaRouter.delete(
   "/collectionsORtables/:connectionName",

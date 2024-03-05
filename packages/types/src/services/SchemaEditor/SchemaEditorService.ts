@@ -17,20 +17,28 @@ export interface SchemaEditor {
   deleteCollectionsORTable(
     collectionTable: string
   ): Promise<DeleteCollectionsORTableResult | null>;
+  renameCollectionsORTable(
+    collectionTableOldName: string,
+    collectionTableNewName: string
+  ): Promise<RenameCollectionsORTableResult | null>;
 }
 
-export interface CreateCollectionsORTableResult {
+interface CollectionsORtables {
   collectionsORtables: string[];
+}
+
+export interface RenameCollectionsORTableResult extends CollectionsORtables {
+  newCollectionTableName: string;
+}
+
+export interface CreateCollectionsORTableResult extends CollectionsORtables {
   currentCollectionTableName: string;
 }
 
-export interface DeleteCollectionsORTableResult {
-  collectionsORtables: string[];
-}
+export interface DeleteCollectionsORTableResult extends CollectionsORtables {}
 
-export interface CollectionOrTableResult {
+export interface CollectionOrTableResult extends CollectionsORtables {
   type: "MONGO" | "KNEX";
-  collectionsORtables: string[];
 }
 
 export interface DatabaseDataResult {

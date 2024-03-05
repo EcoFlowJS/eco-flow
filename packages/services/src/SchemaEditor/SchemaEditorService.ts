@@ -7,6 +7,7 @@ import {
   DriverMongoose,
   EcoFlow,
   Knex,
+  RenameCollectionsORTableResult,
   SchemaEditor,
 } from "@eco-flow/types";
 import { Connection } from "mongoose";
@@ -76,6 +77,45 @@ export class SchemaEditorService implements SchemaEditor {
       } catch (err) {
         throw err;
       }
+    }
+    return null;
+  }
+
+  async renameCollectionsORTable(
+    collectionTableOldName: string,
+    collectionTableNewName: string
+  ): Promise<RenameCollectionsORTableResult | null> {
+    if (
+      this._.isEmpty(collectionTableOldName) ||
+      this._.isEmpty(collectionTableNewName)
+    )
+      throw "Collection Name can't be empty.";
+
+    try {
+      if (this.database.isKnex(this.connection)) {
+        await this.connection.schemaBuilder.renameTable(
+          collectionTableOldName,
+          collectionTableNewName
+        );
+
+        return {
+          newCollectionTableName: collectionTableNewName,
+          collectionsORtables: await this.connection.listTables(),
+        };
+      }
+
+      if (this.database.isMongoose(this.connection)) {
+        await this.connection.getConnection.db
+          .collection(collectionTableOldName)
+          .rename(collectionTableNewName);
+
+        return {
+          newCollectionTableName: collectionTableNewName,
+          collectionsORtables: await this.connection.listCollections(),
+        };
+      }
+    } catch (err) {
+      throw err;
     }
     return null;
   }
