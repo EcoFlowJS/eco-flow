@@ -32,6 +32,14 @@ export type DatabaseTableTypes =
   | "datetime"
   | "foreign";
 
+export type DatabaseTableAlias =
+  | "Text"
+  | "Number"
+  | "Boolean"
+  | "Json"
+  | "Date"
+  | "Foreign";
+
 export interface DatabaseColumnInfo {
   name: string;
   type: DatabaseTableTypes;
@@ -44,9 +52,9 @@ export interface DatabaseColumnInfo {
 
 export interface DatabaseCreateEditModel {
   columnName: string;
-  textFormat: "varChar" | "text";
+  textFormat: "varchar" | "text" | null;
   numberFormat: "int" | "bigInt" | "dec" | "float" | null;
-  dateTimeFormat: "date" | "time" | "dateTime" | null;
+  dateTimeFormat: "date" | "time" | "datetime" | null;
   defaultValue: any;
   notNull: boolean;
 }

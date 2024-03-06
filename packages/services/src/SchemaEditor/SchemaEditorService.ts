@@ -3,7 +3,10 @@ import {
   CreateCollectionsORTableResult,
   Database,
   DatabaseColumnData,
+  DatabaseColumnInfo,
+  DatabaseCreateEditModel,
   DatabaseDataResult,
+  DatabaseTableAlias,
   DeleteCollectionsORTableResult,
   DriverMongoose,
   EcoFlow,
@@ -194,10 +197,15 @@ export class SchemaEditorService implements SchemaEditor {
           let columnBuilder: Knex.ColumnBuilder | null = null;
 
           const processTable = (columnBuilder: Knex.ColumnBuilder) => {
-            if (!this._.isEmpty(defaultValue) || this._.isNumber(defaultValue))
-              columnBuilder.defaultTo(defaultValue);
-            if (this._.isBoolean(notNull) && notNull)
+            if (
+              !this._.isUndefined(defaultValue) &&
+              defaultValue.toString().trim().length > 0
+            ) {
+              columnBuilder.defaultTo(defaultValue.toString().trim());
+            }
+            if (this._.isBoolean(notNull) && notNull) {
               columnBuilder.notNullable();
+            }
           };
 
           switch (type) {
@@ -209,7 +217,7 @@ export class SchemaEditorService implements SchemaEditor {
               }
 
               if (textFormat === "text") columnBuilder = table.text(columnName);
-              if (textFormat === "varChar")
+              if (textFormat === "varchar")
                 columnBuilder = table.string(columnName);
 
               if (columnBuilder === null) {
@@ -272,7 +280,7 @@ export class SchemaEditorService implements SchemaEditor {
                 columnBuilder = table.datetime(columnName);
               if (dateTimeFormat === "date")
                 columnBuilder = table.date(columnName);
-              if (dateTimeFormat === "dateTime")
+              if (dateTimeFormat === "datetime")
                 columnBuilder = table.datetime(columnName);
               if (dateTimeFormat === "time")
                 columnBuilder = table.time(columnName);
@@ -291,7 +299,7 @@ export class SchemaEditorService implements SchemaEditor {
                 log.info("Empty column name provided.");
                 break;
               }
-              columnBuilder = table.text(columnName);
+              columnBuilder = table.json(columnName);
               if (columnBuilder === null) {
                 status.failedCount++;
                 log.info("Invalid json format provided.");
@@ -318,7 +326,13 @@ export class SchemaEditorService implements SchemaEditor {
               break;
           }
         });
+        columnData.deleteDatabaseColumns.map((deleteColumn) => {
+          const columnName = deleteColumn.actualData!.columnData!.columnName;
+          table.dropColumn(columnName);
+        });
       });
+
+      return { ...(await this.getTableColumnInfo(tableName))! };
     }
 
     if (this.database.isMongoose(this.connection))
@@ -334,19 +348,76 @@ export class SchemaEditorService implements SchemaEditor {
       const columnInfo: Record<string | number | symbol, Knex.ColumnInfo> =
         await this.connection.queryBuilder(tableName).columnInfo();
 
+      const textFormat = (type: any): DatabaseCreateEditModel["textFormat"] =>
+        type === "varchar" ? "varchar" : type === "text" ? "text" : null;
+
+      const numberFormat = (
+        type: any
+      ): DatabaseCreateEditModel["numberFormat"] =>
+        type === "int"
+          ? "int"
+          : type === "bigint"
+          ? "bigInt"
+          : type === "decimal"
+          ? "dec"
+          : type === "float"
+          ? "float"
+          : null;
+
+      const dateTimeFormat = (
+        type: any
+      ): DatabaseCreateEditModel["dateTimeFormat"] =>
+        type === "datetime"
+          ? "datetime"
+          : type === "date"
+          ? "date"
+          : type === "time"
+          ? "time"
+          : null;
+
+      const processTypeAlias = (type: any): DatabaseTableAlias =>
+        type === "varchar" || type === "text"
+          ? "Text"
+          : type === "int" ||
+            type === "bigint" ||
+            type === "decimal" ||
+            type === "float" ||
+            type === "integer"
+          ? "Number"
+          : type === "datetime" || type === "date" || type === "time"
+          ? "Date"
+          : type === "boolean" || type === "tinyint"
+          ? "Boolean"
+          : type === "json"
+          ? "Json"
+          : "Foreign";
+
       const info = Object.keys(columnInfo)
         .filter((t) => t != "_id")
         .map((columnInfoKey) => {
-          return {
+          return <DatabaseColumnInfo>{
             name: columnInfoKey,
             type: columnInfo[columnInfoKey].type,
-            alias: columnInfo[columnInfoKey].type,
-            defaultValue: columnInfo[columnInfoKey].defaultValue,
-            nullable: columnInfo[columnInfoKey].nullable,
+            alias: processTypeAlias(columnInfo[columnInfoKey].type),
+            actualData: {
+              columnData: {
+                columnName: columnInfoKey,
+                defaultValue:
+                  columnInfo[columnInfoKey].defaultValue === null
+                    ? ""
+                    : columnInfo[columnInfoKey].defaultValue,
+                notNull: !columnInfo[columnInfoKey].nullable,
+                textFormat: textFormat(columnInfo[columnInfoKey].type),
+                numberFormat: numberFormat(columnInfo[columnInfoKey].type),
+                dateTimeFormat: dateTimeFormat(columnInfo[columnInfoKey].type),
+              },
+            },
           };
         });
 
-      console.log(info);
+      return {
+        columnInfo: info,
+      };
     }
 
     if (this.database.isMongoose(this.connection))

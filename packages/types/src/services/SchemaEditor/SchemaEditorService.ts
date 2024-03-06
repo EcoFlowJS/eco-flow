@@ -34,7 +34,9 @@ interface CollectionsORtables {
   collectionsORtables: string[];
 }
 
-export interface TableColumnInfoResult {}
+export interface TableColumnInfoResult {
+  columnInfo: DatabaseColumnInfo[];
+}
 
 export interface DatabaseColumnData {
   deleteDatabaseColumns: DatabaseColumnInfo[];
@@ -42,7 +44,7 @@ export interface DatabaseColumnData {
   createDatabaseColumns: DatabaseColumnInfo[];
 }
 
-export interface commitSaveTableColumnResult {}
+export interface commitSaveTableColumnResult extends TableColumnInfoResult {}
 
 export interface RenameCollectionsORTableResult extends CollectionsORtables {
   newCollectionTableName: string;

@@ -300,7 +300,6 @@ const getTableColumnInfo = async (ctx: Context) => {
   }
 
   try {
-    const { columnData } = ctx.request.body;
     ctx.status = 200;
     ctx.body = <ApiResponse>{
       success: true,
