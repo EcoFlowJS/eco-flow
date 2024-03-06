@@ -25,7 +25,7 @@ export interface SchemaEditor {
   commitSaveTableColumn(
     tableName: string,
     columnData: DatabaseColumnData
-  ): Promise<commitSaveTableColumnResult | null>;
+  ): Promise<CommitSaveTableColumnResult | null>;
 
   getTableColumnInfo(columnName: string): Promise<TableColumnInfoResult | null>;
 }
@@ -40,11 +40,20 @@ export interface TableColumnInfoResult {
 
 export interface DatabaseColumnData {
   deleteDatabaseColumns: DatabaseColumnInfo[];
-  modifyDatabaseColumns: DatabaseColumnInfo[];
+  modifyDatabaseColumns: {
+    oldDatabaseColumns: DatabaseColumnInfo;
+    newDatabaseColumns: DatabaseColumnInfo;
+  }[];
   createDatabaseColumns: DatabaseColumnInfo[];
 }
 
-export interface commitSaveTableColumnResult extends TableColumnInfoResult {}
+export interface CommitSaveTableColumnResult extends TableColumnInfoResult {
+  status: {
+    failedCount: number;
+    successCount: number;
+    excepted: boolean;
+  };
+}
 
 export interface RenameCollectionsORTableResult extends CollectionsORtables {
   newCollectionTableName: string;
