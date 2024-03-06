@@ -23,3 +23,38 @@ export interface DriverKnex {
 export interface DBConfig extends Knex.Config {
   client?: "mysql" | "pg" | "sqlite3" | typeof Client;
 }
+
+export type DatabaseTableTypes =
+  | "string"
+  | "integer"
+  | "boolean"
+  | "json"
+  | "datetime"
+  | "foreign";
+
+export type DatabaseTableAlias =
+  | "Text"
+  | "Number"
+  | "Boolean"
+  | "Json"
+  | "Date"
+  | "Foreign";
+
+export interface DatabaseColumnInfo {
+  name: string;
+  type: DatabaseTableTypes;
+  alias: string;
+  actualData?: {
+    type?: DatabaseTableTypes;
+    columnData?: DatabaseCreateEditModel;
+  };
+}
+
+export interface DatabaseCreateEditModel {
+  columnName: string;
+  textFormat: "varchar" | "text" | null;
+  numberFormat: "int" | "bigInt" | "dec" | "float" | null;
+  dateTimeFormat: "date" | "time" | "datetime" | null;
+  defaultValue: any;
+  notNull: boolean;
+}

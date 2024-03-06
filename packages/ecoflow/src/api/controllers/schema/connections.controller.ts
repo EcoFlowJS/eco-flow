@@ -281,6 +281,77 @@ const deleteCollectionsORTable = async (ctx: Context) => {
   }
 };
 
+const getTableColumnInfo = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const { connectionName, collectionORtableName } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).getTableColumnInfo(collectionORtableName),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
+const commitSaveTableColumn = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const { connectionName, collectionORtableName } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    const { columnData } = ctx.request.body;
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).commitSaveTableColumn(collectionORtableName, columnData),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
 const getCollectionOrTable = async (ctx: Context) => {
   const { database, service } = ecoFlow;
   const connection = database.getDatabaseConnection(ctx.params.connectionName);
@@ -343,6 +414,8 @@ export {
   createCollectionsORTable,
   renameCollectionsORTable,
   deleteCollectionsORTable,
+  commitSaveTableColumn,
+  getTableColumnInfo,
   getCollectionOrTable,
   getDatabaseData,
 };

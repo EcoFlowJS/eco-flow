@@ -2,13 +2,19 @@ import {
   CollectionOrTableResult,
   CreateCollectionsORTableResult,
   Database,
+  DatabaseColumnData,
+  DatabaseColumnInfo,
+  DatabaseCreateEditModel,
   DatabaseDataResult,
+  DatabaseTableAlias,
   DeleteCollectionsORTableResult,
   DriverMongoose,
   EcoFlow,
   Knex,
   RenameCollectionsORTableResult,
   SchemaEditor,
+  TableColumnInfoResult,
+  commitSaveTableColumnResult,
 } from "@eco-flow/types";
 import { Connection } from "mongoose";
 
@@ -160,6 +166,262 @@ export class SchemaEditorService implements SchemaEditor {
       } catch (err) {
         throw err;
       }
+
+    return null;
+  }
+
+  async commitSaveTableColumn(
+    tableName: string,
+    columnData: DatabaseColumnData
+  ): Promise<commitSaveTableColumnResult | null> {
+    const { log } = ecoFlow;
+
+    if (this._.isEmpty(columnData)) throw "Empty database table information.";
+    if (this.database.isKnex(this.connection)) {
+      const status = Object.create({
+        failedCount: 0,
+        successCount: 0,
+      });
+      await this.connection.schemaBuilder.alterTable(tableName, (table) => {
+        columnData.createDatabaseColumns.map((value) => {
+          const { columnData, type } = value.actualData!;
+          const {
+            textFormat,
+            numberFormat,
+            dateTimeFormat,
+            columnName,
+            defaultValue,
+            notNull,
+          } = columnData!;
+
+          let columnBuilder: Knex.ColumnBuilder | null = null;
+
+          const processTable = (columnBuilder: Knex.ColumnBuilder) => {
+            if (
+              !this._.isUndefined(defaultValue) &&
+              defaultValue.toString().trim().length > 0
+            ) {
+              columnBuilder.defaultTo(defaultValue.toString().trim());
+            }
+            if (this._.isBoolean(notNull) && notNull) {
+              columnBuilder.notNullable();
+            }
+          };
+
+          switch (type) {
+            case "string":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+
+              if (textFormat === "text") columnBuilder = table.text(columnName);
+              if (textFormat === "varchar")
+                columnBuilder = table.string(columnName);
+
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid text format provided.");
+                break;
+              }
+              processTable(columnBuilder);
+              break;
+
+            case "integer":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+
+              if (numberFormat === null)
+                columnBuilder = table.integer(columnName);
+              if (numberFormat === "int")
+                columnBuilder = table.integer(columnName);
+              if (numberFormat === "bigInt")
+                columnBuilder = table.bigint(columnName);
+              if (numberFormat === "dec")
+                columnBuilder = table.decimal(columnName);
+              if (numberFormat === "float")
+                columnBuilder = table.float(columnName);
+
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid integer format provided.");
+                break;
+              }
+              processTable(columnBuilder);
+              break;
+
+            case "boolean":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+              columnBuilder = table.boolean(columnName);
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid boolean format provided.");
+                break;
+              }
+              processTable(columnBuilder);
+              break;
+
+            case "datetime":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+
+              if (dateTimeFormat === null)
+                columnBuilder = table.datetime(columnName);
+              if (dateTimeFormat === "date")
+                columnBuilder = table.date(columnName);
+              if (dateTimeFormat === "datetime")
+                columnBuilder = table.datetime(columnName);
+              if (dateTimeFormat === "time")
+                columnBuilder = table.time(columnName);
+
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid datetime format provided.");
+                break;
+              }
+              processTable(columnBuilder);
+              break;
+
+            case "json":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+              columnBuilder = table.json(columnName);
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid json format provided.");
+                break;
+              }
+              processTable(columnBuilder);
+              break;
+
+            case "foreign":
+              if (this._.isEmpty(columnName)) {
+                status.failedCount++;
+                log.info("Empty column name provided.");
+                break;
+              }
+              table
+                .foreign("_id", columnName)
+                .references("_id")
+                .inTable("rom2");
+              if (columnBuilder === null) {
+                status.failedCount++;
+                log.info("Invalid foreign format provided.");
+                break;
+              }
+              break;
+          }
+        });
+        columnData.deleteDatabaseColumns.map((deleteColumn) => {
+          const columnName = deleteColumn.actualData!.columnData!.columnName;
+          table.dropColumn(columnName);
+        });
+      });
+
+      return { ...(await this.getTableColumnInfo(tableName))! };
+    }
+
+    if (this.database.isMongoose(this.connection))
+      throw "MongoDB Database is not supported for this process.";
+    return null;
+  }
+
+  async getTableColumnInfo(
+    tableName: string
+  ): Promise<TableColumnInfoResult | null> {
+    if (this._.isEmpty(tableName)) throw "Empty database table information.";
+    if (this.database.isKnex(this.connection)) {
+      const columnInfo: Record<string | number | symbol, Knex.ColumnInfo> =
+        await this.connection.queryBuilder(tableName).columnInfo();
+
+      const textFormat = (type: any): DatabaseCreateEditModel["textFormat"] =>
+        type === "varchar" ? "varchar" : type === "text" ? "text" : null;
+
+      const numberFormat = (
+        type: any
+      ): DatabaseCreateEditModel["numberFormat"] =>
+        type === "int"
+          ? "int"
+          : type === "bigint"
+          ? "bigInt"
+          : type === "decimal"
+          ? "dec"
+          : type === "float"
+          ? "float"
+          : null;
+
+      const dateTimeFormat = (
+        type: any
+      ): DatabaseCreateEditModel["dateTimeFormat"] =>
+        type === "datetime"
+          ? "datetime"
+          : type === "date"
+          ? "date"
+          : type === "time"
+          ? "time"
+          : null;
+
+      const processTypeAlias = (type: any): DatabaseTableAlias =>
+        type === "varchar" || type === "text"
+          ? "Text"
+          : type === "int" ||
+            type === "bigint" ||
+            type === "decimal" ||
+            type === "float" ||
+            type === "integer"
+          ? "Number"
+          : type === "datetime" || type === "date" || type === "time"
+          ? "Date"
+          : type === "boolean" || type === "tinyint"
+          ? "Boolean"
+          : type === "json"
+          ? "Json"
+          : "Foreign";
+
+      const info = Object.keys(columnInfo)
+        .filter((t) => t != "_id")
+        .map((columnInfoKey) => {
+          return <DatabaseColumnInfo>{
+            name: columnInfoKey,
+            type: columnInfo[columnInfoKey].type,
+            alias: processTypeAlias(columnInfo[columnInfoKey].type),
+            actualData: {
+              columnData: {
+                columnName: columnInfoKey,
+                defaultValue:
+                  columnInfo[columnInfoKey].defaultValue === null
+                    ? ""
+                    : columnInfo[columnInfoKey].defaultValue,
+                notNull: !columnInfo[columnInfoKey].nullable,
+                textFormat: textFormat(columnInfo[columnInfoKey].type),
+                numberFormat: numberFormat(columnInfo[columnInfoKey].type),
+                dateTimeFormat: dateTimeFormat(columnInfo[columnInfoKey].type),
+              },
+            },
+          };
+        });
+
+      return {
+        columnInfo: info,
+      };
+    }
+
+    if (this.database.isMongoose(this.connection))
+      throw "MongoDB Database is not supported for this process.";
 
     return null;
   }
