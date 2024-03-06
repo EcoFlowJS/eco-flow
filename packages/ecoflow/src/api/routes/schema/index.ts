@@ -11,6 +11,8 @@ import {
   createCollectionsORTable,
   renameCollectionsORTable,
   deleteCollectionsORTable,
+  commitSaveTableColumn,
+  getTableColumnInfo,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
@@ -45,6 +47,17 @@ schemaRouter.delete(
   "/collectionsORtables/:connectionName",
   isAuthenticated,
   deleteCollectionsORTable
+);
+
+schemaRouter.get(
+  "/tableColumn/:connectionName/:collectionORtableName",
+  isAuthenticated,
+  getTableColumnInfo
+);
+schemaRouter.post(
+  "/tableColumn/:connectionName/:collectionORtableName",
+  isAuthenticated,
+  commitSaveTableColumn
 );
 
 schemaRouter.get(
