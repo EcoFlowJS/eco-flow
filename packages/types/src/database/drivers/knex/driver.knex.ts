@@ -29,16 +29,14 @@ export type DatabaseTableTypes =
   | "integer"
   | "boolean"
   | "json"
-  | "datetime"
-  | "foreign";
+  | "datetime";
 
 export type DatabaseTableAlias =
   | "Text"
   | "Number"
   | "Boolean"
   | "Json"
-  | "Date"
-  | "Foreign";
+  | "Date";
 
 export interface DatabaseColumnInfo {
   name: string;

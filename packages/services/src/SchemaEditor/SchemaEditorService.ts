@@ -307,23 +307,6 @@ export class SchemaEditorService implements SchemaEditor {
               }
               processTable(columnBuilder);
               break;
-
-            case "foreign":
-              if (this._.isEmpty(columnName)) {
-                status.failedCount++;
-                log.info("Empty column name provided.");
-                break;
-              }
-              table
-                .foreign("_id", columnName)
-                .references("_id")
-                .inTable("rom2");
-              if (columnBuilder === null) {
-                status.failedCount++;
-                log.info("Invalid foreign format provided.");
-                break;
-              }
-              break;
           }
         });
         columnData.deleteDatabaseColumns.map((deleteColumn) => {
@@ -375,7 +358,7 @@ export class SchemaEditorService implements SchemaEditor {
           ? "time"
           : null;
 
-      const processTypeAlias = (type: any): DatabaseTableAlias =>
+      const processTypeAlias = (type: any): DatabaseTableAlias | null =>
         type === "varchar" || type === "text"
           ? "Text"
           : type === "int" ||
@@ -390,7 +373,7 @@ export class SchemaEditorService implements SchemaEditor {
           ? "Boolean"
           : type === "json"
           ? "Json"
-          : "Foreign";
+          : null;
 
       const info = Object.keys(columnInfo)
         .filter((t) => t != "_id")
