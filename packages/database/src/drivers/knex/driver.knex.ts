@@ -1,4 +1,8 @@
-import { DriverKnex as IDriverKnex, DBConfig } from "@eco-flow/types";
+import {
+  DriverKnex as IDriverKnex,
+  DBConfig,
+  KnexDB_Driver,
+} from "@eco-flow/types";
 import knex, { Knex } from "knex";
 
 export type { Knex } from "knex";
@@ -54,21 +58,29 @@ export class DriverKnex implements IDriverKnex {
     return knex;
   }
 
+  get getClient(): KnexDB_Driver {
+    const client = this.connection.client.config.client;
+    if (["mysql", "mysql2"].indexOf(client) > -1) return "MYSQL";
+    if (client === "pg") return "PGSQL";
+    if (client === "sqlite3") return "SQLite";
+    return client;
+  }
+
   async listTables(): Promise<string[]> {
-    let dialect = this.connection.client.config.client;
-    if (["mysql", "mysql2"].indexOf(dialect) > -1)
+    const dialect = this.getClient;
+    if (dialect === "MYSQL")
       return this.connection
         .raw("show tables")
         .then((value) => this.getMySqlReturnValues(value));
 
-    if (dialect === "postgresql")
+    if (dialect === "PGSQL")
       return this.connection
         .select("tablename") //SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='public'
         .from("pg_catalog.pg_tables")
         .where({ schemaname: "public" })
         .then((rst) => rst.map((it) => it.tablename).sort());
 
-    if (dialect === "sqlite3")
+    if (dialect === "SQLite")
       return this.connection
         .select("name")
         .from("sqlite_master")

@@ -139,14 +139,19 @@ export class Database implements IDatabase {
           const driver = new DriverKnex();
           if (typeof config.filename !== "undefined")
             await fse.ensureFile(config.filename!);
+
+          config.ssl =
+            typeof config.ssl === "boolean"
+              ? config.ssl
+              : typeof config.ssl === "string" && config.ssl === "true"
+              ? true
+              : false;
+
           await driver.createConnection({
             client: client,
             connection: {
               ...config,
-              ssl:
-                typeof config.ssl !== "undefined" && config.ssl
-                  ? { rejectUnauthorized: false }
-                  : false,
+              ssl: config.ssl ? { rejectUnauthorized: false } : false,
             },
             useNullAsDefault: true,
           });
