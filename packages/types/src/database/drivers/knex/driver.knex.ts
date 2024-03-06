@@ -18,7 +18,10 @@ export interface DriverKnex {
   get knex(): typeof knex;
   listTables(): Promise<string[]>;
   getColumnInfo(name: string): Promise<any>;
+  get getClient(): KnexDB_Driver;
 }
+
+export type KnexDB_Driver = "MYSQL" | "PGSQL" | "SQLite";
 
 export interface DBConfig extends Knex.Config {
   client?: "mysql" | "pg" | "sqlite3" | typeof Client;

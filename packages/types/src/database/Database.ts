@@ -1,5 +1,5 @@
 import { MongooseOptions } from "mongoose";
-import { DriverKnex, DriverMongoose, Knex } from "./drivers";
+import { DriverKnex, DriverMongoose, KnexDB_Driver } from "./drivers";
 
 export interface Database {
   initConnection(): Promise<void>;
@@ -34,7 +34,7 @@ export interface ConnectionList {
   driver: DB_Drivers;
 }
 
-export type DB_Drivers = "MYSQL" | "PGSQL" | "SQLite" | "MONGO";
+export type DB_Drivers = KnexDB_Driver | "MONGO";
 
 export type DatabaseConnection = DriverKnex | DriverMongoose;
 
