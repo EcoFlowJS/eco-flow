@@ -1,9 +1,13 @@
-import { Knex } from "knex";
-import { Connection } from "mongoose";
-import { DatabaseColumnInfo } from "../../database";
+import {
+  DatabaseColumnInfo,
+  DatabaseCreateEditModel,
+  DatabaseTableTypes,
+  DriverKnex,
+  DriverMongoose,
+} from "../../database";
 
 export interface SchemaEditorService<InstanceType = SchemaEditor> {
-  new (connection: Knex<any, any[]> | Connection): InstanceType;
+  new (connection: DriverKnex | DriverMongoose): InstanceType;
 }
 
 export interface SchemaEditor {
@@ -32,6 +36,12 @@ export interface SchemaEditor {
 
 interface CollectionsORtables {
   collectionsORtables: string[];
+}
+
+export interface AlterSqliteColumn {
+  oldColumnName: string;
+  type: DatabaseTableTypes;
+  columnData: DatabaseCreateEditModel;
 }
 
 export interface TableColumnInfoResult {
