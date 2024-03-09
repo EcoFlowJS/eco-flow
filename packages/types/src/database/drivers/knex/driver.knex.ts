@@ -44,7 +44,7 @@ export type DatabaseTableAlias =
 export interface DatabaseColumnInfo {
   name: string;
   type: DatabaseTableTypes;
-  alias: string;
+  alias: DatabaseTableAlias;
   actualData?: {
     type?: DatabaseTableTypes;
     columnData?: DatabaseCreateEditModel;

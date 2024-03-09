@@ -80,9 +80,6 @@ export interface CollectionOrTableResult extends CollectionsORtables {
 }
 
 export interface DatabaseDataResult {
-  columns?: Array<{
-    name: string;
-    type: string;
-  }>;
+  columns?: DatabaseColumnInfo[];
   data: any;
 }

@@ -361,12 +361,8 @@ export class SchemaEditorService implements SchemaEditor {
       );
 
       return {
-        columns: Object.keys(columns).map((columnName) => {
-          return {
-            name: columnName,
-            type: columns[columnName].type,
-          };
-        }),
+        columns: (await this.getTableColumnInfo(collectionORtableName))
+          .columnInfo,
         data: await this.connection
           .queryBuilder(collectionORtableName)
           .select(),
