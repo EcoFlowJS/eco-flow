@@ -1,4 +1,3 @@
-import { Builder } from "@eco-flow/utils";
 import _ from "lodash";
 
 export default function xssFilterHelper(input: string): string {
