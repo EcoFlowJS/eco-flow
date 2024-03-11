@@ -134,7 +134,7 @@ export class DriverMongoose implements IDriverMongoose {
           },
         },
         {
-          replaceRoot: {
+          $replaceRoot: {
             newRoot: {
               keys: "$keys",
               types: { $arrayToObject: "$types" },
