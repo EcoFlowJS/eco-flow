@@ -1,4 +1,8 @@
-import { DriverMongoose as IDriverMongoose } from "@eco-flow/types";
+import {
+  CollectionInfo,
+  DriverMongoose as IDriverMongoose,
+  collectionInfoOptions,
+} from "@eco-flow/types";
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
@@ -86,5 +90,59 @@ export class DriverMongoose implements IDriverMongoose {
       .filter((collections) => collections.type === "collection")
       .map((collections) => collections.name)
       .sort();
+  }
+
+  async collectionInfo(
+    collection: string,
+    options: collectionInfoOptions = {}
+  ): Promise<Array<CollectionInfo>> {
+    const { subColumn, match } = options;
+    return <CollectionInfo[]>await this.conn.db
+      .collection(collection)
+      .aggregate([
+        { $match: match || {} },
+        {
+          $addFields: {
+            originalValues: {
+              $objectToArray:
+                subColumn && typeof subColumn === "string"
+                  ? `$$ROOT.${subColumn}`
+                  : "$$ROOT",
+            },
+          },
+        },
+        {
+          $project: {
+            originalValues: 1,
+            keys: {
+              $map: {
+                input: "$originalValues",
+                as: "pair",
+                in: "$$pair.k",
+              },
+            },
+            types: {
+              $map: {
+                input: "$originalValues",
+                as: "pair",
+                in: {
+                  k: "$$pair.k",
+                  v: { $type: "$$pair.v" },
+                },
+              },
+            },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              keys: "$keys",
+              types: { $arrayToObject: "$types" },
+              values: "$originalValues",
+            },
+          },
+        },
+      ])
+      .toArray();
   }
 }
