@@ -1,4 +1,5 @@
 import {
+  DatabaseCollectionInfo,
   DatabaseColumnInfo,
   DatabaseCreateEditModel,
   DatabaseTableTypes,
@@ -16,7 +17,10 @@ export interface SchemaEditor {
     tableLike?: string
   ): Promise<CreateCollectionsORTableResult>;
   getCollectionOrTable(): Promise<CollectionOrTableResult>;
-  getDatabaseData(collectionORtableName: string): Promise<DatabaseDataResult>;
+  getDatabaseData(
+    collectionORtableName: string,
+    options?: DataBaseDataMongoOptions
+  ): Promise<DatabaseDataResult>;
   deleteCollectionsORTable(
     collectionTable: string
   ): Promise<DeleteCollectionsORTableResult>;
@@ -53,6 +57,11 @@ export interface SchemaEditor {
 
 interface CollectionsORtables {
   collectionsORtables: string[];
+}
+
+export interface DataBaseDataMongoOptions {
+  subCollection?: string;
+  matchID?: string;
 }
 
 export interface AlterSqliteColumn {

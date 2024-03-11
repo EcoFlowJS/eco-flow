@@ -1,9 +1,9 @@
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
-  Connection,
   ObtainDocumentType,
   ResolveSchemaOptions,
+  Schema,
   SchemaDefinition,
   SchemaOptions,
 } from "mongoose";
@@ -41,4 +41,46 @@ export interface DriverMongoose {
   ): typeof mongoose.Model;
 
   listCollections(): Promise<string[]>;
+  collectionInfo(collection: string): Promise<Array<CollectionInfo>>;
+  collectionInfo(
+    collection: string,
+    options?: collectionInfoOptions
+  ): Promise<Array<CollectionInfo>>;
+}
+
+export interface CollectionInfo {
+  keys: string[];
+  types: { [key: string]: string };
+  values: any;
+}
+
+export interface collectionInfoOptions {
+  subColumn?: string;
+  match?: { [key: string]: any };
+}
+
+export interface DatabaseCollectionInfo {
+  keys: string[];
+  types: {
+    [key: string]:
+      | "objectId"
+      | "array"
+      | "binData"
+      | "bool"
+      | "javascriptWithScope"
+      | "date"
+      | "decimal"
+      | "double"
+      | "int"
+      | "long"
+      | "maxKey"
+      | "minKey"
+      | "null"
+      | "object"
+      | "regex"
+      | "string"
+      | "symbol"
+      | "timestamp";
+  };
+  data: any;
 }

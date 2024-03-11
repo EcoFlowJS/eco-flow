@@ -15,6 +15,7 @@ import {
   CommitSaveTableColumnResult,
   DriverKnex,
   AlterSqliteColumn,
+  DataBaseDataMongoOptions,
 } from "@eco-flow/types";
 import {
   alterColumn,
@@ -31,7 +32,7 @@ import {
   textFormat,
 } from "./helper/getTableColumnInfo.helper";
 import { formateDateTime } from "./helper/insertDatabaseData.helper";
-import mongoose from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 export class SchemaEditorService implements SchemaEditor {
   private connection: DriverKnex | DriverMongoose;
@@ -342,15 +343,12 @@ export class SchemaEditorService implements SchemaEditor {
   }
 
   async getDatabaseData(
-    collectionORtableName: string
+    collectionORtableName: string,
+    options: DataBaseDataMongoOptions = {}
   ): Promise<DatabaseDataResult> {
     if (this._.isEmpty(collectionORtableName))
       throw "Empty database Collection OR table.";
     if (this.database.isKnex(this.connection)) {
-      const columns = await this.connection.getColumnInfo(
-        collectionORtableName
-      );
-
       return {
         columns: (await this.getTableColumnInfo(collectionORtableName))
           .columnInfo,
@@ -361,11 +359,12 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      const collection = await this.connection.getConnection.collection(
-        collectionORtableName
-      );
+      const { subCollection, matchID } = options;
       return {
-        data: await collection.find().toArray(),
+        data: await this.connection.collectionInfo(collectionORtableName, {
+          subColumn: subCollection,
+          match: matchID ? { _id: new Types.ObjectId(matchID) } : {},
+        }),
       };
     }
 
