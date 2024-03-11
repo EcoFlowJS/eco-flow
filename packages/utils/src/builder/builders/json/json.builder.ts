@@ -1,7 +1,8 @@
-import { Helper } from "@eco-flow/helper";
 import _ from "lodash";
 import path from "path";
 import fs from "fs";
+import functionToString from "./helpers/functionToString.helper";
+import stringToFunction from "./helpers/stringToFunction.helper";
 
 export class JsonBuilder {
   private value: { [key: string | number]: any };
@@ -14,7 +15,7 @@ export class JsonBuilder {
     Object.keys(this.value).forEach((key) => {
       if (typeof this.value[key] === "object") {
         this.value[key] = new JsonBuilder(this.value[key]).stringifyHelper();
-      } else this.value[key] = Helper.functionToString(this.value[key]);
+      } else this.value[key] = functionToString(this.value[key]);
     });
 
     return this.value;
@@ -24,7 +25,7 @@ export class JsonBuilder {
     Object.keys(this.value).forEach((key) => {
       if (typeof this.value[key] === "object") {
         this.value[key] = new JsonBuilder(this.value[key]).parseHelper();
-      } else this.value[key] = Helper.stringToFunction(this.value[key]);
+      } else this.value[key] = stringToFunction(this.value[key]);
     });
     return this.value;
   }
