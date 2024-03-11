@@ -30,6 +30,8 @@ import {
   processTypeAlias,
   textFormat,
 } from "./helper/getTableColumnInfo.helper";
+import { formateDateTime } from "./helper/insertDatabaseData.helper";
+import mongoose from "mongoose";
 
 export class SchemaEditorService implements SchemaEditor {
   private connection: DriverKnex | DriverMongoose;
@@ -157,25 +159,13 @@ export class SchemaEditorService implements SchemaEditor {
 
     if (this.database.isMongoose(this.connection))
       try {
-        const model = (() => {
-          const connection = this.connection as unknown as DriverMongoose;
-          if (connection.getConnection.models[collectionTable])
-            return connection.getConnection.model(collectionTable);
-          else
-            return connection.buildModel(
-              collectionTable,
-              {
-                definition: {},
-              },
-              collectionTable
-            );
-        })();
-
-        await model.collection.drop();
-
-        return {
-          collectionsORtables: await this.connection.listCollections(),
-        };
+        if (
+          await this.connection.getConnection.db.dropCollection(collectionTable)
+        )
+          return {
+            collectionsORtables: await this.connection.listCollections(),
+          };
+        throw `Error dropping the ${collectionTable} collection.`;
       } catch (err) {
         throw err;
       }
@@ -273,6 +263,7 @@ export class SchemaEditorService implements SchemaEditor {
       } catch (error) {
         status.excepted = true;
         log.info("Failed due to error: " + error);
+        throw error;
       }
 
       if (!status.excepted)
@@ -376,6 +367,170 @@ export class SchemaEditorService implements SchemaEditor {
       return {
         data: await collection.find().toArray(),
       };
+    }
+
+    throw "Invalid database connection specified";
+  }
+
+  async insertDatabaseData(
+    collectionORtableName: string,
+    insertData: {
+      [key: string]: any;
+    }
+  ): Promise<DatabaseDataResult> {
+    if (this._.isEmpty(collectionORtableName))
+      throw "Empty database Collection OR table.";
+
+    Object.keys(insertData).forEach((key) => {
+      if (this._.isEmpty(insertData[key])) delete insertData[key];
+    });
+
+    if (this.database.isKnex(this.connection)) {
+      const columnInfo = (await this.getTableColumnInfo(collectionORtableName))
+        .columnInfo;
+
+      Object.keys(insertData).forEach((key) => {
+        columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+          ?.dateTimeFormat === "datetime" ||
+        columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+          ?.dateTimeFormat === "date" ||
+        columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+          ?.dateTimeFormat === "time"
+          ? (insertData[key] = formateDateTime(new Date(insertData[key])))
+          : (insertData[key] = insertData[key]);
+      });
+
+      const result = await this.connection
+        .queryBuilder(collectionORtableName)
+        .insert(insertData);
+
+      if (result)
+        return {
+          columns: columnInfo,
+          data: await this.connection
+            .queryBuilder(collectionORtableName)
+            .select(),
+        };
+
+      throw "Could insert data in database table " + collectionORtableName;
+    }
+
+    if (this.database.isMongoose(this.connection)) {
+      // TODO: this should implemented later
+
+      const collection = await this.connection.getConnection.collection(
+        collectionORtableName
+      );
+      return {
+        data: await collection.find().toArray(),
+      };
+    }
+
+    throw "Invalid database connection specified";
+  }
+
+  async updateDatabaseData(
+    collectionORtableName: string,
+    oldData: {
+      [key: string]: any;
+    },
+    newData: {
+      [key: string]: any;
+    }
+  ): Promise<DatabaseDataResult> {
+    if (this._.isEmpty(collectionORtableName))
+      throw "Empty database Collection OR table.";
+
+    if (this.database.isKnex(this.connection)) {
+      const columnInfo = (await this.getTableColumnInfo(collectionORtableName))
+        .columnInfo;
+      Object.keys(newData).forEach((key) => {
+        if (this._.isEmpty(newData[key])) {
+          const isNullable = !columnInfo.filter((col) => col.name === key)[0]
+            .actualData?.columnData?.notNull;
+          newData[key] = isNullable ? null : "";
+        } else
+          columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+            ?.dateTimeFormat === "datetime" ||
+          columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+            ?.dateTimeFormat === "date" ||
+          columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
+            ?.dateTimeFormat === "time"
+            ? (newData[key] = formateDateTime(new Date(newData[key])))
+            : (newData[key] = newData[key]);
+      });
+
+      const result = await this.connection
+        .queryBuilder(collectionORtableName)
+        .update(newData)
+        .where({ _id: oldData._id });
+
+      if (result)
+        return {
+          columns: columnInfo,
+          data: await this.connection
+            .queryBuilder(collectionORtableName)
+            .select(),
+        };
+
+      throw "Could update data in database table " + collectionORtableName;
+    }
+
+    if (this.database.isMongoose(this.connection)) {
+      // TODO: this should implemented later
+
+      const collection = await this.connection.getConnection.collection(
+        collectionORtableName
+      );
+      return {
+        data: await collection.find().toArray(),
+      };
+    }
+
+    throw "Invalid database connection specified";
+  }
+
+  async deleteDatabaseData(
+    collectionORtableName: string,
+    dataID: string
+  ): Promise<DatabaseDataResult> {
+    if (this._.isEmpty(collectionORtableName))
+      throw "Empty database Collection OR table.";
+
+    if (this.database.isKnex(this.connection)) {
+      if (typeof dataID !== "string") throw "Invalid database record ID.";
+
+      const result = await this.connection
+        .queryBuilder(collectionORtableName)
+        .delete()
+        .where({ _id: dataID });
+      if (result)
+        return {
+          columns: (await this.getTableColumnInfo(collectionORtableName))
+            .columnInfo,
+          data: await this.connection
+            .queryBuilder(collectionORtableName)
+            .select(),
+        };
+
+      throw `Could delete Record in database table ${collectionORtableName} with id : ${dataID}`;
+    }
+
+    if (this.database.isMongoose(this.connection)) {
+      const collection = await this.connection.getConnection.collection(
+        collectionORtableName
+      );
+
+      const result = await collection.deleteOne({
+        _id: new mongoose.Types.ObjectId(dataID),
+      });
+
+      if (result && result.deletedCount > 0)
+        return {
+          data: await collection.find().toArray(),
+        };
+
+      throw `Could delete Record in database collection ${collectionORtableName} with id : ${dataID}`;
     }
 
     throw "Invalid database connection specified";

@@ -13,8 +13,12 @@ const processTable = (
 ): Knex.ColumnBuilder => {
   const { _ } = ecoFlow;
   const { defaultValue, notNull } = columnData;
+  if (!_.isUndefined(defaultValue) && defaultValue === null) {
+    columnBuilder.defaultTo(null);
+  }
   if (
     !_.isUndefined(defaultValue) &&
+    defaultValue !== null &&
     defaultValue.toString().trim().length > 0
   ) {
     columnBuilder.defaultTo(defaultValue.toString().trim());

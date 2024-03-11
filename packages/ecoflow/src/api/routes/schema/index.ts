@@ -13,6 +13,9 @@ import {
   deleteCollectionsORTable,
   commitSaveTableColumn,
   getTableColumnInfo,
+  insertDatabaseData,
+  updateDatabaseData,
+  deleteDatabaseData,
 } from "../../controllers/schema/connections.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated";
 
@@ -64,4 +67,19 @@ schemaRouter.get(
   "/DatabaseData/:connectionName/:collectionORtableName",
   isAuthenticated,
   getDatabaseData
+);
+schemaRouter.post(
+  "/DatabaseData/:connectionName/:collectionORtableName/insert",
+  isAuthenticated,
+  insertDatabaseData
+);
+schemaRouter.patch(
+  "/DatabaseData/:connectionName/:collectionORtableName/update",
+  isAuthenticated,
+  updateDatabaseData
+);
+schemaRouter.delete(
+  "/DatabaseData/:connectionName/:collectionORtableName/delete/:dataID",
+  isAuthenticated,
+  deleteDatabaseData
 );

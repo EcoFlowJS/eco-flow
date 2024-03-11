@@ -404,6 +404,115 @@ const getDatabaseData = async (ctx: Context) => {
   };
 };
 
+const insertDatabaseData = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const { connectionName, collectionORtableName } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    const { insertData } = ctx.request.body;
+
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).insertDatabaseData(collectionORtableName, insertData),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
+const updateDatabaseData = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const { connectionName, collectionORtableName } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    const { oldData, newData } = ctx.request.body;
+
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).updateDatabaseData(collectionORtableName, oldData, newData),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
+const deleteDatabaseData = async (ctx: Context) => {
+  const { database, service } = ecoFlow;
+  const { connectionName, collectionORtableName, dataID } = ctx.params;
+
+  const connection = database.getDatabaseConnection(connectionName);
+
+  if (typeof connection === "undefined") {
+    ctx.status = 400;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: {
+        msg: "Database connection not found or invalid",
+      },
+    };
+
+    return;
+  }
+
+  try {
+    ctx.status = 200;
+    ctx.body = <ApiResponse>{
+      success: true,
+      payload: await new service.SchemaEditorService(
+        connection
+      ).deleteDatabaseData(collectionORtableName, dataID),
+    };
+  } catch (error) {
+    ctx.status = 409;
+    ctx.body = <ApiResponse>{
+      error: true,
+      payload: error,
+    };
+  }
+};
+
 export {
   getConnectionConfig,
   getConnectionConfigs,
@@ -418,4 +527,7 @@ export {
   getTableColumnInfo,
   getCollectionOrTable,
   getDatabaseData,
+  insertDatabaseData,
+  updateDatabaseData,
+  deleteDatabaseData,
 };

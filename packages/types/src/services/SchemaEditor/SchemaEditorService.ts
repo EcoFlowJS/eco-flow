@@ -14,24 +14,41 @@ export interface SchemaEditor {
   createCollectionsORTable(
     tableCollectionName: string,
     tableLike?: string
-  ): Promise<CreateCollectionsORTableResult | null>;
-  getCollectionOrTable(): Promise<CollectionOrTableResult | null>;
-  getDatabaseData(
-    collectionORtableName: string
-  ): Promise<DatabaseDataResult | null>;
+  ): Promise<CreateCollectionsORTableResult>;
+  getCollectionOrTable(): Promise<CollectionOrTableResult>;
+  getDatabaseData(collectionORtableName: string): Promise<DatabaseDataResult>;
   deleteCollectionsORTable(
     collectionTable: string
-  ): Promise<DeleteCollectionsORTableResult | null>;
+  ): Promise<DeleteCollectionsORTableResult>;
   renameCollectionsORTable(
     collectionTableOldName: string,
     collectionTableNewName: string
-  ): Promise<RenameCollectionsORTableResult | null>;
+  ): Promise<RenameCollectionsORTableResult>;
   commitSaveTableColumn(
     tableName: string,
     columnData: DatabaseColumnData
-  ): Promise<CommitSaveTableColumnResult | null>;
+  ): Promise<CommitSaveTableColumnResult>;
 
-  getTableColumnInfo(columnName: string): Promise<TableColumnInfoResult | null>;
+  getTableColumnInfo(columnName: string): Promise<TableColumnInfoResult>;
+  insertDatabaseData(
+    collectionORtableName: string,
+    insertData: {
+      [key: string]: any;
+    }
+  ): Promise<DatabaseDataResult>;
+  updateDatabaseData(
+    collectionORtableName: string,
+    oldData: {
+      [key: string]: any;
+    },
+    newData: {
+      [key: string]: any;
+    }
+  ): Promise<DatabaseDataResult>;
+  deleteDatabaseData(
+    collectionORtableName: string,
+    dataID: string
+  ): Promise<DatabaseDataResult>;
 }
 
 interface CollectionsORtables {
