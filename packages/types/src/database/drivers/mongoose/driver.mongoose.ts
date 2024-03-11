@@ -3,7 +3,6 @@ import mongoose, {
   CompileModelOptions,
   ObtainDocumentType,
   ResolveSchemaOptions,
-  Schema,
   SchemaDefinition,
   SchemaOptions,
 } from "mongoose";
@@ -49,8 +48,8 @@ export interface DriverMongoose {
 }
 
 export interface CollectionInfo {
-  keys: string[];
-  types: { [key: string]: string };
+  keys: CollectionTypes[];
+  types: { [key: string]: CollectionTypes };
   values: any;
 }
 
@@ -59,28 +58,30 @@ export interface collectionInfoOptions {
   match?: { [key: string]: any };
 }
 
+export type CollectionTypes =
+  | "objectId"
+  | "array"
+  | "binData"
+  | "bool"
+  | "javascriptWithScope"
+  | "date"
+  | "decimal"
+  | "double"
+  | "int"
+  | "long"
+  | "maxKey"
+  | "minKey"
+  | "null"
+  | "object"
+  | "regex"
+  | "string"
+  | "symbol"
+  | "timestamp";
+
 export interface DatabaseCollectionInfo {
-  keys: string[];
+  keys: CollectionTypes[];
   types: {
-    [key: string]:
-      | "objectId"
-      | "array"
-      | "binData"
-      | "bool"
-      | "javascriptWithScope"
-      | "date"
-      | "decimal"
-      | "double"
-      | "int"
-      | "long"
-      | "maxKey"
-      | "minKey"
-      | "null"
-      | "object"
-      | "regex"
-      | "string"
-      | "symbol"
-      | "timestamp";
+    [key: string]: CollectionTypes;
   };
   data: any;
 }
