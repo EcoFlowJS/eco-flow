@@ -6,6 +6,7 @@ import {
   StrategyOptions,
 } from "passport-jwt";
 import passport from "koa-passport";
+import { Builder } from "@eco-flow/utils";
 
 export class Passport {
   private svr: EcoServer;
@@ -15,7 +16,7 @@ export class Passport {
     svr: EcoServer,
     options: StrategyOptions = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.ECOFLOW_SYS_TOKEN_SALT,
+      secretOrKey: Builder.ENV.getSystemEnv("TOKEN_SALT")?.value,
     }
   ) {
     this.svr = svr;
@@ -25,7 +26,7 @@ export class Passport {
 
   init() {
     this.initStrategy();
-    this.svr.keys = process.env.ECOFLOW_SYS_TOKEN_SECRET!.split(",");
+    this.svr.keys = Builder.ENV.getSystemEnv("TOKEN_SECRET")!.value.split(",");
     this.svr.use(session(this.svr));
     this.svr.use(this.passport.initialize());
     this.svr.use(this.passport.session());

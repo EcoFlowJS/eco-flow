@@ -13,6 +13,7 @@ import _ from "lodash";
 import proxy from "koa-proxies";
 import { EcoRouter } from "./EcoRouter";
 import { Builder } from "@eco-flow/utils";
+import loadEnvironments from "../helper/env.helper";
 
 export class EcoEditors implements IEcoEditors {
   private server: IEcoServer;
@@ -24,7 +25,7 @@ export class EcoEditors implements IEcoEditors {
     this.isAuth = isAuth;
   }
 
-  private initializeEditorsRouter(): void {
+  private async initializeEditorsRouter(): Promise<void> {
     let { systemRouterOptions, envDir } = ecoFlow.config._config;
     if (_.isEmpty(systemRouterOptions)) {
       systemRouterOptions = {};
@@ -35,7 +36,7 @@ export class EcoEditors implements IEcoEditors {
       systemRouterOptions.prefix = "/systemApi";
     }
 
-    const setEnv = () => {
+    const setEnv = async () => {
       Builder.ENV.setSystemEnv(envDir!, [
         {
           name: "CLIENT_API_ENDPOINT",
@@ -43,14 +44,16 @@ export class EcoEditors implements IEcoEditors {
         },
       ]);
       ecoFlow.log.info("Client API endpoint Configured...");
+      loadEnvironments();
     };
 
-    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT)) setEnv();
+    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT)) await setEnv();
+
     else if (
       process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT !==
       this.server.baseUrl + systemRouterOptions!.prefix
     )
-      setEnv();
+      await setEnv();
     const router = EcoRouter.createRouter(systemRouterOptions);
     this.router.systemRouter = router;
     this.server.use(router.routes()).use(router.allowedMethods());
@@ -62,10 +65,10 @@ export class EcoEditors implements IEcoEditors {
     this.server.use(baseRouter.routes()).use(baseRouter.allowedMethods());
   }
 
-  loadEditors(): void {
+  async loadEditors(): Promise<void> {
     if (this.server.env === "development") {
       this.defaultRedirect();
-      this.initializeEditorsRouter();
+      await this.initializeEditorsRouter();
       this.server.use(
         proxy("/auth", {
           target: "http://localhost:3000",
@@ -113,7 +116,7 @@ export class EcoEditors implements IEcoEditors {
 
     if (!editor.enabled) return;
 
-    this.initializeEditorsRouter();
+    await this.initializeEditorsRouter();
     this.defaultRedirect();
     loadLanding(this.server);
     if (editor.admin) loadAdmin(this.server);
