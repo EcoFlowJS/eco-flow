@@ -12,6 +12,7 @@ import mongoose, {
   SchemaDefinition,
   SchemaOptions,
 } from "mongoose";
+import processCollectionInfo from "./collectionInfo.helper";
 
 export class DriverMongoose implements IDriverMongoose {
   private conn!: Connection;
@@ -97,52 +98,16 @@ export class DriverMongoose implements IDriverMongoose {
     options: collectionInfoOptions = {}
   ): Promise<Array<CollectionInfo>> {
     const { subColumn, match } = options;
-    return <CollectionInfo[]>await this.conn.db
-      .collection(collection)
-      .aggregate([
-        { $match: match || {} },
-        {
-          $addFields: {
-            originalValues: {
-              $objectToArray:
-                subColumn && typeof subColumn === "string"
-                  ? `$$ROOT.${subColumn}`
-                  : "$$ROOT",
-            },
-          },
-        },
-        {
-          $project: {
-            originalValues: 1,
-            keys: {
-              $map: {
-                input: "$originalValues",
-                as: "pair",
-                in: "$$pair.k",
-              },
-            },
-            types: {
-              $map: {
-                input: "$originalValues",
-                as: "pair",
-                in: {
-                  k: "$$pair.k",
-                  v: { $type: "$$pair.v" },
-                },
-              },
-            },
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              keys: "$keys",
-              types: { $arrayToObject: "$types" },
-              values: { $arrayToObject: "$originalValues" },
-            },
-          },
-        },
-      ])
-      .toArray();
+    const collectionKey =
+      subColumn && typeof subColumn === "string"
+        ? `$$ROOT.${subColumn}`
+        : "$$ROOT";
+
+    return await processCollectionInfo(
+      this.conn,
+      collection,
+      collectionKey,
+      match
+    );
   }
 }
