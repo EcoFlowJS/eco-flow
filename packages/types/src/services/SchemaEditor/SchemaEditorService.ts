@@ -1,5 +1,4 @@
 import {
-  DatabaseCollectionInfo,
   DatabaseColumnInfo,
   DatabaseCreateEditModel,
   DatabaseTableTypes,
@@ -107,5 +106,6 @@ export interface CollectionOrTableResult extends CollectionsORtables {
 
 export interface DatabaseDataResult {
   columns?: DatabaseColumnInfo[];
+  modifiedCount?: number;
   data: any;
 }

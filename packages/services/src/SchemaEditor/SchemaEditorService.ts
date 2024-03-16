@@ -31,7 +31,10 @@ import {
   processTypeAlias,
   textFormat,
 } from "./helper/getTableColumnInfo.helper";
-import { formateDateTime } from "./helper/insertDatabaseData.helper";
+import {
+  formateDateTime,
+  processMongo,
+} from "./helper/insertDatabaseData.helper";
 import mongoose, { Schema, Types } from "mongoose";
 
 export class SchemaEditorService implements SchemaEditor {
@@ -380,11 +383,11 @@ export class SchemaEditorService implements SchemaEditor {
     if (this._.isEmpty(collectionORtableName))
       throw "Empty database Collection OR table.";
 
-    Object.keys(insertData).forEach((key) => {
-      if (this._.isEmpty(insertData[key])) delete insertData[key];
-    });
-
     if (this.database.isKnex(this.connection)) {
+      Object.keys(insertData).forEach((key) => {
+        if (this._.isEmpty(insertData[key])) delete insertData[key];
+      });
+
       const columnInfo = (await this.getTableColumnInfo(collectionORtableName))
         .columnInfo;
 
@@ -415,14 +418,21 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      // TODO: this should implemented later
+      const { id, value } = insertData;
 
-      const collection = await this.connection.getConnection.collection(
-        collectionORtableName
-      );
-      return {
-        data: await collection.find().toArray(),
-      };
+      const result = await this.connection.getConnection.db
+        .collection(collectionORtableName)
+        .insertOne({
+          _id: new mongoose.Types.ObjectId(id),
+          ...processMongo(value),
+        });
+
+      if (result.insertedId)
+        return {
+          data: await this.connection.collectionInfo(collectionORtableName),
+        };
+
+      throw "Could insert data in database table " + collectionORtableName;
     }
 
     throw "Invalid database connection specified";
@@ -478,12 +488,24 @@ export class SchemaEditorService implements SchemaEditor {
     if (this.database.isMongoose(this.connection)) {
       // TODO: this should implemented later
 
-      const collection = await this.connection.getConnection.collection(
-        collectionORtableName
-      );
-      return {
-        data: await collection.find().toArray(),
-      };
+      Object.keys(newData.value).map((key) => {
+        if (typeof oldData.data[key] !== "undefined") delete oldData.data[key];
+      });
+
+      const result = await this.connection.getConnection.db
+        .collection(collectionORtableName)
+        .updateOne(
+          { _id: new mongoose.Types.ObjectId(oldData.id) },
+          { $set: processMongo(newData.value), $unset: oldData.data }
+        );
+
+      if (result.matchedCount > 0)
+        return {
+          data: await this.connection.collectionInfo(collectionORtableName),
+          modifiedCount: result.modifiedCount,
+        };
+
+      throw "Could update data in database table " + collectionORtableName;
     }
 
     throw "Invalid database connection specified";
@@ -516,20 +538,24 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      const collection = await this.connection.getConnection.collection(
-        collectionORtableName
-      );
+      // const collection = await this.connection.getConnection.collection(
+      //   collectionORtableName
+      // );
 
-      const result = await collection.deleteOne({
-        _id: new mongoose.Types.ObjectId(dataID),
-      });
+      const result = await this.connection.getConnection.db
+        .collection(collectionORtableName)
+        .deleteOne({
+          _id: new mongoose.Types.ObjectId(dataID),
+        });
 
       if (result && result.deletedCount > 0)
         return {
-          data: await collection.find().toArray(),
+          data: await this.connection.collectionInfo(collectionORtableName),
         };
 
       throw `Could delete Record in database collection ${collectionORtableName} with id : ${dataID}`;
+
+      console.log(dataID);
     }
 
     throw "Invalid database connection specified";
