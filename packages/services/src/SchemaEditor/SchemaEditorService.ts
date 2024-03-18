@@ -15,7 +15,6 @@ import {
   CommitSaveTableColumnResult,
   DriverKnex,
   AlterSqliteColumn,
-  DataBaseDataMongoOptions,
 } from "@eco-flow/types";
 import {
   alterColumn,
@@ -36,6 +35,7 @@ import {
   processMongo,
 } from "./helper/insertDatabaseData.helper";
 import mongoose, { Schema, Types } from "mongoose";
+import dataProcessorMongo from "./helper/getDatabaseData.helper";
 
 export class SchemaEditorService implements SchemaEditor {
   private connection: DriverKnex | DriverMongoose;
@@ -346,8 +346,7 @@ export class SchemaEditorService implements SchemaEditor {
   }
 
   async getDatabaseData(
-    collectionORtableName: string,
-    options: DataBaseDataMongoOptions = {}
+    collectionORtableName: string
   ): Promise<DatabaseDataResult> {
     if (this._.isEmpty(collectionORtableName))
       throw "Empty database Collection OR table.";
@@ -362,12 +361,12 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      const { subCollection, matchID } = options;
       return {
-        data: await this.connection.collectionInfo(collectionORtableName, {
-          subColumn: subCollection,
-          match: matchID ? { _id: new Types.ObjectId(matchID) } : {},
-        }),
+        data: await dataProcessorMongo(
+          this.connection,
+          collectionORtableName,
+          await this.connection.collectionInfo(collectionORtableName)
+        ),
       };
     }
 
@@ -429,7 +428,11 @@ export class SchemaEditorService implements SchemaEditor {
 
       if (result.insertedId)
         return {
-          data: await this.connection.collectionInfo(collectionORtableName),
+          data: await dataProcessorMongo(
+            this.connection,
+            collectionORtableName,
+            await this.connection.collectionInfo(collectionORtableName)
+          ),
         };
 
       throw "Could insert data in database table " + collectionORtableName;
@@ -486,8 +489,6 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      // TODO: this should implemented later
-
       Object.keys(newData.value).map((key) => {
         if (typeof oldData.data[key] !== "undefined") delete oldData.data[key];
       });
@@ -501,7 +502,11 @@ export class SchemaEditorService implements SchemaEditor {
 
       if (result.matchedCount > 0)
         return {
-          data: await this.connection.collectionInfo(collectionORtableName),
+          data: await dataProcessorMongo(
+            this.connection,
+            collectionORtableName,
+            await this.connection.collectionInfo(collectionORtableName)
+          ),
           modifiedCount: result.modifiedCount,
         };
 
@@ -538,10 +543,6 @@ export class SchemaEditorService implements SchemaEditor {
     }
 
     if (this.database.isMongoose(this.connection)) {
-      // const collection = await this.connection.getConnection.collection(
-      //   collectionORtableName
-      // );
-
       const result = await this.connection.getConnection.db
         .collection(collectionORtableName)
         .deleteOne({
@@ -550,7 +551,11 @@ export class SchemaEditorService implements SchemaEditor {
 
       if (result && result.deletedCount > 0)
         return {
-          data: await this.connection.collectionInfo(collectionORtableName),
+          data: await dataProcessorMongo(
+            this.connection,
+            collectionORtableName,
+            await this.connection.collectionInfo(collectionORtableName)
+          ),
         };
 
       throw `Could delete Record in database collection ${collectionORtableName} with id : ${dataID}`;
