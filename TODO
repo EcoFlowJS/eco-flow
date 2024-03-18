@@ -1,8 +1,4 @@
 @eco-flow/api/ECOAPIBuilder   -> Strapi Type Builder
-@eco-flow/Databse[list all tables columns for knex and collections for mongoose]
-
-@editor base-panel [setup, login, logout];
-
 
 [
     {
