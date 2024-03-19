@@ -1,4 +1,4 @@
-import { userTableCollection } from "@eco-flow/types";
+import { Knex, userTableCollection } from "@eco-flow/types";
 import { Schema } from "mongoose";
 
 const mongooseSchema = new Schema<userTableCollection>({
@@ -8,6 +8,10 @@ const mongooseSchema = new Schema<userTableCollection>({
     type: String,
   },
   password: {
+    required: true,
+    type: String,
+  },
+  roles: {
     required: true,
     type: String,
   },
@@ -29,10 +33,11 @@ const mongooseSchema = new Schema<userTableCollection>({
   },
 });
 
-const knexSchema = (table: any) => {
+const knexSchema = (table: Knex.TableBuilder) => {
   table.increments("_id");
   table.string("name");
   table.string("username");
+  table.json("roles");
   table.string("password");
   table.boolean("isActive");
   table.string("email");
