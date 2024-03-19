@@ -7,6 +7,7 @@ import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
   Connection,
+  Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
@@ -64,7 +65,7 @@ export class DriverMongoose implements IDriverMongoose {
     return mongoose.VirtualType;
   }
 
-  buildModel(
+  buildModel<T>(
     name: string,
     schema: {
       definition:
@@ -77,8 +78,8 @@ export class DriverMongoose implements IDriverMongoose {
     },
     collection?: string,
     options?: CompileModelOptions
-  ): typeof mongoose.Model {
-    return this.conn.model(
+  ): Model<T> {
+    return this.conn.model<T>(
       name,
       new this.getSchema(schema.definition, schema.options),
       collection,
