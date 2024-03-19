@@ -1,3 +1,4 @@
+import { Knex } from "knex";
 import { ApiResponse } from "../../ecoflow";
 
 export interface UserService {
@@ -6,26 +7,47 @@ export interface UserService {
     userInfo: userTableCollection,
     isAdmin?: boolean
   ): Promise<ApiResponse>;
-  getUserAllInfo(username: string): Promise<GetUserInfo>;
+  getUserAllInfo(username?: string): Promise<GetUserInfo>;
+  upddateUser(username: string, update: userTableCollection): Promise<UserInfo>;
 }
 
-interface UserInfo {
+export interface UserInfo {
   _id?: string;
-  name: string;
-  username: string;
-  isActive: boolean;
+  name?: string;
+  username?: string;
+  roles?: Array<any> | any;
+  isActive?: boolean;
   email?: string;
   oldPassword?: string;
   isPermanent?: boolean;
   created_at?: Date;
-  updated_at?: Date;
+  updated_at?: Date | Knex.Raw;
 }
 
 export interface GetUserInfo {
   isAvailable: boolean;
-  user?: userTableCollection;
+  user?: userTableCollection | userTableCollection[];
 }
 
 export interface userTableCollection extends UserInfo {
-  password: string;
+  password?: string;
+}
+
+export interface UserPermissions {
+  createUser: boolean;
+  deleteUser: boolean;
+  updateUser: boolean;
+  showUser: boolean;
+  createRole: boolean;
+  deleteRole: boolean;
+  updateRole: boolean;
+  stopServer: boolean;
+  restartServer: boolean;
+  createEnvs: boolean;
+  deleteEnvs: boolean;
+  updateEnvs: boolean;
+  adminEditor: boolean;
+  schemaEditor: boolean;
+  flowEditor: boolean;
+  administrator: boolean;
 }

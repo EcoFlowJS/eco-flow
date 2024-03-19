@@ -1,6 +1,7 @@
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,
+  Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
@@ -24,7 +25,7 @@ export interface DriverMongoose {
 
   get getVirtualType(): typeof mongoose.VirtualType;
 
-  buildModel(
+  buildModel<T>(
     name: string,
     schema: {
       definition:
@@ -37,7 +38,7 @@ export interface DriverMongoose {
     },
     collection?: string,
     options?: CompileModelOptions
-  ): typeof mongoose.Model;
+  ): Model<T>;
 
   listCollections(): Promise<string[]>;
   collectionInfo(collection: string): Promise<Array<CollectionInfo>>;
