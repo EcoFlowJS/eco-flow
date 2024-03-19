@@ -68,16 +68,6 @@ schemaRouter.get(
   isAuthenticated,
   getDatabaseData
 );
-schemaRouter.get(
-  "/DatabaseData/:connectionName/:collectionORtableName/:subCollection",
-  isAuthenticated,
-  getDatabaseData
-);
-schemaRouter.get(
-  "/DatabaseData/:connectionName/:collectionORtableName/:subCollection/:matchID",
-  isAuthenticated,
-  getDatabaseData
-);
 schemaRouter.post(
   "/DatabaseData/:connectionName/:collectionORtableName/insert",
   isAuthenticated,

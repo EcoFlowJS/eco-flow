@@ -70,13 +70,24 @@ const processSetupController = async (ctx: Context) => {
   }
 
   log.info("creating user credentials...");
+  const id: { _id: any } = (await service.RoleService.createRole(
+    {
+      name: "admin",
+      isDefault: true,
+      permissions: {},
+    },
+    null,
+    true
+  )) as { _id: any };
   const userCredentials: userTableCollection = {
     name: userInfo.name,
     username: userInfo.username,
     password: userInfo.password,
+    roles: [id._id],
     email: userInfo.email,
     isActive: true,
   };
+
   const response = await service.UserService.createUser(userCredentials, true);
   log.info("User credentials created successfully");
 

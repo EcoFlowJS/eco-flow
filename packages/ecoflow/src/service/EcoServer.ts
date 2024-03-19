@@ -3,13 +3,14 @@ import koaBody, { HttpMethodEnum } from "koa-body";
 import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
 import { Passport } from "./Passport";
 import { StrategyOptions } from "passport-jwt";
 import EcoFlow from "../lib/EcoFlow";
+import socketEvents from "../api/socketEvents";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -111,10 +112,17 @@ export class EcoServer extends Koa implements IEcoServer {
     this.userSocket = new Server(this._server, {
       cors: socketCors,
     });
+    this.userSocket.on("join", (room) => {
+      this.userSocket.socketsJoin(room);
+    });
 
-    this.socket.on("connection", () =>
-      console.log("WebSocket connected to socket.ecoflow")
-    );
+    this.socket.on("connection", (socket: Socket) => {
+      socketEvents({
+        io: this.socket,
+        socket: socket,
+      });
+      console.log("WebSocket connected to socket.ecoflow");
+    });
     this.userSocket.on("connection", () =>
       console.log("WebSocket connected to UserSocket")
     );

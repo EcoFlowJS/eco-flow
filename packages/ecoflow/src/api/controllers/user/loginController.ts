@@ -1,5 +1,5 @@
 import Helper from "@eco-flow/helper";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse, userTableCollection } from "@eco-flow/types";
 import { Context } from "koa";
 
 const loginController = async (ctx: Context) => {
@@ -27,7 +27,9 @@ const loginController = async (ctx: Context) => {
     return;
   }
 
-  if (!(await Helper.compareHash(password, user!.password))) {
+  if (
+    !(await Helper.compareHash(password, (<userTableCollection>user).password!))
+  ) {
     ctx.body = <ApiResponse>{
       error: true,
       payload: `Invalid password for ${username}`,

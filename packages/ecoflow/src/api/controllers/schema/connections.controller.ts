@@ -379,8 +379,7 @@ const getCollectionOrTable = async (ctx: Context) => {
 
 const getDatabaseData = async (ctx: Context) => {
   const { database, service } = ecoFlow;
-  const { connectionName, collectionORtableName, subCollection, matchID } =
-    ctx.params;
+  const { connectionName, collectionORtableName } = ctx.params;
 
   const connection = database.getDatabaseConnection(connectionName);
 
@@ -400,8 +399,7 @@ const getDatabaseData = async (ctx: Context) => {
   ctx.body = <ApiResponse>{
     success: true,
     payload: await new service.SchemaEditorService(connection).getDatabaseData(
-      collectionORtableName,
-      { subCollection, matchID }
+      collectionORtableName
     ),
   };
 };
