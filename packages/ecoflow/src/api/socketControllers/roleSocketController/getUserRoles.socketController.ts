@@ -5,16 +5,14 @@ import roleAdmin from "../../../defaults/roleAdmin.default";
 const getUserRoles =
   (io: Server) =>
   async ({ roomID, UserID }: any) => {
-    const { service } = ecoFlow;
+    const { UserService, RoleService } = ecoFlow.service;
     const userRoles: Array<any> = (<any>(
-      (await service.UserService.getUserAllInfo(UserID)).user!
+      (await UserService.getUserAllInfo(UserID)).user!
     )).roles;
 
     let roles = Object.create({});
     for await (const userRole of userRoles) {
-      const role: Role = (
-        (await service.RoleService.fetchRole(userRole)) as Role[]
-      )[0];
+      const role: Role = ((await RoleService.fetchRole(userRole)) as Role[])[0];
       if (role.isDefault) {
         roles = roleAdmin;
         break;

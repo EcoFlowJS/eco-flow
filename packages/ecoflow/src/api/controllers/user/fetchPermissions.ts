@@ -1,9 +1,41 @@
-import { ApiResponse, Permissions, Role } from "@eco-flow/types";
+import {
+  ApiResponse,
+  Permissions,
+  Role,
+  RoleService,
+  UserService,
+} from "@eco-flow/types";
 import { Context } from "koa";
 import roleAdmin from "../../../defaults/roleAdmin.default";
 
+const fetchRoleList = async (
+  UserService: UserService,
+  username: string
+): Promise<any[]> => {
+  return (<any>(await UserService.getUserAllInfo(username)).user!).roles;
+};
+
+const fetchpermissionList = async (
+  RoleService: RoleService,
+  userRoles: any[]
+) => {
+  let roles = Object.create({});
+  for await (const userRole of userRoles) {
+    const role: Role = ((await RoleService.fetchRole(userRole)) as Role[])[0];
+    if (role.isDefault) {
+      roles = roleAdmin;
+      break;
+    }
+
+    Object.keys(role.permissions as Permissions).map((rolekey: string) => {
+      if ((role.permissions as Permissions)[rolekey]) roles[rolekey] = true;
+    });
+  }
+  return roles;
+};
+
 const fetchPermissions = async (ctx: Context) => {
-  const { username } = ctx.params;
+  const { username, mode } = ctx.params;
   const { _, service } = ecoFlow;
 
   if (_.isUndefined(username)) throw "Username must be specified";
@@ -11,26 +43,29 @@ const fetchPermissions = async (ctx: Context) => {
   const { UserService, RoleService } = service;
 
   try {
-    const userRoles: Array<any> = (<any>(
-      (await UserService.getUserAllInfo(username)).user!
-    )).roles;
+    const payload = Object.create({});
 
-    let roles = Object.create({});
-    for await (const userRole of userRoles) {
-      const role: Role = ((await RoleService.fetchRole(userRole)) as Role[])[0];
-      if (role.isDefault) {
-        roles = roleAdmin;
-        break;
-      }
-
-      Object.keys(role.permissions as Permissions).map((rolekey: string) => {
-        if ((role.permissions as Permissions)[rolekey]) roles[rolekey] = true;
-      });
+    if (_.isUndefined(mode)) {
+      const userRoles = await fetchRoleList(UserService, username);
+      const permissionList = await fetchpermissionList(RoleService, userRoles);
+      payload["rolesList"] = userRoles;
+      payload["permissions"] = permissionList;
     }
+
+    if (mode === "RoleList") {
+      payload["rolesList"] = await fetchRoleList(UserService, username);
+    }
+
+    if (mode === "Permissions") {
+      const userRoles = await fetchRoleList(UserService, username);
+      const permissionList = await fetchpermissionList(RoleService, userRoles);
+      payload["permissions"] = permissionList;
+    }
+
     ctx.status = 200;
     ctx.body = <ApiResponse>{
       success: true,
-      payload: roles,
+      payload: payload,
     };
   } catch (error) {
     ctx.status = 409;

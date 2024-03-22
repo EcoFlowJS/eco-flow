@@ -8,14 +8,16 @@ const roleAdmin: UserPermissions = {
   createRole: true,
   deleteRole: true,
   updateRole: true,
+  serverConfigurationShow: true,
+  serverConfigurationUpdate: true,
   stopServer: true,
   restartServer: true,
   createEnvs: true,
   deleteEnvs: true,
   updateEnvs: true,
-  adminEditor: true,
   schemaEditor: true,
   flowEditor: true,
+  auditLogs: true,
   administrator: true,
 };
 

@@ -1,4 +1,3 @@
-import { ClassType } from "../ecoflow";
 import { SchemaEditorService } from "./SchemaEditor/SchemaEditorService";
 import { RoleService } from "./role/RoleService";
 import { TokenServices } from "./token/tokenServices";
@@ -10,3 +9,5 @@ export interface Service {
   get SchemaEditorService(): SchemaEditorService;
   get RoleService(): RoleService;
 }
+
+export { UserService, TokenServices, SchemaEditorService, RoleService };

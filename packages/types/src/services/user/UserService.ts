@@ -41,13 +41,15 @@ export interface UserPermissions {
   createRole: boolean;
   deleteRole: boolean;
   updateRole: boolean;
+  serverConfigurationShow: boolean;
+  serverConfigurationUpdate: boolean;
   stopServer: boolean;
   restartServer: boolean;
   createEnvs: boolean;
   deleteEnvs: boolean;
   updateEnvs: boolean;
-  adminEditor: boolean;
   schemaEditor: boolean;
   flowEditor: boolean;
+  auditLogs: boolean;
   administrator: boolean;
 }
