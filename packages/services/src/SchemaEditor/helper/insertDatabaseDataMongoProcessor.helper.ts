@@ -1,29 +1,21 @@
 import mongoose from "mongoose";
 
-const formateDateTime = (dateTime: Date) => {
-  //Sql Format : YYYY-MM-DD HH:MI:SS
-
-  const padL = (nr: any, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
-
-  return `${dateTime.getFullYear()}-${padL(dateTime.getMonth() + 1)}-${padL(
-    dateTime.getDate()
-  )} ${padL(dateTime.getHours())}:${padL(dateTime.getMinutes())}:${padL(
-    dateTime.getSeconds()
-  )}`;
-};
-
-const processMongo = (data: any) => {
+const insertDatabaseDataMongoProcessor = (data: any) => {
   const { _ } = ecoFlow;
   if (_.isUndefined(data)) return {};
   if (_.isNull(data)) return null;
   if (typeof data === "object") {
     if (Array.isArray(data)) {
       const result: any[] = [];
-      data.map((_value, index) => result.push(processMongo(data[index])));
+      data.map((_value, index) =>
+        result.push(insertDatabaseDataMongoProcessor(data[index]))
+      );
       return result;
     }
     const result = Object.create({});
-    Object.keys(data).map((key) => (result[key] = processMongo(data[key])));
+    Object.keys(data).map(
+      (key) => (result[key] = insertDatabaseDataMongoProcessor(data[key]))
+    );
     return result;
   }
   if (_.isString(data) && data.startsWith("Binary(") && data.endsWith(")"))
@@ -44,4 +36,4 @@ const processMongo = (data: any) => {
   return data;
 };
 
-export { formateDateTime, processMongo };
+export default insertDatabaseDataMongoProcessor;

@@ -8,6 +8,7 @@ import serverRouter from "./server";
 import setupRouter from "./setup";
 import roleRouter from "./role/role.route";
 import userRouter from "./users/user.routes";
+import auditLogsRouter from "./auditLogs/auditLogs.routes";
 
 const apiBuilder = new EcoSystemAPIBuilder();
 apiBuilder
@@ -18,7 +19,8 @@ apiBuilder
   .createRouterRoute("/server", serverRouter)
   .createRouterRoute("/setup", setupRouter)
   .createRouterRoute("/role", roleRouter)
-  .createRouterRoute("/users", userRouter);
+  .createRouterRoute("/users", userRouter)
+  .createRouterRoute("/auditLogs", auditLogsRouter);
 
 const apiBaseRoutes: Routes[] = apiBuilder.route;
 

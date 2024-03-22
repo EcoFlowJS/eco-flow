@@ -30,12 +30,10 @@ import {
   processTypeAlias,
   textFormat,
 } from "./helper/getTableColumnInfo.helper";
-import {
-  formateDateTime,
-  processMongo,
-} from "./helper/insertDatabaseData.helper";
-import mongoose, { Schema, Types } from "mongoose";
+import insertDatabaseDataMongoProcessor from "./helper/insertDatabaseDataMongoProcessor.helper";
+import mongoose from "mongoose";
 import dataProcessorMongo from "./helper/getDatabaseData.helper";
+import { Database as EcoDB } from "@eco-flow/database";
 
 export class SchemaEditorService implements SchemaEditor {
   private connection: DriverKnex | DriverMongoose;
@@ -397,7 +395,9 @@ export class SchemaEditorService implements SchemaEditor {
           ?.dateTimeFormat === "date" ||
         columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
           ?.dateTimeFormat === "time"
-          ? (insertData[key] = formateDateTime(new Date(insertData[key])))
+          ? (insertData[key] = EcoDB.formatKnexDateTime(
+              new Date(insertData[key])
+            ))
           : (insertData[key] = insertData[key]);
       });
 
@@ -423,7 +423,7 @@ export class SchemaEditorService implements SchemaEditor {
         .collection(collectionORtableName)
         .insertOne({
           _id: new mongoose.Types.ObjectId(id),
-          ...processMongo(value),
+          ...insertDatabaseDataMongoProcessor(value),
         });
 
       if (result.insertedId)
@@ -468,7 +468,7 @@ export class SchemaEditorService implements SchemaEditor {
             ?.dateTimeFormat === "date" ||
           columnInfo.filter((col) => col.name === key)[0].actualData?.columnData
             ?.dateTimeFormat === "time"
-            ? (newData[key] = formateDateTime(new Date(newData[key])))
+            ? (newData[key] = EcoDB.formatKnexDateTime(new Date(newData[key])))
             : (newData[key] = newData[key]);
       });
 
@@ -497,7 +497,10 @@ export class SchemaEditorService implements SchemaEditor {
         .collection(collectionORtableName)
         .updateOne(
           { _id: new mongoose.Types.ObjectId(oldData.id) },
-          { $set: processMongo(newData.value), $unset: oldData.data }
+          {
+            $set: insertDatabaseDataMongoProcessor(newData.value),
+            $unset: oldData.data,
+          }
         );
 
       if (result.matchedCount > 0)
