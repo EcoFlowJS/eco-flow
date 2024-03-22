@@ -38,9 +38,9 @@ export class EnvBuilder {
   ): Promise<void> {
     const existingENVsList =
       type === "SYS"
-        ? EnvBuilder.getSystemEnvs
+        ? (EnvBuilder.getSystemEnv() as Environment[])
         : type === "USER"
-        ? EnvBuilder.getUserEnvs
+        ? (EnvBuilder.getUserEnv() as Environment[])
         : [];
     const newEnvs: Environment[] = [];
 
@@ -112,25 +112,16 @@ export class EnvBuilder {
     );
   }
 
-  static get getSystemEnvs(): Environment[] {
-    return this.getSystemEnvNameList.map((env) => {
-      return <Environment>{
-        name: env.substring("ECOFLOW_SYS_".length),
-        value: process.env[env],
-      };
-    });
-  }
+  static getSystemEnv(envID?: string): Environment[] | Environment | null {
+    const { _ } = ecoFlow;
+    if (_.isUndefined(envID))
+      return this.getSystemEnvNameList.map((env) => {
+        return <Environment>{
+          name: env.substring("ECOFLOW_SYS_".length),
+          value: process.env[env],
+        };
+      });
 
-  static get getUserEnvs(): Environment[] {
-    return this.getUserEnvNameList.map((env) => {
-      return <Environment>{
-        name: env.substring("ECOFLOW_USER_".length),
-        value: process.env[env],
-      };
-    });
-  }
-
-  static getSystemEnv(envID: string): Environment | null {
     envID = envID.toLocaleUpperCase();
     if (typeof process.env[`ECOFLOW_SYS_${envID}`] !== "undefined")
       return {
@@ -140,14 +131,22 @@ export class EnvBuilder {
     return null;
   }
 
-  static getUserEnv(envID: string): Environment | null {
+  static getUserEnv(envID?: string): Environment | Environment[] {
+    const { _ } = ecoFlow;
+    if (_.isUndefined(envID))
+      return this.getUserEnvNameList.map((env) => {
+        return <Environment>{
+          name: env.substring("ECOFLOW_USER_".length),
+          value: process.env[env],
+        };
+      });
     envID = envID.toLocaleUpperCase();
     if (typeof process.env[`ECOFLOW_USER_${envID}`] !== "undefined")
       return {
         name: envID,
         value: process.env[`ECOFLOW_USER_${envID}`]!,
       };
-    return null;
+    return [];
   }
 
   static async setSystemEnv(

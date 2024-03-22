@@ -9,9 +9,10 @@ export interface AuditLogsResponse {
 }
 
 export interface AuditLog {
-  timeSpan: Date;
+  timeSpan?: Date;
   message: string;
   type: AuditLogType;
+  userID: string;
 }
 
 export interface AuditLogSchemaStruct extends AuditLog {

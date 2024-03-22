@@ -16,13 +16,18 @@ const auditLogSchemaMongoose = new Schema<AuditLogSchemaStruct>({
     required: true,
     type: String,
   },
+  userID: {
+    type: String,
+    required: true,
+  },
 });
 
 const auditLogSchemaKnex = (table: Knex.TableBuilder) => {
   table.increments("_id");
-  table.dateTime("timeSpan").defaultTo(EcoDB.formatKnexDateTime(new Date()));
-  table.string("message");
-  table.string("type");
+  table.dateTime("timeSpan").notNullable();
+  table.string("message").notNullable();
+  table.string("type").notNullable();
+  table.string("userID").notNullable();
 };
 
 export { auditLogSchemaMongoose, auditLogSchemaKnex };

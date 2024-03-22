@@ -25,9 +25,12 @@ export class AuditLogsService implements IAuditLogsService {
     let updated = false;
     if (this.database.isKnex(this.connection)) {
       const log = {
-        timeSpan: EcoDB.formatKnexDateTime(auditLog.timeSpan),
+        timeSpan: auditLog.timeSpan
+          ? EcoDB.formatKnexDateTime(auditLog.timeSpan)
+          : EcoDB.formatKnexDateTime(new Date()),
         message: auditLog.message,
         type: auditLog.type,
+        userID: auditLog.userID,
       };
 
       await (await auditLogsModelKnex(this.connection))().insert(log as any);
