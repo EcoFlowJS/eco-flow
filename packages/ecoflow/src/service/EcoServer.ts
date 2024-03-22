@@ -1,5 +1,5 @@
 import Koa from "koa";
-import koaBody, { HttpMethodEnum } from "koa-body";
+import koaBody from "koa-body";
 import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
@@ -10,7 +10,7 @@ import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
 import { Passport } from "./Passport";
 import { StrategyOptions } from "passport-jwt";
 import EcoFlow from "../lib/EcoFlow";
-import socketEvents from "../api/socketEvents";
+import socketEvents from "../api/socketEvents/socketEvents.events";
 
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
@@ -84,14 +84,6 @@ export class EcoServer extends Koa implements IEcoServer {
     this.use(
       koaBody({
         multipart: true,
-        parsedMethods: [
-          HttpMethodEnum.POST,
-          HttpMethodEnum.PUT,
-          HttpMethodEnum.PATCH,
-          HttpMethodEnum.GET,
-          HttpMethodEnum.HEAD,
-          HttpMethodEnum.DELETE,
-        ],
       })
     );
 

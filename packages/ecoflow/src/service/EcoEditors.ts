@@ -2,7 +2,6 @@ import loadAdmin from "@eco-flow/admin-panel";
 import loadFlow from "@eco-flow/flow-editor";
 import loadSchema from "@eco-flow/schema-editor";
 import loadLanding from "@eco-flow/base-panel";
-import loadEditorsApiRoutes from "../api";
 import {
   EcoFlow,
   EcoRouter as IEcoRouter,
@@ -14,6 +13,7 @@ import proxy from "koa-proxies";
 import { EcoRouter } from "./EcoRouter";
 import { Builder } from "@eco-flow/utils";
 import loadEnvironments from "../helper/env.helper";
+import editorsApiRoutes from "../api/editorsApiRoutes.routes";
 
 export class EcoEditors implements IEcoEditors {
   private server: IEcoServer;
@@ -47,8 +47,8 @@ export class EcoEditors implements IEcoEditors {
       loadEnvironments();
     };
 
-    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT)) await setEnv();
-
+    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT))
+      await setEnv();
     else if (
       process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT !==
       this.server.baseUrl + systemRouterOptions!.prefix
@@ -125,6 +125,6 @@ export class EcoEditors implements IEcoEditors {
   }
 
   static loadEditorsRoutes(): void {
-    loadEditorsApiRoutes();
+    editorsApiRoutes();
   }
 }

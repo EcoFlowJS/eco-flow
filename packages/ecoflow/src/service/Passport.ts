@@ -1,4 +1,4 @@
-import { EcoServer } from "@eco-flow/types";
+import { EcoServer, Environment } from "@eco-flow/types";
 import session from "koa-session";
 import {
   Strategy as JwtStrategy,
@@ -16,7 +16,8 @@ export class Passport {
     svr: EcoServer,
     options: StrategyOptions = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: Builder.ENV.getSystemEnv("TOKEN_SALT")?.value,
+      secretOrKey: (Builder.ENV.getSystemEnv("TOKEN_SALT") as Environment)
+        .value,
     }
   ) {
     this.svr = svr;
@@ -26,7 +27,9 @@ export class Passport {
 
   init() {
     this.initStrategy();
-    this.svr.keys = Builder.ENV.getSystemEnv("TOKEN_SECRET")!.value.split(",");
+    this.svr.keys = (
+      Builder.ENV.getSystemEnv("TOKEN_SECRET") as Environment
+    ).value.split(",");
     this.svr.use(session(this.svr));
     this.svr.use(this.passport.initialize());
     this.svr.use(this.passport.session());
