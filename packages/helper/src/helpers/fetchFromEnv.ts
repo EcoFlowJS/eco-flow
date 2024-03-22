@@ -1,3 +1,4 @@
+import { Environment } from "@eco-flow/types";
 import { Builder } from "@eco-flow/utils";
 
 export default (
@@ -7,9 +8,9 @@ export default (
   if (env.startsWith("env(") && env.endsWith(")")) {
     const name = env.substring(4, env.length - 1);
     return type === "user"
-      ? Builder.ENV.getUserEnv(name)?.value
+      ? (Builder.ENV.getUserEnv(name) as Environment).value
       : type === "system"
-      ? Builder.ENV.getSystemEnv(name)?.value
+      ? (Builder.ENV.getSystemEnv(name) as Environment).value
       : name;
   }
   return env;
