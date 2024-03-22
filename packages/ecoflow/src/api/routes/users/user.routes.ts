@@ -1,5 +1,5 @@
 import { EcoRouter } from "../../../service/EcoRouter";
-import fetchPermissions from "../../controllers/user/fetchPermissions";
+import fetchPermissions from "../../controllers/user/fetchPermissions.controller";
 
 const userRouter = EcoRouter.createRouter();
 export default userRouter;
