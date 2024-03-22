@@ -12,11 +12,6 @@ const commitEnvs = async (ctx: Context) => {
     case "user":
       await Builder.ENV.setUserEnv(envDir!, finalEnvs, true);
       loadEnvironments();
-      await service.AuditLogsService.addLog({
-        message: "User environments has been updated",
-        type: "Info",
-        userID: ctx.user,
-      });
 
       ctx.status = 200;
       ctx.body = <ApiResponse>{
@@ -26,16 +21,16 @@ const commitEnvs = async (ctx: Context) => {
           newEnvs: Builder.ENV.getUserEnv(),
         },
       };
+
+      await service.AuditLogsService.addLog({
+        message: "User environments has been updated",
+        type: "Info",
+        userID: ctx.user,
+      });
       break;
     case "system":
       await Builder.ENV.setSystemEnv(envDir!, finalEnvs);
       loadEnvironments();
-      await service.AuditLogsService.addLog({
-        message: "System environments has been updated",
-        type: "Info",
-        userID: ctx.user,
-      });
-
       ctx.status = 200;
       ctx.body = <ApiResponse>{
         success: true,
@@ -44,6 +39,12 @@ const commitEnvs = async (ctx: Context) => {
           newEnvs: Builder.ENV.getSystemEnv(),
         },
       };
+
+      await service.AuditLogsService.addLog({
+        message: "System environments has been updated",
+        type: "Info",
+        userID: ctx.user,
+      });
       break;
   }
 };

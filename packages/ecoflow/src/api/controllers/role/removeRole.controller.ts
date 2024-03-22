@@ -12,6 +12,12 @@ const removeRole = async (ctx: Context) => {
       success: true,
       payload: await service.RoleService.removeRole(id!),
     };
+
+    await service.AuditLogsService.addLog({
+      message: `Role with id ${id} has been removed`,
+      type: "Info",
+      userID: ctx.user,
+    });
   } catch (error) {
     ctx.status = 409;
     ctx.body = <ApiResponse>{

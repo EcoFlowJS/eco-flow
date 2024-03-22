@@ -28,12 +28,6 @@ const updateConnection = async (ctx: Context) => {
     }
 
     if (status) {
-      await service.AuditLogsService.addLog({
-        message: `Database connection named ${name} has been updated`,
-        type: "Info",
-        userID: ctx.user,
-      });
-
       ctx.body = {
         success: true,
         payload: {
@@ -44,6 +38,12 @@ const updateConnection = async (ctx: Context) => {
           },
         },
       };
+
+      await service.AuditLogsService.addLog({
+        message: `Database connection named ${name} has been updated`,
+        type: "Info",
+        userID: ctx.user,
+      });
     }
   } catch (err) {
     ctx.status = 200;

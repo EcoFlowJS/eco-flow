@@ -6,6 +6,7 @@ import {
   AuditLogsResponse,
   AuditLogsService as IAuditLogsService,
   AuditLog,
+  AuditLogSchemaStruct,
 } from "@eco-flow/types";
 import {
   auditLogsModelKnex,
@@ -54,13 +55,11 @@ export class AuditLogsService implements IAuditLogsService {
 
   async fetchAuditLogs(page: number = 1): Promise<AuditLogsResponse> {
     if (this.database.isKnex(this.connection)) {
-      const pageCount = Math.ceil(
+      const totalDocs = (
         (
-          (
-            await (await auditLogsModelKnex(this.connection))().select().count()
-          )[0] as any
-        )["count(*)"] / 100
-      );
+          await (await auditLogsModelKnex(this.connection))().select().count()
+        )[0] as any
+      )["count(*)"];
 
       const query = (await auditLogsModelKnex(this.connection))()
         .select()
@@ -69,17 +68,15 @@ export class AuditLogsService implements IAuditLogsService {
       if (page > 1) query.offset(page * 100);
 
       return {
-        pageCount: pageCount > 0 ? pageCount : 1,
+        totalDocs: totalDocs > 0 ? totalDocs : 1,
         logs: await query,
       };
     }
 
     if (this.database.isMongoose(this.connection)) {
-      const pageCount = Math.ceil(
-        (await auditLogsModelMongoose(this.connection)
-          .find()
-          .countDocuments()) / 100
-      );
+      const totalDocs = await auditLogsModelMongoose(this.connection)
+        .find()
+        .countDocuments();
 
       const query = auditLogsModelMongoose(this.connection)
         .find()
@@ -88,8 +85,11 @@ export class AuditLogsService implements IAuditLogsService {
       if (page > 1) query.skip(page * 100);
 
       return {
-        pageCount: pageCount > 0 ? pageCount : 1,
-        logs: await query,
+        totalDocs: totalDocs > 0 ? totalDocs : 1,
+        logs: (await query).map((logs: AuditLogSchemaStruct) => {
+          logs.timeSpan = EcoDB.formatKnexDateTime(logs.timeSpan!) as any;
+          return logs;
+        }),
       };
     }
 

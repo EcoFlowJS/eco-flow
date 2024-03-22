@@ -13,7 +13,7 @@ const refreshToken = async (ctx: Context, next: Next) => {
     return;
   }
 
-  const { TokenServices } = ecoFlow.service;
+  const { TokenServices, AuditLogsService } = ecoFlow.service;
   const options = ecoFlow.server.isSecure
     ? {
         secure: true,
@@ -31,6 +31,11 @@ const refreshToken = async (ctx: Context, next: Next) => {
       error: true,
       payload: "Not authorized User.",
     };
+    await AuditLogsService.addLog({
+      message: `Not authorized User.`,
+      type: "Error",
+      userID: "SYSTEM_LOG",
+    });
     return;
   }
   const user = Helper.verifyJwtToken(token);
@@ -40,6 +45,11 @@ const refreshToken = async (ctx: Context, next: Next) => {
       error: true,
       payload: "Invalid Refresh Token.",
     };
+    await AuditLogsService.addLog({
+      message: `Invalid Refresh Token.`,
+      type: "Warning",
+      userID: "SYSTEM_LOG",
+    });
     return;
   }
 
@@ -50,6 +60,11 @@ const refreshToken = async (ctx: Context, next: Next) => {
       error: true,
       payload: "Refresh Token Tampered.",
     };
+    await AuditLogsService.addLog({
+      message: `Refresh Token Tampered`,
+      type: "Warning",
+      userID: "SYSTEM_LOG",
+    });
     return;
   }
 

@@ -15,6 +15,12 @@ const createRole = async (ctx: Context) => {
         roleLike
       ),
     };
+
+    await service.AuditLogsService.addLog({
+      message: `New role named ${roleName} has been created`,
+      type: "Info",
+      userID: ctx.user,
+    });
   } catch (error) {
     ctx.status = 409;
     ctx.body = <ApiResponse>{

@@ -28,12 +28,6 @@ const createConnection = async (ctx: Context) => {
     }
 
     if (status) {
-      await service.AuditLogsService.addLog({
-        message: "New Database Connection has been created",
-        type: "Info",
-        userID: ctx.user,
-      });
-
       ctx.body = {
         success: true,
         payload: {
@@ -44,6 +38,12 @@ const createConnection = async (ctx: Context) => {
           },
         },
       };
+
+      await service.AuditLogsService.addLog({
+        message: "New Database Connection has been created",
+        type: "Info",
+        userID: ctx.user,
+      });
     }
   } catch (err) {
     ctx.status = 200;

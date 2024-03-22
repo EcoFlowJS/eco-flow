@@ -9,11 +9,6 @@ const serverCloseRestart = async (ctx: Context) => {
 
   switch (Mode) {
     case "restart":
-      await service.AuditLogsService.addLog({
-        message: `Server is restart process started`,
-        type: "Info",
-        userID: ctx.user,
-      });
       setTimeout(async () => {
         await service.AuditLogsService.addLog({
           message: `Server is restarted`,
@@ -26,13 +21,13 @@ const serverCloseRestart = async (ctx: Context) => {
         success: true,
         payload: "Server will be restart in 30 seconds",
       };
-      break;
-    case "stop":
       await service.AuditLogsService.addLog({
-        message: `Server is stop process started`,
+        message: `Server is restart process started`,
         type: "Info",
         userID: ctx.user,
       });
+      break;
+    case "stop":
       setTimeout(async () => {
         await service.AuditLogsService.addLog({
           message: `Server is stopped`,
@@ -45,6 +40,11 @@ const serverCloseRestart = async (ctx: Context) => {
         success: true,
         payload: "Server will be stopped in 30 seconds",
       };
+      await service.AuditLogsService.addLog({
+        message: `Server is stop process started`,
+        type: "Info",
+        userID: ctx.user,
+      });
       break;
     case "status":
       ctx.body = <ApiResponse>{

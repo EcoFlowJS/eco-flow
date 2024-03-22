@@ -4,7 +4,7 @@ export interface AuditLogsService {
 }
 
 export interface AuditLogsResponse {
-  pageCount: number;
+  totalDocs: number;
   logs: AuditLogSchemaStruct[];
 }
 

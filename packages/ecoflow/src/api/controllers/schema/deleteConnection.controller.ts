@@ -28,12 +28,6 @@ const deleteConnection = async (ctx: Context) => {
     return;
   }
 
-  await service.AuditLogsService.addLog({
-    message: `Database connection named ${ConnectionName} has been deleted`,
-    type: "Info",
-    userID: ctx.user,
-  });
-
   ctx.body = {
     success: true,
     payload: {
@@ -44,6 +38,12 @@ const deleteConnection = async (ctx: Context) => {
       },
     },
   };
+
+  await service.AuditLogsService.addLog({
+    message: `Database connection named ${ConnectionName} has been deleted`,
+    type: "Info",
+    userID: ctx.user,
+  });
 };
 
 export default deleteConnection;

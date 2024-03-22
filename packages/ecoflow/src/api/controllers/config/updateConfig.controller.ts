@@ -11,12 +11,6 @@ const updateConfig = async (ctx: Context) => {
     });
 
     const newConfigs = await config.setConfig(configs);
-    await service.AuditLogsService.addLog({
-      message: "New server configuration has been updated",
-      type: "Info",
-      userID: ctx.user,
-    });
-
     ctx.body = {
       success: true,
       payload: {
@@ -24,6 +18,12 @@ const updateConfig = async (ctx: Context) => {
         newConfigs: newConfigs,
       },
     };
+
+    await service.AuditLogsService.addLog({
+      message: "New server configuration has been updated",
+      type: "Info",
+      userID: ctx.user,
+    });
   } catch (error) {
     ctx.body = {
       error: true,
