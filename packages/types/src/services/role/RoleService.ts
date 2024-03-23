@@ -5,7 +5,7 @@ export interface RoleService {
     roleLike?: string | null,
     isDefault?: boolean
   ): Promise<Role[] | { _id: any }>;
-  fetchRole(id?: string): Promise<Role | Role[]>;
+  fetchRole(id?: string): Promise<Role[]>;
   updateRole(id: string, permissions: Permissions): Promise<Role[]>;
   removeRole(id: string): Promise<Role[]>;
 }

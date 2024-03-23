@@ -35,7 +35,7 @@ export class RoleService implements IRoleService {
     throw "Invalid database connection specified";
   }
 
-  async fetchRole(id?: string): Promise<Role | Role[]> {
+  async fetchRole(id?: string): Promise<Role[]> {
     if (this.dataBase.isKnex(this.connection)) {
       const query = (await RoleModelKnex(this.connection))().select();
       if (id) query.where({ _id: id });

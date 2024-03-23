@@ -35,14 +35,13 @@ const fetchpermissionList = async (
 };
 
 const fetchPermissions = async (ctx: Context) => {
-  const { username, mode } = ctx.params;
+  const { mode } = ctx.params;
   const { _, service } = ecoFlow;
-
-  if (_.isUndefined(username)) throw "Username must be specified";
 
   const { UserService, RoleService } = service;
 
   try {
+    const username = ctx.user;
     const payload = Object.create({});
 
     if (_.isUndefined(mode)) {

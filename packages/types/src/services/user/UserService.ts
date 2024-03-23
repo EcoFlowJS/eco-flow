@@ -11,6 +11,10 @@ export interface UserService {
   upddateUser(username: string, update: userTableCollection): Promise<UserInfo>;
 }
 
+interface AnyKeyBoolean {
+  [key: string]: boolean;
+}
+
 export interface UserInfo {
   _id?: string;
   name?: string;
@@ -33,7 +37,7 @@ export interface userTableCollection extends UserInfo {
   password?: string;
 }
 
-export interface UserPermissions {
+export interface UserPermissions extends AnyKeyBoolean {
   createUser: boolean;
   deleteUser: boolean;
   updateUser: boolean;
