@@ -57,3 +57,11 @@ export interface UserPermissions extends AnyKeyBoolean {
   auditLogs: boolean;
   administrator: boolean;
 }
+
+export interface UserInformations {
+  name: string;
+  username: string;
+  email: string;
+  isPermanent: boolean;
+  createdAt: Date;
+}

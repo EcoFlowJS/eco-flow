@@ -7,7 +7,7 @@ import userRolesRouter from "./roles/userRoles.routes";
 const userRouter = EcoRouter.createRouter();
 export default userRouter;
 
-userRouter.get("/user", isAuthenticated, fetchUserInfo);
+userRouter.get("/", isAuthenticated, fetchUserInfo);
 
 userRouter.use("/permissions", userPermissionsRouter.routes());
 userRouter.use("/roles", userRolesRouter.routes());

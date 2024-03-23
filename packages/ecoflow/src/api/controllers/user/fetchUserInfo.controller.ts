@@ -16,7 +16,10 @@ const fetchUserInfo = async (ctx: Context) => {
         username: user.username,
         email: user.email,
         isPermanent: user.isPermanent,
-        createdAt: user.created_at,
+        createdAt:
+          typeof user.created_at === "string"
+            ? new Date(user.created_at)
+            : user.created_at,
       },
     };
   } catch (error) {
