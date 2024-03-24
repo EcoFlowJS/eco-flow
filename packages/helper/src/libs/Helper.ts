@@ -15,6 +15,7 @@ import getCookieHelper from "../helpers/getCookieHelper";
 import compareHashHelper from "../helpers/compareHashHelper";
 import createHashHelper from "../helpers/createHashHelper";
 import xssFilterHelper from "../helpers/xssFilterHelper";
+import validatePasswordRegex from "../helpers/validatePasswordRegex";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -94,5 +95,9 @@ export class Helper {
     name: string
   ): Promise<string | undefined> {
     return await getCookieHelper(ctx, name);
+  }
+
+  static validatePasswordRegex(value: string): boolean {
+    return validatePasswordRegex(value);
   }
 }

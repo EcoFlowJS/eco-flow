@@ -7,8 +7,20 @@ export interface UserService {
     userInfo: userTableCollection,
     isAdmin?: boolean
   ): Promise<ApiResponse>;
-  getUserAllInfo(username?: string): Promise<GetUserInfo>;
+  getUserInfos(): Promise<GetUserInfo>;
+  getUserInfos(username?: string): Promise<GetUserInfoSingle>;
   upddateUser(username: string, update: userTableCollection): Promise<UserInfo>;
+  updatePassword(
+    username: string,
+    oldPassword: string,
+    password: string
+  ): Promise<UserInfo>;
+  updatePassword(
+    username: string,
+    oldPassword: string,
+    password: string,
+    ignoreCheck?: boolean
+  ): Promise<UserInfo>;
 }
 
 interface AnyKeyBoolean {
@@ -30,7 +42,12 @@ export interface UserInfo {
 
 export interface GetUserInfo {
   isAvailable: boolean;
-  user?: userTableCollection | userTableCollection[];
+  user?: userTableCollection[];
+}
+
+export interface GetUserInfoSingle {
+  isAvailable: boolean;
+  user?: userTableCollection;
 }
 
 export interface userTableCollection extends UserInfo {

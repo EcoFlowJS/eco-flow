@@ -6,9 +6,8 @@ const getUserRoles =
   (io: Server) =>
   async ({ roomID, UserID }: any) => {
     const { UserService, RoleService } = ecoFlow.service;
-    const userRoles: Array<any> = (<any>(
-      (await UserService.getUserAllInfo(UserID)).user!
-    )).roles;
+    const userRoles: Array<any> = (await UserService.getUserInfos(UserID)).user!
+      .roles;
 
     let roles = Object.create({});
     for await (const userRole of userRoles) {

@@ -158,9 +158,7 @@ export class RoleService implements IRoleService {
     const { _, service, server } = ecoFlow;
     if (_.isUndefined(id)) throw "Role id not defined";
 
-    for await (const user of <userTableCollection[]>(
-      (await service.UserService.getUserAllInfo()).user
-    )) {
+    for await (const user of (await service.UserService.getUserInfos()).user!) {
       const permissions = user.roles.filter(
         (role: string) => role.toString() !== id.toString()
       );

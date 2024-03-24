@@ -3,6 +3,7 @@ import {
   Database,
   DatabaseConnection,
   GetUserInfo,
+  GetUserInfoSingle,
   UserService as IUserService,
   UserInfo,
   userTableCollection,
@@ -72,9 +73,11 @@ export class UserService implements IUserService {
     }
   }
 
-  async getUserAllInfo(username?: string): Promise<GetUserInfo> {
+  async getUserInfos(
+    username?: string
+  ): Promise<GetUserInfoSingle & GetUserInfo> {
     try {
-      const userInfo: GetUserInfo = Object.create({});
+      const userInfo: GetUserInfoSingle | GetUserInfo = Object.create({});
       userInfo.isAvailable = false;
       const findQuerry = {
         ...(username ? { username: username.toLowerCase() } : {}),
@@ -100,7 +103,7 @@ export class UserService implements IUserService {
         userInfo.user = username ? user[0] : user;
       }
 
-      return userInfo;
+      return <GetUserInfoSingle & GetUserInfo>userInfo;
     } catch (error) {
       throw error;
     }
@@ -149,5 +152,54 @@ export class UserService implements IUserService {
       return users;
     }
     throw "Invalid database connection specified";
+  }
+
+  async updatePassword(
+    username: string,
+    oldPassword: string,
+    password: string,
+    ignoreCheck: boolean = false
+  ): Promise<UserInfo> {
+    const { _, server } = ecoFlow;
+    if (_.isUndefined(username)) throw "Username is required";
+    if (_.isUndefined(oldPassword)) throw "Old password is required";
+    if (_.isUndefined(password)) throw "New password is required";
+
+    if (oldPassword === password)
+      throw "New password is same as the current password";
+
+    const { isAvailable, user } = await this.getUserInfos(username);
+
+    if (!isAvailable) throw `No user found with username ${username}`;
+
+    if (
+      !ignoreCheck &&
+      !(await Helper.compareHash(
+        oldPassword,
+        (<userTableCollection>user).password!
+      ))
+    )
+      throw `Invalid old password.`;
+
+    if (
+      !ignoreCheck &&
+      !_.isEmpty((<userTableCollection>user).oldPassword) &&
+      (await Helper.compareHash(
+        password,
+        (<userTableCollection>user).oldPassword!
+      ))
+    )
+      throw "Last used password can't be update as new password. Please use another password";
+
+    if (!Helper.validatePasswordRegex(password))
+      throw "Password must have at least a symbol, upper and lower case letters and a number.";
+
+    oldPassword = (<userTableCollection>user).password!;
+    password = await Helper.createHash(password);
+
+    return await this.upddateUser(username, {
+      password,
+      oldPassword,
+    });
   }
 }

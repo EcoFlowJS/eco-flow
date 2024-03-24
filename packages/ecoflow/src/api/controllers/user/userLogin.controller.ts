@@ -6,7 +6,7 @@ const userLogin = async (ctx: Context) => {
   const { username, password } = ctx.request.body;
   const { server, service } = ecoFlow;
   const { UserService, TokenServices } = service;
-  const { isAvailable, user } = await UserService.getUserAllInfo(username);
+  const { isAvailable, user } = await UserService.getUserInfos(username);
   const options = server.isSecure
     ? {
         secure: true,

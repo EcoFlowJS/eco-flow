@@ -5,9 +5,7 @@ const fetchUserInfo = async (ctx: Context) => {
   const { _, service } = ecoFlow;
   try {
     const { UserService } = service;
-    const user = <userTableCollection>(
-      (await UserService.getUserAllInfo(ctx.user)).user
-    );
+    const user = (await UserService.getUserInfos(ctx.user)).user!;
 
     ctx.body = <ApiResponse>{
       success: true,

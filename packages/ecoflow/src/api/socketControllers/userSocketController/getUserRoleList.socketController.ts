@@ -6,7 +6,7 @@ const getUserRoleList =
     const { UserService } = ecoFlow.service;
     io.to(roomID).emit(
       "userRoleListUpdateResponse",
-      (<any>(await UserService.getUserAllInfo(UserID)).user!).roles
+      (await UserService.getUserInfos(UserID)).user!.roles
     );
   };
 
