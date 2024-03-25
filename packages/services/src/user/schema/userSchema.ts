@@ -1,5 +1,5 @@
 import { Knex, userTableCollection } from "@eco-flow/types";
-import { Schema } from "mongoose";
+import { ObjectId, Schema } from "mongoose";
 
 const mongooseSchema = new Schema<userTableCollection>({
   name: String,
@@ -13,7 +13,7 @@ const mongooseSchema = new Schema<userTableCollection>({
   },
   roles: {
     required: true,
-    type: String,
+    type: Array<ObjectId>,
   },
   isActive: {
     required: true,

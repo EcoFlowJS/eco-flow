@@ -7,6 +7,8 @@ export interface UserService {
     userInfo: userTableCollection,
     isAdmin?: boolean
   ): Promise<ApiResponse>;
+  getUsernames(): Promise<string[]>;
+  getUsernames(isSystem?: boolean): Promise<string[]>;
   getUserInfos(): Promise<GetUserInfo>;
   getUserInfos(username?: string): Promise<GetUserInfoSingle>;
   upddateUser(username: string, update: userTableCollection): Promise<UserInfo>;
@@ -31,7 +33,7 @@ export interface UserInfo {
   _id?: string;
   name?: string;
   username?: string;
-  roles?: Array<any> | any;
+  roles?: Array<any>;
   isActive?: boolean;
   email?: string;
   oldPassword?: string;

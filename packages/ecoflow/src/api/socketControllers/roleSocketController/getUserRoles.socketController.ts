@@ -6,8 +6,8 @@ const getUserRoles =
   (io: Server) =>
   async ({ roomID, UserID }: any) => {
     const { UserService, RoleService } = ecoFlow.service;
-    const userRoles: Array<any> = (await UserService.getUserInfos(UserID)).user!
-      .roles;
+    const userRoles: any[] =
+      (await UserService.getUserInfos(UserID)).user!.roles || [];
 
     let roles = Object.create({});
     for await (const userRole of userRoles) {
@@ -17,7 +17,7 @@ const getUserRoles =
         break;
       }
 
-      Object.keys(role.permissions as Permissions).map((rolekey: string) => {
+      Object.keys(role.permissions as Permissions).map((rolekey: any) => {
         if ((role.permissions as Permissions)[rolekey]) roles[rolekey] = true;
       });
     }

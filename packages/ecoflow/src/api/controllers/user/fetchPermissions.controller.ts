@@ -12,7 +12,7 @@ const fetchRoleList = async (
   UserService: UserService,
   username: string
 ): Promise<any[]> => {
-  return (await UserService.getUserInfos(username)).user!.roles;
+  return (await UserService.getUserInfos(username)).user!.roles || [];
 };
 
 const fetchpermissionList = async (
@@ -20,6 +20,7 @@ const fetchpermissionList = async (
   userRoles: any[]
 ) => {
   let roles = Object.create({});
+
   for await (const userRole of userRoles) {
     const role: Role = ((await RoleService.fetchRole(userRole)) as Role[])[0];
     if (role.isDefault) {
@@ -27,10 +28,11 @@ const fetchpermissionList = async (
       break;
     }
 
-    Object.keys(role.permissions as Permissions).map((rolekey: string) => {
+    Object.keys(role.permissions as Permissions).map((rolekey: any) => {
       if ((role.permissions as Permissions)[rolekey]) roles[rolekey] = true;
     });
   }
+
   return roles;
 };
 
@@ -67,6 +69,8 @@ const fetchPermissions = async (ctx: Context) => {
       payload: payload,
     };
   } catch (error) {
+    console.log(error);
+
     ctx.status = 409;
     ctx.body = <ApiResponse>{
       error: true,

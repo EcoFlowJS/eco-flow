@@ -60,7 +60,7 @@ export class RoleService implements IRoleService {
     roleLike?: string | null,
     isDefault: boolean = false
   ): Promise<Role[] | { _id: any }> {
-    const { _ } = ecoFlow;
+    const { _, server } = ecoFlow;
     if (_.isEmpty(role.name)) throw "Role name is empty";
     if (_.isEmpty(role.permissions)) role.permissions = {};
 
@@ -81,12 +81,15 @@ export class RoleService implements IRoleService {
 
         if (isDefault) return id[0];
 
-        return (<Role[]>(
+        const roles = (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
         )).map((role) => {
           role.permissions = JSON.parse(role.permissions as string);
           return role;
         });
+        server.socket.to(["roles"]).emit("roleCreated", roles);
+
+        return roles;
       } catch (e: any) {
         throw e.toString();
       }
@@ -101,8 +104,13 @@ export class RoleService implements IRoleService {
             })
           )[0].permissions;
         }
-        await RoleModelMongoose(this.connection).create(role);
-        return await RoleModelMongoose(this.connection).find();
+
+        const newRole = await RoleModelMongoose(this.connection).create(role);
+        if (isDefault) return newRole;
+
+        const roles = await RoleModelMongoose(this.connection).find({});
+        server.socket.to(["roles"]).emit("roleCreated", roles);
+        return roles;
       } catch (e: any) {
         throw e.toString();
       }
@@ -159,7 +167,7 @@ export class RoleService implements IRoleService {
     if (_.isUndefined(id)) throw "Role id not defined";
 
     for await (const user of (await service.UserService.getUserInfos()).user!) {
-      const permissions = user.roles.filter(
+      const permissions = user.roles!.filter(
         (role: string) => role.toString() !== id.toString()
       );
       await service.UserService.upddateUser(user.username!, {
@@ -175,12 +183,14 @@ export class RoleService implements IRoleService {
           .delete()
           .where({ _id: id });
 
-        return (<Role[]>(
+        const roles = (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
         )).map((role) => {
           role.permissions = JSON.parse(role.permissions as string);
           return role;
         });
+        server.socket.to(["roles"]).emit("roleRemoved", roles);
+        return roles;
       } catch (e: any) {
         throw e.toString();
       }
@@ -191,7 +201,10 @@ export class RoleService implements IRoleService {
         await RoleModelMongoose(this.connection).deleteOne({
           _id: new Types.ObjectId(id),
         });
-        return await RoleModelMongoose(this.connection).find();
+
+        const roles = await RoleModelMongoose(this.connection).find();
+        server.socket.to(["roles"]).emit("roleRemoved", roles);
+        return roles;
       } catch (e: any) {
         throw e.toString();
       }

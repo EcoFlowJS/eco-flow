@@ -10,6 +10,7 @@ import {
 } from "@eco-flow/types";
 import { userModelKnex, userModelMongoose } from "./model/userModel";
 import Helper from "@eco-flow/helper";
+import { Types } from "mongoose";
 
 export class UserService implements IUserService {
   private dataBase: Database;
@@ -28,9 +29,11 @@ export class UserService implements IUserService {
 
     if (this.dataBase.isKnex(this.connection)) {
       if (
-        (await (await userModelKnex(this.connection))().count())[0][
-          "count(*)"
-        ] > 0
+        Number(
+          (await (await userModelKnex(this.connection))().count())[0][
+            "count(*)"
+          ]
+        ) > 0
       )
         response = false;
     }
@@ -48,8 +51,12 @@ export class UserService implements IUserService {
 
     try {
       if (await this.isNoUser()) {
-        if (this.dataBase.isMongoose(this.connection))
+        if (this.dataBase.isMongoose(this.connection)) {
+          userInfo.roles = userInfo.roles!.map((role) =>
+            role instanceof Types.ObjectId ? role : new Types.ObjectId(role)
+          );
           await userModelMongoose(this.connection).create(userInfo);
+        }
 
         if (this.dataBase.isKnex(this.connection)) {
           userInfo.roles = JSON.stringify(userInfo.roles) as any;
@@ -71,6 +78,34 @@ export class UserService implements IUserService {
         payload: error,
       };
     }
+  }
+
+  async getUsernames(isSystem: boolean = false): Promise<string[]> {
+    if (this.dataBase.isKnex(this.connection)) {
+      const query = (await userModelKnex<UserInfo>(this.connection))().select();
+      if (!isSystem)
+        query.where({
+          isPermanent: false,
+        });
+
+      const usernames = await query.returning("username");
+
+      return usernames.map((username) => username.username!);
+    }
+
+    if (this.dataBase.isMongoose(this.connection))
+      return (
+        await userModelMongoose<UserInfo>(this.connection).find(
+          isSystem
+            ? {}
+            : {
+                isPermanent: false,
+              },
+          "username"
+        )
+      ).map((username) => username.username!);
+
+    throw "Invalid database connection specified";
   }
 
   async getUserInfos(
@@ -120,7 +155,7 @@ export class UserService implements IUserService {
     if (this.dataBase.isKnex(this.connection)) {
       update.updated_at = this.connection.functionHelper.now();
       if (!_.isUndefined(update.roles))
-        update.roles = JSON.stringify(update.roles);
+        update.roles = JSON.stringify(update.roles) as any;
 
       const users = await (await userModelKnex<UserInfo>(this.connection))()
         .update(update, "*")

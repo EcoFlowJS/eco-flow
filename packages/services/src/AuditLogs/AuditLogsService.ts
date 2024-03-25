@@ -65,7 +65,7 @@ export class AuditLogsService implements IAuditLogsService {
         .select()
         .limit(100)
         .orderBy("_id", "desc");
-      if (page > 1) query.offset(page * 100);
+      if (page > 1) query.offset((page - 1) * 100);
 
       return {
         totalDocs: totalDocs > 0 ? totalDocs : 1,
@@ -82,7 +82,7 @@ export class AuditLogsService implements IAuditLogsService {
         .find()
         .limit(100)
         .sort({ _id: -1 });
-      if (page > 1) query.skip(page * 100);
+      if (page > 1) query.skip((page - 1) * 100);
 
       return {
         totalDocs: totalDocs > 0 ? totalDocs : 1,

@@ -6,7 +6,8 @@ const fetchRoles = async (ctx: Context) => {
 
   try {
     const { UserService, RoleService } = service;
-    const userRoles = (await UserService.getUserInfos(ctx.user)).user!.roles;
+    const userRoles =
+      (await UserService.getUserInfos(ctx.user)).user!.roles || [];
 
     const result = [];
     for await (const roleID of userRoles) {
