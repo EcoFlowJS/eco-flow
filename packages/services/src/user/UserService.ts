@@ -41,6 +41,53 @@ export class UserService implements IUserService {
     return response;
   }
 
+  async isUserExist(userId: string): Promise<boolean> {
+    if (this.dataBase.isKnex(this.connection)) {
+      return (
+        Number(
+          (
+            await (await userModelKnex(this.connection))().count().where({
+              username: userId,
+            })
+          )[0]["count(*)"]
+        ) > 0
+      );
+    }
+
+    if (this.dataBase.isMongoose(this.connection))
+      return (
+        (await userModelMongoose(this.connection)
+          .find({ username: userId })
+          .countDocuments()) > 0
+      );
+
+    throw "Invalid database connection specified";
+  }
+
+  async isActiveUser(userId: string): Promise<boolean> {
+    if (this.dataBase.isKnex(this.connection)) {
+      return (
+        Number(
+          (
+            await (await userModelKnex(this.connection))().count().where({
+              username: userId,
+              isActive: true,
+            })
+          )[0]["count(*)"]
+        ) > 0
+      );
+    }
+
+    if (this.dataBase.isMongoose(this.connection))
+      return (
+        (await userModelMongoose(this.connection)
+          .find({ username: userId, isActive: true })
+          .countDocuments()) > 0
+      );
+
+    throw "Invalid database connection specified";
+  }
+
   async createUser(
     userInfo: userTableCollection,
     isAdmin = false
@@ -50,27 +97,28 @@ export class UserService implements IUserService {
     if (isAdmin) userInfo.isPermanent = true;
 
     try {
-      if (await this.isNoUser()) {
-        if (this.dataBase.isMongoose(this.connection)) {
-          userInfo.roles = userInfo.roles!.map((role) =>
-            role instanceof Types.ObjectId ? role : new Types.ObjectId(role)
-          );
-          await userModelMongoose(this.connection).create(userInfo);
-        }
-
-        if (this.dataBase.isKnex(this.connection)) {
-          userInfo.roles = JSON.stringify(userInfo.roles) as any;
-          await (await userModelKnex(this.connection))().insert(userInfo);
-        }
-
+      if (isAdmin && !(await this.isNoUser()))
         return {
-          success: true,
-          payload: "User Credentials created successfully.",
+          error: true,
+          payload: "some User Credentials already exists.",
         };
+
+      if (this.dataBase.isMongoose(this.connection)) {
+        userInfo.roles = userInfo.roles!.map((role) =>
+          role instanceof Types.ObjectId ? role : new Types.ObjectId(role)
+        );
+        await userModelMongoose(this.connection).create(userInfo);
       }
+
+      if (this.dataBase.isKnex(this.connection)) {
+        userInfo.roles = JSON.stringify(userInfo.roles) as any;
+        await (await userModelKnex(this.connection))().insert(userInfo);
+      }
+
+      ecoFlow.server.socket.emit("createdUser", await this.getUsernames());
       return {
-        error: true,
-        payload: "some User Credentials already exists.",
+        success: true,
+        payload: "User Credentials created successfully.",
       };
     } catch (error) {
       return {
@@ -109,14 +157,15 @@ export class UserService implements IUserService {
   }
 
   async getUserInfos(
-    username?: string
+    username?: string,
+    isAll: boolean = false
   ): Promise<GetUserInfoSingle & GetUserInfo> {
     try {
       const userInfo: GetUserInfoSingle | GetUserInfo = Object.create({});
       userInfo.isAvailable = false;
       const findQuerry = {
         ...(username ? { username: username.toLowerCase() } : {}),
-        isActive: true,
+        ...(isAll ? {} : { isActive: true }),
       };
       let user: userTableCollection[] = [];
 
@@ -146,7 +195,8 @@ export class UserService implements IUserService {
 
   async upddateUser(
     username: string,
-    update: userTableCollection
+    update: userTableCollection,
+    isIgnoreActive: boolean = false
   ): Promise<UserInfo> {
     const { _, server } = ecoFlow;
     if (_.isUndefined(username)) throw "Username is required";
@@ -157,22 +207,29 @@ export class UserService implements IUserService {
       if (!_.isUndefined(update.roles))
         update.roles = JSON.stringify(update.roles) as any;
 
-      const users = await (await userModelKnex<UserInfo>(this.connection))()
+      const users = await (
+        await userModelKnex<UserInfo>(this.connection)
+      )()
         .update(update, "*")
-        .where({ username: username, isActive: true });
-      server.socket.to(["users"]).emit("userUpdated");
+        .where({
+          username: username,
+          ...(isIgnoreActive ? {} : { isActive: true }),
+        });
+      server.socket.emit("userUpdated");
 
       return users[0];
     }
 
     if (this.dataBase.isMongoose(this.connection)) {
       update.updated_at = new Date();
+      if (!_.isUndefined(update.roles))
+        update.roles = update.roles.map((role) => new Types.ObjectId(role));
       const users = <UserInfo>await userModelMongoose<UserInfo>(
         this.connection
       ).updateOne(
         {
           username: username,
-          isActive: true,
+          ...(isIgnoreActive ? {} : { isActive: true }),
         },
         {
           $set: {
@@ -182,7 +239,7 @@ export class UserService implements IUserService {
         { new: true }
       );
 
-      server.socket.to(["users"]).emit("userUpdated");
+      server.socket.emit("userUpdated");
 
       return users;
     }

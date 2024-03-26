@@ -22,7 +22,10 @@ const mongooseSchema = new Schema<userTableCollection>({
   },
   email: String,
   oldPassword: String,
-  isPermanent: Boolean,
+  isPermanent: {
+    type: Boolean,
+    default: false,
+  },
   created_at: {
     type: Date,
     default: Date.now,
@@ -39,10 +42,10 @@ const knexSchema = (table: Knex.TableBuilder) => {
   table.string("username");
   table.json("roles");
   table.string("password");
-  table.boolean("isActive");
+  table.boolean("isActive").defaultTo(true);
   table.string("email");
   table.string("oldPassword");
-  table.boolean("isPermanent");
+  table.boolean("isPermanent").defaultTo(false);
   table.timestamps(true, true);
 };
 

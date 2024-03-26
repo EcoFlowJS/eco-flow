@@ -12,7 +12,7 @@ const fetchRoleList = async (
   UserService: UserService,
   username: string
 ): Promise<any[]> => {
-  return (await UserService.getUserInfos(username)).user!.roles || [];
+  return (await UserService.getUserInfos(username)).user?.roles || [];
 };
 
 const fetchpermissionList = async (

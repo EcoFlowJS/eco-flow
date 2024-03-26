@@ -3,6 +3,8 @@ import { ApiResponse } from "../../ecoflow";
 
 export interface UserService {
   isNoUser(): Promise<boolean>;
+  isUserExist(userId: string): Promise<boolean>;
+  isActiveUser(userId: string): Promise<boolean>;
   createUser(
     userInfo: userTableCollection,
     isAdmin?: boolean
@@ -11,7 +13,13 @@ export interface UserService {
   getUsernames(isSystem?: boolean): Promise<string[]>;
   getUserInfos(): Promise<GetUserInfo>;
   getUserInfos(username?: string): Promise<GetUserInfoSingle>;
+  getUserInfos(username?: string, isAll?: boolean): Promise<GetUserInfoSingle>;
   upddateUser(username: string, update: userTableCollection): Promise<UserInfo>;
+  upddateUser(
+    username: string,
+    update: userTableCollection,
+    isIgnoreActive?: boolean
+  ): Promise<UserInfo>;
   updatePassword(
     username: string,
     oldPassword: string,

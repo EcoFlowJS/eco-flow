@@ -87,7 +87,7 @@ export class RoleService implements IRoleService {
           role.permissions = JSON.parse(role.permissions as string);
           return role;
         });
-        server.socket.to(["roles"]).emit("roleCreated", roles);
+        server.socket.emit("roleCreated", roles);
 
         return roles;
       } catch (e: any) {
@@ -109,7 +109,7 @@ export class RoleService implements IRoleService {
         if (isDefault) return newRole;
 
         const roles = await RoleModelMongoose(this.connection).find({});
-        server.socket.to(["roles"]).emit("roleCreated", roles);
+        server.socket.emit("roleCreated", roles);
         return roles;
       } catch (e: any) {
         throw e.toString();
@@ -131,7 +131,7 @@ export class RoleService implements IRoleService {
           .update({ permissions: JSON.stringify(permissions) })
           .where({ _id: id });
 
-        server.socket.to(["roles"]).emit("roleUpdated");
+        server.socket.emit("roleUpdated");
 
         return (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
@@ -151,7 +151,7 @@ export class RoleService implements IRoleService {
           { $set: { permissions } }
         );
 
-        server.socket.to(["roles"]).emit("roleUpdated");
+        server.socket.emit("roleUpdated");
 
         return await RoleModelMongoose(this.connection).find();
       } catch (e: any) {
@@ -175,7 +175,7 @@ export class RoleService implements IRoleService {
       });
     }
 
-    server.socket.to(["roles"]).emit("roleUpdated");
+    server.socket.emit("roleUpdated");
 
     if (this.dataBase.isKnex(this.connection)) {
       try {
@@ -189,7 +189,7 @@ export class RoleService implements IRoleService {
           role.permissions = JSON.parse(role.permissions as string);
           return role;
         });
-        server.socket.to(["roles"]).emit("roleRemoved", roles);
+        server.socket.emit("roleRemoved", roles);
         return roles;
       } catch (e: any) {
         throw e.toString();
@@ -203,7 +203,7 @@ export class RoleService implements IRoleService {
         });
 
         const roles = await RoleModelMongoose(this.connection).find();
-        server.socket.to(["roles"]).emit("roleRemoved", roles);
+        server.socket.emit("roleRemoved", roles);
         return roles;
       } catch (e: any) {
         throw e.toString();

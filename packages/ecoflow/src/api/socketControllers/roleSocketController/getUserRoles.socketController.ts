@@ -4,10 +4,11 @@ import roleAdmin from "../../../defaults/roleAdmin.default";
 
 const getUserRoles =
   (io: Server) =>
-  async ({ roomID, UserID }: any) => {
+  async ({ roomID }: any) => {
     const { UserService, RoleService } = ecoFlow.service;
+    const isActiveUser = await UserService.isActiveUser(roomID);
     const userRoles: any[] =
-      (await UserService.getUserInfos(UserID)).user!.roles || [];
+      (await UserService.getUserInfos(roomID)).user?.roles || [];
 
     let roles = Object.create({});
     for await (const userRole of userRoles) {
@@ -22,7 +23,7 @@ const getUserRoles =
       });
     }
 
-    io.to(roomID).emit("roleUpdateResponse", roles);
+    io.to(roomID).emit("roleUpdateResponse", { isActiveUser, roles });
   };
 
 export default getUserRoles;

@@ -1,5 +1,5 @@
 import { Role, Knex } from "@eco-flow/types";
-import mongoose, { Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 const RoleSchemaMongoose = new Schema<Role>({
   name: String,
@@ -14,7 +14,7 @@ const RoleSchemaKnex = (table: Knex.TableBuilder) => {
   table.increments("_id");
   table.string("name");
   table.boolean("isDefault").defaultTo(false);
-  table.json("permissions");
+  table.json("permissions").defaultTo("{}");
 };
 
 export { RoleSchemaMongoose, RoleSchemaKnex };

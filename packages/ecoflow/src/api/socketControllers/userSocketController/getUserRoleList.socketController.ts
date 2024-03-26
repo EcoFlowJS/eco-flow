@@ -2,12 +2,13 @@ import { Server } from "socket.io";
 
 const getUserRoleList =
   (io: Server) =>
-  async ({ roomID, UserID }: any) => {
+  async ({ roomID }: any) => {
     const { UserService } = ecoFlow.service;
-    io.to(roomID).emit(
-      "userRoleListUpdateResponse",
-      (await UserService.getUserInfos(UserID)).user!.roles
-    );
+    const isActiveUser = await UserService.isActiveUser(roomID);
+    io.to(roomID).emit("userRoleListUpdateResponse", {
+      isActiveUser,
+      roles: (await UserService.getUserInfos(roomID)).user?.roles || [],
+    });
   };
 
 export default getUserRoleList;
