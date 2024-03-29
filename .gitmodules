@@ -1,17 +1,17 @@
 [submodule "editors/schema-editor"]
 	path = editors/schema-editor
-	url = https://github.com/RomelSikdar/schema-editor.git
+	url = https://github.com/EcoFlowJS/schema-editor.git
 	
 [submodule "editors/flow-editor"]
 	path = editors/flow-editor
-	url = https://github.com/RomelSikdar/flow-editor.git
+	url = https://github.com/EcoFlowJS/flow-editor.git
 
 [submodule "editors/admin-panel"]
 	path = editors/admin-panel
-	url = https://github.com/RomelSikdar/admin-panel.git
+	url = https://github.com/EcoFlowJS/admin-panel.git
 [submodule "editors/base-panel"]
 	path = editors/base-panel
-	url = https://github.com/RomelSikdar/ecoflow-base-panel.git
+	url = https://github.com/EcoFlowJS/base-panel.git
 [submodule "editors/components-lib"]
 	path = editors/components-lib
-	url = https://github.com/RomelSikdar/ecoflow-components
+	url = https://github.com/EcoFlowJS/ecoflow-components.git
