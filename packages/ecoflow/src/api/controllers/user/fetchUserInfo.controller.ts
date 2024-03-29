@@ -1,4 +1,4 @@
-import { ApiResponse, userTableCollection } from "@eco-flow/types";
+import { ApiResponse, userTableCollection } from "@ecoflow/types";
 import { Context } from "koa";
 
 const fetchUserInfo = async (ctx: Context) => {

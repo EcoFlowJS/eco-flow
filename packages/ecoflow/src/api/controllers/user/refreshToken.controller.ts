@@ -1,4 +1,4 @@
-import Helper from "@eco-flow/helper";
+import Helper from "@ecoflow/helper";
 import { Context, Next } from "koa";
 import _ from "lodash";
 

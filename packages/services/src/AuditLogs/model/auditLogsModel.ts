@@ -3,7 +3,7 @@ import {
   DriverKnex,
   DriverMongoose,
   Knex,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { Model, Document } from "mongoose";
 import {
   auditLogSchemaKnex,

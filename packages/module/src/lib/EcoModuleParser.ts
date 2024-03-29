@@ -1,4 +1,4 @@
-import { EcoModuleParser as IEcoModuleParser } from "@eco-flow/types";
+import { EcoModuleParser as IEcoModuleParser } from "@ecoflow/types";
 import fse from "fs-extra";
 import _ from "lodash";
 

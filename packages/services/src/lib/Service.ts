@@ -5,7 +5,7 @@ import {
   SchemaEditorService as ISchemaEditorService,
   RoleService as IRoleService,
   AuditLogsService as IAuditLogsService,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { UserService } from "../user";
 import { TokenServices } from "../token";
 import { SchemaEditorService } from "../SchemaEditor/SchemaEditorService";

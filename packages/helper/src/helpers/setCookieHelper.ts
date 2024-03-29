@@ -1,4 +1,4 @@
-import { SetOption } from "@eco-flow/types";
+import { SetOption } from "@ecoflow/types";
 import { Context } from "koa";
 import { Helper } from "../libs";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@eco-flow/types",
+  "name": "@ecoflow/types",
   "version": "0.0.1",
   "main": "./index.js",
   "types": "./dist/types/index.d.ts",

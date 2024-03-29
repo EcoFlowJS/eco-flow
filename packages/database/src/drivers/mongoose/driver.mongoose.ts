@@ -2,7 +2,7 @@ import {
   CollectionInfo,
   DriverMongoose as IDriverMongoose,
   collectionInfoOptions,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import mongoose, {
   ApplySchemaOptions,
   CompileModelOptions,

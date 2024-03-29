@@ -1,7 +1,7 @@
 import {
   EcoAPIRouterBuilder as IEcoAPIRouterBuilder,
   Routes,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import Router, { RouterOptions } from "@koa/router";
 
 export class EcoAPIRouterBuilder

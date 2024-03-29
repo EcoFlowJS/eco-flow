@@ -1,4 +1,4 @@
-import { SocketServer } from "@eco-flow/types";
+import { SocketServer } from "@ecoflow/types";
 import baseEvents from "./baseEvents/baseEvents.events";
 import roleEvents from "./roleEvents/roleEvents.events";
 import userEvents from "./userEvents/userEvents.events";

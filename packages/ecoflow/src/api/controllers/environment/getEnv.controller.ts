@@ -1,4 +1,4 @@
-import { Builder } from "@eco-flow/utils";
+import { Builder } from "@ecoflow/utils";
 import { Context } from "koa";
 
 const getEnv = (ctx: Context) => {

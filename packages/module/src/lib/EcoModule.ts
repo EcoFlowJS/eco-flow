@@ -1,11 +1,11 @@
-import { EcoModule as IEcoModule, Module } from "@eco-flow/types";
+import { EcoModule as IEcoModule, Module } from "@ecoflow/types";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import _ from "lodash";
 import { homedir } from "node:os";
 import path from "path";
 import fse, { promises } from "fs-extra";
 import { SearchResults, searchPackages } from "query-registry";
-import { Helper } from "@eco-flow/helper";
+import { Helper } from "@ecoflow/helper";
 import { ModuleEntryPoint } from "../constants/constants";
 
 export class EcoModule implements IEcoModule {

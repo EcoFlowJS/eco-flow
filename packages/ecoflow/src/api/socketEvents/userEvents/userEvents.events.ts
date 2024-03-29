@@ -1,4 +1,4 @@
-import { SocketServer } from "@eco-flow/types";
+import { SocketServer } from "@ecoflow/types";
 import getUserRoleList from "../../socketControllers/userSocketController/getUserRoleList.socketController";
 
 const userEvents = ({ io, socket }: SocketServer) => {

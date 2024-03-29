@@ -1,5 +1,5 @@
-import EcoFlow from "@eco-flow/ecoflow";
-import { CliService as ICliService, ICommand } from "@eco-flow/types";
+import EcoFlow from "@ecoflow/ecoflow";
+import { CliService as ICliService, ICommand } from "@ecoflow/types";
 import { spawn, ChildProcess } from "child_process";
 import chalk from "chalk";
 
@@ -11,7 +11,7 @@ export class CliService implements ICliService {
   private get generatedExecutableCode(): string {
     return `
     "use strict";
-    const EcoFlow = require("@eco-flow/ecoflow").default;
+    const EcoFlow = require("@ecoflow/ecoflow").default;
     (async () => {
       await new EcoFlow({ cli: JSON.parse(\`${JSON.stringify(
         this.args

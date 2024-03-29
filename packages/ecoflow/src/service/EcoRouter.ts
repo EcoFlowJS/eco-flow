@@ -1,7 +1,7 @@
 import { homedir } from "os";
 import path from "path";
 import fs from "fs";
-import { EcoServer, EcoRouter as IEcoRouter } from "@eco-flow/types";
+import { EcoServer, EcoRouter as IEcoRouter } from "@ecoflow/types";
 import { DefaultState, DefaultContext } from "koa";
 import KoaRouter, { RouterOptions } from "@koa/router";
 import mount from "koa-mount";

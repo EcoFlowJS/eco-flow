@@ -1,5 +1,5 @@
-import { Environment } from "@eco-flow/types";
-import { Builder } from "@eco-flow/utils";
+import { Environment } from "@ecoflow/types";
+import { Builder } from "@ecoflow/utils";
 
 export default (
   env: string,

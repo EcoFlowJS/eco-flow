@@ -1,4 +1,4 @@
-import { Database as EcoDB } from "@eco-flow/database";
+import { Database as EcoDB } from "@ecoflow/database";
 import {
   Database,
   DriverKnex,
@@ -7,7 +7,7 @@ import {
   AuditLogsService as IAuditLogsService,
   AuditLog,
   AuditLogSchemaStruct,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import {
   auditLogsModelKnex,
   auditLogsModelMongoose,

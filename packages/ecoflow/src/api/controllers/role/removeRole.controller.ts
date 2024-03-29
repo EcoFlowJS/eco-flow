@@ -1,4 +1,4 @@
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 const removeRole = async (ctx: Context) => {

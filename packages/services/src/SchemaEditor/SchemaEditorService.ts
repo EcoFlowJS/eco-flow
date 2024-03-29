@@ -15,7 +15,7 @@ import {
   CommitSaveTableColumnResult,
   DriverKnex,
   AlterSqliteColumn,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import {
   alterColumn,
   alterSqliteColumn,
@@ -33,7 +33,7 @@ import {
 import insertDatabaseDataMongoProcessor from "./helper/insertDatabaseDataMongoProcessor.helper";
 import mongoose from "mongoose";
 import dataProcessorMongo from "./helper/getDatabaseData.helper";
-import { Database as EcoDB } from "@eco-flow/database";
+import { Database as EcoDB } from "@ecoflow/database";
 
 export class SchemaEditorService implements SchemaEditor {
   private connection: DriverKnex | DriverMongoose;

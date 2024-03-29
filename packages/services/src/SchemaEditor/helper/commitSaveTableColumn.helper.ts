@@ -5,7 +5,7 @@ import {
   DriverKnex,
   Knex,
   KnexDB_Driver,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 
 const processTable = (
   columnBuilder: Knex.ColumnBuilder,

@@ -1,9 +1,9 @@
-import Helper from "@eco-flow/helper";
+import Helper from "@ecoflow/helper";
 import {
   ConnectionConfig,
   ConnectionDefinations,
   DB_Drivers,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import _ from "lodash";
 import fse from "fs-extra";
 import path from "path";

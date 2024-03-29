@@ -1,4 +1,4 @@
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ConnectionDefinations } from "@ecoflow/types";
 import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
 import { Context } from "koa";
 

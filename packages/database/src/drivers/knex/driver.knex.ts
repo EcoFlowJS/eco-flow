@@ -2,7 +2,7 @@ import {
   DriverKnex as IDriverKnex,
   DBConfig,
   KnexDB_Driver,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import knex, { Knex } from "knex";
 
 export type { Knex } from "knex";

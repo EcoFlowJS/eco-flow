@@ -9,7 +9,7 @@ import { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken";
 import verifyJwtToken from "../helpers/verifyJwtToken";
 import type { Context } from "koa";
 import setCookieHelper from "../helpers/setCookieHelper";
-import { SetOption } from "@eco-flow/types";
+import { SetOption } from "@ecoflow/types";
 import listAllCookies from "../helpers/listAllCookies";
 import getCookieHelper from "../helpers/getCookieHelper";
 import compareHashHelper from "../helpers/compareHashHelper";

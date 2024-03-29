@@ -1,4 +1,4 @@
-import { Knex, userTableCollection } from "@eco-flow/types";
+import { Knex, userTableCollection } from "@ecoflow/types";
 import { ObjectId, Schema } from "mongoose";
 
 const mongooseSchema = new Schema<userTableCollection>({

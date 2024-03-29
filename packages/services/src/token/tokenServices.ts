@@ -3,10 +3,10 @@ import {
   DatabaseConnection,
   DriverKnex,
   TokenServices as ITokenServices,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { tokenModelKnex, tokenModelMongoose } from "./model/token.model";
 import knexSeed from "./seed/knex.seed";
-import Helper from "@eco-flow/helper";
+import Helper from "@ecoflow/helper";
 
 export class TokenServices implements ITokenServices {
   private dataBase: Database;

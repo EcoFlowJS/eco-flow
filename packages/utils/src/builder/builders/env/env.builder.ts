@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
-import { Environment } from "@eco-flow/types";
+import { Environment } from "@ecoflow/types";
 
 export class EnvBuilder {
   private generateEnvName(name: string, type: "SYS" | "USER" = "USER"): string {

@@ -1,4 +1,4 @@
-import { ApiResponse, UserInfo } from "@eco-flow/types";
+import { ApiResponse, UserInfo } from "@ecoflow/types";
 import { Context } from "koa";
 
 const updateUser = async (ctx: Context) => {

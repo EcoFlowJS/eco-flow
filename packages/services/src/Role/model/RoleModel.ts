@@ -1,4 +1,4 @@
-import { DriverKnex, DriverMongoose, Knex, Role } from "@eco-flow/types";
+import { DriverKnex, DriverMongoose, Knex, Role } from "@ecoflow/types";
 import mongoose, { Model } from "mongoose";
 import { RoleSchemaKnex, RoleSchemaMongoose } from "../schema/RoleSchema";
 

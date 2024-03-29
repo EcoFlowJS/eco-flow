@@ -1,5 +1,5 @@
 {
-  "name": "@eco-flow/services",
+  "name": "@ecoflow/services",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -15,9 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/database": "^0.1.0",
-    "@eco-flow/helper": "^1.0.0",
-    "@eco-flow/types": "^0.0.1",
+    "@ecoflow/database": "^0.1.0",
+    "@ecoflow/helper": "^1.0.0",
+    "@ecoflow/types": "^0.0.1",
     "mongoose": "^8.0.3"
   }
 }

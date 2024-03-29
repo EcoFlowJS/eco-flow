@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ConnectionDefinations } from "@ecoflow/types";
 import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
 
 const createConnection = async (ctx: Context) => {

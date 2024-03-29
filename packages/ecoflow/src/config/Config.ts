@@ -4,7 +4,7 @@ import { glob } from "glob";
 import { homedir } from "os";
 import { merge } from "lodash";
 import defaultConfig from "./default.config";
-import { configOptions, Config as IConfig } from "@eco-flow/types";
+import { configOptions, Config as IConfig } from "@ecoflow/types";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment

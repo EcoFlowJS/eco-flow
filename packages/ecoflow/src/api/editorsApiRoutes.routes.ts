@@ -1,4 +1,4 @@
-import { EcoSystemAPIBuilder } from "@eco-flow/api";
+import { EcoSystemAPIBuilder } from "@ecoflow/api";
 import apiBaseRoutes from "./routes/apiBaseRoutes.routes";
 
 const editorsApiRoutes = () => {

@@ -4,7 +4,7 @@ import {
   Role,
   RoleService,
   UserService,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { Context } from "koa";
 import roleAdmin from "../../../defaults/roleAdmin.default";
 

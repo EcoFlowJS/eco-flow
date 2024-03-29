@@ -1,6 +1,6 @@
 import { Context } from "koa";
 import { systemDatabaseConfigutations } from "../../../helpers/parseServerConfigHelper";
-import { ApiResponse, userTableCollection } from "@eco-flow/types";
+import { ApiResponse, userTableCollection } from "@ecoflow/types";
 
 interface TimeSpansSteup {
   initTimeSpan: Date;

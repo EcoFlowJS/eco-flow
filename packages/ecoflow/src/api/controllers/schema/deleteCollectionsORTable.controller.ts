@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 
 const deleteCollectionsORTable = async (ctx: Context) => {
   const { _, database, service } = ecoFlow;

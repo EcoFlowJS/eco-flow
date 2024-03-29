@@ -1,4 +1,4 @@
-import { CollectionInfo } from "@eco-flow/types";
+import { CollectionInfo } from "@ecoflow/types";
 import { Connection } from "mongoose";
 
 const aggregateHelper = (options: {

@@ -1,5 +1,5 @@
 {
-  "name": "@eco-flow/cli",
+  "name": "@ecoflow/cli",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -16,8 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/ecoflow": "^0.0.1",
-    "@eco-flow/types": "^0.0.1",
+    "@ecoflow/ecoflow": "^0.0.1",
+    "@ecoflow/types": "^0.0.1",
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
     "lodash": "^4.17.21"

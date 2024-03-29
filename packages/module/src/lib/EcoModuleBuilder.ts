@@ -2,7 +2,7 @@ import {
   EcoModuleBuilder as IEcoModuleBuilder,
   Module,
   ModuleManifest,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import md5 from "md5";
 import _ from "lodash";
 import path from "path";

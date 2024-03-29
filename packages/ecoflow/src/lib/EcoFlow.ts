@@ -1,16 +1,16 @@
 import { Config } from "../config";
-import { EcoOptions, ICommand } from "@eco-flow/types";
+import { EcoOptions, ICommand } from "@ecoflow/types";
 import _ from "lodash";
-import { Logger } from "@eco-flow/utils";
+import { Logger } from "@ecoflow/utils";
 import EcoContainer from "./EcoContainer";
-import { EcoFlow as IEcoFlow } from "@eco-flow/types";
+import { EcoFlow as IEcoFlow } from "@ecoflow/types";
 import { EcoServer } from "../service/EcoServer";
 import { EcoRouter } from "../service/EcoRouter";
 import { EcoHelper } from "./EcoHelper";
-import { Database } from "@eco-flow/database";
-import { Service } from "@eco-flow/services";
+import { Database } from "@ecoflow/database";
+import { Service } from "@ecoflow/services";
 import { Server as SocketServer } from "socket.io";
-import EcoModule from "@eco-flow/module";
+import EcoModule from "@ecoflow/module";
 import loadEnvironments from "../helper/env.helper";
 
 class EcoFlow implements IEcoFlow {

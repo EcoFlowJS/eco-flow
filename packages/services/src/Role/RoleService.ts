@@ -5,7 +5,7 @@ import {
   Permissions,
   Role,
   userTableCollection,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { RoleModelKnex, RoleModelMongoose } from "./model/RoleModel";
 import { Types } from "mongoose";
 

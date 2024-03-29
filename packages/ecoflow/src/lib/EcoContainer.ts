@@ -1,4 +1,4 @@
-import { EcoContainer as IEcoContainer } from "@eco-flow/types";
+import { EcoContainer as IEcoContainer } from "@ecoflow/types";
 
 export default class EcoContainer implements IEcoContainer {
   registered = new Map<string, unknown>();

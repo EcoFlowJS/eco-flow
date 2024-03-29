@@ -1,11 +1,11 @@
 import { Command, CommandOptions, Option } from "commander";
 import baseCommand from "../commands/command";
 import adminCommand from "../commands/admin";
-import EcoFlow from "@eco-flow/ecoflow";
+import EcoFlow from "@ecoflow/ecoflow";
 import {
   CliService as ICliService,
   CommanderCli as ICommanderCli,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { CliService } from "./CliService";
 
 /**

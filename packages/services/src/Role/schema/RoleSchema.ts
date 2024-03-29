@@ -1,4 +1,4 @@
-import { Role, Knex } from "@eco-flow/types";
+import { Role, Knex } from "@ecoflow/types";
 import { Schema } from "mongoose";
 
 const RoleSchemaMongoose = new Schema<Role>({

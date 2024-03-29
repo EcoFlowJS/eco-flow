@@ -1,4 +1,4 @@
-import { DriverKnex, DriverMongoose } from "@eco-flow/types";
+import { DriverKnex, DriverMongoose } from "@ecoflow/types";
 import tokenSchema from "../schema/token.schema";
 
 export const tokenModelMongoose = (connection: DriverMongoose) => {

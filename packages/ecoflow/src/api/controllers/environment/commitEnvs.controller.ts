@@ -1,6 +1,6 @@
 import { Context } from "koa";
-import { Builder } from "@eco-flow/utils";
-import { ApiResponse } from "@eco-flow/types";
+import { Builder } from "@ecoflow/utils";
+import { ApiResponse } from "@ecoflow/types";
 import loadEnvironments from "../../../helper/env.helper";
 
 const commitEnvs = async (ctx: Context) => {

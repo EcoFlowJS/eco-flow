@@ -1,5 +1,5 @@
 {
-  "name": "@eco-flow/api",
+  "name": "@ecoflow/api",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-flow/types": "^0.0.1",
+    "@ecoflow/types": "^0.0.1",
     "@koa/router": "^11.0.2",
     "koa": "^2.14.2"
   },

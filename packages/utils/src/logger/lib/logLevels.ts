@@ -1,4 +1,4 @@
-import { LogLevel as ILogLevel } from "@eco-flow/types";
+import { LogLevel as ILogLevel } from "@ecoflow/types";
 
 export const LogLevel: ILogLevel = {
   ERROR: 0,

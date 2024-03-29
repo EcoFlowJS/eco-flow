@@ -1,17 +1,17 @@
-import loadAdmin from "@eco-flow/admin-panel";
-import loadFlow from "@eco-flow/flow-editor";
-import loadSchema from "@eco-flow/schema-editor";
-import loadLanding from "@eco-flow/base-panel";
+import loadAdmin from "@ecoflow/admin-panel";
+import loadFlow from "@ecoflow/flow-editor";
+import loadSchema from "@ecoflow/schema-editor";
+import loadLanding from "@ecoflow/base-panel";
 import {
   EcoFlow,
   EcoRouter as IEcoRouter,
   EcoServer as IEcoServer,
   EcoEditors as IEcoEditors,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import _ from "lodash";
 import proxy from "koa-proxies";
 import { EcoRouter } from "./EcoRouter";
-import { Builder } from "@eco-flow/utils";
+import { Builder } from "@ecoflow/utils";
 import loadEnvironments from "../helper/env.helper";
 import editorsApiRoutes from "../api/editorsApiRoutes.routes";
 

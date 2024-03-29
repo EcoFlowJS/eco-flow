@@ -1,5 +1,5 @@
 import { joinRoom } from "../../socketControllers/base.socketController";
-import { SocketServer } from "@eco-flow/types";
+import { SocketServer } from "@ecoflow/types";
 
 const baseEvents = ({ socket }: SocketServer) => {
   socket.on("join", joinRoom(socket));

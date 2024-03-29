@@ -1,4 +1,4 @@
-import { EcoServer, Environment } from "@eco-flow/types";
+import { EcoServer, Environment } from "@ecoflow/types";
 import session from "koa-session";
 import {
   Strategy as JwtStrategy,
@@ -6,7 +6,7 @@ import {
   StrategyOptions,
 } from "passport-jwt";
 import passport from "koa-passport";
-import { Builder } from "@eco-flow/utils";
+import { Builder } from "@ecoflow/utils";
 
 export class Passport {
   private svr: EcoServer;

@@ -1,5 +1,5 @@
-import Helper from "@eco-flow/helper";
-import { Builder } from "@eco-flow/utils";
+import Helper from "@ecoflow/helper";
+import { Builder } from "@ecoflow/utils";
 import { Context } from "koa";
 import jwt from "jsonwebtoken";
 import envLoadHelper from "../../../helper/env.helper";

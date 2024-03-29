@@ -1,4 +1,4 @@
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 const getCollectionOrTable = async (ctx: Context) => {

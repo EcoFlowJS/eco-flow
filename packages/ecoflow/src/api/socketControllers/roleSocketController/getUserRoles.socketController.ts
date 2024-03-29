@@ -1,4 +1,4 @@
-import { Permissions, Role } from "@eco-flow/types";
+import { Permissions, Role } from "@ecoflow/types";
 import { Server } from "socket.io";
 import roleAdmin from "../../../defaults/roleAdmin.default";
 

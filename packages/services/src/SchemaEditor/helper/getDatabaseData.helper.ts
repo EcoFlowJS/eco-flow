@@ -1,4 +1,4 @@
-import { CollectionInfo, DriverMongoose } from "@eco-flow/types";
+import { CollectionInfo, DriverMongoose } from "@ecoflow/types";
 import { Types } from "mongoose";
 
 const processMongo = async (

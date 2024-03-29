@@ -1,5 +1,5 @@
-import Helper from "@eco-flow/helper";
-import { ApiResponse } from "@eco-flow/types";
+import Helper from "@ecoflow/helper";
+import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 const createUser = async (ctx: Context) => {

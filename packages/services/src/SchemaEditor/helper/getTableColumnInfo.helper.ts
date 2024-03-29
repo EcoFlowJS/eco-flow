@@ -4,7 +4,7 @@ import {
   DatabaseTableTypes,
   Knex,
   KnexDB_Driver,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 
 const textFormat = (type: any): DatabaseCreateEditModel["textFormat"] =>
   type === "varchar" || type === "character varying"

@@ -1,4 +1,4 @@
-import { DriverKnex } from "@eco-flow/types";
+import { DriverKnex } from "@ecoflow/types";
 
 export default async (connection: DriverKnex) => {
   await connection.schemaBuilder.createTable("tokens", function (table) {

@@ -1,4 +1,4 @@
-import { EcoFactory as IEcoFactory } from "@eco-flow/types";
+import { EcoFactory as IEcoFactory } from "@ecoflow/types";
 import Router from "@koa/router";
 export class EcoFactory implements IEcoFactory {
   constructor() {}

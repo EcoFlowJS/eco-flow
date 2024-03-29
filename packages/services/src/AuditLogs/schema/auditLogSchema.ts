@@ -1,6 +1,6 @@
-import { AuditLogSchemaStruct, Knex, AuditLogType } from "@eco-flow/types";
+import { AuditLogSchemaStruct, Knex, AuditLogType } from "@ecoflow/types";
 import { Schema } from "mongoose";
-import { Database as EcoDB } from "@eco-flow/database";
+import { Database as EcoDB } from "@ecoflow/database";
 
 const auditLogSchemaMongoose = new Schema<AuditLogSchemaStruct>({
   timeSpan: {

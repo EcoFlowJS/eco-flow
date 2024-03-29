@@ -6,7 +6,7 @@ import httpsServer, { Server as HttpsServer } from "https";
 import { Server, Socket } from "socket.io";
 import _ from "lodash";
 import koaCors from "@koa/cors";
-import { EcoServer as IEcoServer, configOptions } from "@eco-flow/types";
+import { EcoServer as IEcoServer, configOptions } from "@ecoflow/types";
 import { Passport } from "./Passport";
 import { StrategyOptions } from "passport-jwt";
 import EcoFlow from "../lib/EcoFlow";

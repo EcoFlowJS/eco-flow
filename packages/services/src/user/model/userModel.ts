@@ -3,7 +3,7 @@ import {
   DriverMongoose,
   Knex,
   userTableCollection,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { knexSchema, mongooseSchema } from "../schema/userSchema";
 import mongoose, { Model } from "mongoose";
 export const userModelMongoose = <T extends userTableCollection>(

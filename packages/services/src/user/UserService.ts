@@ -7,9 +7,9 @@ import {
   UserService as IUserService,
   UserInfo,
   userTableCollection,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { userModelKnex, userModelMongoose } from "./model/userModel";
-import Helper from "@eco-flow/helper";
+import Helper from "@ecoflow/helper";
 import { Types } from "mongoose";
 
 export class UserService implements IUserService {

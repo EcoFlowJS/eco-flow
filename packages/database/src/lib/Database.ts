@@ -8,13 +8,13 @@ import {
   DriverKnex as IDriverKnex,
   DBConfig,
   ConnectionList,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import fse from "fs-extra";
 import path from "path";
 import { DriverKnex, DriverMongoose } from "../drivers";
 import _ from "lodash";
-import Helper from "@eco-flow/helper";
-import { Builder } from "@eco-flow/utils";
+import Helper from "@ecoflow/helper";
+import { Builder } from "@ecoflow/utils";
 
 export class Database implements IDatabase {
   private connections: Map<string, DatabaseConnection> = new Map<

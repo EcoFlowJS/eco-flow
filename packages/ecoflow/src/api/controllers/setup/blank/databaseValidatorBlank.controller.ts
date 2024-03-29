@@ -1,4 +1,4 @@
-import { ApiResponse, configOptions } from "@eco-flow/types";
+import { ApiResponse, configOptions } from "@ecoflow/types";
 import { Context } from "koa";
 import { systemDatabaseConfigutations } from "../../../helpers/parseServerConfigHelper";
 

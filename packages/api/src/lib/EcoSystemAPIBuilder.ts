@@ -1,7 +1,7 @@
 import {
   EcoSystemAPIBuilder as IEcoSystemAPIBuilder,
   Routes,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import Router from "@koa/router";
 import { DefaultContext, DefaultState } from "koa";
 

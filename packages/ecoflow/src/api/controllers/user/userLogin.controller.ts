@@ -1,5 +1,5 @@
-import Helper from "@eco-flow/helper";
-import { ApiResponse, userTableCollection } from "@eco-flow/types";
+import Helper from "@ecoflow/helper";
+import { ApiResponse, userTableCollection } from "@ecoflow/types";
 import { Context } from "koa";
 
 const userLogin = async (ctx: Context) => {

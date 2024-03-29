@@ -1,5 +1,5 @@
-import { Builder } from "@eco-flow/utils";
-import { EcoFlow } from "@eco-flow/types";
+import { Builder } from "@ecoflow/utils";
+import { EcoFlow } from "@ecoflow/types";
 import path from "path";
 import fse from "fs-extra";
 import crypto from "crypto";

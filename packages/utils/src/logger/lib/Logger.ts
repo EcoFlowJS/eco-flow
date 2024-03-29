@@ -20,7 +20,7 @@ import {
   configOptions,
   loggerOptions,
   Logger as ILogger,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { homedir } from "os";
 import fs from "fs";
 import { LogLevelName } from "./logger.const";

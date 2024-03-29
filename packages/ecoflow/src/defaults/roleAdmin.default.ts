@@ -1,4 +1,4 @@
-import { UserPermissions } from "@eco-flow/types";
+import { UserPermissions } from "@ecoflow/types";
 
 const roleAdmin: UserPermissions = {
   createUser: true,

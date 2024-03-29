@@ -1,6 +1,6 @@
-import { Routes } from "@eco-flow/types";
+import { Routes } from "@ecoflow/types";
 import authRouter from "./auth/auth.routes";
-import { EcoSystemAPIBuilder } from "@eco-flow/api";
+import { EcoSystemAPIBuilder } from "@ecoflow/api";
 import initRouter from "./init/index.routes";
 import schemaRouter from "./schema/schema.routes";
 import adminRouter from "./admin/admin.routes";

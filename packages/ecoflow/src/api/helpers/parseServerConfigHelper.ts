@@ -1,4 +1,4 @@
-import { ConnectionConfig, DB_Drivers, configOptions } from "@eco-flow/types";
+import { ConnectionConfig, DB_Drivers, configOptions } from "@ecoflow/types";
 import fse from "fs-extra";
 import path from "path";
 
