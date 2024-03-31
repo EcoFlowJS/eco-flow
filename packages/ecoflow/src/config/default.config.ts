@@ -14,9 +14,9 @@ const defaultConfig: configOptions = {
    *  - DB_DriverDir
    ******************************************************************************/
   userDir: baseUserDir, // Base directory where all  directiory files are stored.
-  moduleDir: baseUserDir + "/nodes", // Directory where all nodes are installed and stored.
+  moduleDir: baseUserDir + "/modules", // Directory where all modules are installed and stored.
   envDir: baseUserDir + "/environment", // Directory where all environment variables are stored.
-  DB_Directory: path.join(baseUserDir, "Database"), // Directory where all Database Connection files are stored.
+  DB_Directory: path.join(baseUserDir, "Database").replace(/\\/g, "/"), // Directory where all Database Connection files are stored.
 
   /*******************************************************************************
    * Flow File Settings
@@ -142,12 +142,9 @@ const defaultConfig: configOptions = {
   database: {
     driver: "SQLite",
     configuration: {
-      filename: path.join(
-        baseUserDir,
-        "Database",
-        "DB_connections",
-        "ecoflowDB.sqlite"
-      ),
+      filename: path
+        .join(baseUserDir, "Database", "DB_connections", "ecoflowDB.sqlite")
+        .replace(/\\/g, "/"),
     },
   },
 };

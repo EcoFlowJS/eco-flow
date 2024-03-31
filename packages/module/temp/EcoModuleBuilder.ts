@@ -27,18 +27,6 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
   }
 
   /**
-   * Generates unique identifier for the modules and nodes.
-   * To generate a unique identifier for a group leave no need to provide node name.
-   * To generate a unique identifier for nodes node name is requied.
-   * @param nodeName module name for whose id is to be generated.
-   * @returns {string} md5 hashed id string
-   */
-  private generateModuleID(nodeName?: string): string {
-    if (_.isEmpty(nodeName)) return md5(this.manifest.name);
-    return md5(`${this.manifest.name}.${nodeName}`);
-  }
-
-  /**
    * Generates the Actuall Name for the modules.
    * @param name module name for whose actual name is to be generated
    * @returns {string} Actual name of the module.
@@ -117,13 +105,5 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
       modules.push(node);
     });
     return modules;
-  }
-
-  /**
-   * Show the version of the module.
-   * @returns {string} Version of the module.
-   */
-  get version(): string {
-    return this.packageJson.version;
   }
 }
