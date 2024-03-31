@@ -22,7 +22,6 @@
     "fs-extra": "^11.2.0",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
-    "query-registry": "^2.6.0",
-    "uuid": "^9.0.1"
+    "query-registry": "^2.6.0"
   }
 }
