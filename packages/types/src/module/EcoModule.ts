@@ -2,6 +2,7 @@ import { SearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
+import { EcoNodeBuilder, Node, Nodes } from "./EcoNodeBuilder";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
@@ -10,19 +11,26 @@ export interface EcoModule {
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
   installedModules(): Promise<string[]>;
-
-  getModule(): ModuleSchema[];
-  getModule(moduleID?: string): ModuleSchema;
-
-  getNodes(): ModuleNodes[];
-  getNodes(nodeID?: string): ModuleNodes | null;
-
+  getModuleSchema(): ModuleSchema[];
+  getModuleSchema(moduleID?: string): ModuleSchema;
+  getModule(): Module[];
+  getModule(moduleID?: string): Module | null;
+  getNodes(): Nodes[];
+  getNodes(nodeID?: string): Node | null;
   getModuleBuilder(): Promise<EcoModuleBuilder>;
+  get getNodeBuilder(): EcoNodeBuilder | null;
 }
 
 export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug";
 
-export type ModuleSpecsInputsTypes = "String" | "Options" | "Code";
+export type ModuleSpecsInputsTypes =
+  | "Route"
+  | "Methods"
+  | "String"
+  | "Options"
+  | "Code";
+
+export type API_METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export interface ModuleSpecsInputsTypeOptions {
   name: string;
@@ -33,14 +41,15 @@ export interface ModuleSpecsInputs {
   name: string;
   type: ModuleSpecsInputsTypes;
   options?: ModuleSpecsInputsTypeOptions[];
+  methods?: API_METHODS[];
 }
 
 export interface ModuleSpecs {
   name: string;
   type: ModuleTypes;
   describtion?: string;
-  input?: ModuleSpecsInputs[];
-  controller?: string;
+  inputs?: ModuleSpecsInputs[];
+  controller?: string | Function;
 }
 
 export interface ModuleNodes extends ModuleSpecs {

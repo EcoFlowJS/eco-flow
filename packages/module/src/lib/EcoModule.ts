@@ -1,8 +1,12 @@
 import {
+  EcoNodeBuilder as IEcoNodeBuilder,
   EcoModule as IEcoModule,
   EcoModuleBuilder as IEcoModuleBuilder,
+  Module,
   ModuleNodes,
   ModuleSchema,
+  Node,
+  Nodes,
 } from "@ecoflow/types";
 import _ from "lodash";
 import { homedir } from "node:os";
@@ -18,9 +22,11 @@ import {
 } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
+import { EcoNodeBuilder } from "./EcoNodeBuilder";
 
 export class EcoModule implements IEcoModule {
-  private modules: ModuleSchema[] = [];
+  private moduleSchema: ModuleSchema[] = [];
+  private nodes: ModuleNodes[] = [];
   private modulePath: string;
   private nodesPath: string;
 
@@ -79,14 +85,14 @@ export class EcoModule implements IEcoModule {
   }
 
   private addModule(modules: ModuleSchema) {
-    this.modules = this.modules.filter(
+    this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== modules.module?.id._id
     );
-    this.modules.push(modules);
+    this.moduleSchema.push(modules);
   }
 
   private dropModule(moduleID: EcoModuleID) {
-    this.modules = this.modules.filter(
+    this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== moduleID._id
     );
   }
@@ -97,33 +103,36 @@ export class EcoModule implements IEcoModule {
     );
   }
 
-  getModule(moduleID?: string): ModuleSchema & ModuleSchema[] {
+  getModuleSchema(moduleID?: string): ModuleSchema & ModuleSchema[] {
     if (_.isUndefined(moduleID))
-      return <ModuleSchema & ModuleSchema[]>[...this.modules];
-    const module = this.modules.filter((m) => m.module?.id._id === moduleID);
+      return <ModuleSchema & ModuleSchema[]>[...this.moduleSchema];
+    const moduleSchema = this.moduleSchema.filter(
+      (m) => m.module?.id._id === moduleID
+    );
     return <ModuleSchema & ModuleSchema[]>(
-      (module.length > 0 ? module[0] : null)
+      (moduleSchema.length > 0 ? moduleSchema[0] : null)
     );
   }
 
-  getNodes(nodeID?: string): (ModuleNodes | null) & ModuleNodes[] {
-    if (_.isUndefined(nodeID)) {
-      const nodes: ModuleNodes[] = [];
-      this.getModule().forEach((m) => {
-        m.module?.nodes.forEach((n) => nodes.push(n));
-      });
-      return <(ModuleNodes | null) & ModuleNodes[]>nodes;
-    }
+  getModule(moduleID?: string): (Module | null) & Module[] {
+    if (_.isUndefined(moduleID))
+      return <(Module | null) & Module[]>this.moduleSchema.map((m) => m.module);
 
-    let result: ModuleNodes | null = null;
-    for (const m of this.getModule()) {
-      const node = m.module?.nodes.filter((n) => n.id._id === nodeID);
-      if (node && node.length > 0) {
-        result = node[0];
-        break;
-      }
-    }
-    return <(ModuleNodes | null) & ModuleNodes[]>result;
+    const module = this.moduleSchema.filter(
+      (m) => m.module?.id._id === moduleID
+    );
+    return <(Module | null) & Module[]>(
+      (module.length > 0 ? module[0].module : null)
+    );
+  }
+
+  getNodes(nodeID?: string): (Node | null) & Nodes[] {
+    if (_.isUndefined(nodeID))
+      return <(Node | null) & Nodes[]>(<unknown>[...this.nodes]);
+
+    const node = this.nodes.filter((n) => n.id._id === nodeID);
+
+    return <(Node | null) & Nodes[]>(node.length > 0 ? node[0] : null);
   }
 
   async isEcoModule(moduleName: string): Promise<boolean> {
@@ -175,7 +184,10 @@ export class EcoModule implements IEcoModule {
   async registerModules(): Promise<void> {
     const { log } = ecoFlow;
     try {
-      this.modules = await (await this.getModuleBuilder()).build();
+      this.moduleSchema = await (await this.getModuleBuilder()).build();
+      this.nodes = await (this.getNodeBuilder
+        ? this.getNodeBuilder.buildNodes()
+        : ([] as ModuleNodes[]));
     } catch (error) {
       log.error(error);
     }
@@ -183,6 +195,10 @@ export class EcoModule implements IEcoModule {
 
   async getModuleBuilder(): Promise<IEcoModuleBuilder> {
     return new EcoModuleBuilder(this.nodesPath, await this.installedModules());
+  }
+
+  get getNodeBuilder(): IEcoNodeBuilder | null {
+    return this.moduleSchema ? new EcoNodeBuilder(this.moduleSchema) : null;
   }
 
   static get IDBuilders(): typeof EcoModuleID {

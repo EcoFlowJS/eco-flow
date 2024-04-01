@@ -5,14 +5,15 @@ const testAPIController = async (ctx: Context) => {
   // console.log(ecoFlow.ecoModule.getNodes("76a24d0fb415cc7ef92bdaec41aca1c8"));
   // console.log(ecoFlow.ecoModule.getNodes());
 
-  // await ecoFlow.ecoModule.removeModule("ecoflow_functions");
-  ctx.body = ecoFlow.ecoModule.getModule();
+  // await ecoFlow.ecoModule.installModule("ecoflow_functions");
+  // ctx.body = await ecoFlow.ecoModule.getNodes();
+  ctx.body = await ecoFlow.ecoModule.getModule();
 };
 
-// const testAPIController = (log: string) => {
-//   return async (ctx: Context) => {
-//     ctx.body = log;
-//   };
-// };
+// function ctnt(this: any, ctx: Context) {
+//   ctx.body = this;
+// }
+
+// const testAPIController = (logg: string) => ctnt.bind({ logg });
 
 export default testAPIController;
