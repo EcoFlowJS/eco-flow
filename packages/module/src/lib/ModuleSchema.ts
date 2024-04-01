@@ -69,7 +69,7 @@ export class ModuleSchema implements IModuleSchema {
       moduleNodes.push({
         id: new EcoModule.IDBuilders(this.name, name),
         name,
-        controller: `${this.id._id}.${controller}`,
+        ...(controller ? { controller: `${this.id._id}.${controller}` } : {}),
         ...specs,
       });
     });
