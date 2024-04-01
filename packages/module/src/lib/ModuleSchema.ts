@@ -80,7 +80,7 @@ export class ModuleSchema implements IModuleSchema {
   private _initProccessor() {
     this._module = {
       id: this.id,
-      name: this.name,
+      name: this.manifest.name,
       version: this.version,
       nodes: this._processNodeSpecs(this.manifest.specs),
     };
