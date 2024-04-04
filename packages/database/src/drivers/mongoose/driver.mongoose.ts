@@ -68,12 +68,13 @@ export class DriverMongoose implements IDriverMongoose {
   buildModel<T>(
     name: string,
     schema: {
-      definition:
+      definition?:
         | SchemaDefinition
         | ApplySchemaOptions<
             ObtainDocumentType<any, any, ResolveSchemaOptions<SchemaOptions>>,
             ResolveSchemaOptions<SchemaOptions>
-          >;
+          >
+        | {};
       options?: SchemaOptions | ResolveSchemaOptions<SchemaOptions>;
     },
     collection?: string,
