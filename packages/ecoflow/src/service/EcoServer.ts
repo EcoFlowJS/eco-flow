@@ -8,7 +8,11 @@ import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@ecoflow/types";
 import { Passport } from "./Passport";
-import { StrategyOptions } from "passport-jwt";
+import {
+  StrategyOptions,
+  StrategyOptionsWithRequest,
+  StrategyOptionsWithoutRequest,
+} from "passport-jwt";
 import EcoFlow from "../lib/EcoFlow";
 import socketEvents from "../api/socketEvents/socketEvents.events";
 
@@ -208,7 +212,9 @@ export class EcoServer extends Koa implements IEcoServer {
     });
   }
 
-  async initializePassport(options?: StrategyOptions): Promise<void> {
+  async initializePassport(
+    options?: StrategyOptionsWithoutRequest
+  ): Promise<void> {
     await new Passport(this, options).init();
   }
 

@@ -4,17 +4,19 @@ import {
   Strategy as JwtStrategy,
   ExtractJwt,
   StrategyOptions,
+  StrategyOptionsWithoutRequest,
+  StrategyOptionsWithRequest,
 } from "passport-jwt";
 import passport from "koa-passport";
 import { Builder } from "@ecoflow/utils";
 
 export class Passport {
   private svr: EcoServer;
-  private options: StrategyOptions;
+  private options: StrategyOptionsWithoutRequest;
   private passport: typeof passport;
   constructor(
     svr: EcoServer,
-    options: StrategyOptions = {
+    options: StrategyOptionsWithoutRequest = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: (Builder.ENV.getSystemEnv("TOKEN_SALT") as Environment)
         .value,
