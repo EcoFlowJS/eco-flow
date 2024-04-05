@@ -6,7 +6,7 @@ export * from "./database";
 export * from "./ecoflow";
 export * from "./helper";
 export * from "./module";
-export * from "./flow";
+export * from "./flows";
 export * from "./services";
 export * from "./utils";
 
