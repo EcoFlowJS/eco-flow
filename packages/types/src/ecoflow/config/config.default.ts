@@ -11,6 +11,7 @@ export interface configOptions {
   //Base configuration
   userDir?: string;
   moduleDir?: string;
+  flowDir?: string;
   envDir?: string;
   DB_Directory?: string;
 
@@ -68,6 +69,7 @@ export namespace configOptions {
   //Base configuration
   export let userDir: string | undefined;
   export let moduleDir: string | undefined;
+  export let flowDir: string | undefined;
   export let envDir: string | undefined;
   export let DB_Directory: string | undefined;
 

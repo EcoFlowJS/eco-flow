@@ -15,6 +15,7 @@ const defaultConfig: configOptions = {
    ******************************************************************************/
   userDir: baseUserDir, // Base directory where all  directiory files are stored.
   moduleDir: baseUserDir + "/modules", // Directory where all modules are installed and stored.
+  flowDir: baseUserDir + "/flows",
   envDir: baseUserDir + "/environment", // Directory where all environment variables are stored.
   DB_Directory: path.join(baseUserDir, "Database").replace(/\\/g, "/"), // Directory where all Database Connection files are stored.
 

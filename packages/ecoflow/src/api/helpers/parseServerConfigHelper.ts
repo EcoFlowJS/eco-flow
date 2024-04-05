@@ -297,7 +297,7 @@ const directoryConfigutations = async (
   const configs: configOptions = {};
   const { _ } = ecoFlow;
 
-  const { userDir, moduleDir, envDir, DB_Directory, httpStaticRoot } =
+  const { userDir, moduleDir, flowDir, envDir, DB_Directory, httpStaticRoot } =
     configRequest;
 
   if (!_.isUndefined(userDir) && !_.isEmpty(userDir)) {
@@ -316,6 +316,16 @@ const directoryConfigutations = async (
     )
       throw "Given module directory is either not a directory or does not exist!!";
     configs.moduleDir = path.join(moduleDir).replace(/\\/g, "/");
+  }
+
+  if (!_.isUndefined(flowDir) && !_.isEmpty(flowDir)) {
+    await fse.ensureDir(flowDir);
+    if (
+      !(await fse.exists(flowDir)) ||
+      !(await fse.lstat(flowDir)).isDirectory()
+    )
+      throw "Given module directory is either not a directory or does not exist!!";
+    configs.flowDir = path.join(flowDir).replace(/\\/g, "/");
   }
 
   if (!_.isUndefined(envDir) && !_.isEmpty(envDir)) {
