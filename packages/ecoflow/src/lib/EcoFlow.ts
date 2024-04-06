@@ -1,5 +1,13 @@
 import { Config } from "../config";
-import { EcoOptions, ICommand } from "@ecoflow/types";
+import {
+  EcoFlowEditor as IEcoFlowEditor,
+  EcoModule as IEcoModule,
+  Service as IService,
+  Database as IDatabase,
+  Logger as ILogger,
+  EcoOptions,
+  ICommand,
+} from "@ecoflow/types";
 import _ from "lodash";
 import { Logger } from "@ecoflow/utils";
 import EcoContainer from "./EcoContainer";
@@ -12,6 +20,12 @@ import { Service } from "@ecoflow/services";
 import { Server as SocketServer } from "socket.io";
 import EcoModule from "@ecoflow/module";
 import loadEnvironments from "../helper/env.helper";
+import { EcoFlowEditor } from "@ecoflow/flows";
+
+interface ProcessCommands {
+  STOP: string;
+  RESTART: string;
+}
 
 class EcoFlow implements IEcoFlow {
   private helper: EcoHelper;
@@ -48,6 +62,7 @@ class EcoFlow implements IEcoFlow {
       .register("logger", new Logger())
       .register("database", new Database())
       .register("module", new EcoModule())
+      .register("flowEditor", new EcoFlowEditor())
       .register("service", new Service());
 
     this.server = new EcoServer();
@@ -71,6 +86,7 @@ class EcoFlow implements IEcoFlow {
     await this.router.initRouter(this.server);
 
     await this.ecoModule.registerModules();
+    await this.flowEditor.build();
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();
@@ -84,19 +100,23 @@ class EcoFlow implements IEcoFlow {
     return this.container.get("config");
   }
 
-  get database(): Database {
+  get database(): IDatabase {
     return this.container.get("database");
   }
 
-  get ecoModule(): EcoModule {
+  get ecoModule(): IEcoModule {
     return this.container.get("module");
   }
 
-  get service(): Service {
+  get flowEditor(): IEcoFlowEditor {
+    return this.container.get("flowEditor");
+  }
+
+  get service(): IService {
     return this.container.get("service");
   }
 
-  get log(): Logger {
+  get log(): ILogger {
     return this.container.get("logger");
   }
 
@@ -119,8 +139,3 @@ class EcoFlow implements IEcoFlow {
 }
 
 export default EcoFlow;
-
-interface ProcessCommands {
-  STOP: string;
-  RESTART: string;
-}

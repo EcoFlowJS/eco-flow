@@ -17,6 +17,7 @@
     "@ecoflow/base-panel": "^0.1.0",
     "@ecoflow/database": "^0.1.0",
     "@ecoflow/flow-editor": "^0.1.0",
+    "@ecoflow/flows": "^0.0.1",
     "@ecoflow/helper": "^1.0.0",
     "@ecoflow/module": "^1.0.0",
     "@ecoflow/schema-editor": "^0.1.0",

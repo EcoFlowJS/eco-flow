@@ -24,7 +24,9 @@ const defaultConfig: configOptions = {
    *  - flowFile
    *  - flowFilePretty
    ******************************************************************************/
-  flowFile: "flows.json", // JSON file containing flow configuration settings.
+  flowNodeConfigurations: "configs.json", // JSON file containing flow configuration settings.
+  flowNodeDefinitions: "nodes.json", // JSON file containing flow nodes definitions.
+  flowNodeConnections: "connections.json", // JSON file containing flow nodes connection definitions.
   flowFilePretty: true, // Set where JSON flow configuration settings should be formatted or not.
   /*******************************************************************************
    * Server Settings

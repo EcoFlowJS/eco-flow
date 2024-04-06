@@ -8,6 +8,7 @@ import { Database } from "../database";
 import { EcoModule } from "../module";
 import { Service } from "../services";
 import type { Server } from "socket.io";
+import { EcoFlowEditor } from "../flows";
 
 export * from "./config";
 export * from "./EcoContainer";
@@ -37,6 +38,7 @@ export interface EcoFlow {
   get config(): Config;
   get database(): Database;
   get ecoModule(): EcoModule;
+  get flowEditor(): EcoFlowEditor;
   get service(): Service;
   get log(): Logger;
   get Version(): string;
