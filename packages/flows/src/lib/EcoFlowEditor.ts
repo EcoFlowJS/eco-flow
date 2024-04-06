@@ -1,4 +1,7 @@
 import {
+  FlowConfigurations,
+  FlowConnections,
+  FlowDefinitions,
   FlowsDescription,
   EcoFlowEditor as IEcoFlowEditor,
   configOptions,
@@ -6,6 +9,7 @@ import {
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
+import type { Node } from "@reactflow/core";
 
 export class EcoFlowEditor implements IEcoFlowEditor {
   private flowDir: string;
@@ -43,7 +47,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     fse.ensureDirSync(this.flowDir, 0o2775);
   }
 
-  private async updateFlowNodeDefinitions(
+  private async updateFlowNodeDefinitionsFile(
     flowName: string,
     oldName: string,
     newName: string
@@ -60,7 +64,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     this.flowNodeDefinitions = newName;
   }
 
-  private async updateFlowNodeConnections(
+  private async updateFlowNodeConnectionsFile(
     flowName: string,
     oldName: string,
     newName: string
@@ -77,7 +81,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     this.flowNodeConnections = newName;
   }
 
-  private async updateFlowNodeConfigurations(
+  private async updateFlowNodeConfigurationsFile(
     flowName: string,
     oldName: string,
     newName: string
@@ -94,8 +98,90 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     this.flowNodeConfigurations = newName;
   }
 
-  async createFlow(flowName: string): Promise<boolean> {
-    return false;
+  private async updateFlowNodeDefinitions(
+    flowName: string,
+    value?: Node
+  ): Promise<this> {
+    await fse.ensureFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `definitions_${this.flowNodeDefinitions}`
+      )
+    );
+
+    await fse.writeFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `definitions_${this.flowNodeDefinitions}`
+      ),
+      value ? JSON.stringify(value, null, this.flowFilePretty ? 2 : 0) : "{}",
+      "utf8"
+    );
+
+    return this;
+  }
+
+  private async updateFlowNodeConnections(
+    flowName: string,
+    value?: Node
+  ): Promise<this> {
+    await fse.ensureFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `connections_${this.flowNodeConnections}`
+      )
+    );
+
+    await fse.writeFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `connections_${this.flowNodeConnections}`
+      ),
+      value ? JSON.stringify(value, null, this.flowFilePretty ? 2 : 0) : "{}",
+      "utf8"
+    );
+
+    return this;
+  }
+
+  private async updateFlowNodeConfigurations(
+    flowName: string,
+    value?: Node
+  ): Promise<this> {
+    await fse.ensureFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `configurations_${this.flowNodeConfigurations}`
+      )
+    );
+
+    await fse.writeFile(
+      path.join(
+        this.flowDir,
+        flowName,
+        `configurations_${this.flowNodeConfigurations}`
+      ),
+      value ? JSON.stringify(value, null, this.flowFilePretty ? 2 : 0) : "{}",
+      "utf8"
+    );
+
+    return this;
+  }
+
+  async createFlow(flowName: string): Promise<void> {
+    if ((await this.flows).includes(flowName)) throw "Flow already exists.";
+
+    await fse.ensureDir(path.join(this.flowDir, flowName));
+    await (
+      await (
+        await this.updateFlowNodeDefinitions(flowName)
+      ).updateFlowNodeConnections(flowName)
+    ).updateFlowNodeConfigurations(flowName);
   }
 
   async updateFlowConfigs(
@@ -132,7 +218,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
               )
             )
           )
-            await this.updateFlowNodeDefinitions(
+            await this.updateFlowNodeDefinitionsFile(
               flowName,
               configs.flowNodeDefinitions!,
               newConfigs.flowNodeDefinitions
@@ -147,7 +233,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
               )
             )
           )
-            await this.updateFlowNodeConnections(
+            await this.updateFlowNodeConnectionsFile(
               flowName,
               configs.flowNodeConnections!,
               newConfigs.flowNodeConnections
@@ -162,7 +248,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
               )
             )
           )
-            await this.updateFlowNodeConfigurations(
+            await this.updateFlowNodeConfigurationsFile(
               flowName,
               configs.flowNodeConfigurations!,
               newConfigs.flowNodeConfigurations
@@ -173,13 +259,10 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     }
   }
 
-  async removeFlow(flowName: string): Promise<boolean> {
-    return false;
-  }
+  async removeFlow(flowName: string): Promise<void> {
+    if (!(await this.flows).includes(flowName)) throw "Flow doesn't exists.";
 
-  async build(): Promise<this> {
-    console.log("build");
-    return this;
+    await fse.remove(path.join(this.flowDir, flowName));
   }
 
   async isFlow(flowName: string): Promise<boolean> {
@@ -199,42 +282,93 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     );
   }
 
-  async flowsDescription(flowName?: string): Promise<FlowsDescription | null> {
+  async getFlowDefinitions(flowName?: string): Promise<FlowDefinitions> {
     const { _ } = ecoFlow;
     if (!_.isUndefined(flowName) && !_.isEmpty(flowName)) {
-      if (!(await this.isFlow(flowName))) return null;
+      if (!(await this.isFlow(flowName))) return {};
+      const result: FlowDefinitions = Object.create({});
+      result[flowName] = JSON.parse(
+        await fse.readFile(
+          path.join(
+            this.flowDir,
+            flowName,
+            `definitions_${this.flowNodeDefinitions}`
+          ),
+          "utf8"
+        )
+      );
+      return result;
+    }
+    const result = Object.create({});
+    for await (const flowName of await this.flows)
+      Object.assign(result, {
+        ...result,
+        ...(await this.getFlowDefinitions(flowName)),
+      });
+    return result;
+  }
+
+  async getFlowConnections(flowName?: string): Promise<FlowConnections> {
+    const { _ } = ecoFlow;
+    if (!_.isUndefined(flowName) && !_.isEmpty(flowName)) {
+      if (!(await this.isFlow(flowName))) return {};
+      const result: FlowConnections = Object.create({});
+      result[flowName] = JSON.parse(
+        await fse.readFile(
+          path.join(
+            this.flowDir,
+            flowName,
+            `connections_${this.flowNodeConnections}`
+          ),
+          "utf8"
+        )
+      );
+      return result;
+    }
+    const result = Object.create({});
+    for await (const flowName of await this.flows)
+      Object.assign(result, {
+        ...result,
+        ...(await this.getFlowConnections(flowName)),
+      });
+    return result;
+  }
+
+  async getFlowConfigurations(flowName?: string): Promise<FlowConfigurations> {
+    const { _ } = ecoFlow;
+    if (!_.isUndefined(flowName) && !_.isEmpty(flowName)) {
+      if (!(await this.isFlow(flowName))) return {};
+      const result: FlowsDescription = Object.create({});
+      result[flowName] = JSON.parse(
+        await fse.readFile(
+          path.join(
+            this.flowDir,
+            flowName,
+            `configurations_${this.flowNodeConfigurations}`
+          ),
+          "utf8"
+        )
+      );
+      return result;
+    }
+    const result = Object.create({});
+    for await (const flowName of await this.flows)
+      Object.assign(result, {
+        ...result,
+        ...(await this.getFlowConfigurations(flowName)),
+      });
+    return result;
+  }
+
+  async flowsDescription(flowName?: string): Promise<FlowsDescription> {
+    const { _ } = ecoFlow;
+    if (!_.isUndefined(flowName) && !_.isEmpty(flowName)) {
+      if (!(await this.isFlow(flowName))) return {};
       const result: FlowsDescription = Object.create({});
       result[flowName] = {
-        definitions: JSON.parse(
-          await fse.readFile(
-            path.join(
-              this.flowDir,
-              flowName,
-              `definitions_${this.flowNodeDefinitions}`
-            ),
-            "utf8"
-          )
-        ),
-        connections: JSON.parse(
-          await fse.readFile(
-            path.join(
-              this.flowDir,
-              flowName,
-              `connections_${this.flowNodeConnections}`
-            ),
-            "utf8"
-          )
-        ),
-        configurations: JSON.parse(
-          await fse.readFile(
-            path.join(
-              this.flowDir,
-              flowName,
-              `configurations_${this.flowNodeConfigurations}`
-            ),
-            "utf8"
-          )
-        ),
+        definitions: (await this.getFlowDefinitions(flowName))[flowName],
+        connections: (await this.getFlowConnections(flowName))[flowName],
+        configurations: (await this.getFlowConfigurations(flowName))[flowName],
       };
       return result;
     }
@@ -245,6 +379,11 @@ export class EcoFlowEditor implements IEcoFlowEditor {
         ...(await this.flowsDescription(flowName)),
       });
     return result;
+  }
+
+  async build(): Promise<this> {
+    console.log("build");
+    return this;
   }
 
   get flows(): Promise<string[]> {
