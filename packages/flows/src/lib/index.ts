@@ -1,1 +1,1 @@
-export * from "./EcoFlowBuilder";
+export * from "./EcoFlowEditor";

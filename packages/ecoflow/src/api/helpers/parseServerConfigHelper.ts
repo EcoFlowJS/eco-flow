@@ -362,12 +362,30 @@ const flowConfigutations = async (
   const configs: configOptions = {};
   const { _ } = ecoFlow;
 
-  const { flowFile, flowFilePretty } = configRequest;
+  const {
+    flowNodeDefinitions,
+    flowNodeConnections,
+    flowNodeConfigurations,
+    flowFilePretty,
+  } = configRequest;
 
-  if (!_.isUndefined(flowFile) && !_.isEmpty(flowFile))
-    configs.flowFile = (<string>flowFile).endsWith(".json")
-      ? flowFile
-      : `${flowFile}.json`;
+  if (!_.isUndefined(flowNodeDefinitions) && !_.isEmpty(flowNodeDefinitions))
+    configs.flowNodeDefinitions = flowNodeDefinitions.endsWith(".json")
+      ? flowNodeDefinitions
+      : `${flowNodeDefinitions}.json`;
+
+  if (!_.isUndefined(flowNodeConnections) && !_.isEmpty(flowNodeConnections))
+    configs.flowNodeConnections = flowNodeConnections.endsWith(".json")
+      ? flowNodeConnections
+      : `${flowNodeConnections}.json`;
+
+  if (
+    !_.isUndefined(flowNodeConfigurations) &&
+    !_.isEmpty(flowNodeConfigurations)
+  )
+    configs.flowNodeConfigurations = flowNodeConfigurations.endsWith(".json")
+      ? flowNodeConfigurations
+      : `${flowNodeConfigurations}.json`;
 
   if (!_.isUndefined(flowFilePretty) && _.isBoolean(flowFilePretty))
     configs.flowFilePretty = flowFilePretty;

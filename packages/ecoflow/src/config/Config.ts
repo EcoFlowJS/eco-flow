@@ -169,6 +169,11 @@ export class Config implements IConfig {
    * @returns {Promise<configSettings>} Promise resolving all configuration information.
    */
   async setConfig(cfg: configOptions): Promise<configOptions> {
+    const { flowEditor } = ecoFlow;
+    const oldConfigs = {
+      ...defaultConfig,
+      ...this._config,
+    };
     this._config = {
       ...defaultConfig,
       ...this._config,
@@ -176,7 +181,39 @@ export class Config implements IConfig {
     };
 
     await this.updateConfigFile(this._config);
+    if (oldConfigs.flowDir !== this._config.flowDir)
+      await fse.copy(oldConfigs.flowDir!, this._config.flowDir!);
 
+    await flowEditor.updateFlowConfigs({
+      flowDir: this._config.flowDir || defaultConfig.flowDir!,
+      flowFilePretty:
+        this._config.flowFilePretty || defaultConfig.flowFilePretty!,
+    });
+
+    if (
+      oldConfigs.flowNodeConfigurations !==
+        this._config.flowNodeConfigurations ||
+      oldConfigs.flowNodeConnections !== this._config.flowNodeConnections ||
+      oldConfigs.flowNodeDefinitions !== this._config.flowNodeDefinitions
+    )
+      await flowEditor.updateFlowConfigs(
+        {
+          flowNodeConfigurations:
+            oldConfigs.flowNodeConfigurations ||
+            defaultConfig.flowNodeConfigurations!,
+          flowNodeConnections:
+            oldConfigs.flowNodeConnections ||
+            defaultConfig.flowNodeConnections!,
+          flowNodeDefinitions:
+            oldConfigs.flowNodeDefinitions ||
+            defaultConfig.flowNodeDefinitions!,
+        },
+        {
+          flowNodeConfigurations: this._config.flowNodeConfigurations!,
+          flowNodeConnections: this._config.flowNodeConnections!,
+          flowNodeDefinitions: this._config.flowNodeDefinitions!,
+        }
+      );
     return this._config;
   }
 

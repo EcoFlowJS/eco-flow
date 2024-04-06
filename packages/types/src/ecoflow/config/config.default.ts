@@ -16,7 +16,9 @@ export interface configOptions {
   DB_Directory?: string;
 
   //Flow configuration
-  flowFile?: string;
+  flowNodeConfigurations?: string;
+  flowNodeDefinitions?: string;
+  flowNodeConnections?: string;
   flowFilePretty?: boolean;
 
   //HTTP HTTPS configuration
@@ -74,7 +76,9 @@ export namespace configOptions {
   export let DB_Directory: string | undefined;
 
   //Flow configuration
-  export let flowFile: string | undefined;
+  export let flowNodeConfigurations: string | undefined;
+  export let flowNodeDefinitions: string | undefined;
+  export let flowNodeConnections: string | undefined;
   export let flowFilePretty: boolean | undefined;
 
   //HHTP HTTPS configuration
