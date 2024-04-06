@@ -1,8 +1,3 @@
-export interface Flow {
-  flowID: string;
-  flowName: string;
-}
-
-export type Flows = Flow[];
+export type Flows = string[];
 
 export * from "./EcoFlowEditor";
