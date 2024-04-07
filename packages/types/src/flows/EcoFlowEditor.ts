@@ -1,4 +1,4 @@
-import type { Connection, Node } from "@reactflow/core";
+import type { Edge, Node } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
 
 export interface EcoFlowEditor {
@@ -47,7 +47,7 @@ export interface FlowDefinitions {
 }
 
 export interface FlowConnections {
-  [key: string]: Connection;
+  [key: string]: Edge;
 }
 
 export interface FlowConfigurations {
@@ -60,45 +60,16 @@ export interface FlowsDescription {
 
 export interface Describtions {
   definitions: Node;
-  connections: Connection;
+  connections: Edge;
   configurations: NodeConfiguration;
 }
 
-export interface FlowRenameConfigurations {
-  oldName: string;
-  newName: string;
+export interface DeploymentFlowConfigurations {
+  definitions: Node[];
+  connections: Edge[];
+  configurations: NodeConfiguration[];
 }
 
-export interface RemoveNodesConfiguration {
-  flowName: string;
-  nodes: Node[];
-}
-
-export interface NodesConfiguration {
-  flowName: string;
-  nodes: Node[];
-}
-
-export interface RemoveConnectionConfiguration {
-  flowName: string;
-  connections: Connection[];
-}
-
-export interface ConnectionConfiguration {
-  flowName: string;
-  connections: Connection[];
-}
-
-export interface DeploymentConfigurations {
-  //Flow Configuration
-  flows?: string[];
-  removedFlows?: string[];
-  renamedFlows?: FlowRenameConfigurations[];
-  addFlows?: string[];
-
-  //Node Descripotion Configuration
-  nodes?: NodesConfiguration[];
-
-  //Connection Configuration
-  connections?: ConnectionConfiguration[];
+export interface FlowsConfigurations {
+  [key: string]: DeploymentFlowConfigurations;
 }
