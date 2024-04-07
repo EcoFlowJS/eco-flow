@@ -43,15 +43,15 @@ export interface EcoFlowEditor {
 export type NodeConfiguration = any;
 
 export interface FlowDefinitions {
-  [key: string]: Node;
+  [key: string]: Node[];
 }
 
 export interface FlowConnections {
-  [key: string]: Edge;
+  [key: string]: Edge[];
 }
 
 export interface FlowConfigurations {
-  [key: string]: NodeConfiguration;
+  [key: string]: NodeConfiguration[];
 }
 
 export interface FlowsDescription {
@@ -59,17 +59,11 @@ export interface FlowsDescription {
 }
 
 export interface Describtions {
-  definitions: Node;
-  connections: Edge;
-  configurations: NodeConfiguration;
-}
-
-export interface DeploymentFlowConfigurations {
   definitions: Node[];
   connections: Edge[];
   configurations: NodeConfiguration[];
 }
 
 export interface FlowsConfigurations {
-  [key: string]: DeploymentFlowConfigurations;
+  [key: string]: Describtions;
 }
