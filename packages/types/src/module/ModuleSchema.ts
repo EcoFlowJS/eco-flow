@@ -1,6 +1,7 @@
 import { Module } from "./EcoModule";
 
 export interface ModuleSchema {
+  initialize(): Promise<this>;
   get module(): Module | null;
   get name(): string;
   get version(): string;

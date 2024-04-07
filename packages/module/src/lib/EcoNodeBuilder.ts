@@ -4,8 +4,6 @@ import {
   ModuleNodes,
   ModuleSchema,
   ModuleSpecsInputs,
-  Node,
-  Nodes,
 } from "@ecoflow/types";
 
 export class EcoNodeBuilder implements IEcoNodeBuilder {
