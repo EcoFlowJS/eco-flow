@@ -338,7 +338,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     const { _ } = ecoFlow;
     if (!_.isUndefined(flowName) && !_.isEmpty(flowName)) {
       if (!(await this.isFlow(flowName))) return {};
-      const result: FlowsDescription = Object.create({});
+      const result: FlowConfigurations = Object.create({});
       result[flowName] = JSON.parse(
         await fse.readFile(
           path.join(
