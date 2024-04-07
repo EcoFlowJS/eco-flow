@@ -15,18 +15,26 @@ export class ModuleSchema implements IModuleSchema {
   private _module: Module | null = null;
   private id: EcoModuleID;
   private nodePath: string;
-  private manifest: ModuleManifest;
+  private manifest: (() => ModuleManifest) | ModuleManifest;
   private packageJson: PackageJSON;
   private controllers: { [key: string]: any } = {};
 
   constructor(nodePath: string, moduleName: string) {
     this.nodePath = path.join(nodePath, moduleName);
-    this.manifest = require(path.join(nodePath, moduleName, "manifest.json"));
+    this.manifest = require(path.join(nodePath, moduleName));
     this.packageJson = require(path.join(nodePath, moduleName, "package.json"));
     this.id = new EcoModule.IDBuilders(this.name);
+  }
 
+  async initialize(): Promise<this> {
+    this.manifest =
+      typeof this.manifest === "function"
+        ? await this.manifest()
+        : this.manifest;
     this._initControllers();
     this._initProccessor();
+
+    return this;
   }
 
   private _initControllers() {
@@ -78,6 +86,8 @@ export class ModuleSchema implements IModuleSchema {
   }
 
   private _initProccessor() {
+    const { _ } = ecoFlow;
+    if (_.isFunction(this.manifest)) return;
     this._module = {
       id: this.id,
       name: this.manifest.name,
@@ -97,15 +107,19 @@ export class ModuleSchema implements IModuleSchema {
   get version(): string {
     return this.packageJson.version;
   }
+
   get description(): string {
     return this.packageJson.description;
   }
+
   get author(): string {
     return this.packageJson.author;
   }
+
   get license(): string {
     return this.packageJson.license;
   }
+
   getKeyValue(key: string) {
     return this.packageJson[key];
   }

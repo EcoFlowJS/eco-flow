@@ -1,7 +1,6 @@
 import {
   EcoModuleBuilder as IEcoModuleBuilder,
   ModuleSchema as IModuleSchema,
-  Module,
 } from "@ecoflow/types";
 import { ModuleSchema } from "./ModuleSchema";
 
@@ -14,8 +13,11 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
     this.ecoPackages = ecoPackages;
   }
 
-  private initBuild(nodePath: string, ecoPackages: string): IModuleSchema {
-    return new ModuleSchema(nodePath, ecoPackages);
+  private async initBuild(
+    nodePath: string,
+    ecoPackages: string
+  ): Promise<IModuleSchema> {
+    return await new ModuleSchema(nodePath, ecoPackages).initialize();
   }
 
   async build(
@@ -24,13 +26,13 @@ export class EcoModuleBuilder implements IEcoModuleBuilder {
   ): Promise<IModuleSchema & IModuleSchema[]> {
     if (nodePath && ecoModule)
       return <IModuleSchema & IModuleSchema[]>(
-        this.initBuild(nodePath ? nodePath : this.nodePath, ecoModule)
+        await this.initBuild(nodePath ? nodePath : this.nodePath, ecoModule)
       );
 
     const moduleSchema: IModuleSchema[] = [];
     for await (const ecoModule of this.ecoPackages)
       moduleSchema.push(
-        this.initBuild(nodePath ? nodePath : this.nodePath, ecoModule)
+        await this.initBuild(nodePath ? nodePath : this.nodePath, ecoModule)
       );
 
     return <IModuleSchema & IModuleSchema[]>moduleSchema;
