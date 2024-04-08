@@ -1,7 +1,12 @@
-import { ModuleNodes } from "./EcoModule";
+import { EcoModuleID } from "./Builders";
+import { ModuleSpecs } from "./EcoModule";
 
 export interface EcoNodeBuilder {
   buildNodes(): Promise<ModuleNodes[]>;
+}
+
+export interface ModuleNodes extends ModuleSpecs {
+  id: EcoModuleID;
 }
 
 export interface ExtractedRawNodes {

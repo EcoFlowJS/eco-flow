@@ -1,5 +1,7 @@
 import type { Edge, Node } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
+import { EcoModuleID } from "../module";
+import { FC, HTMLAttributes } from "react";
 
 export interface EcoFlowEditor {
   get flows(): Promise<string[]>;
@@ -66,4 +68,31 @@ export interface Describtions {
 
 export interface FlowsConfigurations {
   [key: string]: Describtions;
+}
+
+export interface FlowsDataTypes {
+  moduleID: EcoModuleID;
+  label: string;
+  configured: boolean;
+  disabled: boolean;
+  icon?: FC<HTMLAttributes<SVGElement>>;
+  isConnectable?: number;
+  openDrawer?: (label: string, configured: boolean, disabled: boolean) => void;
+}
+
+export interface FlowsConfigurationsDrawer {
+  show: boolean;
+  nodeID?: string;
+  moduleID?: EcoModuleID;
+  label?: string;
+  configured?: boolean;
+  disabled?: boolean;
+}
+
+export interface FlowEditorSettingsConfigurations {
+  disabledkeyboard: boolean;
+  controls: boolean;
+  miniMap: boolean;
+  panMiniMap: boolean;
+  scrollPan: boolean;
 }
