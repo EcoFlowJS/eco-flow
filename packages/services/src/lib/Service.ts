@@ -5,12 +5,14 @@ import {
   SchemaEditorService as ISchemaEditorService,
   RoleService as IRoleService,
   AuditLogsService as IAuditLogsService,
+  FlowSettingsService as IFlowSettingsService,
 } from "@ecoflow/types";
 import { UserService } from "../user";
 import { TokenServices } from "../token";
 import { SchemaEditorService } from "../SchemaEditor/SchemaEditorService";
 import { RoleService } from "../Role";
 import { AuditLogsService } from "../AuditLogs";
+import { FlowSettingsService } from "../FlowSettings";
 
 export class Service implements IService {
   get UserService(): IUserService {
@@ -28,7 +30,12 @@ export class Service implements IService {
   get RoleService(): IRoleService {
     return new RoleService();
   }
+
   get AuditLogsService(): IAuditLogsService {
     return new AuditLogsService();
+  }
+
+  get flowSettingsService(): IFlowSettingsService {
+    return new FlowSettingsService();
   }
 }
