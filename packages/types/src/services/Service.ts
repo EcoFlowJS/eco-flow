@@ -1,3 +1,4 @@
+import { FlowSettingsService } from "./FlowSettings/FlowSettingsService";
 import { SchemaEditorService } from "./SchemaEditor/SchemaEditorService";
 import { AuditLogsService } from "./auditLogs/AuditLogsService";
 import { RoleService } from "./role/RoleService";
@@ -10,7 +11,14 @@ export interface Service {
   get SchemaEditorService(): SchemaEditorService;
   get RoleService(): RoleService;
   get AuditLogsService(): AuditLogsService;
+  get flowSettingsService(): FlowSettingsService;
 }
 
-export { UserService, TokenServices, SchemaEditorService, RoleService };
+export {
+  UserService,
+  TokenServices,
+  SchemaEditorService,
+  RoleService,
+  FlowSettingsService,
+};
 export * from "./auditLogs/AuditLogsService";

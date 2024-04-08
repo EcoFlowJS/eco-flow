@@ -90,7 +90,7 @@ export interface FlowsConfigurationsDrawer {
 }
 
 export interface FlowEditorSettingsConfigurations {
-  disabledkeyboard: boolean;
+  keyboardAccessibility: boolean;
   controls: boolean;
   miniMap: boolean;
   panMiniMap: boolean;
