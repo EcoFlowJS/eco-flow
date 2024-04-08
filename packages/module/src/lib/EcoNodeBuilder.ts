@@ -60,6 +60,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
         node.inputs.push({
           name: "API End point",
           type: "Route",
+          required: true,
         });
 
       if (!isMethodRoute(node.inputs))
@@ -67,6 +68,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
           name: "Method",
           type: "Methods",
           methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+          required: true,
         });
       return node;
     });

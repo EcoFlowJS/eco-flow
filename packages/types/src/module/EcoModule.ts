@@ -2,7 +2,7 @@ import { SearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
-import { EcoNodeBuilder, Node, Nodes } from "./EcoNodeBuilder";
+import { EcoNodeBuilder, ModuleNodes, Node, Nodes } from "./EcoNodeBuilder";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
@@ -40,6 +40,7 @@ export interface ModuleSpecsInputsTypeOptions {
 export interface ModuleSpecsInputs {
   name: string;
   type: ModuleSpecsInputsTypes;
+  required?: boolean;
   options?: ModuleSpecsInputsTypeOptions[];
   methods?: API_METHODS[];
 }
@@ -50,10 +51,6 @@ export interface ModuleSpecs {
   describtion?: string;
   inputs?: ModuleSpecsInputs[];
   controller?: string | Function;
-}
-
-export interface ModuleNodes extends ModuleSpecs {
-  id: EcoModuleID;
 }
 
 export interface Module {
