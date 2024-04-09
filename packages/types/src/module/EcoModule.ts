@@ -39,6 +39,7 @@ export interface ModuleSpecsInputsTypeOptions {
 
 export interface ModuleSpecsInputs {
   name: string;
+  lable: string;
   type: ModuleSpecsInputsTypes;
   required?: boolean;
   options?: ModuleSpecsInputsTypeOptions[];
