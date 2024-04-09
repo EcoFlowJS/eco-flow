@@ -69,15 +69,31 @@ export interface Describtions {
 export interface FlowsConfigurations {
   [key: string]: Describtions;
 }
+export interface NodeAppearanceConfigurations {
+  label?: boolean;
+  icon?: FC<HTMLAttributes<SVGElement>> | null;
+  portLabel?: {
+    input?: string;
+    output?: string;
+  };
+}
 
 export interface FlowsDataTypes {
   moduleID: EcoModuleID;
   label: string;
   configured: boolean;
   disabled: boolean;
+  description: string;
+  appearance: NodeAppearanceConfigurations;
   icon?: FC<HTMLAttributes<SVGElement>>;
-  isConnectable?: number;
-  openDrawer?: (label: string, configured: boolean, disabled: boolean) => void;
+  isConnectable?: number | boolean;
+  openDrawer?: (
+    label: string,
+    configured: boolean,
+    disabled: boolean,
+    description: string,
+    appearance: NodeAppearanceConfigurations
+  ) => void;
 }
 
 export interface FlowsConfigurationsDrawer {
@@ -87,6 +103,8 @@ export interface FlowsConfigurationsDrawer {
   label?: string;
   configured?: boolean;
   disabled?: boolean;
+  description?: string;
+  appearance?: NodeAppearanceConfigurations;
 }
 
 export interface FlowEditorSettingsConfigurations {
