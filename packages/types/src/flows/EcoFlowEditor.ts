@@ -71,7 +71,7 @@ export interface FlowsConfigurations {
 }
 export interface NodeAppearanceConfigurations {
   label?: boolean;
-  icon?: FC<HTMLAttributes<SVGElement>> | null;
+  icon?: string | null;
   portLabel?: {
     input?: string;
     output?: string;
