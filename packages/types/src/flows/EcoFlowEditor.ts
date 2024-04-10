@@ -42,7 +42,12 @@ export interface EcoFlowEditor {
   build(): Promise<this>;
 }
 
-export type NodeConfiguration = any;
+export interface NodeConfiguration {
+  nodeID: string;
+  configs: {
+    [key: string]: any;
+  };
+}
 
 export interface FlowDefinitions {
   [key: string]: Node[];
@@ -105,6 +110,7 @@ export interface FlowsConfigurationsDrawer {
   disabled?: boolean;
   description?: string;
   appearance?: NodeAppearanceConfigurations;
+  nodeConfiguration?: NodeConfiguration;
 }
 
 export interface FlowEditorSettingsConfigurations {
