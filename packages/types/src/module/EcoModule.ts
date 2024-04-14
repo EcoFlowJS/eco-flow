@@ -52,12 +52,16 @@ export interface ModuleSpecsInputs {
   name: string;
   lable: string;
   type: ModuleSpecsInputsTypes;
-  methods?: API_METHODS[];
   required?: boolean;
-  db_Selector?: string | string[];
+  methods?: API_METHODS[];
   radioValues?: string | string[];
-  pickerOptions?: ModuleSpecsInputsTypeOptions[];
-  default?: string | number | boolean | Date | { start: number; end: number };
+  pickerOptions?: String[] | ModuleSpecsInputsTypeOptions[];
+  defaultValue?:
+    | string
+    | number
+    | boolean
+    | Date
+    | { start: number; end: number };
 }
 
 export interface ModuleSpecs {
