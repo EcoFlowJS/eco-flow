@@ -21,16 +21,27 @@ export interface EcoModule {
   get getNodeBuilder(): EcoNodeBuilder | null;
 }
 
-export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug";
+export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug"; // Modle node types;
 
 export type ModuleSpecsInputsTypes =
-  | "Route"
-  | "Methods"
-  | "String"
-  | "Options"
-  | "Code";
+  | "Route" // Default value for Request Node Types
+  | "DB_Selector" // Default value for DB Selectors
+  | "Methods" // Request Node API Methods
+  | "Code" // Code Editor Input Type
+  | "Toggle" // Toggle Input Type
+  | "Date" // Date Input Type
+  | "Time" // Time Input Type
+  | "DateTime" // Date Time Input Type
+  | "Number" // Number Input Type
+  | "String" // Text Input Type (DEFAULT VALUE)
+  | "HiddenString" // Password Input Type
+  | "CheckPicker" // List Picker Input Type
+  | "SelectPicker" // Select Picker Input Type
+  | "Checkbox" // Checkbox Input Type
+  | "Radio" // Radio Input Type
+  | "Range"; // Range or Slider Input Type
 
-export type API_METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+export type API_METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"; // Available API Methods;
 
 export interface ModuleSpecsInputsTypeOptions {
   name: string;
@@ -41,9 +52,12 @@ export interface ModuleSpecsInputs {
   name: string;
   lable: string;
   type: ModuleSpecsInputsTypes;
-  required?: boolean;
-  options?: ModuleSpecsInputsTypeOptions[];
   methods?: API_METHODS[];
+  required?: boolean;
+  db_Selector?: string | string[];
+  radioValues?: string | string[];
+  pickerOptions?: ModuleSpecsInputsTypeOptions[];
+  default?: string | number | boolean | Date | { start: number; end: number };
 }
 
 export interface ModuleSpecs {
