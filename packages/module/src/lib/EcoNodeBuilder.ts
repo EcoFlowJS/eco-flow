@@ -57,21 +57,27 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     return requestNodes.map((node) => {
       if (_.isUndefined(node.inputs)) node.inputs = [];
       if (!isInputRoute(node.inputs))
-        node.inputs.push({
-          name: "apiEndpoint",
-          lable: "API End point",
-          type: "Route",
-          required: true,
-        });
+        node.inputs = [
+          {
+            name: "apiEndpoint",
+            lable: "API End point",
+            type: "Route",
+            required: true,
+          },
+          ...node.inputs,
+        ];
 
       if (!isMethodRoute(node.inputs))
-        node.inputs.push({
-          name: "apiMethod",
-          lable: "Method",
-          type: "Methods",
-          methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-          required: true,
-        });
+        node.inputs = [
+          {
+            name: "apiMethod",
+            lable: "Method",
+            type: "Methods",
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+            required: true,
+          },
+          ...node.inputs,
+        ];
       return node;
     });
   }
