@@ -2,14 +2,17 @@ import {
   FlowConfigurations,
   FlowConnections,
   FlowDefinitions,
+  FlowsConfigurations,
   FlowsDescription,
   EcoFlowEditor as IEcoFlowEditor,
+  EcoFLowBuilder as IEcoFLowBuilder,
   configOptions,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
 import type { Node } from "@reactflow/core";
+import { EcoFLowBuilder } from "./EcoFLowBuilder";
 
 export class EcoFlowEditor implements IEcoFlowEditor {
   private flowDir: string;
@@ -386,6 +389,12 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     return this;
   }
 
+  async deploy(flowconfigurations: FlowsConfigurations): Promise<boolean> {
+    this.fLowBuilder.build(flowconfigurations);
+
+    return true;
+  }
+
   get flows(): Promise<string[]> {
     return new Promise<string[]>(async (resolve) => {
       const result: string[] = [];
@@ -406,5 +415,9 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       }
       resolve(result);
     });
+  }
+
+  get fLowBuilder(): IEcoFLowBuilder {
+    return new EcoFLowBuilder();
   }
 }
