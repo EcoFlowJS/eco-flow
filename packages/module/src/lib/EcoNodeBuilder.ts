@@ -60,7 +60,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
         node.inputs = [
           {
             name: "apiEndpoint",
-            lable: "API End point",
+            label: "API End point",
             type: "Route",
             required: true,
           },
@@ -71,7 +71,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
         node.inputs = [
           {
             name: "apiMethod",
-            lable: "Method",
+            label: "Method",
             type: "Methods",
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
             required: true,

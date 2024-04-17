@@ -50,7 +50,7 @@ export interface ModuleSpecsInputsTypeOptions {
 
 export interface ModuleSpecsInputs {
   name: string;
-  lable: string;
+  label: string;
   type: ModuleSpecsInputsTypes;
   required?: boolean;
   methods?: API_METHODS[];
