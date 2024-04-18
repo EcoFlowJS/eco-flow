@@ -1,10 +1,13 @@
 import type { Edge, Node } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
-import { EcoModuleID } from "../module";
+import { EcoModuleID, ModuleTypes } from "../module";
 import { FC, HTMLAttributes } from "react";
+import { EcoFLowBuilder } from "./EcoFLowBuilder";
 
 export interface EcoFlowEditor {
   get flows(): Promise<string[]>;
+  get fLowBuilder(): EcoFLowBuilder;
+
   getFlowDefinitions(): Promise<FlowDefinitions>;
   getFlowDefinitions(flowName?: string): Promise<FlowDefinitions>;
 
@@ -40,6 +43,11 @@ export interface EcoFlowEditor {
   removeFlow(flowName: string): Promise<void>;
 
   build(): Promise<this>;
+  isAllNodesConfigured(
+    definitions: FlowDefinitions | FlowsConfigurations
+  ): boolean;
+  isNodeConfigured(node: Node<FlowsDataTypes, ModuleTypes>): boolean;
+  deploy(flowconfigurations: FlowsConfigurations): Promise<boolean>;
 }
 
 export interface NodeConfiguration {
@@ -50,7 +58,7 @@ export interface NodeConfiguration {
 }
 
 export interface FlowDefinitions {
-  [key: string]: Node[];
+  [key: string]: Node<FlowsDataTypes, ModuleTypes>[];
 }
 
 export interface FlowConnections {
@@ -66,7 +74,7 @@ export interface FlowsDescription {
 }
 
 export interface Describtions {
-  definitions: Node[];
+  definitions: Node<FlowsDataTypes, ModuleTypes>[];
   connections: Edge[];
   configurations: NodeConfiguration[];
 }

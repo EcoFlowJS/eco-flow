@@ -2,14 +2,22 @@ import {
   FlowConfigurations,
   FlowConnections,
   FlowDefinitions,
+  FlowsConfigurations,
   FlowsDescription,
   EcoFlowEditor as IEcoFlowEditor,
+  EcoFLowBuilder as IEcoFLowBuilder,
   configOptions,
+  FlowsDataTypes,
+  ModuleTypes,
+  Describtions,
+  NodeConfiguration,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
 import type { Node } from "@reactflow/core";
+import { EcoFLowBuilder } from "./EcoFLowBuilder";
+import { EcoAPIRouterBuilder } from "@ecoflow/api";
 
 export class EcoFlowEditor implements IEcoFlowEditor {
   private flowDir: string;
@@ -17,6 +25,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
   private flowNodeConnections: string;
   private flowNodeConfigurations: string;
   private flowFilePretty: boolean;
+  private _flowBuilder: IEcoFLowBuilder;
 
   constructor(directory?: string) {
     const { config } = ecoFlow;
@@ -43,6 +52,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     this.flowNodeConfigurations =
       flowNodeConfigurations || defaultFlowNodeConfigurations!;
     this.flowFilePretty = flowFilePretty || defaultFlowFilePretty!;
+    this._flowBuilder = new EcoFLowBuilder();
 
     fse.ensureDirSync(this.flowDir, 0o2775);
   }
@@ -386,6 +396,45 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     return this;
   }
 
+  isAllNodesConfigured(
+    definitions: FlowDefinitions | FlowsConfigurations
+  ): boolean {
+    const { _ } = ecoFlow;
+    const nodes: Node<FlowsDataTypes, ModuleTypes>[] = [];
+    Object.keys(definitions).map((key) => {
+      if (_.has(definitions[key], "definitions"))
+        nodes.push(...(<Describtions>definitions[key]).definitions);
+      else
+        nodes.push(...(<Node<FlowsDataTypes, ModuleTypes>[]>definitions[key]));
+    });
+
+    if (nodes.filter((n) => !n.data.configured).length > 0) return false;
+
+    return true;
+  }
+
+  isNodeConfigured(node: Node<FlowsDataTypes, ModuleTypes>): boolean {
+    return node.data.configured;
+  }
+
+  async deploy(flowconfigurations: FlowsConfigurations): Promise<boolean> {
+    const [stack, configurations] = await this.fLowBuilder.buildStack({
+      ...flowconfigurations,
+    });
+
+    const apiRouterBuilder = await new EcoAPIRouterBuilder(
+      stack,
+      configurations
+    ).initializeBuilder();
+
+    console.log(apiRouterBuilder);
+    // console.log(this.fLowBuilder.getStackNodeConfigurations(stack[0][0].id));
+
+    // console.log(this.fLowBuilder.consoleNodes);
+
+    return true;
+  }
+
   get flows(): Promise<string[]> {
     return new Promise<string[]>(async (resolve) => {
       const result: string[] = [];
@@ -406,5 +455,9 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       }
       resolve(result);
     });
+  }
+
+  get fLowBuilder(): IEcoFLowBuilder {
+    return this._flowBuilder;
   }
 }
