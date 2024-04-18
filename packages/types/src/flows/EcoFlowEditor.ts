@@ -46,7 +46,9 @@ export interface EcoFlowEditor {
   isAllNodesConfigured(
     definitions: FlowDefinitions | FlowsConfigurations
   ): boolean;
-  isNodeConfigured(node: Node<FlowsDataTypes, ModuleTypes>): boolean;
+  isNodeConfigured(
+    node: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>
+  ): boolean;
   deploy(flowconfigurations: FlowsConfigurations): Promise<boolean>;
 }
 
@@ -58,11 +60,11 @@ export interface NodeConfiguration {
 }
 
 export interface FlowDefinitions {
-  [key: string]: Node<FlowsDataTypes, ModuleTypes>[];
+  [key: string]: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
 }
 
 export interface FlowConnections {
-  [key: string]: Edge[];
+  [key: string]: Edge<FlowsEdgeDataTypes>[];
 }
 
 export interface FlowConfigurations {
@@ -74,8 +76,8 @@ export interface FlowsDescription {
 }
 
 export interface Describtions {
-  definitions: Node<FlowsDataTypes, ModuleTypes>[];
-  connections: Edge[];
+  definitions: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
+  connections: Edge<FlowsEdgeDataTypes>[];
   configurations: NodeConfiguration[];
 }
 
@@ -91,7 +93,11 @@ export interface NodeAppearanceConfigurations {
   };
 }
 
-export interface FlowsDataTypes {
+export interface FlowsEdgeDataTypes {
+  forcedDisabled: false;
+}
+
+export interface FlowsNodeDataTypes {
   moduleID: EcoModuleID;
   label: string;
   configured: boolean;

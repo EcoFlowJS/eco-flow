@@ -1,6 +1,7 @@
 import {
   FlowsConfigurations,
-  FlowsDataTypes,
+  FlowsEdgeDataTypes,
+  FlowsNodeDataTypes,
   EcoFLowBuilder as IEcoFLowBuilder,
   ModuleTypes,
   NodeConfiguration,
@@ -10,14 +11,23 @@ import type { Edge, Node } from "@reactflow/core";
 import stackNodes from "../helpers/stackNodes";
 
 export class EcoFLowBuilder implements IEcoFLowBuilder {
-  private _nodes: Node<FlowsDataTypes, ModuleTypes>[];
-  private _edges: Edge[];
+  private _nodes: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
+  private _edges: Edge<FlowsEdgeDataTypes>[];
   private _configurations: NodeConfiguration[];
   private _stack: NodesStack;
   private _stacksConfigurations: NodeConfiguration[];
-  private _startingNodes: Node<FlowsDataTypes, ModuleTypes>[];
-  private _responseNodes: Node<FlowsDataTypes, ModuleTypes>[];
-  private _consoleNodes: Node<FlowsDataTypes, ModuleTypes>[];
+  private _startingNodes: Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
+  private _responseNodes: Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
+  private _consoleNodes: Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
 
   constructor() {
     this._nodes = [];
@@ -33,14 +43,15 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   private extractContents = (
     flowConfigurations: FlowsConfigurations
   ): [
-    Node<FlowsDataTypes, ModuleTypes>[],
-    Edge[],
+    Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[],
+    Edge<FlowsEdgeDataTypes>[],
     NodeConfiguration[],
     NodesStack
   ] => {
     const flows = Object.keys(flowConfigurations);
-    const nodes: Node<FlowsDataTypes, ModuleTypes>[] = [];
-    const edges: Edge[] = [];
+    const nodes: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[] =
+      [];
+    const edges: Edge<FlowsEdgeDataTypes>[] = [];
     const configurations: NodeConfiguration[] = [];
     const connectionLists: NodesStack = [];
 
@@ -127,11 +138,11 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
     return this._stacksConfigurations;
   }
 
-  get nodes(): Node<FlowsDataTypes, ModuleTypes>[] {
+  get nodes(): Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[] {
     return this._nodes;
   }
 
-  get edges(): Edge[] {
+  get edges(): Edge<FlowsEdgeDataTypes>[] {
     return this._edges;
   }
 
@@ -139,15 +150,24 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
     return this._configurations;
   }
 
-  get startingNodes(): Node<FlowsDataTypes, ModuleTypes>[] {
+  get startingNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[] {
     return this._startingNodes;
   }
 
-  get responseNodes(): Node<FlowsDataTypes, ModuleTypes>[] {
+  get responseNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[] {
     return this._responseNodes;
   }
 
-  get consoleNodes(): Node<FlowsDataTypes, ModuleTypes>[] {
+  get consoleNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[] {
     return this._consoleNodes;
   }
 }
