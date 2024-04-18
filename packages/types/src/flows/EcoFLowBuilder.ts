@@ -1,22 +1,35 @@
 import type { Edge, Node } from "@reactflow/core";
 import {
   FlowsConfigurations,
-  FlowsDataTypes,
+  FlowsEdgeDataTypes,
+  FlowsNodeDataTypes,
   NodeConfiguration,
 } from "./EcoFlowEditor";
 import { ModuleTypes } from "../module";
 
-export type NodesStack = Node<FlowsDataTypes, ModuleTypes>[][];
+export type NodesStack = Node<
+  FlowsNodeDataTypes,
+  ModuleTypes | string | undefined
+>[][];
 
 export interface EcoFLowBuilder {
   get stack(): NodesStack;
   get stacksConfigurations(): NodeConfiguration[];
-  get nodes(): Node<FlowsDataTypes, ModuleTypes>[];
-  get edges(): Edge[];
+  get nodes(): Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
+  get edges(): Edge<FlowsEdgeDataTypes>[];
   get configurations(): NodeConfiguration[];
-  get startingNodes(): Node<FlowsDataTypes, ModuleTypes>[];
-  get responseNodes(): Node<FlowsDataTypes, ModuleTypes>[];
-  get consoleNodes(): Node<FlowsDataTypes, ModuleTypes>[];
+  get startingNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
+  get responseNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
+  get consoleNodes(): Node<
+    FlowsNodeDataTypes,
+    ModuleTypes | string | undefined
+  >[];
 
   buildStack(
     flowConfigurations: FlowsConfigurations

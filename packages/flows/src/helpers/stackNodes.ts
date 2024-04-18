@@ -1,11 +1,16 @@
-import { FlowsDataTypes, ModuleTypes, NodesStack } from "@ecoflow/types";
+import {
+  FlowsEdgeDataTypes,
+  FlowsNodeDataTypes,
+  ModuleTypes,
+  NodesStack,
+} from "@ecoflow/types";
 import { Edge, Node } from "@reactflow/core";
 import isEndNode from "./isEndNode";
 
 const stackNodes = (
   connectionLists: NodesStack,
-  nodes: Node<FlowsDataTypes, ModuleTypes>[],
-  edges: Edge[]
+  nodes: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[],
+  edges: Edge<FlowsEdgeDataTypes>[]
 ): NodesStack => {
   const { _ } = ecoFlow;
   const finalConnectionStack: NodesStack = [];

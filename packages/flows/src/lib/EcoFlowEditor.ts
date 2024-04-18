@@ -7,7 +7,7 @@ import {
   EcoFlowEditor as IEcoFlowEditor,
   EcoFLowBuilder as IEcoFLowBuilder,
   configOptions,
-  FlowsDataTypes,
+  FlowsNodeDataTypes,
   ModuleTypes,
   Describtions,
   NodeConfiguration,
@@ -400,12 +400,15 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     definitions: FlowDefinitions | FlowsConfigurations
   ): boolean {
     const { _ } = ecoFlow;
-    const nodes: Node<FlowsDataTypes, ModuleTypes>[] = [];
+    const nodes: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[] =
+      [];
     Object.keys(definitions).map((key) => {
       if (_.has(definitions[key], "definitions"))
         nodes.push(...(<Describtions>definitions[key]).definitions);
       else
-        nodes.push(...(<Node<FlowsDataTypes, ModuleTypes>[]>definitions[key]));
+        nodes.push(
+          ...(<Node<FlowsNodeDataTypes, ModuleTypes>[]>definitions[key])
+        );
     });
 
     if (nodes.filter((n) => !n.data.configured).length > 0) return false;
@@ -413,7 +416,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     return true;
   }
 
-  isNodeConfigured(node: Node<FlowsDataTypes, ModuleTypes>): boolean {
+  isNodeConfigured(node: Node<FlowsNodeDataTypes, ModuleTypes>): boolean {
     return node.data.configured;
   }
 
