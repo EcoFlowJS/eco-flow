@@ -1,22 +1,19 @@
 import {
   EcoAPIRouterBuilder as IEcoAPIRouterBuilder,
-  Routes,
+  NodeConfiguration,
+  NodesStack,
 } from "@ecoflow/types";
-import Router, { RouterOptions } from "@koa/router";
 
-export class EcoAPIRouterBuilder
-  extends Router
-  implements IEcoAPIRouterBuilder
-{
-  constructor(opts?: RouterOptions) {
-    super(opts);
+export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
+  private _stack: NodesStack;
+  private _configurations: NodeConfiguration[];
+
+  constructor(nodeStack: NodesStack, configurations: NodeConfiguration[]) {
+    this._stack = nodeStack;
+    this._configurations = configurations;
   }
 
-  upadteRoutes(path: string | RegExp, routes: Routes[]): void {
-    routes.push({
-      path: path,
-      type: "Router",
-      router: this,
-    });
+  async initializeBuilder(): Promise<IEcoAPIRouterBuilder> {
+    return this;
   }
 }
