@@ -43,6 +43,10 @@ export interface EcoFlowEditor {
   removeFlow(flowName: string): Promise<void>;
 
   build(): Promise<this>;
+  isAllNodesConfigured(
+    definitions: FlowDefinitions | FlowsConfigurations
+  ): boolean;
+  isNodeConfigured(node: Node<FlowsDataTypes, ModuleTypes>): boolean;
   deploy(flowconfigurations: FlowsConfigurations): Promise<boolean>;
 }
 
