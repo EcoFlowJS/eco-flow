@@ -97,12 +97,6 @@ export class EcoModule implements IEcoModule {
     );
   }
 
-  installedModules(): Promise<string[]> {
-    return new Promise<string[]>((resolve) =>
-      resolve(this.getInstalledModules())
-    );
-  }
-
   getModuleSchema(moduleID?: string): ModuleSchema & ModuleSchema[] {
     if (_.isUndefined(moduleID))
       return <ModuleSchema & ModuleSchema[]>[...this.moduleSchema];
@@ -194,11 +188,17 @@ export class EcoModule implements IEcoModule {
   }
 
   async getModuleBuilder(): Promise<IEcoModuleBuilder> {
-    return new EcoModuleBuilder(this.nodesPath, await this.installedModules());
+    return new EcoModuleBuilder(this.nodesPath, await this.installedModules);
   }
 
   get getNodeBuilder(): IEcoNodeBuilder | null {
     return this.moduleSchema ? new EcoNodeBuilder(this.moduleSchema) : null;
+  }
+
+  get installedModules(): Promise<string[]> {
+    return new Promise<string[]>((resolve) =>
+      resolve(this.getInstalledModules())
+    );
   }
 
   static get IDBuilders(): typeof EcoModuleID {

@@ -10,7 +10,6 @@ export interface EcoModule {
   searchModule(moduleName: string): Promise<SearchResults | null>;
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
-  installedModules(): Promise<string[]>;
   getModuleSchema(): ModuleSchema[];
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
@@ -19,6 +18,7 @@ export interface EcoModule {
   getNodes(nodeID?: string): Node | null;
   getModuleBuilder(): Promise<EcoModuleBuilder>;
   get getNodeBuilder(): EcoNodeBuilder | null;
+  get installedModules(): Promise<string[]>;
 }
 
 export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug"; // Modle node types;
