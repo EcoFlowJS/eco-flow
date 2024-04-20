@@ -54,6 +54,9 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
         (input) => input.type === "Methods" && !_.isUndefined(input.methods)
       ).length > 0;
 
+    const isParamsRoute = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.type === "ListBox").length > 0;
+
     return requestNodes.map((node) => {
       if (_.isUndefined(node.inputs)) node.inputs = [];
       if (!isInputRoute(node.inputs))
@@ -78,6 +81,18 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
           },
           ...node.inputs,
         ];
+
+      if (!isParamsRoute(node.inputs))
+        node.inputs = [
+          ...node.inputs,
+          {
+            name: "$url.params",
+            label: "URL Parameters",
+            type: "ListBox",
+            listBoxSorting: true,
+          },
+        ];
+
       return node;
     });
   }

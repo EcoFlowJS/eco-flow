@@ -10,7 +10,6 @@ export interface EcoModule {
   searchModule(moduleName: string): Promise<SearchResults | null>;
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
-  installedModules(): Promise<string[]>;
   getModuleSchema(): ModuleSchema[];
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
@@ -19,6 +18,7 @@ export interface EcoModule {
   getNodes(nodeID?: string): Node | null;
   getModuleBuilder(): Promise<EcoModuleBuilder>;
   get getNodeBuilder(): EcoNodeBuilder | null;
+  get installedModules(): Promise<string[]>;
 }
 
 export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug"; // Modle node types;
@@ -39,7 +39,8 @@ export type ModuleSpecsInputsTypes =
   | "SelectPicker" // Select Picker Input Type
   | "Checkbox" // Checkbox Input Type
   | "Radio" // Radio Input Type
-  | "Range"; // Range or Slider Input Type
+  | "Range" // Range or Slider Input Type
+  | "ListBox"; // List Box Input Type
 
 export type API_METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"; // Available API Methods;
 
@@ -55,7 +56,8 @@ export interface ModuleSpecsInputs {
   required?: boolean;
   methods?: API_METHODS[];
   radioValues?: string | string[];
-  pickerOptions?: String[] | ModuleSpecsInputsTypeOptions[];
+  pickerOptions?: string[] | ModuleSpecsInputsTypeOptions[];
+  listBoxSorting?: boolean;
   defaultValue?:
     | string
     | number
