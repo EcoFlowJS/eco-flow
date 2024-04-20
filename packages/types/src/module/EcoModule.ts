@@ -43,6 +43,9 @@ export type ModuleSpecsInputsTypes =
   | "ListBox"; // List Box Input Type
 
 export type API_METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"; // Available API Methods;
+export type DebugOutput = "Message" | "Complete" | "Expression";
+export type DebugConsole = "WebConsole" | "Terminal";
+export type Response = { [key: string]: any };
 
 export interface ModuleSpecsInputsTypeOptions {
   name: string;
@@ -71,7 +74,7 @@ export interface ModuleSpecs {
   type: ModuleTypes;
   describtion?: string;
   inputs?: ModuleSpecsInputs[];
-  controller?: string | Function;
+  controller?: string | (() => string | { [key: string]: any });
 }
 
 export interface Module {
