@@ -66,6 +66,7 @@ export interface ModuleSpecsInputs {
     | number
     | boolean
     | Date
+    | string[]
     | { start: number; end: number };
 }
 
