@@ -5,8 +5,8 @@ import {
   Module,
   ModuleNodes,
   ModuleSchema,
-  Node,
-  Nodes,
+  EcoNode,
+  EcoNodes,
 } from "@ecoflow/types";
 import _ from "lodash";
 import { homedir } from "node:os";
@@ -120,13 +120,13 @@ export class EcoModule implements IEcoModule {
     );
   }
 
-  getNodes(nodeID?: string): (Node | null) & Nodes[] {
+  getNodes(nodeID?: string): (EcoNode | null) & EcoNodes {
     if (_.isUndefined(nodeID))
-      return <(Node | null) & Nodes[]>(<unknown>[...this.nodes]);
+      return <(EcoNode | null) & EcoNodes>(<unknown>[...this.nodes]);
 
     const node = this.nodes.filter((n) => n.id._id === nodeID);
 
-    return <(Node | null) & Nodes[]>(node.length > 0 ? node[0] : null);
+    return <(EcoNode | null) & EcoNodes>(node.length > 0 ? node[0] : null);
   }
 
   async isEcoModule(moduleName: string): Promise<boolean> {

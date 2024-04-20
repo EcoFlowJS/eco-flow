@@ -16,5 +16,5 @@ export interface ExtractedRawNodes {
   consoleNodes: ModuleNodes[];
 }
 
-export type Node = Readonly<ModuleNodes | null>;
-export type Nodes = Readonly<ModuleNodes[]>;
+export type EcoNode = Readonly<ModuleNodes | null>;
+export type EcoNodes = Readonly<ModuleNodes[]>;

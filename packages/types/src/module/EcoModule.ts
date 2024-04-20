@@ -2,7 +2,14 @@ import { SearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
-import { EcoNodeBuilder, ModuleNodes, Node, Nodes } from "./EcoNodeBuilder";
+import {
+  EcoNodeBuilder,
+  ModuleNodes,
+  EcoNode,
+  EcoNodes,
+} from "./EcoNodeBuilder";
+import { Node as ReactFlowNode } from "@reactflow/core";
+import { FlowsNodeDataTypes } from "../flows";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
@@ -14,8 +21,8 @@ export interface EcoModule {
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
   getModule(moduleID?: string): Module | null;
-  getNodes(): Nodes[];
-  getNodes(nodeID?: string): Node | null;
+  getNodes(): EcoNodes;
+  getNodes(nodeID?: string): EcoNode | null;
   getModuleBuilder(): Promise<EcoModuleBuilder>;
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
@@ -97,3 +104,6 @@ export interface ControllersEntryPoints {
 }
 
 export type ModuleControllers = string | ControllersEntryPoints;
+
+export type Node = ReactFlowNode<FlowsNodeDataTypes, string | undefined>;
+export type Nodes = Node[];
