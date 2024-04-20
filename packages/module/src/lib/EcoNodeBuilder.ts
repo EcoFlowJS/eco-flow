@@ -97,13 +97,82 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     });
   }
 
-  private buildMiddlewareNodes(middlewareNodes: ModuleNodes[]) {
+  private buildMiddlewareNodes(middlewareNodes: ModuleNodes[]): ModuleNodes[] {
     if (middlewareNodes.length === 0) return [];
 
     const { _ } = ecoFlow;
     return middlewareNodes.map((node) => {
-      if (_.isUndefined(node.controller))
-        node.controller = (payload: any) => payload;
+      if (_.isUndefined(node.controller)) node.controller = () => this;
+
+      return node;
+    });
+  }
+
+  private buildDebugNodes(debugNodes: ModuleNodes[]): ModuleNodes[] {
+    if (debugNodes.length === 0) return [];
+
+    const { _ } = ecoFlow;
+
+    const isInputDebugOutput = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "debugOutput").length > 0;
+
+    const isInputConsole = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "debugConsole").length > 0;
+
+    return debugNodes.map((node) => {
+      if (_.isUndefined(node.inputs)) node.inputs = [];
+
+      if (!isInputConsole(node.inputs))
+        node.inputs = [
+          {
+            name: "debugConsole",
+            label: "Consoles :",
+            type: "CheckPicker",
+            pickerOptions: ["WebConsole", "Terminal"],
+            required: true,
+            defaultValue: ["WebConsole"],
+          },
+          ...node.inputs,
+        ];
+
+      if (!isInputDebugOutput(node.inputs))
+        node.inputs = [
+          {
+            name: "debugOutput",
+            label: "Output :",
+            type: "SelectPicker",
+            pickerOptions: ["Message", "Complete", "Expression"],
+            required: true,
+            defaultValue: "Complete",
+          },
+          ...node.inputs,
+        ];
+
+      return node;
+    });
+  }
+
+  private buildResponseNode(responseNodes: ModuleNodes[]): ModuleNodes[] {
+    if (responseNodes.length === 0) return [];
+
+    const { _ } = ecoFlow;
+
+    const isInputResponseKey = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "responseKey").length > 0;
+
+    return responseNodes.map((node) => {
+      if (_.isUndefined(node.inputs)) node.inputs = [];
+      if (!isInputResponseKey(node.inputs))
+        node.inputs = [
+          {
+            name: "responseKey",
+            label: "Response key:",
+            type: "String",
+            required: true,
+            defaultValue: "msg",
+          },
+          ...node.inputs,
+        ];
 
       return node;
     });
@@ -116,8 +185,8 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     return [
       ...this.buildRequestNodes(requestNodes),
       ...this.buildMiddlewareNodes(middlewareNodes),
-      ...responseNodes,
-      ...consoleNodes,
+      ...this.buildResponseNode(responseNodes),
+      ...this.buildDebugNodes(consoleNodes),
     ];
   }
 }
