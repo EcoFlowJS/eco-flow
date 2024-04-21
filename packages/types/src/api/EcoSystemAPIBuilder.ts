@@ -1,6 +1,6 @@
 import Router from "@koa/router";
 import { DefaultContext, DefaultState } from "koa";
-import { methods } from "./methods";
+import { Routes } from "./common";
 
 export interface EcoSystemAPIBuilder {
   createGETRoute(
@@ -46,15 +46,4 @@ export interface EcoSystemAPIBuilder {
   registerTo(router: Router): this;
 
   get route(): Routes[];
-}
-
-export interface Routes {
-  path: string | RegExp;
-  type: "method" | "Router";
-  method?: methods;
-  controller?:
-    | Router.Middleware<DefaultState, DefaultContext>
-    | Array<Router.Middleware<DefaultState, DefaultContext>>;
-  router?: Router<DefaultState, DefaultContext>;
-  opts?: Router.LayerOptions;
 }
