@@ -25,13 +25,15 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
 
     const middlewareStack: MiddlewareStack = requestStack.map((node) => [
       node,
-      this._stack.filter((n) => n[0].id === node.id),
+      this._stack
+        .filter((n) => n[0].id === node.id)
+        .map((n) => n.filter((_n, index) => index > 0)),
     ]);
 
     return [requestStack, middlewareStack];
   }
 
-  private async buildRouterRequestNode(
+  private async buildRouterPath(
     controller: ModuleSpecs["controller"],
     inputs?: NodeConfiguration["configs"]
   ): Promise<string> {
@@ -48,8 +50,15 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return buildRoutePath(await nodeController.call(inputs));
   }
 
-  private async buildRouterRequestStack(requestStack: RequestStack) {
-    const result: any[] = [];
+  private async buildRouterMiddleware(middlewares: NodesStack = []) {
+    return middlewares;
+  }
+
+  private async buildRouterStack(
+    requestStack: RequestStack,
+    middlewareStack: MiddlewareStack
+  ): Promise<[string, NodesStack | undefined][]> {
+    let result: [string, NodesStack][] = [];
     for await (const node of requestStack) {
       const { ecoModule } = ecoFlow;
       const { type, controller } = ecoModule.getNodes(node.data.moduleID._id)!;
@@ -57,9 +66,14 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
         (configuration) => configuration.nodeID === node.id
       )?.configs;
 
-      if (type !== "Request") return node;
+      if (type === "Request") {
+        const requestPath = await this.buildRouterPath(controller, inputs);
 
-      result.push(await this.buildRouterRequestNode(controller, inputs));
+        const middleware = await this.buildRouterMiddleware(
+          middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
+        );
+        result.push([requestPath, middleware]);
+      }
     }
 
     return result;
@@ -67,8 +81,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
 
   async initializeBuilder(): Promise<IEcoAPIRouterBuilder> {
     const [requestStack, middlewareStack] = this.routerBuilderStacks;
-    console.log(await this.buildRouterRequestStack(requestStack));
-
+    console.log(await this.buildRouterStack(requestStack, middlewareStack));
     return this;
   }
 }

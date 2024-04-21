@@ -430,7 +430,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       configurations
     ).initializeBuilder();
 
-    console.log(apiRouterBuilder);
+    // console.log(apiRouterBuilder);
     // console.log(this.fLowBuilder.getStackNodeConfigurations(stack[0][0].id));
 
     // console.log(this.fLowBuilder.consoleNodes);

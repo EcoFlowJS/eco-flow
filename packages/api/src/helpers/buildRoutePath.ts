@@ -7,6 +7,9 @@ const buildRoutePath = (apiConfigs: NodeRequestController): string => {
       .split(" ")[1]
       .replace(/^\/+|\/+$/g, "")}`;
 
+  if (_.isUndefined(apiConfigs.apiMethod) || _.isEmpty(apiConfigs.apiMethod))
+    apiConfigs.apiMethod = "GET";
+
   if (
     _.isUndefined(apiConfigs.apiEndpoint) ||
     _.isEmpty(apiConfigs.apiEndpoint)
