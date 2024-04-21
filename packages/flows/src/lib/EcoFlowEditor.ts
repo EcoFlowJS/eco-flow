@@ -17,7 +17,7 @@ import path from "path";
 import fse from "fs-extra";
 import type { Node } from "@reactflow/core";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
-import { EcoAPIRouterBuilder } from "@ecoflow/api";
+import { EcoAPIBuilder, EcoAPIRouterBuilder } from "@ecoflow/api";
 
 export class EcoFlowEditor implements IEcoFlowEditor {
   private flowDir: string;
@@ -429,11 +429,13 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       stack,
       configurations
     ).initializeBuilder();
+    try {
+      EcoAPIBuilder.register(apiRouterBuilder);
+    } catch (error) {
+      ecoFlow.log.error(error);
+    }
 
-    // console.log(apiRouterBuilder);
-    // console.log(this.fLowBuilder.getStackNodeConfigurations(stack[0][0].id));
-
-    // console.log(this.fLowBuilder.consoleNodes);
+    //TODO: Save configuration to the flow Files
 
     return true;
   }

@@ -1,11 +1,14 @@
-import { NodeRequestController } from "@ecoflow/types";
+import { API_METHODS, NodeRequestController } from "@ecoflow/types";
 
-const buildRoutePath = (apiConfigs: NodeRequestController): string => {
+const buildRoutePath = (
+  apiConfigs: NodeRequestController
+): [API_METHODS, string] => {
   const { _ } = ecoFlow;
   if (_.isString(apiConfigs))
-    return `${apiConfigs.split(" ")[0]} /${apiConfigs
-      .split(" ")[1]
-      .replace(/^\/+|\/+$/g, "")}`;
+    return [
+      <API_METHODS>apiConfigs.split(" ")[0],
+      `/${apiConfigs.split(" ")[1].replace(/^\/+|\/+$/g, "")}`,
+    ];
 
   if (_.isUndefined(apiConfigs.apiMethod) || _.isEmpty(apiConfigs.apiMethod))
     apiConfigs.apiMethod = "GET";
@@ -26,7 +29,7 @@ const buildRoutePath = (apiConfigs: NodeRequestController): string => {
     (params: string) => (path = path + `/:${params}`)
   );
 
-  return `${apiConfigs.apiMethod} /${path}`;
+  return [apiConfigs.apiMethod, `/${path}`];
 };
 
 export default buildRoutePath;

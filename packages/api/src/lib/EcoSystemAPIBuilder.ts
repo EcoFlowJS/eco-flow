@@ -269,11 +269,12 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
    * @memberof EcoSystemAPIBuilder
    */
   registerTo(router: Router): this {
+    const { _ } = ecoFlow;
     this.routes.forEach((route) => {
-      if (ecoFlow._.isEmpty(route.path)) return;
-      if (ecoFlow._.isEmpty(route.type)) return;
+      if (_.isEmpty(route.path)) return;
+      if (_.isEmpty(route.type)) return;
       if (route.type === "method") {
-        if (ecoFlow._.isEmpty(route.method)) return;
+        if (_.isEmpty(route.method)) return;
         if (typeof route.controller === "undefined") return;
         router.register(
           route.path,
@@ -310,13 +311,14 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
    * @memberof EcoSystemAPIBuilder
    */
   static register(routes: Routes[]): void {
-    const { systemRouter } = ecoFlow.router;
-    if (ecoFlow._.isUndefined(systemRouter)) return;
+    const { _, router } = ecoFlow;
+    const { systemRouter } = router;
+    if (_.isUndefined(systemRouter)) return;
     routes.forEach((route) => {
-      if (ecoFlow._.isEmpty(route.path)) return;
-      if (ecoFlow._.isEmpty(route.type)) return;
+      if (_.isEmpty(route.path)) return;
+      if (_.isEmpty(route.type)) return;
       if (route.type === "method") {
-        if (ecoFlow._.isEmpty(route.method)) return;
+        if (_.isEmpty(route.method)) return;
         if (typeof route.controller === "undefined") return;
         systemRouter.register(
           route.path,
