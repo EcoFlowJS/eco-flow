@@ -17,6 +17,7 @@ import TPromise from "thread-promises";
 import responseController from "../helpers/responseController";
 import middlewareController from "../helpers/middlewareController";
 import buildUserControllers from "../helpers/buildUserControllers";
+import getDuplicateRoutes from "../helpers/getDuplicateRoutes";
 
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
@@ -60,17 +61,13 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
           return this;
         };
 
-    try {
-      return buildRouterPath(
-        await new Promise((resolve, reject) => {
-          const apiConfigs = nodeController.call(inputs);
-          if (apiConfigs instanceof Promise) apiConfigs.then(resolve, reject);
-          else resolve(apiConfigs);
-        })
-      );
-    } catch (err) {
-      throw err;
-    }
+    return buildRouterPath(
+      await new Promise((resolve, reject) => {
+        const apiConfigs = nodeController.call(inputs);
+        if (apiConfigs instanceof Promise) apiConfigs.then(resolve, reject);
+        else resolve(apiConfigs);
+      })
+    );
   }
 
   private async buildKoaController(middlewares: NodesStack = []) {
@@ -175,9 +172,16 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
 
   async initializeBuilder(): Promise<IEcoAPIRouterBuilder> {
     const [requestStack, middlewareStack] = this.routerBuilderStacks;
-    this._routes = (
-      await this.generateRoutesConfigs(requestStack, middlewareStack)
-    ).map((configs) => {
+
+    const routesSchema = await this.generateRoutesConfigs(
+      requestStack,
+      middlewareStack
+    );
+
+    const isDuplicateRoute = getDuplicateRoutes(routesSchema);
+    if (Object.keys(isDuplicateRoute).length > 0) throw isDuplicateRoute;
+
+    this._routes = routesSchema.map((configs) => {
       const [method, path, controller] = configs;
       return {
         path,

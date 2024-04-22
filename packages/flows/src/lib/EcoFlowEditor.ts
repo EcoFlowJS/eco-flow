@@ -428,11 +428,8 @@ export class EcoFlowEditor implements IEcoFlowEditor {
         stack,
         configurations
       ).initializeBuilder();
-      try {
-        EcoAPIBuilder.register(apiRouterBuilder);
-      } catch (error) {
-        ecoFlow.log.error(error);
-      }
+
+      EcoAPIBuilder.register(apiRouterBuilder);
 
       for await (const flowName of Object.keys(flowconfigurations)) {
         await this.updateFlowNodeDefinitions(
