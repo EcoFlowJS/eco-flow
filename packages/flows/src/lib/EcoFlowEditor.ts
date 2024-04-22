@@ -11,11 +11,12 @@ import {
   ModuleTypes,
   Describtions,
   NodeConfiguration,
+  Node,
+  NodeConnections,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
-import type { Node } from "@reactflow/core";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 import { EcoAPIBuilder, EcoAPIRouterBuilder } from "@ecoflow/api";
 
@@ -110,7 +111,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
 
   private async updateFlowNodeDefinitions(
     flowName: string,
-    value?: Node
+    value?: Node[]
   ): Promise<this> {
     await fse.ensureFile(
       path.join(
@@ -135,7 +136,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
 
   private async updateFlowNodeConnections(
     flowName: string,
-    value?: Node
+    value?: NodeConnections
   ): Promise<this> {
     await fse.ensureFile(
       path.join(
@@ -160,7 +161,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
 
   private async updateFlowNodeConfigurations(
     flowName: string,
-    value?: Node
+    value?: NodeConfiguration[]
   ): Promise<this> {
     await fse.ensureFile(
       path.join(
@@ -400,15 +401,11 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     definitions: FlowDefinitions | FlowsConfigurations
   ): boolean {
     const { _ } = ecoFlow;
-    const nodes: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[] =
-      [];
+    const nodes: Node[] = [];
     Object.keys(definitions).map((key) => {
       if (_.has(definitions[key], "definitions"))
         nodes.push(...(<Describtions>definitions[key]).definitions);
-      else
-        nodes.push(
-          ...(<Node<FlowsNodeDataTypes, ModuleTypes>[]>definitions[key])
-        );
+      else nodes.push(...(<Node[]>definitions[key]));
     });
 
     if (nodes.filter((n) => !n.data.configured).length > 0) return false;
@@ -416,28 +413,48 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     return true;
   }
 
-  isNodeConfigured(node: Node<FlowsNodeDataTypes, ModuleTypes>): boolean {
+  isNodeConfigured(node: Node): boolean {
     return node.data.configured;
   }
 
   async deploy(flowconfigurations: FlowsConfigurations): Promise<boolean> {
-    const [stack, configurations] = await this.fLowBuilder.buildStack({
-      ...flowconfigurations,
-    });
-
-    const apiRouterBuilder = await new EcoAPIRouterBuilder(
-      stack,
-      configurations
-    ).initializeBuilder();
+    const { log } = ecoFlow;
     try {
-      EcoAPIBuilder.register(apiRouterBuilder);
+      const [stack, configurations] = await this.fLowBuilder.buildStack({
+        ...flowconfigurations,
+      });
+
+      const apiRouterBuilder = await new EcoAPIRouterBuilder(
+        stack,
+        configurations
+      ).initializeBuilder();
+      try {
+        EcoAPIBuilder.register(apiRouterBuilder);
+      } catch (error) {
+        ecoFlow.log.error(error);
+      }
+
+      for await (const flowName of Object.keys(flowconfigurations)) {
+        await this.updateFlowNodeDefinitions(
+          flowName,
+          flowconfigurations[flowName].definitions
+        );
+
+        await this.updateFlowNodeConnections(
+          flowName,
+          flowconfigurations[flowName].connections
+        );
+
+        await this.updateFlowNodeConfigurations(
+          flowName,
+          flowconfigurations[flowName].configurations
+        );
+      }
+      return true;
     } catch (error) {
-      ecoFlow.log.error(error);
+      log.error(error);
+      return false;
     }
-
-    //TODO: Save configuration to the flow Files
-
-    return true;
   }
 
   get flows(): Promise<string[]> {
