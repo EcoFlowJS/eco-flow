@@ -1,6 +1,6 @@
-import type { Edge, Node } from "@reactflow/core";
+import type { Edge } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
-import { EcoModuleID, ModuleTypes } from "../module";
+import { EcoModuleID, ModuleTypes, Node, Nodes } from "../module";
 import { FC, HTMLAttributes } from "react";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 
@@ -46,9 +46,7 @@ export interface EcoFlowEditor {
   isAllNodesConfigured(
     definitions: FlowDefinitions | FlowsConfigurations
   ): boolean;
-  isNodeConfigured(
-    node: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>
-  ): boolean;
+  isNodeConfigured(node: Node): boolean;
   deploy(flowconfigurations: FlowsConfigurations): Promise<boolean>;
 }
 
@@ -60,7 +58,7 @@ export interface NodeConfiguration {
 }
 
 export interface FlowDefinitions {
-  [key: string]: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
+  [key: string]: Nodes;
 }
 
 export interface FlowConnections {
@@ -76,7 +74,7 @@ export interface FlowsDescription {
 }
 
 export interface Describtions {
-  definitions: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>[];
+  definitions: Nodes;
   connections: Edge<FlowsEdgeDataTypes>[];
   configurations: NodeConfiguration[];
 }
@@ -134,3 +132,6 @@ export interface FlowEditorSettingsConfigurations {
   panMiniMap: boolean;
   scrollPan: boolean;
 }
+
+export type NodeConnection = Edge<FlowsEdgeDataTypes>;
+export type NodeConnections = NodeConnection[];

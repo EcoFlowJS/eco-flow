@@ -4,19 +4,20 @@ import {
   EcoAPIRouterBuilder as IEcoAPIRouterBuilder,
   MiddlewareStack,
   ModuleSpecs,
-  ModuleTypes,
   NodeConfiguration,
   NodeRequestController,
-  Nodes,
   NodesStack,
   RequestStack,
-  ResponseController,
   RouterRequestControllerBuilderOptions,
   Routes,
-  UserControllers,
 } from "@ecoflow/types";
-import buildRoutePath from "../helpers/buildRoutePath";
+import buildRouterPath from "../helpers/buildRouterPath";
 import { Context } from "koa";
+import TPromise from "thread-promises";
+import responseController from "../helpers/responseController";
+import middlewareController from "../helpers/middlewareController";
+import buildUserControllers from "../helpers/buildUserControllers";
+import getDuplicateRoutes from "../helpers/getDuplicateRoutes";
 
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
@@ -44,7 +45,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return [requestStack, middlewareStack];
   }
 
-  private async buildRouterPath(
+  private async buildRouterRequest(
     controller: ModuleSpecs["controller"],
     inputs?: NodeConfiguration["configs"]
   ): Promise<[API_METHODS, string]> {
@@ -60,159 +61,89 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
           return this;
         };
 
-    try {
-      return buildRoutePath(
-        await new Promise((resolve, reject) => {
-          const apiConfigs = nodeController.call(inputs);
-          if (apiConfigs instanceof Promise) apiConfigs.then(resolve, reject);
-          else resolve(apiConfigs);
-        })
-      );
-    } catch (err) {
-      throw err;
-    }
+    return buildRouterPath(
+      await new Promise((resolve, reject) => {
+        const apiConfigs = nodeController.call(inputs);
+        if (apiConfigs instanceof Promise) apiConfigs.then(resolve, reject);
+        else resolve(apiConfigs);
+      })
+    );
   }
 
-  private async buildUserControllers(
-    middlewares: Nodes
-  ): Promise<
-    [
-      string,
-      ModuleTypes,
-      NodeConfiguration["configs"] | undefined,
-      () => Promise<UserControllers>
-    ][]
-  > {
-    const { _, ecoModule } = ecoFlow;
-    const result: [
-      string,
-      ModuleTypes,
-      NodeConfiguration["configs"] | undefined,
-      () => Promise<UserControllers>
-    ][] = [];
-    for await (const middleware of middlewares) {
-      const { type, controller } = await ecoModule.getNodes(
-        middleware.data.moduleID._id
-      )!;
-      if (type === "Request") continue;
-
-      const inputs = this._configurations.find(
-        (configuration) => configuration.nodeID === middleware.id
-      )?.configs;
-
-      const nodeController: () => Promise<void> = _.isString(controller)
-        ? await ecoModule
-            .getModuleSchema(controller.split(".")[0])
-            .getController(controller.split(".")[1])
-        : controller ||
-          function (this: EcoContext) {
-            this.next();
-          };
-      const modduleType: ModuleTypes =
-        middleware.type === "Request"
-          ? "Request"
-          : middleware.type === "Middleware"
-          ? "Middleware"
-          : middleware.type === "Debug"
-          ? "Debug"
-          : middleware.type === "Response"
-          ? "Response"
-          : "Request";
-
-      result.push([middleware.id, modduleType, inputs, nodeController]);
-    }
-
-    return result;
-  }
-
-  private async buildRouterMiddleware(middlewares: NodesStack = []) {
+  private async buildKoaController(middlewares: NodesStack = []) {
     return async (ctx: Context) => {
       const { _ } = ecoFlow;
       const controllerResponse = Object.create({});
       const middlewareResponse = Object.create({});
+      const concurrentMiddlewares: TPromise<Array<void>, void, void>[] =
+        middlewares.map(
+          (middleware) =>
+            new TPromise<Array<void>, void, void>(async (resolve) => {
+              const controllers = await buildUserControllers(
+                middleware,
+                this._configurations
+              );
+              let isNext = true;
+              let lastControllerID: string | null = null;
 
-      for await (const middleware of middlewares) {
-        const controllers = await this.buildUserControllers(middleware);
-        let isNext = true;
-        let lastControllerID: string | null = null;
+              const ecoContext: EcoContext = {
+                ...ctx,
+                payload: { msg: (<any>ctx.request).body || {} },
+                next() {
+                  isNext = true;
+                },
+              };
 
-        const ecoContext: EcoContext = {
-          ...ctx,
-          payload: { msg: (<any>ctx.request).body || {} },
-          next() {
-            isNext = true;
-          },
-        };
+              for await (const controller of controllers) {
+                const [id, type, inputs, userControllers] = controller;
+                if (_.has(controllerResponse, id)) continue;
 
-        for await (const controller of controllers) {
-          const [id, type, inputs, userControllers] = controller;
-          if (_.has(controllerResponse, id)) continue;
+                if (!isNext && type === "Middleware") {
+                  controllerResponse[id] = lastControllerID
+                    ? controllerResponse[lastControllerID]
+                    : ecoContext.payload;
+                  lastControllerID = id;
+                  continue;
+                }
+                isNext = false;
+                ecoContext.inputs = inputs;
 
-          if (!isNext && type === "Middleware") {
-            controllerResponse[id] = lastControllerID
-              ? controllerResponse[lastControllerID]
-              : ecoContext.payload;
-            lastControllerID = id;
-            continue;
-          }
+                if (type === "Middleware")
+                  await middlewareController(
+                    id,
+                    ecoContext,
+                    userControllers,
+                    controllerResponse
+                  );
 
-          isNext = false;
-          ecoContext.inputs = inputs;
+                if (type === "Response")
+                  await responseController(
+                    ecoContext,
+                    ctx,
+                    userControllers,
+                    middlewareResponse
+                  );
 
-          if (type === "Middleware") {
-            await new Promise((resolve, reject) => {
-              const userController = userControllers.call(ecoContext);
-              if (userController instanceof Promise)
-                userController.then(resolve, reject);
-              resolve(userController);
-            });
+                if (type === "Debug") {
+                  //Todo: this should be implemented
+                  console.log(
+                    "Debug",
+                    lastControllerID ? controllerResponse[lastControllerID] : {}
+                  );
+                }
 
-            controllerResponse[id] = ecoContext.payload || {};
-          }
-
-          if (type === "Response") {
-            const [id, response]: ResponseController = await new Promise(
-              (resolve, reject) => {
-                const userController = userControllers.call(
-                  ecoContext
-                ) as Promise<ResponseController>;
-                if (userController instanceof Promise)
-                  userController.then(resolve, reject);
-                resolve(userController);
+                lastControllerID = id;
               }
-            );
+              resolve();
+            })
+        );
 
-            middlewareResponse[id] = response;
-            const updatedContext: Context = { ...ecoContext };
-            delete updatedContext.payload;
-            delete updatedContext.inputs;
-            delete updatedContext.next;
-            Object.keys(updatedContext)
-              .filter((key) => key !== "body")
-              .map((key) => {
-                ctx[key] = updatedContext[key];
-              });
-          }
-
-          if (type === "Debug") {
-            //Todo: this should be implemented
-            console.log(
-              "Debug",
-              lastControllerID
-                ? controllerResponse[lastControllerID]
-                : ecoContext.payload
-            );
-          }
-
-          lastControllerID = id;
-        }
-      }
-
+      await Promise.all(concurrentMiddlewares);
       if (!_.isEmpty(middlewareResponse)) ctx.body = middlewareResponse;
     };
   }
 
-  private async buildRouterStack(
+  private async generateRoutesConfigs(
     requestStack: RequestStack,
     middlewareStack: MiddlewareStack
   ): Promise<[API_METHODS, string, (ctx: Context) => void][]> {
@@ -225,15 +156,15 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       )?.configs;
 
       if (type !== "Request") continue;
-      const [methods, requestPath] = await this.buildRouterPath(
+      const [methods, requestPath] = await this.buildRouterRequest(
         controller,
         inputs
       );
 
-      const middleware = await this.buildRouterMiddleware(
+      const koaController = await this.buildKoaController(
         middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
       );
-      result.push([methods, requestPath, middleware]);
+      result.push([methods, requestPath, koaController]);
     }
 
     return result;
@@ -241,10 +172,17 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
 
   async initializeBuilder(): Promise<IEcoAPIRouterBuilder> {
     const [requestStack, middlewareStack] = this.routerBuilderStacks;
-    this._routes = (
-      await this.buildRouterStack(requestStack, middlewareStack)
-    ).map((stack) => {
-      const [method, path, controller] = stack;
+
+    const routesSchema = await this.generateRoutesConfigs(
+      requestStack,
+      middlewareStack
+    );
+
+    const isDuplicateRoute = getDuplicateRoutes(routesSchema);
+    if (Object.keys(isDuplicateRoute).length > 0) throw isDuplicateRoute;
+
+    this._routes = routesSchema.map((configs) => {
+      const [method, path, controller] = configs;
       return {
         path,
         type: "method",
@@ -257,5 +195,13 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
 
   get routes(): Routes[] {
     return this._routes;
+  }
+
+  get nodeStack(): NodesStack {
+    return this._stack;
+  }
+
+  get configurations(): NodeConfiguration[] {
+    return this._configurations;
   }
 }

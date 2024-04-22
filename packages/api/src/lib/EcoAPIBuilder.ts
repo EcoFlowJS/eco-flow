@@ -265,10 +265,6 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
       });
     };
 
-    try {
-      registerRoutes(apiRouterBuilder.routes);
-    } catch (error) {
-      throw error;
-    }
+    registerRoutes(apiRouterBuilder.routes);
   }
 }

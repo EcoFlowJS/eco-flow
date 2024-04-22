@@ -14,7 +14,6 @@
   "dependencies": {
     "@ecoflow/api": "^0.0.1",
     "@ecoflow/types": "^0.0.1",
-    "@reactflow/core": "^11.11.0",
     "fs-extra": "^11.2.0",
     "glob": "^10.3.12"
   }

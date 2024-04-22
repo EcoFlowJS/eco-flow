@@ -1,6 +1,6 @@
 import { API_METHODS, NodeRequestController } from "@ecoflow/types";
 
-const buildRoutePath = (
+const buildRouterPath = (
   apiConfigs: NodeRequestController
 ): [API_METHODS, string] => {
   const { _ } = ecoFlow;
@@ -32,4 +32,4 @@ const buildRoutePath = (
   return [apiConfigs.apiMethod, `/${path}`];
 };
 
-export default buildRoutePath;
+export default buildRouterPath;
