@@ -1,5 +1,5 @@
 import { Context, Middleware } from "koa";
-import { FlowsNodeDataTypes, NodesStack } from "../flows";
+import { FlowsNodeDataTypes, NodeConfiguration, NodesStack } from "../flows";
 import { API_METHODS, Node, Nodes } from "../module";
 import { Routes } from "./common";
 
@@ -7,6 +7,8 @@ export interface EcoAPIRouterBuilder {
   initializeBuilder(): Promise<EcoAPIRouterBuilder>;
 
   get routes(): Routes[];
+  get nodeStack(): NodesStack;
+  get configurations(): NodeConfiguration[];
 }
 
 export interface RouterRequestControllerBuilderOptions {
