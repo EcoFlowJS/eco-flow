@@ -4,11 +4,10 @@ const buildRouterPath = (
   apiConfigs: NodeRequestController
 ): [API_METHODS, string] => {
   const { _ } = ecoFlow;
-  if (_.isString(apiConfigs))
-    return [
-      <API_METHODS>apiConfigs.split(" ")[0],
-      `/${apiConfigs.split(" ")[1].replace(/^\/+|\/+$/g, "")}`,
-    ];
+  if (_.isString(apiConfigs)) {
+    const [method, path] = apiConfigs.split(" ");
+    return [<API_METHODS>method, `/${path.replace(/^\/+|\/+$/g, "")}`];
+  }
 
   if (_.isUndefined(apiConfigs.apiMethod) || _.isEmpty(apiConfigs.apiMethod))
     apiConfigs.apiMethod = "GET";

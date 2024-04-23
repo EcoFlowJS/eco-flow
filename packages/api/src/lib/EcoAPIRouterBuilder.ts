@@ -17,12 +17,12 @@ import TPromise from "thread-promises";
 import responseController from "../helpers/responseController";
 import middlewareController from "../helpers/middlewareController";
 import buildUserControllers from "../helpers/buildUserControllers";
-import getDuplicateRoutes from "../helpers/getDuplicateRoutes";
 
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
   private _configurations: NodeConfiguration[];
   private _routes: Routes[];
+  private _isDuplicateRoutes: { [key: string]: string[] } = {};
 
   constructor(nodeStack: NodesStack, configurations: NodeConfiguration[]) {
     this._stack = nodeStack;
@@ -148,6 +148,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     middlewareStack: MiddlewareStack
   ): Promise<[API_METHODS, string, (ctx: Context) => void][]> {
     let result: [API_METHODS, string, (ctx: Context) => void][] = [];
+    this._isDuplicateRoutes = {};
     for await (const node of requestStack) {
       const { ecoModule } = ecoFlow;
       const { type, controller } = ecoModule.getNodes(node.data.moduleID._id)!;
@@ -156,15 +157,41 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       )?.configs;
 
       if (type !== "Request") continue;
-      const [methods, requestPath] = await this.buildRouterRequest(
+      const [method, requestPath] = await this.buildRouterRequest(
         controller,
         inputs
       );
 
+      const checkPath = `${method} ${requestPath}`;
+      if (this._isDuplicateRoutes[checkPath]) {
+        this._isDuplicateRoutes[checkPath].push(node.id);
+        continue;
+      }
+      this._isDuplicateRoutes[checkPath] = [node.id];
+
       const koaController = await this.buildKoaController(
         middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
       );
-      result.push([methods, requestPath, koaController]);
+      result.push([method, requestPath, koaController]);
+    }
+
+    Object.keys(this._isDuplicateRoutes).forEach((key) => {
+      if (this._isDuplicateRoutes[key].length === 1)
+        delete this._isDuplicateRoutes[key];
+    });
+
+    if (Object.keys(this._isDuplicateRoutes).length > 0) {
+      const routes = Object.keys(this._isDuplicateRoutes);
+      const nodesID: string[] = [];
+      routes.forEach((route) =>
+        this._isDuplicateRoutes[route].forEach((nodeID) => nodesID.push(nodeID))
+      );
+
+      throw {
+        msg: "Duplicate routes",
+        routes,
+        nodesID,
+      };
     }
 
     return result;
@@ -177,9 +204,6 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       requestStack,
       middlewareStack
     );
-
-    const isDuplicateRoute = getDuplicateRoutes(routesSchema);
-    if (Object.keys(isDuplicateRoute).length > 0) throw isDuplicateRoute;
 
     this._routes = routesSchema.map((configs) => {
       const [method, path, controller] = configs;
