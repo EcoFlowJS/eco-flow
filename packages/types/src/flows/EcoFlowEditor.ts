@@ -104,6 +104,7 @@ export interface FlowsNodeDataTypes {
   appearance: NodeAppearanceConfigurations;
   icon?: FC<HTMLAttributes<SVGElement>>;
   isConnectable?: number | boolean;
+  isError?: boolean;
   openDrawer?: (
     label: string,
     configured: boolean,

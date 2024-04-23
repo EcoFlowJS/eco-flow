@@ -13,6 +13,7 @@ import {
   NodeConfiguration,
   Node,
   NodeConnections,
+  Nodes,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
@@ -111,7 +112,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
 
   private async updateFlowNodeDefinitions(
     flowName: string,
-    value?: Node[]
+    value?: Nodes
   ): Promise<this> {
     await fse.ensureFile(
       path.join(
@@ -401,11 +402,11 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     definitions: FlowDefinitions | FlowsConfigurations
   ): boolean {
     const { _ } = ecoFlow;
-    const nodes: Node[] = [];
+    const nodes: Nodes = [];
     Object.keys(definitions).map((key) => {
       if (_.has(definitions[key], "definitions"))
         nodes.push(...(<Describtions>definitions[key]).definitions);
-      else nodes.push(...(<Node[]>definitions[key]));
+      else nodes.push(...(<Nodes>definitions[key]));
     });
 
     if (nodes.filter((n) => !n.data.configured).length > 0) return false;
@@ -418,7 +419,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
   }
 
   async deploy(flowconfigurations: FlowsConfigurations): Promise<boolean> {
-    const { log } = ecoFlow;
+    const { _, log } = ecoFlow;
     try {
       const [stack, configurations] = await this.fLowBuilder.buildStack({
         ...flowconfigurations,
@@ -448,9 +449,9 @@ export class EcoFlowEditor implements IEcoFlowEditor {
         );
       }
       return true;
-    } catch (error) {
-      log.error(error);
-      return false;
+    } catch (error: any) {
+      log.error(_.isString(error) ? error : error.msg);
+      throw error;
     }
   }
 
