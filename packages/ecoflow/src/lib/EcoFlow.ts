@@ -86,7 +86,7 @@ class EcoFlow implements IEcoFlow {
     await this.router.initRouter(this.server);
 
     await this.ecoModule.registerModules();
-    await this.flowEditor.build();
+    await this.flowEditor.initialize();
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();

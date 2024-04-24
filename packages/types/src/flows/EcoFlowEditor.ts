@@ -42,12 +42,12 @@ export interface EcoFlowEditor {
   ): Promise<void>;
   removeFlow(flowName: string): Promise<void>;
 
-  build(): Promise<this>;
+  initialize(): Promise<this>;
   isAllNodesConfigured(
-    definitions: FlowDefinitions | FlowsConfigurations
+    definitions: FlowDefinitions | FlowsDescription
   ): boolean;
   isNodeConfigured(node: Node): boolean;
-  deploy(flowconfigurations: FlowsConfigurations): Promise<boolean>;
+  deploy(flowDescription: FlowsDescription): Promise<boolean>;
 }
 
 export interface NodeConfiguration {
@@ -79,9 +79,6 @@ export interface Describtions {
   configurations: NodeConfiguration[];
 }
 
-export interface FlowsConfigurations {
-  [key: string]: Describtions;
-}
 export interface NodeAppearanceConfigurations {
   label?: boolean;
   icon?: string | null;
