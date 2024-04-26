@@ -1,12 +1,11 @@
 import { Database as EcoDB } from "@ecoflow/database";
 import {
   Database,
-  DriverKnex,
-  DriverMongoose,
   AuditLogsResponse,
   AuditLogsService as IAuditLogsService,
   AuditLog,
   AuditLogSchemaStruct,
+  DatabaseConnection,
 } from "@ecoflow/types";
 import {
   auditLogsModelKnex,
@@ -14,11 +13,12 @@ import {
 } from "./model/auditLogsModel";
 
 export class AuditLogsService implements IAuditLogsService {
-  private connection: DriverKnex | DriverMongoose;
+  private connection: DatabaseConnection;
   private database: Database;
-  constructor() {
+
+  constructor(conn?: DatabaseConnection) {
     this.database = ecoFlow.database;
-    this.connection = this.database.getDatabaseConnection("_sysDB");
+    this.connection = conn || this.database.getDatabaseConnection("_sysDB");
   }
 
   async addLog(auditLog: AuditLog): Promise<void> {
@@ -53,22 +53,26 @@ export class AuditLogsService implements IAuditLogsService {
     throw "Invalid database connection specified";
   }
 
-  async fetchAuditLogs(page: number = 1): Promise<AuditLogsResponse> {
-    if (this.database.isKnex(this.connection)) {
-      const totalDocs = (
-        (
-          await (await auditLogsModelKnex(this.connection))().select().count()
-        )[0] as any
-      )["count(*)"];
+  async fetchAuditLogs(page: number | boolean = 1): Promise<AuditLogsResponse> {
+    const { _ } = ecoFlow;
 
-      const query = (await auditLogsModelKnex(this.connection))()
-        .select()
-        .limit(100)
-        .orderBy("_id", "desc");
-      if (page > 1) query.offset((page - 1) * 100);
+    if (this.database.isKnex(this.connection)) {
+      const countQuery = (
+        await (await auditLogsModelKnex(this.connection))().select().count()
+      )[0] as any;
+      const totalDocs = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+
+      const query = (await auditLogsModelKnex(this.connection))().select();
+
+      if (_.isNumber(page)) {
+        query.limit(100).orderBy("_id", "desc");
+        if (page > 1) query.offset((page - 1) * 100);
+      }
 
       return {
-        totalDocs: totalDocs > 0 ? totalDocs : 1,
+        totalDocs: Number(totalDocs) > 0 ? Number(totalDocs) : 1,
         logs: await query,
       };
     }
@@ -78,11 +82,12 @@ export class AuditLogsService implements IAuditLogsService {
         .find()
         .countDocuments();
 
-      const query = auditLogsModelMongoose(this.connection)
-        .find()
-        .limit(100)
-        .sort({ _id: -1 });
-      if (page > 1) query.skip((page - 1) * 100);
+      const query = auditLogsModelMongoose(this.connection).find();
+
+      if (_.isNumber(page)) {
+        query.limit(100).sort({ _id: -1 });
+        if (page > 1) query.skip((page - 1) * 100);
+      }
 
       return {
         totalDocs: totalDocs > 0 ? totalDocs : 1,

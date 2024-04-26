@@ -5,6 +5,7 @@ export interface UserService {
   isNoUser(): Promise<boolean>;
   isUserExist(userId: string): Promise<boolean>;
   isActiveUser(userId: string): Promise<boolean>;
+  migrateUsers(userInfo: userTableCollection): Promise<void>;
   createUser(
     userInfo: userTableCollection,
     isAdmin?: boolean

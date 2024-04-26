@@ -1,5 +1,6 @@
 export interface RoleService {
   getAllRoles(): Promise<Role[]>;
+  migrateRole(role: Role): Promise<string>;
   createRole(
     role: Role,
     roleLike?: string | null,

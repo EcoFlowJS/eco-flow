@@ -1,6 +1,6 @@
 import { ApiResponse, configOptions } from "@ecoflow/types";
 import { Context } from "koa";
-import { systemDatabaseConfigutations } from "../../../helpers/parseServerConfigHelper";
+import systemDatabaseConfigutations from "../../../helpers/systemDatabaseConfigutations";
 
 const databaseValidatorBlank = async (ctx: Context) => {
   const { _ } = ecoFlow;

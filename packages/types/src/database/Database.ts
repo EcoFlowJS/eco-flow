@@ -14,7 +14,8 @@ export interface Database {
   addDatabaseConnection(
     name: string,
     driver: DB_Drivers,
-    connection: ConnectionConfig
+    connection: ConnectionConfig,
+    isSystem?: boolean
   ): Promise<[boolean, string]>;
   removeDatabaseConnection(name: string): Promise<[boolean, String]>;
   updateDatabaseConnection(

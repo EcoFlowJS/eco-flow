@@ -1,20 +1,20 @@
 import {
   Database,
   DatabaseConnection,
-  DriverKnex,
   TokenServices as ITokenServices,
+  Tokens,
 } from "@ecoflow/types";
-import { tokenModelKnex, tokenModelMongoose } from "./model/token.model";
-import knexSeed from "./seed/knex.seed";
 import Helper from "@ecoflow/helper";
+import { TokenModelKnex, TokenModelMongoose } from "./model/token.model";
+import { Database as EcoDB } from "@ecoflow/database";
 
 export class TokenServices implements ITokenServices {
   private dataBase: Database;
   private connection: DatabaseConnection;
 
-  constructor() {
+  constructor(conn?: DatabaseConnection) {
     this.dataBase = ecoFlow.database;
-    this.connection = this.dataBase.getDatabaseConnection("_sysDB");
+    this.connection = conn || this.dataBase.getDatabaseConnection("_sysDB");
   }
 
   private async setToken(
@@ -22,20 +22,21 @@ export class TokenServices implements ITokenServices {
     userId: string,
     expireIn: Date | number
   ): Promise<void> {
+    const { _ } = ecoFlow;
     userId = userId.toLowerCase();
     if (this.dataBase.isMongoose(this.connection)) {
       if (
-        (await tokenModelMongoose(this.connection).countDocuments({
+        (await TokenModelMongoose(this.connection).countDocuments({
           userId: userId,
         })) === 0
       )
-        await new (tokenModelMongoose(this.connection))({
+        await new (TokenModelMongoose(this.connection))({
           token: token,
           userId: userId,
           expires_at: expireIn,
         }).save();
       else
-        await tokenModelMongoose(this.connection).updateOne(
+        await TokenModelMongoose(this.connection).updateOne(
           { userId: userId },
           {
             token: token,
@@ -46,38 +47,56 @@ export class TokenServices implements ITokenServices {
     }
 
     if (this.dataBase.isKnex(this.connection)) {
-      if (!(await this.connection.schemaBuilder.hasTable("tokens")))
-        await knexSeed(this.connection);
-
-      if (
-        (
-          await tokenModelKnex(this.connection)
-            .count()
-            .where({ userId: userId })
-        )[0]["count(*)"] === 0
-      )
-        await tokenModelKnex(this.connection).insert({
+      const countQuery = (
+        await (await TokenModelKnex(this.connection))()
+          .count()
+          .where({ userId: userId })
+      )[0] as any;
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+      if (Number(count) === 0)
+        await (
+          await TokenModelKnex(this.connection)
+        )().insert({
           userId: userId,
           token: token,
-          expires_at: expireIn,
+          expires_at: EcoDB.formatKnexDateTime(
+            _.isDate(expireIn) ? expireIn : new Date(expireIn)
+          ) as any,
         });
       else
-        await tokenModelKnex(this.connection)
+        await (
+          await TokenModelKnex(this.connection)
+        )()
           .update({
             userId: userId,
             token: token,
-            expires_at: expireIn,
+            expires_at: EcoDB.formatKnexDateTime(
+              _.isDate(expireIn) ? expireIn : new Date(expireIn)
+            ) as any,
           })
           .where({ userId: userId });
     }
   }
 
+  async getAllTokens(): Promise<Tokens[]> {
+    if (this.dataBase.isKnex(this.connection))
+      return await (await TokenModelKnex(this.connection))().select();
+
+    if (this.dataBase.isMongoose(this.connection))
+      return await TokenModelMongoose(this.connection).find();
+
+    throw "Invalid database connection specified";
+  }
+
   async checkToken(token: string, userId: string): Promise<boolean> {
+    const { _ } = ecoFlow;
     userId = userId.toLowerCase();
     let result = false;
     if (this.dataBase.isMongoose(this.connection)) {
       if (
-        (await tokenModelMongoose(this.connection).countDocuments({
+        (await TokenModelMongoose(this.connection).countDocuments({
           userId: userId,
           token: token,
           expires_at: { $gt: new Date() },
@@ -86,20 +105,23 @@ export class TokenServices implements ITokenServices {
         result = true;
     }
     if (this.dataBase.isKnex(this.connection)) {
-      if (!(await this.connection.schemaBuilder.hasTable("tokens")))
-        await knexSeed(this.connection);
-      if (
-        (
-          await tokenModelKnex(this.connection)
-            .where({
-              userId: userId,
-              token: token,
-            })
-            .where("created_at", ">=", Date.now())
-            .count()
-        )[0]["count(*)"] > 0
-      )
-        result = true;
+      const fetchQuery = (await TokenModelKnex(this.connection))().where({
+        userId: userId,
+        token: token,
+      });
+
+      this.connection.client === "PGSQL"
+        ? fetchQuery.whereRaw(
+            this.connection.rawBuilder("expires_at >= ?", "now()")
+          )
+        : fetchQuery.where("expires_at", ">=", Date.now());
+
+      const countQuery = (await fetchQuery.count())[0] as any;
+
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+      if (Number(count) > 0) result = true;
     }
     return result;
   }
@@ -128,9 +150,25 @@ export class TokenServices implements ITokenServices {
 
   async removeToken(token: string, userId: string): Promise<void> {
     if (this.dataBase.isMongoose(this.connection))
-      await tokenModelMongoose(this.connection).deleteOne({ token, userId });
+      await TokenModelMongoose(this.connection).deleteOne({ token, userId });
 
     if (this.dataBase.isKnex(this.connection))
-      await tokenModelKnex(this.connection).delete().where({ token, userId });
+      await (await TokenModelKnex(this.connection))()
+        .delete()
+        .where({ token, userId });
+  }
+
+  async migrateToken(token: Tokens): Promise<void> {
+    if (this.dataBase.isMongoose(this.connection)) {
+      await TokenModelMongoose(this.connection).create(token);
+      return;
+    }
+
+    if (this.dataBase.isKnex(this.connection)) {
+      await (await TokenModelKnex(this.connection))().insert(token);
+      return;
+    }
+
+    throw "Invalid database connection specified";
   }
 }

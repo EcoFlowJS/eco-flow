@@ -324,15 +324,21 @@ export class Database implements IDatabase {
   async addDatabaseConnection(
     name: string,
     driver: DB_Drivers,
-    connection: ConnectionConfig
+    connection: ConnectionConfig,
+    isSystem: boolean = false
   ): Promise<[boolean, string]> {
     const config = _.cloneDeep(connection);
-    const [status, msg] = await this.addConnection(name, driver, connection);
+    const [status, msg] = await this.addConnection(
+      name,
+      driver,
+      connection,
+      isSystem
+    );
 
     if (!status)
       return [status, typeof msg === "string" ? msg : JSON.stringify(msg)];
 
-    if (status)
+    if (!isSystem && status)
       await this.saveConfigurations("ADD", {
         name: name,
         driver: driver,

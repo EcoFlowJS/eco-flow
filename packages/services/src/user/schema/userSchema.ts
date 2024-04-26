@@ -1,40 +1,43 @@
 import { Knex, userTableCollection } from "@ecoflow/types";
 import { ObjectId, Schema } from "mongoose";
 
-const mongooseSchema = new Schema<userTableCollection>({
-  name: String,
-  username: {
-    required: true,
-    type: String,
+const mongooseSchema = new Schema<userTableCollection>(
+  {
+    name: String,
+    username: {
+      required: true,
+      type: String,
+    },
+    password: {
+      required: true,
+      type: String,
+    },
+    roles: {
+      required: true,
+      type: Array<ObjectId>,
+    },
+    isActive: {
+      required: true,
+      type: Boolean,
+      default: true,
+    },
+    email: String,
+    oldPassword: String,
+    isPermanent: {
+      type: Boolean,
+      default: false,
+    },
+    created_at: {
+      type: Date,
+      default: Date.now,
+    },
+    updated_at: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  password: {
-    required: true,
-    type: String,
-  },
-  roles: {
-    required: true,
-    type: Array<ObjectId>,
-  },
-  isActive: {
-    required: true,
-    type: Boolean,
-    default: true,
-  },
-  email: String,
-  oldPassword: String,
-  isPermanent: {
-    type: Boolean,
-    default: false,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { versionKey: false }
+);
 
 const knexSchema = (table: Knex.TableBuilder) => {
   table.increments("_id");

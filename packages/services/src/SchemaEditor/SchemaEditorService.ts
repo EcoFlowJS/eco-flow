@@ -217,7 +217,7 @@ export class SchemaEditorService implements SchemaEditor {
             }
 
             const isSqlite = alterColumn(
-              (<DriverKnex>this.connection).getClient,
+              (<DriverKnex>this.connection).client,
               oldDatabaseColumns.actualData?.columnData?.columnName!,
               {
                 type: type,
@@ -296,7 +296,7 @@ export class SchemaEditorService implements SchemaEditor {
         .map((columnInfoKey) => {
           const columnType = columnInfo[columnInfoKey].type.trim();
           const columnDefaultValue = getcolumnDefaultValue(
-            connection.getClient,
+            connection.client,
             columnInfo[columnInfoKey].defaultValue
           );
           return <DatabaseColumnInfo>{

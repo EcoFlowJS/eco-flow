@@ -4,11 +4,11 @@ import defaultFlowEditorSettings from "../../../defaults/defaultFlowEditorSettin
 
 const updateSettings = async (ctx: Context) => {
   const { _, service } = ecoFlow;
-  const { flowSettingsService } = service;
+  const { FlowSettingsService } = service;
   try {
     const { settings } = ctx.request.body;
     const result = _.mapValues(
-      { ...(await flowSettingsService.updateFlowSettings(ctx.user, settings)) },
+      { ...(await FlowSettingsService.updateFlowSettings(ctx.user, settings)) },
       (flowSettings) => {
         return _.isNumber(flowSettings)
           ? flowSettings === 0

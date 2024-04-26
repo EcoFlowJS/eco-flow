@@ -6,8 +6,6 @@ const createUser = async (ctx: Context) => {
   const { _, service } = ecoFlow;
   const { username, name, password, email, roles } = ctx.request.body;
 
-  console.log(username, name, password, email, roles);
-
   if (_.isUndefined(username)) throw "username is required";
   if (_.isUndefined(name)) throw "name is required";
   if (_.isUndefined(password)) throw "password is required";
