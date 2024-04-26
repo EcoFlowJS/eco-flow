@@ -1,10 +1,6 @@
 import {
-  FlowsConfigurations,
-  FlowsEdgeDataTypes,
-  FlowsNodeDataTypes,
+  FlowsDescription,
   EcoFLowBuilder as IEcoFLowBuilder,
-  ModuleTypes,
-  Node,
   NodeConfiguration,
   NodeConnections,
   Nodes,
@@ -34,9 +30,9 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   }
 
   private extractContents = (
-    flowConfigurations: FlowsConfigurations
+    flowDescription: FlowsDescription
   ): [Nodes, NodeConnections, NodeConfiguration[], NodesStack] => {
-    const flows = Object.keys(flowConfigurations);
+    const flows = Object.keys(flowDescription);
     const nodes: Nodes = [];
     const edges: NodeConnections = [];
     const configurations: NodeConfiguration[] = [];
@@ -44,32 +40,32 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
 
     flows.map((flow) => {
       nodes.push(
-        ...flowConfigurations[flow].definitions.filter(
+        ...flowDescription[flow].definitions.filter(
           (node) => node.type !== "Request" && !node.data.disabled
         )
       );
       edges.push(
-        ...flowConfigurations[flow].connections.filter(
+        ...flowDescription[flow].connections.filter(
           (edge) => edge.animated === false
         )
       );
 
-      this._startingNodes = flowConfigurations[flow].definitions.filter(
+      this._startingNodes = flowDescription[flow].definitions.filter(
         (node) => node.type === "Request" && !node.data.disabled
       );
 
-      this._responseNodes = flowConfigurations[flow].definitions.filter(
+      this._responseNodes = flowDescription[flow].definitions.filter(
         (node) => node.type === "Response" && !node.data.disabled
       );
 
-      this._consoleNodes = flowConfigurations[flow].definitions.filter(
+      this._consoleNodes = flowDescription[flow].definitions.filter(
         (node) => node.type === "Debug" && !node.data.disabled
       );
 
       this._startingNodes.map((node) => {
         connectionLists.push([node]);
       });
-      configurations.push(...flowConfigurations[flow].configurations);
+      configurations.push(...flowDescription[flow].configurations);
     });
 
     this._nodes = nodes;
@@ -79,7 +75,7 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   };
 
   async buildStack(
-    flowConfigurations: FlowsConfigurations
+    flowConfigurations: FlowsDescription
   ): Promise<[NodesStack, NodeConfiguration[]]> {
     const { _ } = ecoFlow;
     this._stacksConfigurations = [];

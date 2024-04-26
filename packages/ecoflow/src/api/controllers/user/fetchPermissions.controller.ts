@@ -59,6 +59,7 @@ const fetchPermissions = async (ctx: Context) => {
 
     if (mode === "Permissions") {
       const userRoles = await fetchRoleList(UserService, username);
+
       const permissionList = await fetchpermissionList(RoleService, userRoles);
       payload["permissions"] = permissionList;
     }
@@ -69,8 +70,6 @@ const fetchPermissions = async (ctx: Context) => {
       payload: payload,
     };
   } catch (error) {
-    console.log(error);
-
     ctx.status = 409;
     ctx.body = <ApiResponse>{
       error: true,

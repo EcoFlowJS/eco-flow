@@ -13,9 +13,26 @@ export class FlowSettingsService implements IFlowSettingsService {
   private database: Database;
   private connection: DatabaseConnection;
 
-  constructor() {
+  constructor(conn?: DatabaseConnection) {
     this.database = ecoFlow.database;
-    this.connection = this.database.getDatabaseConnection("_sysDB");
+    this.connection = conn || this.database.getDatabaseConnection("_sysDB");
+  }
+
+  async fetchAllFlowSettings(): Promise<
+    (Partial<FlowEditorSettingsConfigurations> & {
+      _id?: string;
+      username?: string;
+    })[]
+  > {
+    if (this.database.isKnex(this.connection))
+      return await (
+        await flowEditorSettingsModelKnex(this.connection)
+      )().select();
+
+    if (this.database.isMongoose(this.connection))
+      return await flowEditorSettingsModelMongoose(this.connection).find();
+
+    throw "Invalid database connection specified";
   }
 
   async fetchFlowSettings(userId: string): Promise<
@@ -55,46 +72,56 @@ export class FlowSettingsService implements IFlowSettingsService {
       username?: string | undefined;
     }
   > {
+    const { _ } = ecoFlow;
     if (this.database.isKnex(this.connection)) {
-      const count = (
+      const countQuery = (
         await (await flowEditorSettingsModelKnex(this.connection))()
           .count()
           .where("username", "=", userId)
-      )[0]["count(*)"];
+      )[0];
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
 
-      if (count === 0)
+      if (Number(count) === 0) {
+        await (
+          await flowEditorSettingsModelKnex(this.connection)
+        )().insert({
+          username: userId,
+          ...flowSettings,
+        });
+
         return (
-          await (
-            await flowEditorSettingsModelKnex(this.connection)
-          )()
-            .insert({
-              username: userId,
-              ...flowSettings,
-            })
-            .returning([
+          await (await flowEditorSettingsModelKnex(this.connection))()
+            .select(
               "keyboardAccessibility",
               "controls",
               "miniMap",
               "panMiniMap",
-              "scrollPan",
-            ])
+              "scrollPan"
+            )
+            .where({ username: userId })
         )[0];
+      }
+
+      await (
+        await flowEditorSettingsModelKnex(this.connection)
+      )()
+        .update({
+          ...flowSettings,
+        })
+        .where("username", "=", userId);
 
       return (
-        await (
-          await flowEditorSettingsModelKnex(this.connection)
-        )()
-          .update({
-            ...flowSettings,
-          })
-          .where("username", "=", userId)
-          .returning([
+        await (await flowEditorSettingsModelKnex(this.connection))()
+          .select(
             "keyboardAccessibility",
             "controls",
             "miniMap",
             "panMiniMap",
-            "scrollPan",
-          ])
+            "scrollPan"
+          )
+          .where({ username: userId })
       )[0];
     }
 

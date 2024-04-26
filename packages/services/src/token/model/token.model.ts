@@ -1,11 +1,38 @@
-import { DriverKnex, DriverMongoose } from "@ecoflow/types";
-import tokenSchema from "../schema/token.schema";
+import { DriverKnex, DriverMongoose, Knex, Tokens } from "@ecoflow/types";
+import { Model, Document } from "mongoose";
+import { TokenSchemaKnex, TokenSchemaMongoose } from "../schema/token.schema";
 
-export const tokenModelMongoose = (connection: DriverMongoose) => {
+const TokenModelMongoose = (
+  connection: DriverMongoose
+): Model<
+  Tokens,
+  {},
+  {},
+  {},
+  Document<unknown, {}, Tokens> &
+    Tokens & {
+      _id: string;
+    },
+  any
+> => {
   if (connection.getConnection.models.tokens)
-    return connection.getConnection.model("tokens");
-  else return connection.buildModel("tokens", { definition: tokenSchema });
+    return connection.getConnection.model<Tokens>("tokens");
+  else
+    return connection.buildModel<Tokens>("tokens", {
+      definition: TokenSchemaMongoose,
+    });
 };
 
-export const tokenModelKnex = (connection: DriverKnex) =>
+const tokenModelKnex = (connection: DriverKnex) =>
   connection.queryBuilder("tokens");
+
+const TokenModelKnex = async (
+  connection: DriverKnex
+): Promise<() => Knex.QueryBuilder<Tokens, any[]>> => {
+  if (!(await connection.schemaBuilder.hasTable("tokens")))
+    await connection.schemaBuilder.createTable("tokens", TokenSchemaKnex);
+
+  return () => connection.queryBuilder<Tokens>("tokens");
+};
+
+export { TokenModelMongoose, TokenModelKnex };

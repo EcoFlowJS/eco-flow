@@ -42,8 +42,11 @@ export class DriverKnex implements IDriverKnex {
     return this.connection<TRecord, TResult>(tableName, options);
   }
 
-  rawBuilder(value: Knex.Value): Knex.Raw<any> {
-    return this.connection.raw(value);
+  rawBuilder(
+    value: Knex.Value | string,
+    binding?: Knex.RawBinding
+  ): Knex.Raw<any> {
+    return this.connection.raw(value as any, binding as any);
   }
 
   refBuilder(value: string): knex.Knex.Ref<string, { [x: string]: string }> {
@@ -58,7 +61,7 @@ export class DriverKnex implements IDriverKnex {
     return knex;
   }
 
-  get getClient(): KnexDB_Driver {
+  get client(): KnexDB_Driver {
     const client = this.connection.client.config.client;
     if (["mysql", "mysql2"].indexOf(client) > -1) return "MYSQL";
     if (client === "pg") return "PGSQL";
@@ -67,7 +70,7 @@ export class DriverKnex implements IDriverKnex {
   }
 
   async listTables(): Promise<string[]> {
-    const dialect = this.getClient;
+    const dialect = this.client;
     if (dialect === "MYSQL")
       return this.connection
         .raw("show tables")

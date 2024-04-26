@@ -16,42 +16,43 @@ export class UserService implements IUserService {
   private dataBase: Database;
   private connection: DatabaseConnection;
 
-  constructor() {
+  constructor(conn?: DatabaseConnection) {
     this.dataBase = ecoFlow.database;
-    this.connection = this.dataBase.getDatabaseConnection("_sysDB");
+    this.connection = conn || this.dataBase.getDatabaseConnection("_sysDB");
   }
 
   async isNoUser(): Promise<boolean> {
+    const { _ } = ecoFlow;
     let response = true;
     if (this.dataBase.isMongoose(this.connection))
       if ((await userModelMongoose(this.connection).countDocuments()) > 0)
         response = false;
 
     if (this.dataBase.isKnex(this.connection)) {
-      if (
-        Number(
-          (await (await userModelKnex(this.connection))().count())[0][
-            "count(*)"
-          ]
-        ) > 0
-      )
-        response = false;
+      const countQuery = (
+        await (await userModelKnex(this.connection))().count()
+      )[0];
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+      if (Number(count) > 0) response = false;
     }
 
     return response;
   }
 
   async isUserExist(userId: string): Promise<boolean> {
+    const { _ } = ecoFlow;
     if (this.dataBase.isKnex(this.connection)) {
-      return (
-        Number(
-          (
-            await (await userModelKnex(this.connection))().count().where({
-              username: userId,
-            })
-          )[0]["count(*)"]
-        ) > 0
-      );
+      const countQuery = (
+        await (await userModelKnex(this.connection))().count().where({
+          username: userId,
+        })
+      )[0];
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+      return Number(count) > 0;
     }
 
     if (this.dataBase.isMongoose(this.connection))
@@ -65,17 +66,18 @@ export class UserService implements IUserService {
   }
 
   async isActiveUser(userId: string): Promise<boolean> {
+    const { _ } = ecoFlow;
     if (this.dataBase.isKnex(this.connection)) {
-      return (
-        Number(
-          (
-            await (await userModelKnex(this.connection))().count().where({
-              username: userId,
-              isActive: true,
-            })
-          )[0]["count(*)"]
-        ) > 0
-      );
+      const countQuery = (
+        await (await userModelKnex(this.connection))().count().where({
+          username: userId,
+          isActive: true,
+        })
+      )[0];
+      const count = !_.isUndefined(countQuery["count(*)"])
+        ? countQuery["count(*)"]
+        : countQuery.count;
+      return Number(count) > 0;
     }
 
     if (this.dataBase.isMongoose(this.connection))
@@ -86,6 +88,17 @@ export class UserService implements IUserService {
       );
 
     throw "Invalid database connection specified";
+  }
+
+  async migrateUsers(userInfo: userTableCollection): Promise<void> {
+    if (this.dataBase.isMongoose(this.connection)) {
+      await userModelMongoose(this.connection).create(userInfo);
+    }
+
+    if (this.dataBase.isKnex(this.connection)) {
+      userInfo.roles = JSON.stringify(userInfo.roles) as any;
+      await (await userModelKnex(this.connection))().insert(userInfo);
+    }
   }
 
   async createUser(
@@ -130,13 +143,15 @@ export class UserService implements IUserService {
 
   async getUsernames(isSystem: boolean = false): Promise<string[]> {
     if (this.dataBase.isKnex(this.connection)) {
-      const query = (await userModelKnex<UserInfo>(this.connection))().select();
+      const query = (await userModelKnex<UserInfo>(this.connection))().select(
+        "username"
+      );
       if (!isSystem)
         query.where({
           isPermanent: false,
         });
 
-      const usernames = await query.returning("username");
+      const usernames = await query;
 
       return usernames.map((username) => username.username!);
     }
@@ -160,6 +175,7 @@ export class UserService implements IUserService {
     username?: string,
     isAll: boolean = false
   ): Promise<GetUserInfoSingle & GetUserInfo> {
+    const { _ } = ecoFlow;
     try {
       const userInfo: GetUserInfoSingle | GetUserInfo = Object.create({});
       userInfo.isAvailable = false;
@@ -176,8 +192,10 @@ export class UserService implements IUserService {
         user = await (await userModelKnex(this.connection))()
           .select()
           .where(findQuerry);
-        user = user.map((userInfo: any) => {
-          userInfo!.roles = JSON.parse(userInfo!.roles as unknown as string);
+        user = user.map((userInfo: userTableCollection) => {
+          userInfo.roles = _.isArray(userInfo.roles)
+            ? userInfo.roles
+            : JSON.parse(userInfo.roles as unknown as string);
           return userInfo;
         });
       }

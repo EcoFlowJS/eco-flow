@@ -8,6 +8,7 @@ const updateConfig = async (ctx: Context) => {
 
     const configs = await parseServerConfigHelper({
       ...(<any>ctx.request.body),
+      userID: ctx.user,
     });
 
     const newConfigs = await config.setConfig(configs);

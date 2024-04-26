@@ -11,7 +11,7 @@ export interface Service {
   get SchemaEditorService(): SchemaEditorService;
   get RoleService(): RoleService;
   get AuditLogsService(): AuditLogsService;
-  get flowSettingsService(): FlowSettingsService;
+  get FlowSettingsService(): FlowSettingsService;
 }
 
 export {

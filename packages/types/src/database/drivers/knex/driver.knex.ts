@@ -13,12 +13,17 @@ export interface DriverKnex {
       | undefined
   ): Knex.QueryBuilder;
   rawBuilder(value: Knex.Value): Knex.Raw<any>;
+  rawBuilder(value: Knex.Value, binding?: Knex.RawBinding): Knex.Raw<any>;
+  rawBuilder(
+    sql: string,
+    bindings: readonly Knex.RawBinding[] | Knex.ValueDict
+  ): Knex.Raw<any>;
   refBuilder(value: string): knex.Knex.Ref<string, { [x: string]: string }>;
   get functionHelper(): Knex.FunctionHelper;
   get knex(): typeof knex;
   listTables(): Promise<string[]>;
   getColumnInfo(name: string): Promise<any>;
-  get getClient(): KnexDB_Driver;
+  get client(): KnexDB_Driver;
 }
 
 export type KnexDB_Driver = "MYSQL" | "PGSQL" | "SQLite";

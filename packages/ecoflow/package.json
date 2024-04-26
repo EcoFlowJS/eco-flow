@@ -42,7 +42,8 @@
     "mime-types": "^2.1.35",
     "node-stream-zip": "^1.15.0",
     "passport-jwt": "^4.0.1",
-    "socket.io": "^4.7.4"
+    "socket.io": "^4.7.4",
+    "thread-promises": "^1.6.3"
   },
   "description": "",
   "devDependencies": {

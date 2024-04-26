@@ -1,5 +1,5 @@
 import {
-  FlowsConfigurations,
+  FlowsDescription,
   NodeConfiguration,
   NodeConnections,
 } from "./EcoFlowEditor";
@@ -18,7 +18,7 @@ export interface EcoFLowBuilder {
   get consoleNodes(): Nodes;
 
   buildStack(
-    flowConfigurations: FlowsConfigurations
+    flowConfigurations: FlowsDescription
   ): Promise<[NodesStack, NodeConfiguration[]]>;
 
   getNodeConfigurations(nodeID: string): NodeConfiguration["configs"] | {};

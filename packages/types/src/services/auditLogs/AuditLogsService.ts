@@ -1,4 +1,5 @@
 export interface AuditLogsService {
+  fetchAuditLogs(isAll?: boolean): Promise<AuditLogsResponse>;
   fetchAuditLogs(page?: number): Promise<AuditLogsResponse>;
   addLog(auditLog: AuditLog): Promise<void>;
 }
@@ -16,7 +17,7 @@ export interface AuditLog {
 }
 
 export interface AuditLogSchemaStruct extends AuditLog {
-  _id: string;
+  _id?: string;
 }
 
 export type AuditLogType = "Info" | "Warning" | "Error";

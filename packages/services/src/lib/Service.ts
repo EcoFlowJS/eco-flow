@@ -6,6 +6,7 @@ import {
   RoleService as IRoleService,
   AuditLogsService as IAuditLogsService,
   FlowSettingsService as IFlowSettingsService,
+  DatabaseConnection,
 } from "@ecoflow/types";
 import { UserService } from "../user";
 import { TokenServices } from "../token";
@@ -15,12 +16,21 @@ import { AuditLogsService } from "../AuditLogs";
 import { FlowSettingsService } from "../FlowSettings";
 
 export class Service implements IService {
+  private connection: DatabaseConnection | undefined = undefined;
+
+  constructor(name?: string) {
+    if (name) {
+      const { database } = ecoFlow;
+      this.connection = database.getDatabaseConnection(name);
+    }
+  }
+
   get UserService(): IUserService {
-    return new UserService();
+    return new UserService(this.connection);
   }
 
   get TokenServices(): ITokenServices {
-    return new TokenServices();
+    return new TokenServices(this.connection);
   }
 
   get SchemaEditorService(): ISchemaEditorService {
@@ -28,14 +38,14 @@ export class Service implements IService {
   }
 
   get RoleService(): IRoleService {
-    return new RoleService();
+    return new RoleService(this.connection);
   }
 
   get AuditLogsService(): IAuditLogsService {
-    return new AuditLogsService();
+    return new AuditLogsService(this.connection);
   }
 
-  get flowSettingsService(): IFlowSettingsService {
-    return new FlowSettingsService();
+  get FlowSettingsService(): IFlowSettingsService {
+    return new FlowSettingsService(this.connection);
   }
 }

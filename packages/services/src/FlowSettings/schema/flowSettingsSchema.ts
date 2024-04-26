@@ -3,37 +3,40 @@ import { ObjectId, Schema } from "mongoose";
 
 const mongooseFlowEditorSettingsSchema = new Schema<
   FlowEditorSettingsConfigurations & { username: string }
->({
-  username: {
-    type: String,
-    required: true,
+>(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
+    keyboardAccessibility: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    controls: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    miniMap: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    panMiniMap: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    scrollPan: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  keyboardAccessibility: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  controls: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  miniMap: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  panMiniMap: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  scrollPan: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-});
+  { versionKey: false }
+);
 
 const knexFlowEditorSettingsSchema = (table: Knex.TableBuilder) => {
   table.increments("_id");

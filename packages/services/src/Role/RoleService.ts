@@ -13,17 +13,20 @@ export class RoleService implements IRoleService {
   private dataBase: Database;
   private connection: DatabaseConnection;
 
-  constructor() {
+  constructor(conn?: DatabaseConnection) {
     this.dataBase = ecoFlow.database;
-    this.connection = this.dataBase.getDatabaseConnection("_sysDB");
+    this.connection = conn || this.dataBase.getDatabaseConnection("_sysDB");
   }
 
   async getAllRoles(): Promise<Role[]> {
+    const { _ } = ecoFlow;
     if (this.dataBase.isKnex(this.connection)) {
       return (<Role[]>(
         await (await RoleModelKnex(this.connection))().select()
       )).map((role) => {
-        role.permissions = JSON.parse(role.permissions as string);
+        role.permissions = _.isObject(role.permissions)
+          ? role.permissions
+          : JSON.parse(role.permissions as string);
         return role;
       });
     }
@@ -36,12 +39,15 @@ export class RoleService implements IRoleService {
   }
 
   async fetchRole(id?: string): Promise<Role[]> {
+    const { _ } = ecoFlow;
     if (this.dataBase.isKnex(this.connection)) {
       const query = (await RoleModelKnex(this.connection))().select();
       if (id) query.where({ _id: id });
 
       return (<Role[]>await query).map((role) => {
-        role.permissions = JSON.parse(role.permissions as string);
+        role.permissions = _.isObject(role.permissions)
+          ? role.permissions
+          : JSON.parse(role.permissions as string);
         return role;
       });
     }
@@ -50,6 +56,25 @@ export class RoleService implements IRoleService {
       return await RoleModelMongoose(this.connection).find(
         id ? { _id: new Types.ObjectId(id) } : {}
       );
+    }
+
+    throw "Invalid database connection specified";
+  }
+
+  async migrateRole(role: Role): Promise<string> {
+    if (this.dataBase.isKnex(this.connection)) {
+      await (await RoleModelKnex(this.connection))().insert(role);
+
+      const id = await (await RoleModelKnex(this.connection))()
+        .select("_id")
+        .limit(1)
+        .orderBy("_id", "desc");
+      return id[0]._id;
+    }
+
+    if (this.dataBase.isMongoose(this.connection)) {
+      const newRole = await RoleModelMongoose(this.connection).create(role);
+      return newRole._id;
     }
 
     throw "Invalid database connection specified";
@@ -66,25 +91,28 @@ export class RoleService implements IRoleService {
 
     if (this.dataBase.isKnex(this.connection)) {
       try {
-        if (_.isUndefined(roleLike) || roleLike === null)
-          role.permissions = JSON.stringify(role.permissions);
-        else {
+        if (!_.isUndefined(roleLike) && roleLike !== null) {
           role.permissions = (
             await (await RoleModelKnex(this.connection))()
               .select("permissions")
               .where({ _id: roleLike })
           )[0].permissions;
-        }
-        const id = await (
-          await RoleModelKnex(this.connection)
-        )().insert(role, ["_id"]);
+        } else role.permissions = JSON.stringify(role.permissions);
+
+        await (await RoleModelKnex(this.connection))().insert(role);
+        const id = await (await RoleModelKnex(this.connection))()
+          .select("_id")
+          .limit(1)
+          .orderBy("_id", "desc");
 
         if (isDefault) return id[0];
 
         const roles = (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
         )).map((role) => {
-          role.permissions = JSON.parse(role.permissions as string);
+          role.permissions = _.isString(role.permissions)
+            ? JSON.parse(role.permissions)
+            : role.permissions;
           return role;
         });
         server.socket.emit("roleCreated", roles);
@@ -136,7 +164,9 @@ export class RoleService implements IRoleService {
         return (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
         )).map((role) => {
-          role.permissions = JSON.parse(role.permissions as string);
+          role.permissions = _.isObject(role.permissions)
+            ? role.permissions
+            : JSON.parse(role.permissions as string);
           return role;
         });
       } catch (e: any) {
@@ -186,7 +216,9 @@ export class RoleService implements IRoleService {
         const roles = (<Role[]>(
           await (await RoleModelKnex(this.connection))().select()
         )).map((role) => {
-          role.permissions = JSON.parse(role.permissions as string);
+          role.permissions = _.isObject(role.permissions)
+            ? role.permissions
+            : JSON.parse(role.permissions as string);
           return role;
         });
         server.socket.emit("roleRemoved", roles);

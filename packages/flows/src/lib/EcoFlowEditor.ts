@@ -2,13 +2,10 @@ import {
   FlowConfigurations,
   FlowConnections,
   FlowDefinitions,
-  FlowsConfigurations,
   FlowsDescription,
   EcoFlowEditor as IEcoFlowEditor,
   EcoFLowBuilder as IEcoFLowBuilder,
   configOptions,
-  FlowsNodeDataTypes,
-  ModuleTypes,
   Describtions,
   NodeConfiguration,
   Node,
@@ -393,13 +390,20 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     return result;
   }
 
-  async build(): Promise<this> {
-    console.log("build");
+  async initialize(): Promise<this> {
+    const { _, log } = ecoFlow;
+    log.info("Initializing the existing flow...");
+    const flowDescribtions = await this.flowsDescription();
+    try {
+      await this.deploy(flowDescribtions);
+    } catch (error: string | any) {
+      _.isString(error) ? log.error(error) : log.error(error.msg);
+    }
     return this;
   }
 
   isAllNodesConfigured(
-    definitions: FlowDefinitions | FlowsConfigurations
+    definitions: FlowDefinitions | FlowsDescription
   ): boolean {
     const { _ } = ecoFlow;
     const nodes: Nodes = [];
@@ -415,14 +419,14 @@ export class EcoFlowEditor implements IEcoFlowEditor {
   }
 
   isNodeConfigured(node: Node): boolean {
-    return node.data.configured;
+    return node.data.configured || false;
   }
 
-  async deploy(flowconfigurations: FlowsConfigurations): Promise<boolean> {
+  async deploy(flowDescription: FlowsDescription): Promise<boolean> {
     const { _, log } = ecoFlow;
     try {
       const [stack, configurations] = await this.fLowBuilder.buildStack({
-        ...flowconfigurations,
+        ...flowDescription,
       });
 
       const apiRouterBuilder = await new EcoAPIRouterBuilder(
@@ -432,20 +436,22 @@ export class EcoFlowEditor implements IEcoFlowEditor {
 
       EcoAPIBuilder.register(apiRouterBuilder);
 
-      for await (const flowName of Object.keys(flowconfigurations)) {
+      await fse.emptyDir(path.join(this.flowDir));
+
+      for await (const flowName of Object.keys(flowDescription)) {
         await this.updateFlowNodeDefinitions(
           flowName,
-          flowconfigurations[flowName].definitions
+          flowDescription[flowName].definitions
         );
 
         await this.updateFlowNodeConnections(
           flowName,
-          flowconfigurations[flowName].connections
+          flowDescription[flowName].connections
         );
 
         await this.updateFlowNodeConfigurations(
           flowName,
-          flowconfigurations[flowName].configurations
+          flowDescription[flowName].configurations
         );
       }
       return true;
