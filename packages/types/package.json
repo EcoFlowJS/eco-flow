@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/types",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "main": "./index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -8,10 +8,15 @@
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
+  "files": [
+    "README.md",
+    "dist",
+    "index.js"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Package contains all types of EcoflowJS",
   "devDependencies": {
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
@@ -28,5 +33,13 @@
     "passport-jwt": "^4.0.1",
     "query-registry": "^2.6.0",
     "socket.io": "^4.7.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EcoFlowJS/eco-flow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EcoFlowJS/eco-flow/issues"
+  },
+  "homepage": "https://github.com/EcoFlowJS/eco-flow#readme"
 }
