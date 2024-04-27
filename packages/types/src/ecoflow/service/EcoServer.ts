@@ -26,6 +26,7 @@ export interface EcoServer extends Koa {
   get isSecure(): boolean;
   get serverState(): "Online" | "Offline";
   passport: typeof passport;
+  systemSocket: Server;
   socket: Server;
 }
 
