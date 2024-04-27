@@ -16,7 +16,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@ecoflow/utils": "latest",
+    "@ecoflow/utils": "^0.0.1",
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "fs-extra": "^11.2.0",

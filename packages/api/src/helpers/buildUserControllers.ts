@@ -34,14 +34,6 @@ const buildUserControllers = async (
       (configuration) => configuration.nodeID === middleware.id
     )?.configs;
 
-    const nodeController: () => Promise<void> = _.isString(controller)
-      ? await ecoModule
-          .getModuleSchema(controller.split(".")[0])
-          .getController(controller.split(".")[1])
-      : controller ||
-        function (this: EcoContext) {
-          this.next();
-        };
     const modduleType: ModuleTypes =
       middleware.type === "Request"
         ? "Request"
@@ -53,6 +45,21 @@ const buildUserControllers = async (
         ? "Response"
         : "Request";
 
+    const debugController: () => void = function (this: EcoContext) {
+      const { server } = ecoFlow;
+      server.systemSocket.emit("DebugWebConsole", this.debugPayload);
+    };
+
+    const userController: () => void = function (this: EcoContext) {
+      this.next();
+    };
+
+    const nodeController: () => Promise<void> = _.isString(controller)
+      ? await ecoModule
+          .getModuleSchema(controller.split(".")[0])
+          .getController(controller.split(".")[1])
+      : controller ||
+        (modduleType === "Debug" ? debugController : userController);
     result.push([middleware.id, modduleType, inputs, nodeController]);
   }
 
