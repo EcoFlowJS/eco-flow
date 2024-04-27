@@ -17,6 +17,7 @@ import TPromise from "thread-promises";
 import responseController from "../helpers/responseController";
 import middlewareController from "../helpers/middlewareController";
 import buildUserControllers from "../helpers/buildUserControllers";
+import debugController from "../helpers/debugController";
 
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
@@ -124,13 +125,14 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
                     middlewareResponse
                   );
 
-                if (type === "Debug") {
-                  //Todo: this should be implemented
-                  console.log(
-                    "Debug",
-                    lastControllerID ? controllerResponse[lastControllerID] : {}
+                if (type === "Debug")
+                  await debugController(
+                    ecoContext,
+                    lastControllerID
+                      ? controllerResponse[lastControllerID]
+                      : {},
+                    userControllers
                   );
-                }
 
                 lastControllerID = id;
               }

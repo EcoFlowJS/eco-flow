@@ -39,7 +39,7 @@
     "concurrently": "^8.2.1",
     "nodemon": "^3.0.1",
     "nx": "16.9.1",
-    "nx-cloud": "latest",
+    "nx-cloud": "^16.0.4",
     "ts-node": "^10.9.1"
   },
   "keywords": []

@@ -116,6 +116,9 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     const isInputDebugOutput = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "debugOutput").length > 0;
 
+    const isInputExpression = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "debugExp").length > 0;
+
     const isInputConsole = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "debugConsole").length > 0;
 
@@ -131,6 +134,16 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
             pickerOptions: ["WebConsole", "Terminal"],
             required: true,
             defaultValue: ["WebConsole"],
+          },
+          ...node.inputs,
+        ];
+
+      if (!isInputExpression(node.inputs))
+        node.inputs = [
+          {
+            name: "debugExp",
+            label: "Expression",
+            type: "String",
           },
           ...node.inputs,
         ];

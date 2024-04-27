@@ -25,8 +25,8 @@ export class EcoServer extends Koa implements IEcoServer {
   private _server!: HttpServer | HttpsServer;
   private _serverStatus: "Online" | "Offline" = "Offline";
   passport: typeof passport = passport;
+  systemSocket!: Server;
   socket!: Server;
-  userSocket!: Server;
 
   /**
    * EcoFlow Server Library interface implementation for HTTP/HTTPS connections and APIs requests.
@@ -100,26 +100,26 @@ export class EcoServer extends Koa implements IEcoServer {
       maxAge: Number(this._httpCors.maxAge),
     };
 
-    this.socket = new Server(this._server, {
+    this.systemSocket = new Server(this._server, {
       path: "/socket.ecoflow",
       cors: socketCors,
     });
 
-    this.userSocket = new Server(this._server, {
+    this.socket = new Server(this._server, {
       cors: socketCors,
     });
-    this.userSocket.on("join", (room) => {
-      this.userSocket.socketsJoin(room);
+    this.socket.on("join", (room) => {
+      this.socket.socketsJoin(room);
     });
 
-    this.socket.on("connection", (socket: Socket) => {
+    this.systemSocket.on("connection", (socket: Socket) => {
       socketEvents({
-        io: this.socket,
+        io: this.systemSocket,
         socket: socket,
       });
       console.log("WebSocket connected to socket.ecoflow");
     });
-    this.userSocket.on("connection", () =>
+    this.socket.on("connection", () =>
       console.log("WebSocket connected to UserSocket")
     );
   }

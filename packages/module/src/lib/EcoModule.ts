@@ -50,14 +50,10 @@ export class EcoModule implements IEcoModule {
           })
         )
           .filter((dirent) => dirent.isDirectory())
-          .filter(
-            (dirent) =>
-              fse.existsSync(
-                path.join(this.nodesPath, dirent.name, "package.json")
-              ) &&
-              fse.existsSync(
-                path.join(this.nodesPath, dirent.name, "manifest.json")
-              )
+          .filter((dirent) =>
+            fse.existsSync(
+              path.join(this.nodesPath, dirent.name, "package.json")
+            )
           )
           .filter(
             (dirent) =>
