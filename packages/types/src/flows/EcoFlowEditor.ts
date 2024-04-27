@@ -1,6 +1,6 @@
 import type { Edge } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
-import { EcoModuleID, ModuleTypes, Node, Nodes } from "../module";
+import { EcoModuleID, Node, Nodes } from "../module";
 import { FC, HTMLAttributes } from "react";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 

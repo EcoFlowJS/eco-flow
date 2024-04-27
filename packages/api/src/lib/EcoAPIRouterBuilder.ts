@@ -96,7 +96,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
               };
 
               for await (const controller of controllers) {
-                const [id, type, inputs, userControllers] = controller;
+                const [id, type, datas, inputs, userControllers] = controller;
                 if (_.has(controllerResponse, id)) continue;
 
                 if (!isNext && type === "Middleware") {
@@ -108,6 +108,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
                 }
                 isNext = false;
                 ecoContext.inputs = inputs;
+                ecoContext.moduleDatas = datas;
 
                 if (type === "Middleware")
                   await middlewareController(
