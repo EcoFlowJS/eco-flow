@@ -1,5 +1,6 @@
 import {
   EcoContext,
+  FlowsNodeDataTypes,
   ModuleTypes,
   NodeConfiguration,
   Nodes,
@@ -13,6 +14,7 @@ const buildUserControllers = async (
   [
     string,
     ModuleTypes,
+    FlowsNodeDataTypes,
     NodeConfiguration["configs"] | undefined,
     () => Promise<UserControllers>
   ][]
@@ -21,6 +23,7 @@ const buildUserControllers = async (
   const result: [
     string,
     ModuleTypes,
+    FlowsNodeDataTypes,
     NodeConfiguration["configs"] | undefined,
     () => Promise<UserControllers>
   ][] = [];
@@ -47,7 +50,10 @@ const buildUserControllers = async (
 
     const debugController: () => void = function (this: EcoContext) {
       const { server } = ecoFlow;
-      server.systemSocket.emit("DebugWebConsole", this.debugPayload);
+      server.systemSocket.emit("DebugWebConsole", [
+        this.moduleDatas?.label,
+        this.debugPayload,
+      ]);
     };
 
     const userController: () => void = function (this: EcoContext) {
@@ -60,7 +66,13 @@ const buildUserControllers = async (
           .getController(controller.split(".")[1])
       : controller ||
         (modduleType === "Debug" ? debugController : userController);
-    result.push([middleware.id, modduleType, inputs, nodeController]);
+    result.push([
+      middleware.id,
+      modduleType,
+      middleware.data,
+      inputs,
+      nodeController,
+    ]);
   }
 
   return result;

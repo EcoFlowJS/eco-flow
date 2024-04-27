@@ -41,6 +41,7 @@ export interface EcoContextPayload {
 
 export interface EcoContext extends Context {
   payload: EcoContextPayload;
+  moduleDatas?: FlowsNodeDataTypes;
   inputs?: { [key: string]: any };
   next: () => void;
 }

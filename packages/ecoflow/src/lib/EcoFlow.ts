@@ -66,7 +66,7 @@ class EcoFlow implements IEcoFlow {
       .register("service", new Service());
 
     this.server = new EcoServer();
-    this.socket = this.server.userSocket;
+    this.socket = this.server.socket;
     this.router = new EcoRouter();
     this.helper = new EcoHelper(this);
 
