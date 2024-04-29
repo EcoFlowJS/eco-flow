@@ -20,6 +20,7 @@ import {
   PackageManifest,
   SearchResult,
   SearchResults,
+  getPackageDownloads,
   getPackageManifest,
   searchPackages,
 } from "query-registry";
@@ -194,7 +195,7 @@ export class EcoModule implements IEcoModule {
     packageName: string
   ): Promise<InstalledPackagesDescription> {
     const currentModule = await this.getCurrentPackageDescription(packageName);
-    const searchModule = (await this.searchModule(`${packageName}`))!.objects;
+    const searchModule = (await this.searchModule(packageName))!.objects;
     if (currentModule === null) {
       if (searchModule.length > 0) {
         const { name, version, author } = searchModule[0].package;
@@ -203,6 +204,10 @@ export class EcoModule implements IEcoModule {
           currentVersion: "0.0.0",
           latestVersion: name === packageName ? version : "0.0.0",
           author: author && name === packageName ? author : "",
+          download:
+            name === packageName
+              ? (await getPackageDownloads({ name: packageName })).downloads
+              : 0,
           isInUse: false,
           isLocalPackage: false,
         };
@@ -212,6 +217,7 @@ export class EcoModule implements IEcoModule {
         currentVersion: "0.0.0",
         latestVersion: "0.0.0",
         author: "",
+        download: 0,
         isInUse: false,
         isLocalPackage: false,
       };
@@ -231,6 +237,10 @@ export class EcoModule implements IEcoModule {
         currentVersion: currentVersion,
         latestVersion: name === currentPackageName ? version : "0.0.0",
         author: author && name === currentPackageName ? author : "",
+        download:
+          name === currentPackageName
+            ? (await getPackageDownloads({ name: packageName })).downloads
+            : 0,
         isInUse,
         isLocalPackage,
       };
@@ -240,6 +250,7 @@ export class EcoModule implements IEcoModule {
       currentVersion: currentVersion,
       latestVersion: "0.0.0",
       author: "",
+      download: 0,
       isInUse,
       isLocalPackage,
     };

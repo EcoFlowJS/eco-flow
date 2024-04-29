@@ -69,6 +69,7 @@ export interface InstalledPackagesDescription {
   currentVersion: string;
   latestVersion: string;
   author: string | Person;
+  download: number;
   isInUse: boolean;
   isLocalPackage: boolean;
 }
