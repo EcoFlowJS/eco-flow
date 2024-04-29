@@ -1,4 +1,6 @@
 import { EcoRouter } from "../../../service/EcoRouter";
+import fetchInstalledModule from "../../controllers/module/fetchInstalledModule.controller";
+import fetchInstalledModuleDescription from "../../controllers/module/fetchInstalledModuleDescription.controller";
 import fetchModule from "../../controllers/module/fetchModule.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
 import moduleNodeRouter from "./node/node.routes";
@@ -8,6 +10,13 @@ export default moduleRouter;
 
 moduleRouter.get("/", isAuthenticated, fetchModule);
 moduleRouter.get("/id/:moduleID", isAuthenticated, fetchModule);
+
+moduleRouter.get("/installedPackages", isAuthenticated, fetchInstalledModule);
+moduleRouter.get(
+  "/installedPackages/id/:name",
+  isAuthenticated,
+  fetchInstalledModuleDescription
+);
 
 //node router
 moduleRouter.use("/nodes", moduleNodeRouter.routes());

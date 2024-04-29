@@ -15,11 +15,13 @@ export class ModuleSchema implements IModuleSchema {
   private _module: Module | null = null;
   private id: EcoModuleID;
   private nodePath: string;
+  private moduleName: string;
   private manifest: (() => ModuleManifest) | ModuleManifest;
   private packageJson: PackageJSON;
   private controllers: { [key: string]: any } = {};
 
   constructor(nodePath: string, moduleName: string) {
+    this.moduleName = moduleName;
     this.nodePath = path.join(nodePath, moduleName);
     this.manifest = require(path.join(nodePath, moduleName));
     this.packageJson = require(path.join(nodePath, moduleName, "package.json"));
@@ -91,6 +93,7 @@ export class ModuleSchema implements IModuleSchema {
     this._module = {
       id: this.id,
       name: this.manifest.name,
+      packageName: this.moduleName,
       version: this.version,
       nodes: this._processNodeSpecs(this.manifest.specs),
     };

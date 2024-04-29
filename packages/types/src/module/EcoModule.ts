@@ -1,4 +1,4 @@
-import { SearchResults } from "query-registry";
+import { Person, SearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
@@ -24,6 +24,11 @@ export interface EcoModule {
   getNodes(): EcoNodes;
   getNodes(nodeID?: string): EcoNode | null;
   getModuleBuilder(): Promise<EcoModuleBuilder>;
+
+  getInstalledPackagesDescription(
+    packageName: string
+  ): Promise<InstalledPackagesDescription>;
+
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
 }
@@ -59,6 +64,22 @@ export interface ModuleSpecsInputsTypeOptions {
   value: string;
 }
 
+export interface InstalledPackagesDescription {
+  name: string;
+  currentVersion: string;
+  latestVersion: string;
+  author: string | Person;
+  isInUse: boolean;
+  isLocalPackage: boolean;
+}
+
+export interface CurrentPackageDescription {
+  name: string;
+  version: string;
+  isInUse: boolean;
+  isLocalPackage: boolean;
+}
+
 export interface ModuleSpecsInputs {
   name: string;
   label: string;
@@ -88,6 +109,7 @@ export interface ModuleSpecs {
 export interface Module {
   id: EcoModuleID;
   name: string;
+  packageName: string;
   version: string;
   nodes: ModuleNodes[];
 }
