@@ -1,4 +1,4 @@
-import { Person, SearchResults } from "query-registry";
+import { Person, SearchResults as RegitySearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
@@ -14,7 +14,7 @@ import { FlowsNodeDataTypes } from "../flows";
 export interface EcoModule {
   registerModules(): Promise<void>;
   isEcoModule(moduleName: string): Promise<boolean>;
-  searchModule(moduleName: string): Promise<SearchResults | null>;
+  searchModule(moduleName: string): Promise<RegitySearchResults | null>;
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
   getModuleSchema(): ModuleSchema[];
@@ -69,7 +69,7 @@ export interface InstalledPackagesDescription {
   currentVersion: string;
   latestVersion: string;
   author: string | Person;
-  download: number;
+  download: number | string;
   isInUse: boolean;
   isLocalPackage: boolean;
 }
@@ -130,3 +130,5 @@ export type ModuleControllers = string | ControllersEntryPoints;
 
 export type Node = ReactFlowNode<FlowsNodeDataTypes, string | undefined>;
 export type Nodes = Node[];
+
+export { RegitySearchResults };

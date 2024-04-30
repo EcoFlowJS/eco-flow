@@ -214,11 +214,11 @@ export class EcoModule implements IEcoModule {
           name: packageName,
           currentVersion: "0.0.0",
           latestVersion: name === packageName ? version : "0.0.0",
-          author: author && name === packageName ? author : "",
+          author: author && name === packageName ? author : "N/A",
           download:
             name === packageName
               ? (await getPackageDownloads({ name: packageName })).downloads
-              : 0,
+              : "N/A",
           isInUse: false,
           isLocalPackage: false,
         };
@@ -227,8 +227,8 @@ export class EcoModule implements IEcoModule {
         name: packageName,
         currentVersion: "0.0.0",
         latestVersion: "0.0.0",
-        author: "",
-        download: 0,
+        author: "N/A",
+        download: "N/A",
         isInUse: false,
         isLocalPackage: false,
       };
@@ -247,11 +247,11 @@ export class EcoModule implements IEcoModule {
         name: name === currentPackageName ? name : currentPackageName,
         currentVersion: currentVersion,
         latestVersion: name === currentPackageName ? version : "0.0.0",
-        author: author && name === currentPackageName ? author : "",
+        author: author && name === currentPackageName ? author : "N/A",
         download:
           name === currentPackageName
             ? (await getPackageDownloads({ name: packageName })).downloads
-            : 0,
+            : "N/A",
         isInUse,
         isLocalPackage,
       };
@@ -260,8 +260,8 @@ export class EcoModule implements IEcoModule {
       name: currentPackageName,
       currentVersion: currentVersion,
       latestVersion: "0.0.0",
-      author: "",
-      download: 0,
+      author: "N/A",
+      download: "N/A",
       isInUse,
       isLocalPackage,
     };
