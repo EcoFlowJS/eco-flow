@@ -1,6 +1,8 @@
 import { ModuleSchema } from "./ModuleSchema";
 
 export interface EcoModuleBuilder {
-  build(): Promise<ModuleSchema[]>;
-  build(nodesPath: string, ecoModule: string): Promise<ModuleSchema>;
+  build(ecoModules: string[]): Promise<ModuleSchema[]>;
+  build(ecoModules: string): Promise<ModuleSchema>;
+  build(ecoModules: string[], nodePath?: string): Promise<ModuleSchema[]>;
+  build(ecoModules: string, nodePath?: string): Promise<ModuleSchema>;
 }

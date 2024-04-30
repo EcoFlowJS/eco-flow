@@ -10,7 +10,6 @@ import {
   InstalledPackagesDescription,
   CurrentPackageDescription,
 } from "@ecoflow/types";
-import _, { VERSION } from "lodash";
 import { homedir } from "node:os";
 import path from "path";
 import fse from "fs-extra";
@@ -35,7 +34,8 @@ export class EcoModule implements IEcoModule {
   private nodesPath: string;
 
   constructor() {
-    const { moduleDir } = ecoFlow.config._config;
+    const { _, config } = ecoFlow;
+    const { moduleDir } = config._config;
 
     this.modulePath =
       !_.isUndefined(moduleDir) && !_.isEmpty(moduleDir)
@@ -47,6 +47,7 @@ export class EcoModule implements IEcoModule {
   }
 
   private async getInstalledModules(): Promise<string[]> {
+    const { _ } = ecoFlow;
     return (await fse.exists(this.nodesPath))
       ? (
           await fse.readdir(this.nodesPath, {
@@ -100,6 +101,8 @@ export class EcoModule implements IEcoModule {
   private async getCurrentPackageDescription(
     packageName: string
   ): Promise<CurrentPackageDescription | null> {
+    const { _ } = ecoFlow;
+
     if ((await this.installedModules).includes(packageName)) {
       const packageDescription: PackageJSON | null =
         !_.isUndefined(
@@ -149,6 +152,8 @@ export class EcoModule implements IEcoModule {
   }
 
   getModuleSchema(moduleID?: string): ModuleSchema & ModuleSchema[] {
+    const { _ } = ecoFlow;
+
     if (_.isUndefined(moduleID))
       return <ModuleSchema & ModuleSchema[]>[...this.moduleSchema];
     const moduleSchema = this.moduleSchema.filter(
@@ -160,6 +165,8 @@ export class EcoModule implements IEcoModule {
   }
 
   getModule(moduleID?: string): (Module | null) & Module[] {
+    const { _ } = ecoFlow;
+
     if (_.isUndefined(moduleID))
       return <(Module | null) & Module[]>this.moduleSchema.map((m) => m.module);
 
@@ -172,6 +179,8 @@ export class EcoModule implements IEcoModule {
   }
 
   getNodes(nodeID?: string): (EcoNode | null) & EcoNodes {
+    const { _ } = ecoFlow;
+
     if (_.isUndefined(nodeID))
       return <(EcoNode | null) & EcoNodes>(<unknown>[...this.nodes]);
 
@@ -181,6 +190,8 @@ export class EcoModule implements IEcoModule {
   }
 
   async isEcoModule(moduleName: string): Promise<boolean> {
+    const { _ } = ecoFlow;
+
     const module = await this.getManifest(moduleName);
     if (
       module !== null &&
@@ -274,6 +285,8 @@ export class EcoModule implements IEcoModule {
   }
 
   async installModule(moduleName: string): Promise<void> {
+    const { _ } = ecoFlow;
+
     const module = await this.getManifest(moduleName);
     if (
       module !== null &&
@@ -281,9 +294,7 @@ export class EcoModule implements IEcoModule {
       !_.isEmpty(module["ecoModule"])
     )
       await Helper.installPackageHelper(this.modulePath, moduleName);
-    await this.addModule(
-      await (await this.getModuleBuilder()).build(this.nodesPath, moduleName)
-    );
+    await this.addModule(await this.moduleBuilder.build(moduleName));
   }
 
   async removeModule(moduleName: string): Promise<void> {
@@ -294,7 +305,9 @@ export class EcoModule implements IEcoModule {
   async registerModules(): Promise<void> {
     const { log } = ecoFlow;
     try {
-      this.moduleSchema = await (await this.getModuleBuilder()).build();
+      this.moduleSchema = await this.moduleBuilder.build(
+        await this.installedModules
+      );
       this.nodes = await (this.getNodeBuilder
         ? this.getNodeBuilder.buildNodes()
         : ([] as ModuleNodes[]));
@@ -303,8 +316,8 @@ export class EcoModule implements IEcoModule {
     }
   }
 
-  async getModuleBuilder(): Promise<IEcoModuleBuilder> {
-    return new EcoModuleBuilder(this.nodesPath, await this.installedModules);
+  get moduleBuilder(): IEcoModuleBuilder {
+    return new EcoModuleBuilder(this.nodesPath);
   }
 
   get getNodeBuilder(): IEcoNodeBuilder | null {

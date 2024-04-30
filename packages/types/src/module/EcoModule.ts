@@ -23,12 +23,12 @@ export interface EcoModule {
   getModule(moduleID?: string): Module | null;
   getNodes(): EcoNodes;
   getNodes(nodeID?: string): EcoNode | null;
-  getModuleBuilder(): Promise<EcoModuleBuilder>;
 
   getInstalledPackagesDescription(
     packageName: string
   ): Promise<InstalledPackagesDescription>;
 
+  get moduleBuilder(): EcoModuleBuilder;
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
 }
