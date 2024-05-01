@@ -10,6 +10,7 @@ import {
   InstalledPackagesDescription,
   CurrentPackageDescription,
   ModuleSearchResults,
+  ModuleResults,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";
@@ -90,28 +91,24 @@ export class EcoModule implements IEcoModule {
     }
   }
 
-  private async searchPackages(
-    moduleName: string
-  ): Promise<SearchResults | null> {
-    try {
-      const result = {
-        ...(await searchPackages({
-          query: { text: `${moduleName} keywords:EcoFlowModule` },
-          cached: true,
-        })),
-      };
+  private async searchPackages(moduleName: string): Promise<SearchResults> {
+    const result = {
+      ...(await searchPackages({
+        query: {
+          text: `${moduleName} keywords:EcoFlow EcoFlowModule`,
+        },
+        cached: true,
+      })),
+    };
 
-      const newObject: SearchResult[] = [];
-      for await (const object of result.objects) {
-        if (await this.isEcoModule(object.package)) newObject.push(object);
-      }
-
-      result.objects = newObject;
-      return result;
-    } catch (err) {
-      console.log(err);
-      return null;
+    const newObject: SearchResult[] = [];
+    for await (const object of result.objects) {
+      if (await this.isEcoModule(object.package)) newObject.push(object);
     }
+
+    result.objects = newObject;
+    result.total = newObject.length;
+    return result;
   }
 
   private addModule(modules: ModuleSchema) {
@@ -230,6 +227,7 @@ export class EcoModule implements IEcoModule {
     if (
       module !== null &&
       !_.isUndefined(module.keywords) &&
+      module.keywords.includes("EcoFlow") &&
       module.keywords.includes("EcoFlowModule")
     )
       return true;
@@ -302,11 +300,13 @@ export class EcoModule implements IEcoModule {
     };
   }
 
-  async searchModule(moduleName: string): Promise<ModuleSearchResults[]> {
-    const searchResults = await this.searchPackages(moduleName);
+  async searchModule(moduleName: string): Promise<ModuleSearchResults> {
+    const { objects: searchResults, total } = await this.searchPackages(
+      moduleName
+    );
 
-    const result: ModuleSearchResults[] = [];
-    if (searchResults?.objects && searchResults.objects.length > 0) {
+    const modules: ModuleResults[] = [];
+    if (searchResults && searchResults.length > 0) {
       const installedPackage = await new Promise<CurrentPackageDescription[]>(
         async (resolve) => {
           const result: CurrentPackageDescription[] = [];
@@ -321,7 +321,7 @@ export class EcoModule implements IEcoModule {
         }
       );
 
-      for await (const { package: searchResult } of searchResults.objects) {
+      for await (const { package: searchResult } of searchResults) {
         const packument = new TPromise<unknown[], Packument, void>(
           (resolve, reject) =>
             getPackument({
@@ -330,8 +330,9 @@ export class EcoModule implements IEcoModule {
             }).then(resolve, reject)
         );
 
-        const resultPayload: ModuleSearchResults = {
+        const resultPayload: ModuleResults = {
           name: searchResult.name,
+          author: searchResult.author,
           versions: [],
           isInstalled: false,
           inUsed: false,
@@ -355,11 +356,14 @@ export class EcoModule implements IEcoModule {
           ? gitRepository.url
           : undefined;
 
-        result.push(resultPayload);
+        modules.push(resultPayload);
       }
     }
 
-    return result;
+    return {
+      modules,
+      total,
+    };
   }
 
   async installModule(moduleName: string): Promise<void> {
@@ -368,8 +372,9 @@ export class EcoModule implements IEcoModule {
     const module = await this.getManifest(moduleName);
     if (
       module !== null &&
-      !_.isUndefined(module["ecoModule"]) &&
-      !_.isEmpty(module["ecoModule"])
+      !_.isUndefined(module.keywords) &&
+      module.keywords.includes("EcoFlow") &&
+      module.keywords.includes("EcoFlowModule")
     )
       await Helper.installPackageHelper(this.modulePath, moduleName);
     await this.addModule(await this.moduleBuilder.build(moduleName));
@@ -392,6 +397,14 @@ export class EcoModule implements IEcoModule {
     } catch (error) {
       log.error(error);
     }
+  }
+
+  get availablePackagesCounts(): Promise<Number> {
+    return new Promise<Number>(async (resolve, reject) => {
+      searchPackages({
+        query: { text: "keywords:EcoFlow EcoFlowModule" },
+      }).then(({ total }) => resolve(total), reject);
+    });
   }
 
   get moduleBuilder(): IEcoModuleBuilder {

@@ -18,7 +18,7 @@ export interface PackageJSON {
   description: string;
   author: string;
   license: string;
-  ecoModule:
+  ecoModule?:
     | string
     | {
         [key: string]: string;

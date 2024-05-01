@@ -15,7 +15,7 @@ export interface EcoModule {
   registerModules(): Promise<void>;
   isEcoModule(moduleName: PackageSearchResult): Promise<boolean>;
   isEcoModule(moduleName: string): Promise<boolean>;
-  searchModule(moduleName: string): Promise<ModuleSearchResults[]>;
+  searchModule(moduleName: string): Promise<ModuleSearchResults>;
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
   getModuleSchema(): ModuleSchema[];
@@ -24,18 +24,24 @@ export interface EcoModule {
   getModule(moduleID?: string): Module | null;
   getNodes(): EcoNodes;
   getNodes(nodeID?: string): EcoNode | null;
-
   getInstalledPackagesDescription(
     packageName: string
   ): Promise<InstalledPackagesDescription>;
 
+  get availablePackagesCounts(): Promise<Number>;
   get moduleBuilder(): EcoModuleBuilder;
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
 }
 
 export interface ModuleSearchResults {
+  modules: ModuleResults[];
+  total: number;
+}
+
+export interface ModuleResults {
   name: string;
+  author?: Person;
   versions: string[];
   isInstalled: boolean;
   inUsed: boolean;

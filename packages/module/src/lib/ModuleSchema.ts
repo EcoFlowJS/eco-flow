@@ -43,6 +43,11 @@ export class ModuleSchema implements IModuleSchema {
     const { _ } = ecoFlow;
     const controllers = this.packageJson.ecoModule;
 
+    if (_.isUndefined(controllers)) {
+      this.controllers["default"] = function () {};
+      return;
+    }
+
     if (_.isArray(controllers))
       throw `[Module: ${this.name}] Array is not supported yet`;
 

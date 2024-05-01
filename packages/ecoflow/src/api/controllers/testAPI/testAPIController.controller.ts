@@ -1,3 +1,4 @@
+import Helper from "@ecoflow/helper";
 import { Context } from "koa";
 
 const testAPIController = async (ctx: Context) => {
@@ -7,7 +8,11 @@ const testAPIController = async (ctx: Context) => {
 
   // await ecoFlow.ecoModule.installModule("ecoflow_functions");
   // ctx.body = await ecoFlow.ecoModule.getNodes();
-  ctx.body = await ecoFlow.ecoModule.getModule();
+  // ctx.body = await Helper.installPackageHelper(
+  //   "P:/aditi",
+  //   "ecoflow_common@0.0.2"
+  // );
+  ctx.body = "";
 };
 
 // function ctnt(this: any, ctx: Context) {
