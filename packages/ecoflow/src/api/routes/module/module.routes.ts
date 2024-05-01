@@ -4,7 +4,9 @@ import fetchInstalledModuleDescription from "../../controllers/module/fetchInsta
 import fetchModule from "../../controllers/module/fetchModule.controller";
 import fetchSearchPackagesCount from "../../controllers/module/fetchSearchPackagesCount.controller";
 import installEcoPackages from "../../controllers/module/installEcoPackages.controller";
+import removeEcoPackage from "../../controllers/module/removeEcoPackage.controller";
 import searchPackages from "../../controllers/module/searchPackages.controller";
+import upgradeDowngradePackage from "../../controllers/module/upgradeDowngradePackage.controller";
 import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
 import moduleNodeRouter from "./node/node.routes";
 
@@ -32,6 +34,17 @@ moduleRouter.get(
 );
 
 moduleRouter.post("/installPackages", isAuthenticated, installEcoPackages);
+moduleRouter.patch(
+  "/installPackages",
+  isAuthenticated,
+  upgradeDowngradePackage
+);
+
+moduleRouter.delete(
+  "/installPackages/:packageName",
+  isAuthenticated,
+  removeEcoPackage
+);
 
 //node router
 moduleRouter.use("/nodes", moduleNodeRouter.routes());

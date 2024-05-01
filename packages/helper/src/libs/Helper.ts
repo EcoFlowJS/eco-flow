@@ -16,6 +16,7 @@ import compareHashHelper from "../helpers/compareHashHelper";
 import createHashHelper from "../helpers/createHashHelper";
 import xssFilterHelper from "../helpers/xssFilterHelper";
 import validatePasswordRegex from "../helpers/validatePasswordRegex";
+import requireUncached from "../helpers/requireUncached";
 
 export class Helper {
   static stringToFunction(value: string): unknown {
@@ -99,5 +100,9 @@ export class Helper {
 
   static validatePasswordRegex(value: string): boolean {
     return validatePasswordRegex(value);
+  }
+
+  static requireUncached(id: string): any {
+    return requireUncached(id);
   }
 }

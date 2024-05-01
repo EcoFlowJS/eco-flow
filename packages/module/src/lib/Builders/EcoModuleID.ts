@@ -9,7 +9,9 @@ export class EcoModuleID implements IEcoModuleID {
 
     this._id =
       _.isUndefined(nodeName) || _.isEmpty(nodeName)
-        ? md5(moduleName)
+        ? /[a-fA-F0-9]{32}/.test(moduleName)
+          ? moduleName
+          : md5(moduleName)
         : md5(`${moduleName}.${nodeName}`);
   }
 }

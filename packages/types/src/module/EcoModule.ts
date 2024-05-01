@@ -18,10 +18,16 @@ export interface EcoModule {
   searchModule(moduleName: string): Promise<ModuleSearchResults>;
   installModule(moduleName: string): Promise<ModuleSchema>;
   installModule(moduleName: string, version?: string): Promise<ModuleSchema>;
+  upgradeDowngradeModule(
+    moduleName: string,
+    version: string
+  ): Promise<ModuleSchema>;
   removeModule(moduleName: string): Promise<void>;
-  addModule(modules: ModuleSchema): void;
+  addModule(module: ModuleSchema): void;
+  updateModule(module: ModuleSchema): void;
   dropModule(moduleID: EcoModuleID): void;
   getModuleSchema(): ModuleSchema[];
+  getModuleSchema(moduleID?: EcoModuleID): ModuleSchema;
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
   getModule(moduleID?: string): Module | null;

@@ -1,7 +1,7 @@
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
-const installEcoPackages = async (ctx: Context) => {
+const upgradeDowngradePackage = async (ctx: Context) => {
   const { _, ecoModule } = ecoFlow;
   const { packageName, version } = ctx.request.body;
 
@@ -11,8 +11,8 @@ const installEcoPackages = async (ctx: Context) => {
     if (_.isUndefined(version) || _.isEmpty(version))
       throw "Package name is required";
 
-    const schema = await ecoModule.installModule(packageName, version);
-    await ecoModule.addModule(schema);
+    const schema = await ecoModule.upgradeDowngradeModule(packageName, version);
+    await ecoModule.updateModule(schema);
 
     ctx.status = 200;
     ctx.body = <ApiResponse>{
@@ -28,4 +28,4 @@ const installEcoPackages = async (ctx: Context) => {
   }
 };
 
-export default installEcoPackages;
+export default upgradeDowngradePackage;
