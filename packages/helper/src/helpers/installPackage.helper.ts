@@ -8,7 +8,7 @@ export default async (
 ): Promise<void> => {
   await fse.ensureDir(installDir);
   await fse.ensureFile(path.join(installDir, "package-lock.json"));
-  let packageManager = await detectPackageManager(installDir);
+  const packageManager = await detectPackageManager(installDir);
 
   await addPackages(packageNames, installDir, packageManager);
 };

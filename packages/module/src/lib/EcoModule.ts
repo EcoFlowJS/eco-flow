@@ -66,17 +66,23 @@ export class EcoModule implements IEcoModule {
               path.join(this.nodesPath, dirent.name, "package.json")
             )
           )
-          .filter(
-            (dirent) =>
-              !_.isUndefined(
-                require(path.join(this.nodesPath, dirent.name, "package.json"))
-                  .ecoModule
-              ) &&
-              !_.isEmpty(
-                require(path.join(this.nodesPath, dirent.name, "package.json"))
-                  .ecoModule
-              )
-          )
+          .filter((dirent) => {
+            const ecoPackage: any = require(path.join(
+              this.nodesPath,
+              dirent.name,
+              "package.json"
+            ));
+
+            if (
+              !_.isUndefined(ecoPackage.keywords) &&
+              !_.isEmpty(ecoPackage.keywords) &&
+              ecoPackage.keywords.includes("EcoFlow") &&
+              ecoPackage.keywords.includes("EcoFlowModule")
+            )
+              return true;
+
+            return false;
+          })
           .map((dir) => dir.name)
       : [];
   }
@@ -88,6 +94,19 @@ export class EcoModule implements IEcoModule {
       return await getPackageManifest({ name: moduleName, cached: true });
     } catch {
       return null;
+    }
+  }
+
+  private async getDownloadCount(moduleName: string): Promise<string | number> {
+    try {
+      return (
+        await getPackageDownloads({
+          name: moduleName,
+          cached: true,
+        })
+      ).downloads;
+    } catch {
+      return "N/A";
     }
   }
 
@@ -111,14 +130,14 @@ export class EcoModule implements IEcoModule {
     return result;
   }
 
-  private addModule(modules: ModuleSchema) {
+  addModule(modules: ModuleSchema): void {
     this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== modules.module?.id._id
     );
     this.moduleSchema.push(modules);
   }
 
-  private dropModule(moduleID: EcoModuleID) {
+  dropModule(moduleID: EcoModuleID): void {
     this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== moduleID._id
     );
@@ -130,15 +149,16 @@ export class EcoModule implements IEcoModule {
     const { _ } = ecoFlow;
 
     if ((await this.installedModules).includes(packageName)) {
+      const ecoPackage = require(path.join(
+        this.nodesPath,
+        packageName,
+        "package.json"
+      ));
       const packageDescription: PackageJSON | null =
-        !_.isUndefined(
-          require(path.join(this.nodesPath, packageName, "package.json"))
-            .ecoModule
-        ) &&
-        !_.isEmpty(
-          require(path.join(this.nodesPath, packageName, "package.json"))
-            .ecoModule
-        )
+        !_.isUndefined(ecoPackage.keywords) &&
+        !_.isEmpty(ecoPackage.keywords) &&
+        ecoPackage.keywords.includes("EcoFlow") &&
+        ecoPackage.keywords.includes("EcoFlowModule")
           ? require(path.join(this.nodesPath, packageName, "package.json"))
           : null;
 
@@ -239,6 +259,7 @@ export class EcoModule implements IEcoModule {
   ): Promise<InstalledPackagesDescription> {
     const currentModule = await this.getCurrentPackageDescription(packageName);
     const searchModule = (await this.searchPackages(packageName))!.objects;
+
     if (currentModule === null) {
       if (searchModule.length > 0) {
         const { name, version, author } = searchModule[0].package;
@@ -249,8 +270,7 @@ export class EcoModule implements IEcoModule {
           author: author && name === packageName ? author : "N/A",
           download:
             name === packageName
-              ? (await getPackageDownloads({ name: packageName, cached: true }))
-                  .downloads
+              ? await this.getDownloadCount(packageName)
               : "N/A",
           isInUse: false,
           isLocalPackage: false,
@@ -283,7 +303,7 @@ export class EcoModule implements IEcoModule {
         author: author && name === currentPackageName ? author : "N/A",
         download:
           name === currentPackageName
-            ? (await getPackageDownloads({ name: packageName })).downloads
+            ? await this.getDownloadCount(packageName)
             : "N/A",
         isInUse,
         isLocalPackage,
@@ -366,7 +386,10 @@ export class EcoModule implements IEcoModule {
     };
   }
 
-  async installModule(moduleName: string): Promise<void> {
+  async installModule(
+    moduleName: string,
+    version: string = "latest"
+  ): Promise<ModuleSchema> {
     const { _ } = ecoFlow;
 
     const module = await this.getManifest(moduleName);
@@ -376,8 +399,12 @@ export class EcoModule implements IEcoModule {
       module.keywords.includes("EcoFlow") &&
       module.keywords.includes("EcoFlowModule")
     )
-      await Helper.installPackageHelper(this.modulePath, moduleName);
-    await this.addModule(await this.moduleBuilder.build(moduleName));
+      await Helper.installPackageHelper(
+        this.modulePath,
+        `${moduleName}@${version}`
+      );
+
+    return await this.moduleBuilder.build(moduleName);
   }
 
   async removeModule(moduleName: string): Promise<void> {
