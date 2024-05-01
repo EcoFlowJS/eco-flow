@@ -1,4 +1,4 @@
-import { Person, SearchResults as RegitySearchResults } from "query-registry";
+import { PackageSearchResult, Person } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
@@ -13,8 +13,9 @@ import { FlowsNodeDataTypes } from "../flows";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
+  isEcoModule(moduleName: PackageSearchResult): Promise<boolean>;
   isEcoModule(moduleName: string): Promise<boolean>;
-  searchModule(moduleName: string): Promise<RegitySearchResults | null>;
+  searchModule(moduleName: string): Promise<ModuleSearchResults[]>;
   installModule(moduleName: string): Promise<void>;
   removeModule(moduleName: string): Promise<void>;
   getModuleSchema(): ModuleSchema[];
@@ -31,6 +32,16 @@ export interface EcoModule {
   get moduleBuilder(): EcoModuleBuilder;
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
+}
+
+export interface ModuleSearchResults {
+  name: string;
+  versions: string[];
+  isInstalled: boolean;
+  inUsed: boolean;
+  latestVersion: string;
+  installedVersions: string | null;
+  gitRepository?: string;
 }
 
 export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug"; // Modle node types;
@@ -130,5 +141,3 @@ export type ModuleControllers = string | ControllersEntryPoints;
 
 export type Node = ReactFlowNode<FlowsNodeDataTypes, string | undefined>;
 export type Nodes = Node[];
-
-export { RegitySearchResults };

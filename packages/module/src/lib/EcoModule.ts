@@ -9,6 +9,7 @@ import {
   EcoNodes,
   InstalledPackagesDescription,
   CurrentPackageDescription,
+  ModuleSearchResults,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";
@@ -22,10 +23,14 @@ import {
   getPackageDownloads,
   getPackageManifest,
   searchPackages,
+  getPackument,
+  Packument,
+  PackageSearchResult,
 } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { EcoNodeBuilder } from "./EcoNodeBuilder";
+import TPromise from "thread-promises";
 
 export class EcoModule implements IEcoModule {
   private moduleSchema: ModuleSchema[] = [];
@@ -79,8 +84,32 @@ export class EcoModule implements IEcoModule {
     moduleName: string
   ): Promise<PackageManifest | null> {
     try {
-      return await getPackageManifest({ name: moduleName });
+      return await getPackageManifest({ name: moduleName, cached: true });
     } catch {
+      return null;
+    }
+  }
+
+  private async searchPackages(
+    moduleName: string
+  ): Promise<SearchResults | null> {
+    try {
+      const result = {
+        ...(await searchPackages({
+          query: { text: `${moduleName} keywords:EcoFlowModule` },
+          cached: true,
+        })),
+      };
+
+      const newObject: SearchResult[] = [];
+      for await (const object of result.objects) {
+        if (await this.isEcoModule(object.package)) newObject.push(object);
+      }
+
+      result.objects = newObject;
+      return result;
+    } catch (err) {
+      console.log(err);
       return null;
     }
   }
@@ -127,6 +156,7 @@ export class EcoModule implements IEcoModule {
           name !== packageName ? packageName : name
         )),
       };
+
       const currentModuleNodeIDs =
         (await this.getModule())
           .find((module) => module.packageName === name)
@@ -189,14 +219,18 @@ export class EcoModule implements IEcoModule {
     return <(EcoNode | null) & EcoNodes>(node.length > 0 ? node[0] : null);
   }
 
-  async isEcoModule(moduleName: string): Promise<boolean> {
+  async isEcoModule(
+    moduleName: string | PackageSearchResult
+  ): Promise<boolean> {
     const { _ } = ecoFlow;
 
-    const module = await this.getManifest(moduleName);
+    const module = _.isString(moduleName)
+      ? await this.getManifest(moduleName)
+      : moduleName;
     if (
       module !== null &&
-      !_.isUndefined(module["ecoModule"]) &&
-      !_.isEmpty(module["ecoModule"])
+      !_.isUndefined(module.keywords) &&
+      module.keywords.includes("EcoFlowModule")
     )
       return true;
     return false;
@@ -206,7 +240,7 @@ export class EcoModule implements IEcoModule {
     packageName: string
   ): Promise<InstalledPackagesDescription> {
     const currentModule = await this.getCurrentPackageDescription(packageName);
-    const searchModule = (await this.searchModule(packageName))!.objects;
+    const searchModule = (await this.searchPackages(packageName))!.objects;
     if (currentModule === null) {
       if (searchModule.length > 0) {
         const { name, version, author } = searchModule[0].package;
@@ -217,7 +251,8 @@ export class EcoModule implements IEcoModule {
           author: author && name === packageName ? author : "N/A",
           download:
             name === packageName
-              ? (await getPackageDownloads({ name: packageName })).downloads
+              ? (await getPackageDownloads({ name: packageName, cached: true }))
+                  .downloads
               : "N/A",
           isInUse: false,
           isLocalPackage: false,
@@ -267,21 +302,64 @@ export class EcoModule implements IEcoModule {
     };
   }
 
-  async searchModule(moduleName: string): Promise<SearchResults | null> {
-    try {
-      const result = {
-        ...(await searchPackages({ query: { text: moduleName } })),
-      };
-      const newObject: SearchResult[] = [];
-      for await (const object of result.objects) {
-        if (await this.isEcoModule(object.package.name)) newObject.push(object);
+  async searchModule(moduleName: string): Promise<ModuleSearchResults[]> {
+    const searchResults = await this.searchPackages(moduleName);
+
+    const result: ModuleSearchResults[] = [];
+    if (searchResults?.objects && searchResults.objects.length > 0) {
+      const installedPackage = await new Promise<CurrentPackageDescription[]>(
+        async (resolve) => {
+          const result: CurrentPackageDescription[] = [];
+          for await (const installedModule of await this.installedModules) {
+            const packageDescription = await this.getCurrentPackageDescription(
+              installedModule
+            );
+            if (packageDescription !== null) result.push(packageDescription);
+          }
+
+          resolve(result);
+        }
+      );
+
+      for await (const { package: searchResult } of searchResults.objects) {
+        const packument = new TPromise<unknown[], Packument, void>(
+          (resolve, reject) =>
+            getPackument({
+              name: searchResult.name,
+              cached: true,
+            }).then(resolve, reject)
+        );
+
+        const resultPayload: ModuleSearchResults = {
+          name: searchResult.name,
+          versions: [],
+          isInstalled: false,
+          inUsed: false,
+          latestVersion: "",
+          installedVersions: null,
+        };
+        const installedModule = installedPackage.filter(
+          (installedPackage) => installedPackage.name === searchResult.name
+        );
+        if (installedModule.length > 0) {
+          resultPayload.isInstalled = true;
+          resultPayload.installedVersions = installedModule[0].version;
+          resultPayload.inUsed = installedModule[0].isInUse;
+        }
+
+        const { distTags, versions, gitRepository } = await packument;
+
+        resultPayload.versions = Object.keys(versions);
+        resultPayload.latestVersion = distTags.latest;
+        resultPayload.gitRepository = gitRepository
+          ? gitRepository.url
+          : undefined;
+
+        result.push(resultPayload);
       }
-      result.objects = newObject;
-      return result;
-    } catch (err) {
-      console.log(err);
-      return null;
     }
+
+    return result;
   }
 
   async installModule(moduleName: string): Promise<void> {
