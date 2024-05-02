@@ -1,3 +1,4 @@
+import EcoModule from "@ecoflow/module";
 import {
   EcoContext,
   FlowsNodeDataTypes,
@@ -62,7 +63,7 @@ const buildUserControllers = async (
 
     const nodeController: () => Promise<void> = _.isString(controller)
       ? await ecoModule
-          .getModuleSchema(controller.split(".")[0])
+          .getModuleSchema(new EcoModule.IDBuilders(controller.split(".")[0]))
           .getController(controller.split(".")[1])
       : controller ||
         (modduleType === "Debug" ? debugController : userController);

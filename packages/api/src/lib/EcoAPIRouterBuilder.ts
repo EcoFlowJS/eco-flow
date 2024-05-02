@@ -18,6 +18,7 @@ import responseController from "../helpers/responseController";
 import middlewareController from "../helpers/middlewareController";
 import buildUserControllers from "../helpers/buildUserControllers";
 import debugController from "../helpers/debugController";
+import EcoModule from "@ecoflow/module";
 
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
@@ -55,7 +56,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       controller
     )
       ? ecoModule
-          .getModuleSchema(controller.split(".")[0])
+          .getModuleSchema(new EcoModule.IDBuilders(controller.split(".")[0]))
           .getController(controller.split(".")[1])
       : controller ||
         function (this: RouterRequestControllerBuilderOptions) {

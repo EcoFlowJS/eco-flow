@@ -20,8 +20,8 @@
     "@ecoflow/helper": "^1.0.0",
     "@ecoflow/types": "^0.0.15",
     "fs-extra": "^11.2.0",
-    "lodash": "^4.17.21",
     "md5": "^2.3.0",
-    "query-registry": "^2.6.0"
+    "query-registry": "^2.6.0",
+    "thread-promises": "^1.6.3"
   }
 }

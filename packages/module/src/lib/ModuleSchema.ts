@@ -10,19 +10,24 @@ import {
 } from "@ecoflow/types";
 import { EcoModule } from "./EcoModule";
 import fse from "fs-extra";
+import Helper from "@ecoflow/helper";
 
 export class ModuleSchema implements IModuleSchema {
   private _module: Module | null = null;
   private id: EcoModuleID;
   private nodePath: string;
+  private moduleName: string;
   private manifest: (() => ModuleManifest) | ModuleManifest;
   private packageJson: PackageJSON;
   private controllers: { [key: string]: any } = {};
 
   constructor(nodePath: string, moduleName: string) {
+    this.moduleName = moduleName;
     this.nodePath = path.join(nodePath, moduleName);
-    this.manifest = require(path.join(nodePath, moduleName));
-    this.packageJson = require(path.join(nodePath, moduleName, "package.json"));
+    this.manifest = Helper.requireUncached(this.nodePath);
+    this.packageJson = Helper.requireUncached(
+      path.join(nodePath, moduleName, "package.json")
+    );
     this.id = new EcoModule.IDBuilders(this.name);
   }
 
@@ -41,6 +46,11 @@ export class ModuleSchema implements IModuleSchema {
     const { _ } = ecoFlow;
     const controllers = this.packageJson.ecoModule;
 
+    if (_.isUndefined(controllers)) {
+      this.controllers["default"] = function () {};
+      return;
+    }
+
     if (_.isArray(controllers))
       throw `[Module: ${this.name}] Array is not supported yet`;
 
@@ -49,10 +59,9 @@ export class ModuleSchema implements IModuleSchema {
         throw `[Module: ${this.name}] Controller File not found at ${path
           .join(this.nodePath, controllers)
           .replace(/\\/g, "/")}`;
-      this.controllers["default"] = require(path.join(
-        this.nodePath,
-        controllers
-      ));
+      this.controllers["default"] = Helper.requireUncached(
+        path.join(this.nodePath, controllers)
+      );
     }
 
     if (_.isObject(controllers)) {
@@ -63,10 +72,9 @@ export class ModuleSchema implements IModuleSchema {
           }] Controller File not found of ID ${key} at ${path
             .join(this.nodePath, controllers[key])
             .replace(/\\/g, "/")}`;
-        this.controllers[key] = require(path.join(
-          this.nodePath,
-          controllers[key]
-        ));
+        this.controllers[key] = Helper.requireUncached(
+          path.join(this.nodePath, controllers[key])
+        );
       });
     }
   }
@@ -91,6 +99,7 @@ export class ModuleSchema implements IModuleSchema {
     this._module = {
       id: this.id,
       name: this.manifest.name,
+      packageName: this.moduleName,
       version: this.version,
       nodes: this._processNodeSpecs(this.manifest.specs),
     };

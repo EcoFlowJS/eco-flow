@@ -1,4 +1,4 @@
-import { SearchResults } from "query-registry";
+import { PackageSearchResult, Person } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { ModuleSchema } from "./ModuleSchema";
@@ -13,19 +13,50 @@ import { FlowsNodeDataTypes } from "../flows";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
+  isEcoModule(moduleName: PackageSearchResult): Promise<boolean>;
   isEcoModule(moduleName: string): Promise<boolean>;
-  searchModule(moduleName: string): Promise<SearchResults | null>;
-  installModule(moduleName: string): Promise<void>;
+  searchModule(moduleName: string): Promise<ModuleSearchResults>;
+  installModule(moduleName: string): Promise<ModuleSchema>;
+  installModule(moduleName: string, version?: string): Promise<ModuleSchema>;
+  upgradeDowngradeModule(
+    moduleName: string,
+    version: string
+  ): Promise<ModuleSchema>;
   removeModule(moduleName: string): Promise<void>;
+  addModule(module: ModuleSchema): void;
+  updateModule(module: ModuleSchema): void;
+  dropModule(moduleID: EcoModuleID): void;
   getModuleSchema(): ModuleSchema[];
+  getModuleSchema(moduleID?: EcoModuleID): ModuleSchema;
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
   getModule(moduleID?: string): Module | null;
   getNodes(): EcoNodes;
   getNodes(nodeID?: string): EcoNode | null;
-  getModuleBuilder(): Promise<EcoModuleBuilder>;
+  getInstalledPackagesDescription(
+    packageName: string
+  ): Promise<InstalledPackagesDescription>;
+
+  get availablePackagesCounts(): Promise<Number>;
+  get moduleBuilder(): EcoModuleBuilder;
   get getNodeBuilder(): EcoNodeBuilder | null;
   get installedModules(): Promise<string[]>;
+}
+
+export interface ModuleSearchResults {
+  modules: ModuleResults[];
+  total: number;
+}
+
+export interface ModuleResults {
+  name: string;
+  author?: Person | string;
+  versions: string[];
+  isInstalled: boolean;
+  inUsed: boolean;
+  latestVersion: string;
+  installedVersions: string | null;
+  gitRepository?: string;
 }
 
 export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug"; // Modle node types;
@@ -59,6 +90,23 @@ export interface ModuleSpecsInputsTypeOptions {
   value: string;
 }
 
+export interface InstalledPackagesDescription {
+  name: string;
+  currentVersion: string;
+  latestVersion: string;
+  author: string | Person;
+  download: number | string;
+  isInUse: boolean;
+  isLocalPackage: boolean;
+}
+
+export interface CurrentPackageDescription {
+  name: string;
+  version: string;
+  isInUse: boolean;
+  isLocalPackage: boolean;
+}
+
 export interface ModuleSpecsInputs {
   name: string;
   label: string;
@@ -88,6 +136,7 @@ export interface ModuleSpecs {
 export interface Module {
   id: EcoModuleID;
   name: string;
+  packageName: string;
   version: string;
   nodes: ModuleNodes[];
 }
