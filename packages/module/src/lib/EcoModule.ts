@@ -32,12 +32,14 @@ import { EcoModuleBuilder } from "./EcoModuleBuilder";
 import { EcoModuleID } from "./Builders/EcoModuleID";
 import { EcoNodeBuilder } from "./EcoNodeBuilder";
 import TPromise from "thread-promises";
+import StreamZip from "node-stream-zip";
 
 export class EcoModule implements IEcoModule {
   private moduleSchema: ModuleSchema[] = [];
   private nodes: ModuleNodes[] = [];
   private modulePath: string;
   private nodesPath: string;
+  private localModulePaths: string;
 
   constructor() {
     const { _, config } = ecoFlow;
@@ -49,6 +51,7 @@ export class EcoModule implements IEcoModule {
         : path.join(homedir().replace(/\\/g, "/"), ".ecoflow", "modules");
 
     fse.ensureDirSync(this.modulePath);
+    this.localModulePaths = path.join(this.modulePath, "local");
     this.nodesPath = path.join(this.modulePath, "node_modules");
   }
 
@@ -135,21 +138,36 @@ export class EcoModule implements IEcoModule {
     return result;
   }
 
-  addModule(module: ModuleSchema): void {
+  addModule(module: ModuleSchema | ModuleSchema[]): void {
+    if (Array.isArray(module)) {
+      module.forEach((m) => this.addModule(m));
+      return;
+    }
+
     this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== module.module?.id._id
     );
     this.moduleSchema.push(module);
   }
 
-  updateModule(module: ModuleSchema): void {
+  updateModule(module: ModuleSchema | ModuleSchema[]): void {
+    if (Array.isArray(module)) {
+      module.forEach((m) => this.updateModule(m));
+      return;
+    }
+
     this.moduleSchema.map((schema, index, schemas) => {
       if (schema.module?.id._id === module.module?.id._id)
         schemas.splice(index, 1, module);
     });
   }
 
-  dropModule(moduleID: EcoModuleID): void {
+  dropModule(moduleID: EcoModuleID | EcoModuleID[]): void {
+    if (Array.isArray(moduleID)) {
+      moduleID.forEach((m) => this.dropModule(m));
+      return;
+    }
+
     this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== moduleID._id
     );
@@ -443,6 +461,52 @@ export class EcoModule implements IEcoModule {
       );
 
     return await this.moduleBuilder.build(moduleName);
+  }
+
+  async installLocalModule(moduleName: string[]): Promise<ModuleSchema[]> {
+    const { _, config } = ecoFlow;
+    const modulesName: {
+      path: string;
+      name: string;
+    }[] = [];
+    for await (const module of moduleName) {
+      const file = new StreamZip.async({
+        file: path.join(config._config.userDir!, "uploads", module),
+      });
+      if (!Object.keys(await file.entries()).includes("package.json")) continue;
+      const packageJSON = JSON.parse(
+        (await file.entryData("package.json")).toString("utf8")
+      );
+      if (!(await this.isEcoModule(packageJSON))) continue;
+
+      const localModuleName = packageJSON.name;
+      modulesName.map((module, index, localModules) =>
+        module.name === localModuleName ? localModules.splice(index, 1) : null
+      );
+      const localModuleNodePath = path.join(
+        this.localModulePaths,
+        localModuleName
+      );
+      if (await fse.exists(localModuleNodePath)) {
+        await this.removeModule(localModuleName);
+        await fse.remove(localModuleNodePath);
+      }
+
+      await fse.ensureDir(localModuleNodePath);
+      await file.extract(null, localModuleNodePath);
+      await file.close();
+
+      modulesName.push({ path: localModuleNodePath, name: localModuleName });
+    }
+
+    const schema: ModuleSchema[] = [];
+
+    for await (const module of modulesName) {
+      await Helper.installPackageHelper(this.modulePath, `${module.path}`);
+      schema.push(await this.moduleBuilder.build(module.name));
+    }
+
+    return schema;
   }
 
   async removeModule(moduleName: string): Promise<void> {
