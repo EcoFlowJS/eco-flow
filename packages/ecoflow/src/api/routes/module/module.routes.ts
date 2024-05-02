@@ -3,6 +3,7 @@ import fetchInstalledModule from "../../controllers/module/fetchInstalledModule.
 import fetchInstalledModuleDescription from "../../controllers/module/fetchInstalledModuleDescription.controller";
 import fetchModule from "../../controllers/module/fetchModule.controller";
 import fetchSearchPackagesCount from "../../controllers/module/fetchSearchPackagesCount.controller";
+import importEcoPackages from "../../controllers/module/importEcoPackages.controller";
 import installEcoPackages from "../../controllers/module/installEcoPackages.controller";
 import removeEcoPackage from "../../controllers/module/removeEcoPackage.controller";
 import searchPackages from "../../controllers/module/searchPackages.controller";
@@ -34,6 +35,12 @@ moduleRouter.get(
 );
 
 moduleRouter.post("/installPackages", isAuthenticated, installEcoPackages);
+moduleRouter.post(
+  "/installPackages/import",
+  isAuthenticated,
+  importEcoPackages
+);
+
 moduleRouter.patch(
   "/installPackages",
   isAuthenticated,
