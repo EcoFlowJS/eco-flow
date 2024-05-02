@@ -15,6 +15,8 @@ const roleAdmin: UserPermissions = {
   createEnvs: true,
   deleteEnvs: true,
   updateEnvs: true,
+  backup: true,
+  restore: true,
   schemaEditor: true,
   createDBConnection: true,
   modifyDBConnection: true,

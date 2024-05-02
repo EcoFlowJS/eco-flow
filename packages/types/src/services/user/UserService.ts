@@ -80,6 +80,8 @@ export interface UserPermissions extends AnyKeyBoolean {
   createEnvs: boolean;
   deleteEnvs: boolean;
   updateEnvs: boolean;
+  backup: boolean;
+  restore: boolean;
   schemaEditor: boolean;
   createDBConnection: boolean;
   modifyDBConnection: boolean;

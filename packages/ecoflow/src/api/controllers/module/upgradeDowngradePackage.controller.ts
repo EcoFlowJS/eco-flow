@@ -2,7 +2,7 @@ import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 const upgradeDowngradePackage = async (ctx: Context) => {
-  const { _, ecoModule } = ecoFlow;
+  const { _, ecoModule, service } = ecoFlow;
   const { packageName, version } = ctx.request.body;
 
   try {
@@ -19,6 +19,12 @@ const upgradeDowngradePackage = async (ctx: Context) => {
       success: true,
       payload: schema.module,
     };
+
+    await service.AuditLogsService.addLog({
+      message: `Package(${packageName}) version has been changed to ${version} by ${ctx.user}`,
+      type: "Info",
+      userID: ctx.user,
+    });
   } catch (error) {
     ctx.status = 409;
     ctx.body = <ApiResponse>{

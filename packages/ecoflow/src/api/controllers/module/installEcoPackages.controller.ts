@@ -2,7 +2,7 @@ import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 const installEcoPackages = async (ctx: Context) => {
-  const { _, ecoModule } = ecoFlow;
+  const { _, ecoModule, service } = ecoFlow;
   const { packageName, version } = ctx.request.body;
 
   try {
@@ -19,6 +19,12 @@ const installEcoPackages = async (ctx: Context) => {
       success: true,
       payload: schema.module,
     };
+
+    await service.AuditLogsService.addLog({
+      message: `New package(${packageName}) has been installed by ${ctx.user}`,
+      type: "Info",
+      userID: ctx.user,
+    });
   } catch (error) {
     ctx.status = 409;
     ctx.body = <ApiResponse>{
