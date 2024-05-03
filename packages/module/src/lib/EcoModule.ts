@@ -11,7 +11,6 @@ import {
   CurrentPackageDescription,
   ModuleSearchResults,
   ModuleResults,
-  ModuleSpecsInputs,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";

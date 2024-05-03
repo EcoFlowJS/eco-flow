@@ -1,3 +1,4 @@
+import { FlowInputSpecs } from "../flows";
 import { EcoModuleID } from "./Builders";
 import { ModuleSpecs } from "./EcoModule";
 
@@ -7,6 +8,7 @@ export interface EcoNodeBuilder {
 
 export interface ModuleNodes extends ModuleSpecs {
   id: EcoModuleID;
+  inputs?: FlowInputSpecs[];
 }
 
 export interface ExtractedRawNodes {

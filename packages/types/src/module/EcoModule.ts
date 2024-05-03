@@ -151,8 +151,11 @@ export interface ModuleSpecs {
   name: string;
   type: ModuleTypes;
   describtion?: string;
-  inputs?: ModuleSpecsInputs[];
   controller?: string | (() => string | { [key: string]: any });
+}
+
+export interface ManifestSpecs extends ModuleSpecs {
+  inputs?: ModuleSpecsInputs[];
 }
 
 export interface Module {
