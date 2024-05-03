@@ -28,6 +28,10 @@ export class ModuleSchema implements IModuleSchema {
     this.packageJson = Helper.requireUncached(
       path.join(nodePath, moduleName, "package.json")
     );
+    if ((<{ default: ModuleManifest }>(<unknown>this.manifest)).default)
+      this.manifest = (<{ default: ModuleManifest }>(
+        (<unknown>this.manifest)
+      )).default;
     this.id = new EcoModule.IDBuilders(this.name);
   }
 
@@ -62,6 +66,9 @@ export class ModuleSchema implements IModuleSchema {
       this.controllers["default"] = Helper.requireUncached(
         path.join(this.nodePath, controllers)
       );
+
+      if (this.controllers["default"].default)
+        this.controllers["default"] = this.controllers["default"].default;
     }
 
     if (_.isObject(controllers)) {
@@ -75,6 +82,8 @@ export class ModuleSchema implements IModuleSchema {
         this.controllers[key] = Helper.requireUncached(
           path.join(this.nodePath, controllers[key])
         );
+        if (this.controllers[key].default)
+          this.controllers[key] = this.controllers[key].default;
       });
     }
   }

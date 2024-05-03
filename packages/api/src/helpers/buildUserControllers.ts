@@ -61,12 +61,15 @@ const buildUserControllers = async (
       this.next();
     };
 
-    const nodeController: () => Promise<void> = _.isString(controller)
-      ? await ecoModule
+    const nodeController: () => Promise<void> = controller
+      ? (await ecoModule
           .getModuleSchema(new EcoModule.IDBuilders(controller.split(".")[0]))
-          .getController(controller.split(".")[1])
-      : controller ||
-        (modduleType === "Debug" ? debugController : userController);
+          .getController(controller.split(".")[1])) ||
+        (modduleType === "Debug" ? debugController : userController)
+      : modduleType === "Debug"
+      ? debugController
+      : userController;
+
     result.push([
       middleware.id,
       modduleType,

@@ -102,7 +102,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
 
     const { _ } = ecoFlow;
     return middlewareNodes.map((node) => {
-      if (_.isUndefined(node.controller)) node.controller = () => this;
+      if (_.isUndefined(node.controller)) node.controller = "default";
 
       return node;
     });
