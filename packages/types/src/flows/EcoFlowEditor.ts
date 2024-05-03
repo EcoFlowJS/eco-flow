@@ -143,6 +143,7 @@ export interface FlowInputSpecs {
   label: string;
   type: ModuleSpecsInputsTypes;
   required?: boolean;
+  codeLanguage?: string;
   methods?: API_METHODS[];
   radioValues?: string | string[];
   pickerOptions?: string[] | ModuleSpecsInputsTypeOptions[];

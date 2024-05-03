@@ -2,7 +2,7 @@ import { ICommand } from "../cli";
 import { EcoRouter, EcoServer } from "./service";
 import { Logger } from "../utils";
 import { Config } from "./config";
-import _ from "lodash";
+import type _ from "lodash";
 import { EcoContainer } from "./EcoContainer";
 import { Database } from "../database";
 import { EcoModule } from "../module";
