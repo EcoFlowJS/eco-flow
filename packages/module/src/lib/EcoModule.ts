@@ -11,7 +11,6 @@ import {
   CurrentPackageDescription,
   ModuleSearchResults,
   ModuleResults,
-  ModuleSpecsInputs,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";
@@ -277,7 +276,7 @@ export class EcoModule implements IEcoModule {
 
   async getNodes(
     nodeID?: string,
-    inputValuePass?: { [key: string]: any }
+    inputValuePass: { [key: string]: any } = {}
   ): Promise<(EcoNode | null) & EcoNodes> {
     const { _ } = ecoFlow;
 

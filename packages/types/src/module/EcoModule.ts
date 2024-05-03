@@ -10,6 +10,7 @@ import {
 } from "./EcoNodeBuilder";
 import { Node as ReactFlowNode } from "@reactflow/core";
 import { FlowsNodeDataTypes } from "../flows";
+import { EcoContext } from "../api";
 
 export interface EcoModule {
   registerModules(): Promise<void>;
@@ -117,18 +118,28 @@ export interface ModuleSpecsInputs {
   label: string;
   type: ModuleSpecsInputsTypes;
   required?: boolean;
-  methods?: API_METHODS[] | ((value?: { [key: string]: any }) => API_METHODS[]);
+  codeLanguage?: string;
+  methods?:
+    | API_METHODS[]
+    | ((value?: {
+        [key: string]: any;
+      }) => API_METHODS[] | Promise<API_METHODS[]>);
   radioValues?:
     | string
     | string[]
-    | ((value?: { [key: string]: any }) => string | string[]);
+    | ((value?: {
+        [key: string]: any;
+      }) => string | string[] | Promise<string | string[]>);
   pickerOptions?:
     | string[]
     | ModuleSpecsInputsTypeOptions[]
     | ((value?: {
         [key: string]: any;
-      }) => string[] | ModuleSpecsInputsTypeOptions[]);
-  listBoxSorting?: boolean | ((value?: { [key: string]: any }) => boolean);
+      }) =>
+        | string[]
+        | ModuleSpecsInputsTypeOptions[]
+        | Promise<string[] | ModuleSpecsInputsTypeOptions[]>);
+  listBoxSorting?: boolean;
   defaultValue?:
     | string
     | number
@@ -144,15 +155,26 @@ export interface ModuleSpecsInputs {
         | boolean
         | Date
         | string[]
-        | { start: number; end: number });
+        | { start: number; end: number }
+        | Promise<
+            | string
+            | number
+            | boolean
+            | Date
+            | string[]
+            | { start: number; end: number }
+          >);
 }
 
 export interface ModuleSpecs {
   name: string;
   type: ModuleTypes;
   describtion?: string;
+  controller?: string;
+}
+
+export interface ManifestSpecs extends ModuleSpecs {
   inputs?: ModuleSpecsInputs[];
-  controller?: string | (() => string | { [key: string]: any });
 }
 
 export interface Module {
@@ -167,7 +189,7 @@ export type Modules = Module[];
 
 export interface ModuleManifest {
   name: string;
-  specs: ModuleSpecs[];
+  specs: ManifestSpecs[];
 }
 
 export interface ControllersEntryPoints {

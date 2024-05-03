@@ -1,6 +1,13 @@
 import type { Edge } from "@reactflow/core";
 import { configOptions } from "../ecoflow";
-import { EcoModuleID, Node, Nodes } from "../module";
+import {
+  API_METHODS,
+  EcoModuleID,
+  ModuleSpecsInputsTypeOptions,
+  ModuleSpecsInputsTypes,
+  Node,
+  Nodes,
+} from "../module";
 import { FC, HTMLAttributes } from "react";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 
@@ -129,6 +136,25 @@ export interface FlowEditorSettingsConfigurations {
   miniMap: boolean;
   panMiniMap: boolean;
   scrollPan: boolean;
+}
+
+export interface FlowInputSpecs {
+  name: string;
+  label: string;
+  type: ModuleSpecsInputsTypes;
+  required?: boolean;
+  codeLanguage?: string;
+  methods?: API_METHODS[];
+  radioValues?: string | string[];
+  pickerOptions?: string[] | ModuleSpecsInputsTypeOptions[];
+  listBoxSorting?: boolean;
+  defaultValue?:
+    | string
+    | number
+    | boolean
+    | Date
+    | string[]
+    | { start: number; end: number };
 }
 
 export type NodeConnection = Edge<FlowsEdgeDataTypes>;

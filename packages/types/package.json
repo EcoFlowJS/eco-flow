@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/types",
-  "version": "0.0.15",
+  "version": "0.0.18",
   "main": "./index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
