@@ -128,7 +128,7 @@ export interface ModuleSpecsInputs {
     | ((value?: {
         [key: string]: any;
       }) => string[] | ModuleSpecsInputsTypeOptions[]);
-  listBoxSorting?: boolean | ((value?: { [key: string]: any }) => boolean);
+  listBoxSorting?: boolean;
   defaultValue?:
     | string
     | number
