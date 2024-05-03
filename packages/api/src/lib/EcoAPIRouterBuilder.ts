@@ -155,7 +155,9 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     this._isDuplicateRoutes = {};
     for await (const node of requestStack) {
       const { ecoModule } = ecoFlow;
-      const { type, controller } = ecoModule.getNodes(node.data.moduleID._id)!;
+      const { type, controller } = (await ecoModule.getNodes(
+        node.data.moduleID._id
+      ))!;
       const inputs = this._configurations.find(
         (configuration) => configuration.nodeID === node.id
       )?.configs;
