@@ -170,7 +170,7 @@ export type Modules = Module[];
 
 export interface ModuleManifest {
   name: string;
-  specs: ModuleSpecs[];
+  specs: ManifestSpecs[];
 }
 
 export interface ControllersEntryPoints {
