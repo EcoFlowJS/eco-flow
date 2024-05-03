@@ -29,9 +29,9 @@ const buildUserControllers = async (
     () => Promise<UserControllers>
   ][] = [];
   for await (const middleware of middlewares) {
-    const { type, controller } = await ecoModule.getNodes(
+    const { type, controller } = (await ecoModule.getNodes(
       middleware.data.moduleID._id
-    )!;
+    ))!;
     if (type === "Request") continue;
 
     const inputs = configurations.find(

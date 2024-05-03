@@ -192,14 +192,28 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
   }
 
   async buildNodes(): Promise<ModuleNodes[]> {
+    const { _, server, ecoModule } = ecoFlow;
     const { requestNodes, middlewareNodes, responseNodes, consoleNodes } =
       this.extractNodes;
 
-    return [
+    const nodes = [
       ...this.buildRequestNodes(requestNodes),
       ...this.buildMiddlewareNodes(middlewareNodes),
       ...this.buildResponseNode(responseNodes),
       ...this.buildDebugNodes(consoleNodes),
     ];
+
+    server.systemSocket.on("connection", (socket) => {
+      const nodesID = nodes.map((node) => node.id._id);
+      nodesID.map((nodeID) => {
+        if (!socket.eventNames().includes(nodeID))
+          socket.on(nodeID, async (value) => {
+            if (!_.isEmpty(value))
+              socket.emit(nodeID, await ecoModule.getNodes(nodeID, value));
+          });
+      });
+    });
+
+    return nodes;
   }
 }

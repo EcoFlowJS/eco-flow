@@ -24,16 +24,20 @@ export interface EcoModule {
     version: string
   ): Promise<ModuleSchema>;
   removeModule(moduleName: string): Promise<void>;
-  addModule(module: ModuleSchema | ModuleSchema[]): void;
-  updateModule(module: ModuleSchema | ModuleSchema[]): void;
-  dropModule(moduleID: EcoModuleID | EcoModuleID[]): void;
+  addModule(module: ModuleSchema | ModuleSchema[]): Promise<void>;
+  updateModule(module: ModuleSchema | ModuleSchema[]): Promise<void>;
+  dropModule(moduleID: EcoModuleID | EcoModuleID[]): Promise<void>;
   getModuleSchema(): ModuleSchema[];
   getModuleSchema(moduleID?: EcoModuleID): ModuleSchema;
   getModuleSchema(moduleID?: string): ModuleSchema;
   getModule(): Module[];
   getModule(moduleID?: string): Module | null;
-  getNodes(): EcoNodes;
-  getNodes(nodeID?: string): EcoNode | null;
+  getNodes(): Promise<EcoNodes>;
+  getNodes(nodeID?: string): Promise<EcoNode | null>;
+  getNodes(
+    nodeID?: string,
+    inputValuePass?: { [key: string]: any }
+  ): Promise<EcoNode | null>;
   getInstalledPackagesDescription(
     packageName: string
   ): Promise<InstalledPackagesDescription>;
@@ -113,17 +117,34 @@ export interface ModuleSpecsInputs {
   label: string;
   type: ModuleSpecsInputsTypes;
   required?: boolean;
-  methods?: API_METHODS[];
-  radioValues?: string | string[];
-  pickerOptions?: string[] | ModuleSpecsInputsTypeOptions[];
-  listBoxSorting?: boolean;
+  methods?: API_METHODS[] | ((value?: { [key: string]: any }) => API_METHODS[]);
+  radioValues?:
+    | string
+    | string[]
+    | ((value?: { [key: string]: any }) => string | string[]);
+  pickerOptions?:
+    | string[]
+    | ModuleSpecsInputsTypeOptions[]
+    | ((value?: {
+        [key: string]: any;
+      }) => string[] | ModuleSpecsInputsTypeOptions[]);
+  listBoxSorting?: boolean | ((value?: { [key: string]: any }) => boolean);
   defaultValue?:
     | string
     | number
     | boolean
     | Date
     | string[]
-    | { start: number; end: number };
+    | { start: number; end: number }
+    | ((value?: {
+        [key: string]: any;
+      }) =>
+        | string
+        | number
+        | boolean
+        | Date
+        | string[]
+        | { start: number; end: number });
 }
 
 export interface ModuleSpecs {

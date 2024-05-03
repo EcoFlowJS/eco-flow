@@ -16,7 +16,7 @@ const importEcoPackages = async (ctx: Context) => {
     const schemas: ModuleSchema[] = await ecoModule.installLocalModule(
       await new Upload(ctx.request.files["packages"]).upload()
     );
-    ecoModule.addModule(schemas);
+    await ecoModule.addModule(schemas);
 
     ctx.status = 200;
     ctx.body = <ApiResponse>{

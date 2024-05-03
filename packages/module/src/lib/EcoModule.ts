@@ -11,6 +11,7 @@ import {
   CurrentPackageDescription,
   ModuleSearchResults,
   ModuleResults,
+  ModuleSpecsInputs,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";
@@ -138,9 +139,9 @@ export class EcoModule implements IEcoModule {
     return result;
   }
 
-  addModule(module: ModuleSchema | ModuleSchema[]): void {
+  async addModule(module: ModuleSchema | ModuleSchema[]): Promise<void> {
     if (Array.isArray(module)) {
-      module.forEach((m) => this.addModule(m));
+      for await (const m of module) await this.addModule(m);
       return;
     }
 
@@ -148,11 +149,14 @@ export class EcoModule implements IEcoModule {
       (m) => m.module?.id._id !== module.module?.id._id
     );
     this.moduleSchema.push(module);
+    this.nodes = await (this.getNodeBuilder
+      ? this.getNodeBuilder.buildNodes()
+      : ([] as ModuleNodes[]));
   }
 
-  updateModule(module: ModuleSchema | ModuleSchema[]): void {
+  async updateModule(module: ModuleSchema | ModuleSchema[]): Promise<void> {
     if (Array.isArray(module)) {
-      module.forEach((m) => this.updateModule(m));
+      for await (const m of module) await this.updateModule(m);
       return;
     }
 
@@ -160,17 +164,25 @@ export class EcoModule implements IEcoModule {
       if (schema.module?.id._id === module.module?.id._id)
         schemas.splice(index, 1, module);
     });
+
+    this.nodes = await (this.getNodeBuilder
+      ? this.getNodeBuilder.buildNodes()
+      : ([] as ModuleNodes[]));
   }
 
-  dropModule(moduleID: EcoModuleID | EcoModuleID[]): void {
+  async dropModule(moduleID: EcoModuleID | EcoModuleID[]): Promise<void> {
     if (Array.isArray(moduleID)) {
-      moduleID.forEach((m) => this.dropModule(m));
+      for await (const m of moduleID) await this.dropModule(m);
       return;
     }
 
     this.moduleSchema = this.moduleSchema.filter(
       (m) => m.module?.id._id !== moduleID._id
     );
+
+    this.nodes = await (this.getNodeBuilder
+      ? this.getNodeBuilder.buildNodes()
+      : ([] as ModuleNodes[]));
   }
 
   private async getCurrentPackageDescription(
@@ -263,13 +275,28 @@ export class EcoModule implements IEcoModule {
     );
   }
 
-  getNodes(nodeID?: string): (EcoNode | null) & EcoNodes {
+  async getNodes(
+    nodeID?: string,
+    inputValuePass?: { [key: string]: any }
+  ): Promise<(EcoNode | null) & EcoNodes> {
     const { _ } = ecoFlow;
 
     if (_.isUndefined(nodeID))
       return <(EcoNode | null) & EcoNodes>(<unknown>[...this.nodes]);
 
-    const node = this.nodes.filter((n) => n.id._id === nodeID);
+    const node: ModuleNodes[] = _.cloneDeep(
+      this.nodes.filter((n) => n.id._id === nodeID)
+    );
+
+    for await (const n of node) {
+      if (n.inputs)
+        for await (const input of n.inputs) {
+          for await (const params of Object.keys(input)) {
+            if (_.isFunction((<any>input)[params]))
+              (<any>input)[params] = await (<any>input)[params](inputValuePass);
+          }
+        }
+    }
 
     return <(EcoNode | null) & EcoNodes>(node.length > 0 ? node[0] : null);
   }
@@ -511,7 +538,7 @@ export class EcoModule implements IEcoModule {
 
   async removeModule(moduleName: string): Promise<void> {
     await Helper.removePackageHelper(this.modulePath, moduleName);
-    this.dropModule(new EcoModule.IDBuilders(moduleName));
+    await this.dropModule(new EcoModule.IDBuilders(moduleName));
   }
 
   async registerModules(): Promise<void> {
