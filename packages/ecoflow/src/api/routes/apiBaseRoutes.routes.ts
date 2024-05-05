@@ -13,7 +13,15 @@ import testAPIRouter from "./testAPI/testAPI.routes";
 import moduleRouter from "./module/module.routes";
 import flowRouter from "./flow/flow.routes";
 
+/**
+ * Creates a new instance of EcoSystemAPIBuilder to build APIs for the ecosystem.
+ */
 const apiBuilder = new EcoSystemAPIBuilder();
+
+/**
+ * Builds multiple router routes for different endpoints using the apiBuilder.
+ * @returns None
+ */
 apiBuilder
   .createRouterRoute("/init", initRouter)
   .createRouterRoute("/auth", authRouter)
@@ -28,6 +36,10 @@ apiBuilder
   .createRouterRoute("/flows", flowRouter)
   .createRouterRoute("/testAPI", testAPIRouter);
 
+/**
+ * Retrieves the base routes from the API builder and stores them in an array of Routes.
+ * @returns {Routes[]} An array of base routes from the API builder.
+ */
 const apiBaseRoutes: Routes[] = apiBuilder.route;
 
 export default apiBaseRoutes;

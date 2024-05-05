@@ -1,4 +1,9 @@
-export default (): boolean => {
+/**
+ * Checks if the application is set up correctly by verifying the presence of required environment variables
+ * and authentication settings.
+ * @returns {boolean} Returns true if the application is properly configured, false otherwise.
+ */
+const isCreateApp = (): boolean => {
   const { _, isAuth } = ecoFlow;
   let result = true;
   const {
@@ -20,3 +25,5 @@ export default (): boolean => {
   if (!isAuth && _.isEmpty(ECOFLOW_SYS_NOAUTH_ACCESS_TOKEN)) result = false;
   return result;
 };
+
+export default isCreateApp;

@@ -8,6 +8,12 @@ import {
   UserControllers,
 } from "@ecoflow/types";
 
+/**
+ * Builds user controllers based on the provided middlewares and configurations.
+ * @param {Nodes} middlewares - The list of middleware nodes.
+ * @param {NodeConfiguration[]} configurations - The configurations for the nodes.
+ * @returns A Promise that resolves to an array of tuples containing information about the user controllers.
+ */
 const buildUserControllers = async (
   middlewares: Nodes,
   configurations: NodeConfiguration[]

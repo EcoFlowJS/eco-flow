@@ -4,8 +4,16 @@ export interface Config {
   //Global configuration settings of the application.
   _config: configOptions;
 
+  /**
+   * Get the path of the directory containing the configuration file.
+   * @returns {string} The directory path of the configuration file.
+   */
   get getConfigPath(): string;
 
+  /**
+   * Get the base name of the configuration file.
+   * @returns The base name of the configuration file.
+   */
   get getConfigFileName(): string;
 
   /**
@@ -30,6 +38,10 @@ export interface Config {
    */
   setConfig(cfg: configOptions): Promise<configOptions>;
 
+  /**
+   * Asynchronously creates a backup of the configuration file.
+   * @returns Promise<void>
+   */
   createBackup(): Promise<void>;
 
   /**

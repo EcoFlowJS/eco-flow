@@ -6,12 +6,21 @@ import {
 import Router from "@koa/router";
 import { DefaultContext, DefaultState } from "koa";
 
+/**
+ * A class that helps in building and registering routes for an API using various HTTP methods.
+ */
 export class EcoAPIBuilder implements IEcoAPIBuilder {
   private routes: Routes[];
   constructor(routes: Routes[] = []) {
     this.routes = routes;
   }
 
+  /**
+   * Creates a GET route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {Array<Router.Middleware<DefaultState, DefaultContext>>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow for method chaining.
+   */
   createGETRoute(
     path: string | RegExp | Array<string | RegExp>,
     ...middleware: Array<Router.Middleware<DefaultState, DefaultContext>>
@@ -36,6 +45,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates a HEAD route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the new HEAD route added.
+   */
   createHEADRoute(
     path: string | RegExp | Array<string | RegExp>,
     ...middleware: Router.Middleware<DefaultState, DefaultContext>[]
@@ -60,6 +75,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates an OPTIONS route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow method chaining.
+   */
   createOPTIONSRoute(
     path: string | RegExp | Array<string | RegExp>,
     ...middleware: Router.Middleware<DefaultState, DefaultContext, unknown>[]
@@ -84,6 +105,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates a PUT route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow for method chaining.
+   */
   createPUTRoute(
     path: string | RegExp | Array<string | RegExp>,
     ...middleware: Router.Middleware<DefaultState, DefaultContext, unknown>[]
@@ -108,6 +135,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates a PATCH route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow for method chaining.
+   */
   createPATCHRoute(
     path: string | RegExp | Array<string | RegExp>,
     ...middleware: Router.Middleware<DefaultState, DefaultContext, unknown>[]
@@ -132,6 +165,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates a POST route with the specified path and middleware.
+   * @param {string | RegExp | (string | RegExp)[]} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow for method chaining.
+   */
   createPOSTRoute(
     path: string | RegExp | (string | RegExp)[],
     ...middleware: Router.Middleware<DefaultState, DefaultContext, unknown>[]
@@ -156,6 +195,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Creates a DELETE route with the specified path and middleware.
+   * @param {string | RegExp | (string | RegExp)[]} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions for the route.
+   * @returns {this} The instance of the class with the new DELETE route added.
+   */
   createDELETERoute(
     path: string | RegExp | (string | RegExp)[],
     ...middleware: Router.Middleware<DefaultState, DefaultContext, unknown>[]
@@ -180,6 +225,12 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Adds a new route to the router with the specified path and router.
+   * @param {string | RegExp | string[]} path - The path or paths for the route.
+   * @param {Router<DefaultState, DefaultContext>} router - The router to be associated with the path.
+   * @returns {this} The updated router instance with the new route added.
+   */
   createRouterRoute(
     path: string | RegExp | string[],
     router: Router<DefaultState, DefaultContext>
@@ -202,6 +253,11 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Registers routes to the provided router based on the configuration set in this instance.
+   * @param {Router} router - The router to register routes to.
+   * @returns {this} The instance of the class with routes registered to the router.
+   */
   registerTo(router: Router): this {
     const { _ } = ecoFlow;
     this.routes.forEach((route) => {
@@ -231,10 +287,19 @@ export class EcoAPIBuilder implements IEcoAPIBuilder {
     return this;
   }
 
+  /**
+   * Getter method to retrieve the routes array.
+   * @returns {Routes[]} - An array of Routes objects.
+   */
   get route(): Routes[] {
     return this.routes;
   }
 
+  /**
+   * Registers routes based on the provided API router builder configuration.
+   * @param {Omit<EcoAPIRouterBuilder, "initializeBuilder">} apiRouterBuilder - The API router builder configuration.
+   * @returns None
+   */
   static register(
     apiRouterBuilder: Omit<EcoAPIRouterBuilder, "initializeBuilder">
   ): void {

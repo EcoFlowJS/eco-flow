@@ -27,6 +27,10 @@ interface ProcessCommands {
   RESTART: string;
 }
 
+/**
+ * Represents an EcoFlow class that implements the EcoFlow interface.
+ * @class
+ */
 class EcoFlow implements IEcoFlow {
   private helper: EcoHelper;
 
@@ -37,6 +41,11 @@ class EcoFlow implements IEcoFlow {
   router: EcoRouter;
   container: EcoContainer;
 
+  /**
+   * Constructor for the EcoOptions class.
+   * @param {EcoOptions} [args={}] - An object containing optional arguments.
+   * @returns None
+   */
   constructor(args: EcoOptions = {}) {
     global.ecoFlow = this;
     let cliArgs: ICommand = {};
@@ -73,6 +82,13 @@ class EcoFlow implements IEcoFlow {
     loadEnvironments();
   }
 
+  /**
+   * Asynchronously starts the application by initializing various components and services.
+   * Logs the start of the application and checks if an app needs to be created.
+   * Initializes database connection, router, modules, flow editor, editor, system routes,
+   * passport authentication, and starts the server.
+   * @returns {Promise<EcoFlow>} - A promise that resolves to the EcoFlow instance.
+   */
   async start(): Promise<EcoFlow> {
     this.log.info("====================================");
     this.log.info("Starting Application....");
@@ -96,40 +112,76 @@ class EcoFlow implements IEcoFlow {
     return this;
   }
 
+  /**
+   * Getter method to retrieve the configuration object from the container.
+   * @returns {Config} The configuration object.
+   */
   get config(): Config {
     return this.container.get("config");
   }
 
+  /**
+   * Getter method to retrieve the database instance from the container.
+   * @returns {IDatabase} The database instance.
+   */
   get database(): IDatabase {
     return this.container.get("database");
   }
 
+  /**
+   * Get the ecoModule from the container.
+   * @returns {IEcoModule} The ecoModule object obtained from the container.
+   */
   get ecoModule(): IEcoModule {
     return this.container.get("module");
   }
 
+  /**
+   * Getter method to retrieve the EcoFlowEditor instance from the container.
+   * @returns {IEcoFlowEditor} The EcoFlowEditor instance.
+   */
   get flowEditor(): IEcoFlowEditor {
     return this.container.get("flowEditor");
   }
 
+  /**
+   * Getter method to retrieve the service instance from the container.
+   * @returns {IService} The service instance obtained from the container.
+   */
   get service(): IService {
     return this.container.get("service");
   }
 
+  /**
+   * Getter method to retrieve the logger instance from the container.
+   * @returns {ILogger} The logger instance.
+   */
   get log(): ILogger {
     return this.container.get("logger");
   }
 
+  /**
+   * Retrieves the version number from the package.json file.
+   * @returns The version number as a string.
+   */
   get Version(): string {
     let packageVersion: string = require("../../package.json").version;
     return packageVersion;
   }
 
+  /**
+   * Get the version of the package from the package.json file.
+   * @returns The version of the package as a string.
+   */
   static get Version(): string {
     let packageVersion: string = require("../../package.json").version;
     return packageVersion;
   }
 
+  /**
+   * Returns an object containing process commands.
+   * @returns {ProcessCommands} An object with process commands and their corresponding values.
+   */
   static get processCommands(): ProcessCommands {
     return {
       STOP: "stop",

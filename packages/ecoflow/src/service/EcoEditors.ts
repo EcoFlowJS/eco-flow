@@ -15,16 +15,34 @@ import { Builder } from "@ecoflow/utils";
 import loadEnvironments from "../helper/env.helper";
 import editorsApiRoutes from "../api/editorsApiRoutes.routes";
 
+/**
+ * Class representing EcoEditors that implements EcoEditors interface.
+ */
 export class EcoEditors implements IEcoEditors {
   private server: IEcoServer;
   private router: IEcoRouter;
   private isAuth: boolean;
+
+  /**
+   * Constructs an EcoFlow object with the provided server, router, and isAuth properties.
+   * @param {EcoFlow} server - The server object.
+   * @param {EcoFlow} router - The router object.
+   * @param {EcoFlow} isAuth - The authentication status.
+   * @returns None
+   */
   constructor({ server, router, isAuth }: EcoFlow) {
     this.server = server;
     this.router = router;
     this.isAuth = isAuth;
   }
 
+  /**
+   * Initializes the editors router with the specified systemRouterOptions and envDir.
+   * If systemRouterOptions is empty, it sets a default prefix of "/systemApi".
+   * It then sets the CLIENT_API_ENDPOINT environment variable and configures the Client API endpoint.
+   * Finally, it creates and sets up the router for the system and adds it to the server middleware.
+   * @returns Promise<void>
+   */
   private async initializeEditorsRouter(): Promise<void> {
     let { systemRouterOptions, envDir } = ecoFlow.config._config;
     if (_.isEmpty(systemRouterOptions)) {
@@ -59,12 +77,22 @@ export class EcoEditors implements IEcoEditors {
     this.server.use(router.routes()).use(router.allowedMethods());
   }
 
+  /**
+   * Sets up a default redirect route to "/auth" using EcoRouter.
+   * @returns None
+   */
   private defaultRedirect() {
     const baseRouter = EcoRouter.createRouter();
     baseRouter.get("/", (ctx) => ctx.redirect("/auth"));
     this.server.use(baseRouter.routes()).use(baseRouter.allowedMethods());
   }
 
+  /**
+   * Asynchronously loads the editors based on the environment and configuration settings.
+   * If the environment is in development, it sets up proxy routes and initializes the editors router.
+   * If the environment is not in development, it configures the editor settings based on the configuration.
+   * @returns Promise<void>
+   */
   async loadEditors(): Promise<void> {
     if (this.server.env === "development") {
       this.defaultRedirect();
@@ -124,6 +152,10 @@ export class EcoEditors implements IEcoEditors {
     if (editor.schema) loadSchema(this.server);
   }
 
+  /**
+   * Loads the routes for the editors API.
+   * @returns None
+   */
   static loadEditorsRoutes(): void {
     editorsApiRoutes();
   }

@@ -20,18 +20,33 @@ import buildUserControllers from "../helpers/buildUserControllers";
 import debugController from "../helpers/debugController";
 import EcoModule from "@ecoflow/module";
 
+/**
+ * A class that builds an Eco API router based on the provided node stack and configurations.
+ */
 export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   private _stack: NodesStack;
   private _configurations: NodeConfiguration[];
   private _routes: Routes[];
   private _isDuplicateRoutes: { [key: string]: string[] } = {};
 
+  /**
+   * Constructs a new instance of a class with the given node stack and configurations.
+   * @param {NodesStack} nodeStack - The stack of nodes to be used.
+   * @param {NodeConfiguration[]} configurations - The configurations for the nodes.
+   * @returns None
+   */
   constructor(nodeStack: NodesStack, configurations: NodeConfiguration[]) {
     this._stack = nodeStack;
     this._configurations = configurations;
     this._routes = [];
   }
 
+  /**
+   * Returns a tuple containing the request stack and middleware stack based on the current stack.
+   * The request stack contains unique nodes from the current stack.
+   * The middleware stack contains nodes grouped by request node with associated middleware nodes.
+   * @returns A tuple containing the request stack and middleware stack.
+   */
   private get routerBuilderStacks(): [RequestStack, MiddlewareStack] {
     const requestStack: RequestStack = this._stack
       .map((node) => node[0])
@@ -47,6 +62,12 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return [requestStack, middlewareStack];
   }
 
+  /**
+   * Builds a router request based on the provided controller and inputs.
+   * @param {ModuleSpecs["controller"]} controller - The controller for the router request.
+   * @param {NodeConfiguration["configs"]} [inputs] - The configurations for the node.
+   * @returns {Promise<[API_METHODS, string]>} A promise that resolves to an array containing the API method and the router path.
+   */
   private async buildRouterRequest(
     controller: ModuleSpecs["controller"],
     inputs?: NodeConfiguration["configs"]
@@ -72,6 +93,11 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     );
   }
 
+  /**
+   * Builds a Koa controller function with the given middlewares.
+   * @param {NodesStack} [middlewares=[]] - An array of middleware functions to be executed.
+   * @returns {Promise<void>} A Koa controller function that handles the middleware execution.
+   */
   private async buildKoaController(middlewares: NodesStack = []) {
     return async (ctx: Context) => {
       const { _ } = ecoFlow;
@@ -147,6 +173,12 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     };
   }
 
+  /**
+   * Asynchronously generates route configurations based on the provided request stack and middleware stack.
+   * @param {RequestStack} requestStack - The stack of requests to generate routes for.
+   * @param {MiddlewareStack} middlewareStack - The stack of middleware to apply to the routes.
+   * @returns A promise that resolves to an array of tuples containing API method, request path, and Koa controller function.
+   */
   private async generateRoutesConfigs(
     requestStack: RequestStack,
     middlewareStack: MiddlewareStack
@@ -203,6 +235,12 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return result;
   }
 
+  /**
+   * Asynchronously initializes the Eco API Router Builder by generating route configurations
+   * based on the request and middleware stacks. It then maps the generated route configurations
+   * to create route objects with path, method type, method, and controller properties.
+   * @returns {Promise<IEcoAPIRouterBuilder>} A promise that resolves to the initialized Eco API Router Builder.
+   */
   async initializeBuilder(): Promise<IEcoAPIRouterBuilder> {
     const [requestStack, middlewareStack] = this.routerBuilderStacks;
 
@@ -223,14 +261,26 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return this;
   }
 
+  /**
+   * Getter method to retrieve the routes array.
+   * @returns {Routes[]} - An array of Routes objects.
+   */
   get routes(): Routes[] {
     return this._routes;
   }
 
+  /**
+   * Getter method to retrieve the NodesStack object stored in the nodeStack property.
+   * @returns {NodesStack} The NodesStack object stored in the nodeStack property.
+   */
   get nodeStack(): NodesStack {
     return this._stack;
   }
 
+  /**
+   * Getter method to retrieve the configurations of the node.
+   * @returns {NodeConfiguration[]} - An array of NodeConfiguration objects.
+   */
   get configurations(): NodeConfiguration[] {
     return this._configurations;
   }

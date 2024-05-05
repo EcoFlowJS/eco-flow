@@ -8,14 +8,21 @@ import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@ecoflow/types";
 import { Passport } from "./Passport";
-import {
-  StrategyOptions,
-  StrategyOptionsWithRequest,
-  StrategyOptionsWithoutRequest,
-} from "passport-jwt";
+import { StrategyOptionsWithoutRequest } from "passport-jwt";
 import EcoFlow from "../lib/EcoFlow";
 import socketEvents from "../api/socketEvents/socketEvents.events";
 
+/**
+ * Represents an EcoServer that extends Koa and implements EcoServer interface.
+ * @constructor
+ * @param {object} options - The options for the EcoServer.
+ * @param {string} [options.env] - The environment setting.
+ * @param {string[]} [options.keys] - The keys for the server.
+ * @param {boolean} [options.proxy] - Indicates if proxy is enabled.
+ * @param {number} [options.subdomainOffset] - The subdomain offset value.
+ * @param {string} [options.proxyIpHeader] - The proxy IP header value.
+ * @param {number} [options.maxIpsCount] - The maximum number of IPs allowed.
+ */
 export class EcoServer extends Koa implements IEcoServer {
   private _https!: typeof configOptions.https;
   private _isHttps: boolean = false;
@@ -24,8 +31,22 @@ export class EcoServer extends Koa implements IEcoServer {
   private _httpCors!: koaCors.Options;
   private _server!: HttpServer | HttpsServer;
   private _serverStatus: "Online" | "Offline" = "Offline";
+
+  /**
+   * A variable declaration that assigns the passport module to the passport variable.
+   * @param {typeof passport} passport - The passport module
+   * @returns The passport module assigned to the passport variable.
+   */
   passport: typeof passport = passport;
+
+  /**
+   * The Server object representing the system socket.
+   */
   systemSocket!: Server;
+
+  /**
+   * The WebSocket server instance.
+   */
   socket!: Server;
 
   /**
@@ -59,9 +80,10 @@ export class EcoServer extends Koa implements IEcoServer {
   }
 
   /**
-   * Process config from EcoFlow environment. This method is called automatically before the server is started and restart of the server process.
-   * @memberof EcoServer
-   * @returns {void}
+   * Processes the configuration settings for the server, setting up HTTPS if enabled,
+   * configuring the host, port, CORS settings, and creating HTTP and HTTPS servers.
+   * Also sets up socket connections for system and user sockets.
+   * @returns None
    */
   private processConfig() {
     const { https, Host, Port, httpCors } = ecoFlow.config._config;
@@ -125,8 +147,8 @@ export class EcoServer extends Koa implements IEcoServer {
   }
 
   /**
-   * Start the server process for the application to process HTTP/HTTPS requests.
-   * @returns { httpServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse>| httpsServer.Server<typeof httpServer.IncomingMessage,typeof httpServer.ServerResponse> } Server instance.
+   * Starts the server and listens on the specified port and host.
+   * @returns A Promise that resolves to an HTTP or HTTPS server instance.
    */
   async startServer(): Promise<
     | httpServer.Server<
@@ -154,8 +176,9 @@ export class EcoServer extends Koa implements IEcoServer {
   }
 
   /**
-   * Close the running HTTP/HTTPS server process and disconnect all connections.
-   * @returns { void }
+   * Asynchronously closes the server.
+   * @param {boolean} [exit=false] - Whether to exit the process after closing the server.
+   * @returns {Promise<void>} A Promise that resolves once the server is closed.
    */
   async closeServer(exit: boolean = false): Promise<void> {
     const { log } = ecoFlow;
@@ -189,8 +212,8 @@ export class EcoServer extends Koa implements IEcoServer {
   }
 
   /**
-   * Restarts the HTTP/HTTPS server process and all connections.
-   * @returns {Promise} Server instance.
+   * Asynchronously restarts the server process.
+   * @returns A Promise that resolves when the server has been successfully restarted.
    */
   async restartServer(): Promise<void> {
     const { log } = ecoFlow;
@@ -212,22 +235,39 @@ export class EcoServer extends Koa implements IEcoServer {
     });
   }
 
+  /**
+   * Initializes Passport with the provided options.
+   * @param {StrategyOptionsWithoutRequest} [options] - The options to configure Passport.
+   * @returns {Promise<void>} A promise that resolves once Passport has been initialized.
+   */
   async initializePassport(
     options?: StrategyOptionsWithoutRequest
   ): Promise<void> {
     await new Passport(this, options).init();
   }
 
+  /**
+   * Returns the base URL constructed from the host, port, and protocol (http or https).
+   * @returns {string} The base URL formed by combining the protocol, host, and port.
+   */
   get baseUrl(): string {
     return `${this._isHttps ? "https" : "http"}://${
       this._host === "0.0.0.0" ? "localhost" : this._host
     }:${this._port}`;
   }
 
+  /**
+   * Getter method to check if the connection is secure (HTTPS).
+   * @returns {boolean} - true if the connection is secure (HTTPS), false otherwise
+   */
   get isSecure(): boolean {
     return this._isHttps;
   }
 
+  /**
+   * Get the current server state, which can be either "Online" or "Offline".
+   * @returns The current server state.
+   */
   get serverState(): "Online" | "Offline" {
     return this._serverStatus;
   }

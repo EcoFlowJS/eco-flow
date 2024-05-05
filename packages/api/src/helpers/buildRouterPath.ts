@@ -1,5 +1,10 @@
 import { API_METHODS, NodeRequestController } from "@ecoflow/types";
 
+/**
+ * Builds a router path based on the provided API configurations.
+ * @param {NodeRequestController} apiConfigs - The API configurations object.
+ * @returns An array containing the API method and the formatted path.
+ */
 const buildRouterPath = (
   apiConfigs: NodeRequestController
 ): [API_METHODS, string] => {

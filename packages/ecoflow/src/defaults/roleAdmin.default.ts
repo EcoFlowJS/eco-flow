@@ -1,5 +1,9 @@
 import { UserPermissions } from "@ecoflow/types";
 
+/**
+ * Defines the permissions for a user with the role of Admin.
+ * @type {UserPermissions}
+ */
 const roleAdmin: UserPermissions = {
   createUser: true,
   deleteUser: true,

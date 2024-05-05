@@ -3,11 +3,19 @@ import { CliService as ICliService, ICommand } from "@ecoflow/types";
 import { spawn, ChildProcess } from "child_process";
 import chalk from "chalk";
 
+/**
+ * A class that implements the CliService interface and provides methods to start, stop, and restart a service.
+ */
 export class CliService implements ICliService {
   private args: ICommand = {};
   private status: "Stopped" | "Running" | "Restarting" = "Stopped";
   private process?: ChildProcess;
 
+  /**
+   * Generates executable code as a string that initializes an EcoFlow instance
+   * with the provided arguments and starts the flow.
+   * @returns {string} The generated executable code as a string.
+   */
   private get generatedExecutableCode(): string {
     return `
     "use strict";
@@ -19,14 +27,28 @@ export class CliService implements ICliService {
     })();`;
   }
 
+  /**
+   * Setter method to update the service status to one of the following values: "Stopped", "Running", or "Restarting".
+   * @param {string} status - The new status of the service.
+   * @returns None
+   */
   private set setserviceStatus(status: "Stopped" | "Running" | "Restarting") {
     this.status = status;
   }
 
+  /**
+   * Get the current service status, which can be one of "Stopped", "Running", or "Restarting".
+   * @returns The current status of the service.
+   */
   get serviceStatus(): "Stopped" | "Running" | "Restarting" {
     return this.status;
   }
 
+  /**
+   * Starts the service with the given command arguments.
+   * @param {ICommand} [args={}] - The command arguments to start the service with.
+   * @returns None
+   */
   startService(args: ICommand = {}): void {
     this.args = args;
     this.process = spawn("node", ["-e", this.generatedExecutableCode], {
@@ -93,6 +115,10 @@ export class CliService implements ICliService {
     });
   }
 
+  /**
+   * Stops the service if it is currently running.
+   * @returns void
+   */
   stopService(): void {
     if (typeof this.process !== "undefined")
       if (this.process.kill()) {
@@ -118,6 +144,13 @@ export class CliService implements ICliService {
         );
       }
   }
+
+  /**
+   * Restarts the service by setting the service status to "Restarting",
+   * stopping the service, and then starting the service with the provided arguments.
+   * @param {ICommand} args - The arguments to pass to the service when restarting.
+   * @returns void
+   */
   restartService(args: ICommand): void {
     this.setserviceStatus = "Restarting";
     this.stopService();
