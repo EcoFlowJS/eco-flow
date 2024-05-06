@@ -1,6 +1,10 @@
 import { configOptions } from "@ecoflow/types";
 
-// Cors Configuration
+/**
+ * Parses the CORS configuration from the given config request object.
+ * @param {any} configRequest - The configuration request object containing CORS settings.
+ * @returns {Promise<configOptions>} A promise that resolves to the parsed CORS configuration options.
+ */
 const corsConfigurationParser = async (
   configRequest: any
 ): Promise<configOptions> => {

@@ -10,6 +10,11 @@ import {
   auditLogSchemaMongoose,
 } from "../schema/auditLogSchema";
 
+/**
+ * Creates or retrieves the Mongoose model for audit logs based on the provided connection.
+ * @param {DriverMongoose} connection - The Mongoose driver connection.
+ * @returns {Model<AuditLogSchemaStruct, {}, {}, {}, Document<unknown, {}, AuditLogSchemaStruct> & AuditLogSchemaStruct & Required<{ _id: string; }>, any>} The Mongoose model for audit logs.
+ */
 const auditLogsModelMongoose = (
   connection: DriverMongoose
 ): Model<
@@ -32,6 +37,12 @@ const auditLogsModelMongoose = (
     });
 };
 
+/**
+ * Creates an audit logs model using Knex for the given database connection.
+ * If the "auditLogs" table does not exist, it creates the table using the provided schema.
+ * @param {DriverKnex} connection - The Knex database connection.
+ * @returns A function that returns a Knex QueryBuilder for the "auditLogs" table.
+ */
 const auditLogsModelKnex = async (
   connection: DriverKnex
 ): Promise<() => Knex.QueryBuilder<AuditLogSchemaStruct, any[]>> => {

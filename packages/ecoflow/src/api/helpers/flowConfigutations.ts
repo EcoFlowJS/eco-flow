@@ -1,6 +1,10 @@
 import { configOptions } from "@ecoflow/types";
 
-// Flow Configutations
+/**
+ * Asynchronously processes the configuration request and returns a Promise with the resulting configOptions object.
+ * @param {any} configRequest - The configuration request object.
+ * @returns {Promise<configOptions>} A Promise that resolves to a configOptions object.
+ */
 const flowConfigutations = async (
   configRequest: any
 ): Promise<configOptions> => {

@@ -2,6 +2,11 @@ import { DriverKnex, DriverMongoose, Knex, Tokens } from "@ecoflow/types";
 import { Model, Document } from "mongoose";
 import { TokenSchemaKnex, TokenSchemaMongoose } from "../schema/token.schema";
 
+/**
+ * Creates a Mongoose model for the Tokens collection based on the provided Mongoose connection.
+ * @param {DriverMongoose} connection - The Mongoose connection object.
+ * @returns {Model} A Mongoose model for the Tokens collection.
+ */
 const TokenModelMongoose = (
   connection: DriverMongoose
 ): Model<
@@ -23,9 +28,11 @@ const TokenModelMongoose = (
     });
 };
 
-const tokenModelKnex = (connection: DriverKnex) =>
-  connection.queryBuilder("tokens");
-
+/**
+ * Creates a TokenModelKnex function that returns a query builder for the 'tokens' table.
+ * @param {DriverKnex} connection - The Knex connection object.
+ * @returns A promise that resolves to a function returning a query builder for the 'tokens' table.
+ */
 const TokenModelKnex = async (
   connection: DriverKnex
 ): Promise<() => Knex.QueryBuilder<Tokens, any[]>> => {

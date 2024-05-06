@@ -6,7 +6,13 @@ import {
 } from "@ecoflow/types";
 import { knexSchema, mongooseSchema } from "../schema/userSchema";
 import mongoose, { Model } from "mongoose";
-export const userModelMongoose = <T extends userTableCollection>(
+
+/**
+ * Creates a Mongoose model for the specified user table collection.
+ * @param {DriverMongoose} connection - The Mongoose driver connection.
+ * @returns {Model} A Mongoose model for the specified user table collection.
+ */
+const userModelMongoose = <T extends userTableCollection>(
   connection: DriverMongoose
 ): Model<
   T,
@@ -25,7 +31,12 @@ export const userModelMongoose = <T extends userTableCollection>(
   else return connection.buildModel<T>("users", { definition: mongooseSchema });
 };
 
-export const userModelKnex = async <
+/**
+ * Creates a Knex query builder function for the "users" table in the database.
+ * @param {DriverKnex} connection - The Knex connection object.
+ * @returns A promise that resolves to a function that returns a Knex query builder for the "users" table.
+ */
+const userModelKnex = async <
   TRecord extends {} = userTableCollection,
   TResult = userTableCollection[]
 >(
@@ -36,3 +47,5 @@ export const userModelKnex = async <
 
   return () => connection.queryBuilder<TRecord, TResult>("users");
 };
+
+export { userModelMongoose, userModelKnex };

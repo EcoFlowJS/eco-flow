@@ -10,6 +10,11 @@ import loggingConfigutations from "./loggingConfigutations";
 import editorConfigutations from "./editorConfigutations";
 import systemDatabaseMigration from "./systemDatabaseMigration";
 
+/**
+ * Parses the server configuration based on the provided config request object.
+ * @param {any} configRequest - The configuration request object.
+ * @returns {Promise<configOptions>} A promise that resolves to the parsed server configuration options.
+ */
 const parseServerConfigHelper = async (
   configRequest: any
 ): Promise<configOptions> => {

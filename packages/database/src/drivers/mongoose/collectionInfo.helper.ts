@@ -1,6 +1,13 @@
 import { CollectionInfo } from "@ecoflow/types";
 import { Connection } from "mongoose";
 
+/**
+ * Aggregate helper function that constructs a MongoDB aggregation pipeline stage based on the provided options.
+ * @param {Object} options - An object containing parent and key properties.
+ * @param {string | null} [options.parent] - The parent field to be added to the aggregation stage.
+ * @param {string | null} [options.key] - The key field to be added to the aggregation stage.
+ * @returns {Object} - A MongoDB aggregation pipeline stage object.
+ */
 const aggregateHelper = (options: {
   parent?: string | null;
   key?: string | null;
@@ -43,6 +50,14 @@ const aggregateHelper = (options: {
     : {};
 };
 
+/**
+ * Processes collection information based on the provided parameters.
+ * @param {Connection} connection - The database connection object.
+ * @param {string} collectionName - The name of the collection to process.
+ * @param {string} collectionKey - The key of the collection to process.
+ * @param {Object} [match] - Optional matching criteria for the collection.
+ * @returns {Promise<CollectionInfo[]>} A promise that resolves to an array of CollectionInfo objects.
+ */
 const processCollectionInfo = async (
   connection: Connection,
   collectionName: string,
@@ -54,6 +69,12 @@ const processCollectionInfo = async (
   const aggregate: ({ [key: string]: string } | {})[] = [
     { $match: match || {} },
   ];
+
+  /**
+   * Splits a collection key by "." and aggregates the values using aggregateHelper function.
+   * @param {string} collectionKey - The key to split and aggregate.
+   * @returns An array of aggregated values.
+   */
   collectionKey.split(".").forEach((val, index) => {
     aggregate.push(
       aggregateHelper({
@@ -63,6 +84,11 @@ const processCollectionInfo = async (
     );
   });
 
+  /**
+   * Aggregates an array of objects by adding fields, projecting specific fields, and replacing the root object.
+   * @param {Array} aggregate - The array of aggregation stages to be applied.
+   * @returns None
+   */
   aggregate.push(
     {
       $addFields: {

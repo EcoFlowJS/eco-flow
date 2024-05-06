@@ -12,7 +12,6 @@ import { EcoFlowEditor } from "../flows";
 
 export * from "./config";
 export * from "./EcoContainer";
-export * from "./EcoFactory";
 export * from "./service";
 export * from "./api";
 
