@@ -10,12 +10,22 @@ import {
 import prepareDBMigration from "./prepareDBMigration";
 import TPromise from "thread-promises";
 
-export default function systemDatabaseMigration({ database }: configOptions) {
+/**
+ * Creates a system database migration object that allows for migrating the database.
+ * @param {configOptions} database - The database configuration options.
+ * @returns An object with a 'migrate' method that can be used to migrate the database.
+ */
+const systemDatabaseMigration = ({ database }: configOptions) => {
   return {
     migrate: (byUser: string) => migrate.call(database, byUser),
   };
-}
+};
 
+/**
+ * Migrate data from the current database to a new database based on the provided configuration.
+ * @param {string} userID - The ID of the user initiating the migration.
+ * @returns None
+ */
 async function migrate(this: configOptions["database"], userID: string) {
   if (!this) return;
   const { _, log, service, database } = ecoFlow;
@@ -227,3 +237,5 @@ async function migrate(this: configOptions["database"], userID: string) {
     console.log(error);
   }
 }
+
+export default systemDatabaseMigration;

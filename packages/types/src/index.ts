@@ -10,17 +10,16 @@ export * from "./flows";
 export * from "./services";
 export * from "./utils";
 
-/* The is used to ensure that the file being exported does not have any exports.
-It is a way to explicitly indicate that the file is not exporting anything,
-which can be useful in certain scenarios to avoid unintentional exports or 
-conflicts with other modules. */
+/**
+ * This line is used to export an empty object, ensuring that this file is treated as a module.
+ * This is commonly used in TypeScript files to prevent naming conflicts and to ensure proper module isolation.
+ */
 export {};
 
-/* Declaring a global variable `ecoFlow` of class `EcoFlow` in TypeScript.
-It is also extending the NodeJS global namespace to include the `ecoFlow` variable 
-with the same type definition. This allows the `ecoFlow` variable to be accessed
-globally within the TypeScript project and also ensures that it is recognized as
-part of the NodeJS global namespace. */
+/**
+ * Declares the global variable ecoFlow with the type loadedEcoFlow.
+ * Extends the NodeJS global namespace to include the ecoFlow variable.
+ */
 declare global {
   var ecoFlow: loadedEcoFlow;
   namespace NodeJS {

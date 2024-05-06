@@ -7,10 +7,27 @@ import KoaRouter, { RouterOptions } from "@koa/router";
 import mount from "koa-mount";
 import staticServe from "koa-static";
 
+/**
+ * Class representing an EcoRouter that implements EcoRouter interface.
+ */
 export class EcoRouter implements IEcoRouter {
+  /**
+   * Represents a KoaRouter instance that handles system routes.
+   * @type {KoaRouter<DefaultState, DefaultContext> | undefined}
+   */
   systemRouter: KoaRouter<DefaultState, DefaultContext> | undefined;
+
+  /**
+   * The API router instance for handling API routes in a Koa application.
+   * @type {KoaRouter<DefaultState, DefaultContext>}
+   */
   apiRouter!: KoaRouter<DefaultState, DefaultContext>;
 
+  /**
+   * Initializes the router for the EcoServer instance.
+   * @param {EcoServer} svr - The EcoServer instance to initialize the router for.
+   * @returns None
+   */
   initRouter(svr: EcoServer) {
     const { config, _ } = ecoFlow;
     const defaultRouter = EcoRouter.createRouter();
@@ -67,9 +84,9 @@ export class EcoRouter implements IEcoRouter {
   }
 
   /**
-   * Creates new router instance.
-   * @param opt {RouterOptions} Options to configure the router with the given options object.
-   * @returns {KoaRouter}
+   * Creates a new instance of KoaRouter with the provided options.
+   * @param {RouterOptions} [opt] - Optional options to configure the router.
+   * @returns {KoaRouter} - A new instance of KoaRouter.
    */
   static createRouter(opt?: RouterOptions): KoaRouter {
     return new KoaRouter(opt);

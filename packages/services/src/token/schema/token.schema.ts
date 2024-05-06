@@ -1,6 +1,11 @@
 import { Knex, Tokens } from "@ecoflow/types";
 import { Schema } from "mongoose";
 
+/**
+ * Mongoose schema for storing tokens associated with a user.
+ * @param {Schema<Tokens>} - The schema definition for tokens.
+ * @returns None
+ */
 const TokenSchemaMongoose = new Schema<Tokens>(
   {
     userId: String,
@@ -21,6 +26,11 @@ const TokenSchemaMongoose = new Schema<Tokens>(
   { versionKey: false }
 );
 
+/**
+ * Defines the schema for the token table using Knex.
+ * @param {Knex.TableBuilder} table - The Knex TableBuilder object to define the schema on.
+ * @returns None
+ */
 const TokenSchemaKnex = (table: Knex.TableBuilder) => {
   table.increments();
   table.string("userId");

@@ -2,7 +2,12 @@ import path from "path";
 import fse from "fs-extra";
 import { configOptions } from "@ecoflow/types";
 
-// Logging Configutations
+/**
+ * Parses the logging configuration options from the provided configRequest object
+ * and returns a configOptions object with the parsed values.
+ * @param {any} configRequest - The configuration request object containing logging options.
+ * @returns {Promise<configOptions>} A promise that resolves to a configOptions object with parsed logging configurations.
+ */
 const loggingConfigutations = async (
   configRequest: any
 ): Promise<configOptions> => {

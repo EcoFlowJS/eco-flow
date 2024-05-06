@@ -1,7 +1,12 @@
 import fse from "fs-extra";
 import { configOptions } from "@ecoflow/types";
 
-// Server Configuration
+/**
+ * Parses the server configuration based on the provided config request object.
+ * @param {any} configRequest - The configuration request object containing Host, Port, httpStatic, httpsEnabled, httpsKey, and httpsCert.
+ * @returns {configOptions} The parsed server configuration options.
+ * @throws Throws an error if key and certificate for HTTPS configuration are not provided or if key/cert files are not found.
+ */
 const serverConfigurationParser = async (configRequest: any) => {
   const configs: configOptions = {};
   const { _ } = ecoFlow;

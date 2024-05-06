@@ -1,6 +1,11 @@
 import { Knex, userTableCollection } from "@ecoflow/types";
 import { ObjectId, Schema } from "mongoose";
 
+/**
+ * Defines a Mongoose schema for the userTableCollection with specified fields and types.
+ * @param {Object} userTableCollection - The collection object for the user table.
+ * @returns A Mongoose schema for the user table collection.
+ */
 const mongooseSchema = new Schema<userTableCollection>(
   {
     name: String,
@@ -39,6 +44,11 @@ const mongooseSchema = new Schema<userTableCollection>(
   { versionKey: false }
 );
 
+/**
+ * Defines the schema for a table using Knex.
+ * @param {Knex.TableBuilder} table - The Knex TableBuilder object to define the schema on.
+ * @returns None
+ */
 const knexSchema = (table: Knex.TableBuilder) => {
   table.increments("_id");
   table.string("name");

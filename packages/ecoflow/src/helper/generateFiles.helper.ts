@@ -5,12 +5,27 @@ import fse from "fs-extra";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
+/**
+ * Generates a random secret key using crypto.randomBytes and returns it as a base64 encoded string.
+ * @returns {string} A randomly generated secret key.
+ */
 const generateASecret = (): string => crypto.randomBytes(16).toString("base64");
 
+/**
+ * Generates a JWT token with the given ID and salt.
+ * @param {string} id - The ID to include in the token payload.
+ * @param {string} salt - The salt to use for signing the token.
+ * @returns {string} The generated JWT token.
+ */
 const generateToken = (id: string, salt: string): string =>
   jwt.sign({ _id: id, accessRoot: true }, salt, { expiresIn: "9999Y" });
 
-export default async ({ config, log }: EcoFlow) => {
+/**
+ * Generates necessary files and configurations for the EcoFlow application.
+ * @param {EcoFlow} config - The configuration object containing environment and user directories.
+ * @returns None
+ */
+const generateFiles = async ({ config, log }: EcoFlow) => {
   log.info("Generating Files...");
   const { envDir, userDir } = config._config;
   const DB_Path = path.join(userDir!, "database");
@@ -32,3 +47,5 @@ export default async ({ config, log }: EcoFlow) => {
 
   log.info("Files Created Starting Server");
 };
+
+export default generateFiles;

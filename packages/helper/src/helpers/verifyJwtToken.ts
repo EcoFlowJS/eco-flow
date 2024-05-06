@@ -1,6 +1,13 @@
 import jwt, { JwtPayload, VerifyOptions } from "jsonwebtoken";
 
-export default (
+/**
+ * Verify a JWT token using the provided options.
+ * @param {string} token - The JWT token to verify.
+ * @param {VerifyOptions} [options] - Optional verification options.
+ * @returns {JwtPayload | string | null} - The decoded payload if verification is successful,
+ * a string if verification fails, or null if an error occurs.
+ */
+const verifyJwtToken = (
   token: string,
   options?: VerifyOptions
 ): JwtPayload | string | null => {
@@ -10,3 +17,5 @@ export default (
     return null;
   }
 };
+
+export default verifyJwtToken;

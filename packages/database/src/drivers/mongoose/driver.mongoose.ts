@@ -4,25 +4,43 @@ import {
   collectionInfoOptions,
 } from "@ecoflow/types";
 import mongoose, {
+  createConnection as mongooseCreateConnection,
   ApplySchemaOptions,
   CompileModelOptions,
+  ConnectOptions,
   Connection,
   Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
   SchemaOptions,
+  Schema,
+  Document,
+  Query,
+  Aggregate,
+  SchemaType,
+  VirtualType,
 } from "mongoose";
 import processCollectionInfo from "./collectionInfo.helper";
 
+/**
+ * A class that implements the DriverMongoose interface and provides methods for interacting with MongoDB using
+ */
 export class DriverMongoose implements IDriverMongoose {
   private conn!: Connection;
+
+  /**
+   * Creates a connection to a MongoDB database using
+   * @param {string} uri - The URI of the MongoDB database.
+   * @param {ConnectOptions} [options] - Optional connection options.
+   * @returns {Promise<Connection>} A promise that resolves to the Mongoose connection object.
+   */
   async createConnection(
     uri: string,
-    options?: mongoose.ConnectOptions
+    options?: ConnectOptions
   ): Promise<Connection> {
     return new Promise<Connection>((resolve, reject) => {
-      this.conn = mongoose.createConnection(uri, options);
+      this.conn = mongooseCreateConnection(uri, options);
       this.conn.on("connected", () => {
         resolve(this.conn);
       });
@@ -33,38 +51,78 @@ export class DriverMongoose implements IDriverMongoose {
     });
   }
 
-  get getSchema(): typeof mongoose.Schema {
-    return mongoose.Schema;
+  /**
+   * Returns the mongoose Schema class for creating MongoDB schemas.
+   * @returns {typeof Schema} The mongoose Schema class.
+   */
+  get getSchema(): typeof Schema {
+    return Schema;
   }
 
+  /**
+   * Returns the Mongoose object for interacting with MongoDB using the Mongoose library.
+   * @returns The Mongoose object.
+   */
   get getMongoose(): typeof mongoose {
     return mongoose;
   }
 
-  get getConnection(): mongoose.Connection {
+  /**
+   * Getter method to retrieve the mongoose connection object.
+   * @returns {Connection} The mongoose connection object.
+   */
+  get getConnection(): Connection {
     return this.conn;
   }
 
-  get getDocument(): typeof mongoose.Document {
-    return mongoose.Document;
+  /**
+   * Returns the type of mongoose Document.
+   * @returns {typeof Document} The type of mongoose Document.
+   */
+  get getDocument(): typeof Document {
+    return Document;
   }
 
-  get getQuery(): typeof mongoose.Query {
-    return mongoose.Query;
+  /**
+   * Getter method that returns the Query class.
+   * @returns The Query class.
+   */
+  get getQuery(): typeof Query {
+    return Query;
   }
 
-  get getAggregate(): typeof mongoose.Aggregate {
-    return mongoose.Aggregate;
+  /**
+   * Returns the Aggregate class.
+   * @returns The Aggregate class.
+   */
+  get getAggregate(): typeof Aggregate {
+    return Aggregate;
   }
 
-  get getSchemaType(): typeof mongoose.SchemaType {
-    return mongoose.SchemaType;
+  /**
+   * Getter method that returns the SchemaType class.
+   * @returns The SchemaType class
+   */
+  get getSchemaType(): typeof SchemaType {
+    return SchemaType;
   }
 
-  get getVirtualType(): typeof mongoose.VirtualType {
-    return mongoose.VirtualType;
+  /**
+   * Getter method that returns the VirtualType class.
+   * @returns The VirtualType class.
+   */
+  get getVirtualType(): typeof VirtualType {
+    return VirtualType;
   }
 
+  /**
+   * Builds and returns a model based on the provided name, schema, collection, and options.
+   * @param {string} name - The name of the model.
+   * @param {object} schema - The schema definition and options for the model.
+   * @param {string} [collection] - The name of the collection in the database.
+   * @param {object} [options] - Additional options for compiling the model.
+   * @returns {Model<T>} A model of type T based on the provided parameters.
+   */
   buildModel<T>(
     name: string,
     schema: {
@@ -88,6 +146,10 @@ export class DriverMongoose implements IDriverMongoose {
     );
   }
 
+  /**
+   * Asynchronously retrieves a list of collection names from the database.
+   * @returns {Promise<string[]>} A promise that resolves to an array of collection names sorted alphabetically.
+   */
   async listCollections(): Promise<string[]> {
     return (await this.conn.db.listCollections().toArray())
       .filter((collections) => collections.type === "collection")
@@ -95,6 +157,12 @@ export class DriverMongoose implements IDriverMongoose {
       .sort();
   }
 
+  /**
+   * Retrieves information about a collection from the database.
+   * @param {string} collection - The name of the collection to retrieve information for.
+   * @param {collectionInfoOptions} [options={}] - Additional options for retrieving collection information.
+   * @returns {Promise<Array<CollectionInfo>>} A promise that resolves to an array of CollectionInfo objects.
+   */
   async collectionInfo(
     collection: string,
     options: collectionInfoOptions = {}

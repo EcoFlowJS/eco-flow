@@ -1,7 +1,13 @@
 import { Context } from "koa";
 import { Helper } from "../libs";
 
-export default async (
+/**
+ * Asynchronously retrieves a cookie value from the context object based on the cookie name.
+ * @param {Context} ctx - The context object containing the cookies.
+ * @param {string} name - The name of the cookie to retrieve.
+ * @returns A Promise that resolves to the value of the cookie, or undefined if not found.
+ */
+const getCookieHelper = async (
   ctx: Context,
   name: string
 ): Promise<string | undefined> => {
@@ -14,3 +20,5 @@ export default async (
   }
   return undefined;
 };
+
+export default getCookieHelper;

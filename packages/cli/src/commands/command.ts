@@ -2,6 +2,12 @@ import { Option, Command } from "commander";
 const baseCommand = new Command("ecoflow");
 export default baseCommand;
 
+/**
+ * Configures the base command with various options for the command line interface.
+ * Options include setting host binding, port number, authentication, configuration directory,
+ * configuration file name, user directory, verbose output, and help message.
+ * @returns None
+ */
 baseCommand
   .configureHelp({ showGlobalOptions: true })
   .addOption(new Option("-h, --host <address>", "Set a specific host binding"))

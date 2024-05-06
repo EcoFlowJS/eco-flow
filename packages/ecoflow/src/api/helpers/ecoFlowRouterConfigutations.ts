@@ -1,6 +1,10 @@
 import { configOptions } from "@ecoflow/types";
 
-// EcoFlow Router Configutations
+/**
+ * Configures the options for the ecoFlow router based on the provided configRequest object.
+ * @param {any} configRequest - The configuration request object containing router options.
+ * @returns {Promise<configOptions>} A promise that resolves to the configured router options.
+ */
 const ecoFlowRouterConfigutations = async (
   configRequest: any
 ): Promise<configOptions> => {

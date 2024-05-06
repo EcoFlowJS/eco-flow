@@ -8,6 +8,11 @@ import _ from "lodash";
 import fse from "fs-extra";
 import path from "path";
 
+/**
+ * Retrieves connection details based on the provided connection definitions.
+ * @param {ConnectionDefinations} connections - The connection definitions object.
+ * @returns A tuple containing the connection name, DB driver, and connection configuration.
+ */
 const getConnectionsDetails = (
   connections: ConnectionDefinations
 ): [string, DB_Drivers, ConnectionConfig] => {

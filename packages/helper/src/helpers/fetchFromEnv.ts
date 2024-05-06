@@ -1,7 +1,13 @@
 import { Environment } from "@ecoflow/types";
 import { Builder } from "@ecoflow/utils";
 
-export default (
+/**
+ * Fetches a value from either the user or system environment based on the provided environment variable.
+ * @param {string} env - The environment variable to fetch the value for.
+ * @param {("user" | "system")} [type="user"] - The type of environment to fetch the value from (user or system).
+ * @returns The value of the environment variable if found, otherwise returns undefined.
+ */
+const fetchFromEnv = (
   env: string,
   type: "user" | "system" = "user"
 ): string | undefined => {
@@ -15,3 +21,5 @@ export default (
   }
   return env;
 };
+
+export default fetchFromEnv;

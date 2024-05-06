@@ -17,11 +17,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a GET request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a GET route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {Array<Router.Middleware<DefaultState, DefaultContext>>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the new GET route added.
    */
   createGETRoute(
     path: string | RegExp | Array<string | RegExp>,
@@ -48,11 +47,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a HEAD request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a HEAD route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext>[]} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the new HEAD route added.
    */
   createHEADRoute(
     path: string | RegExp | Array<string | RegExp>,
@@ -79,11 +77,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a OPTIONS request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates an OPTIONS route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the added OPTIONS route.
    */
   createOPTIONSRoute(
     path: string | RegExp | Array<string | RegExp>,
@@ -110,11 +107,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a PUT request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a PUT route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the PUT route added.
    */
   createPUTRoute(
     path: string | RegExp | Array<string | RegExp>,
@@ -141,11 +137,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a PATCH request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a PATCH route with the specified path and middleware.
+   * @param {string | RegExp | Array<string | RegExp>} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class to allow for method chaining.
    */
   createPATCHRoute(
     path: string | RegExp | Array<string | RegExp>,
@@ -172,11 +167,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a POST request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a POST route with the specified path and middleware.
+   * @param {string | RegExp | (string | RegExp)[]} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the POST route added.
    */
   createPOSTRoute(
     path: string | RegExp | (string | RegExp)[],
@@ -203,11 +197,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Create a DELETE request for the specified route and parameters.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param middleware {Function | Array<Function>} The middleware function to execute when the endpoint is requested from the API endpoint.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a DELETE route with the specified path and middleware.
+   * @param {string | RegExp | (string | RegExp)[]} path - The path or paths for the route.
+   * @param {...Router.Middleware<DefaultState, DefaultContext, unknown>} middleware - The middleware functions to be executed for the route.
+   * @returns {this} The instance of the class with the new DELETE route added.
    */
   createDELETERoute(
     path: string | RegExp | (string | RegExp)[],
@@ -234,11 +227,10 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Creates a new route for the specified path.
-   * @param path {string | RegExp | Array<string | RegExp>} The path of the api endpoint.
-   * @param router {KoaRouter} External router to merge to the route.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Creates a new route in the router with the specified path and router.
+   * @param {string | RegExp | string[]} path - The path or paths for the route.
+   * @param {Router<DefaultState, DefaultContext>} router - The router to be associated with the route.
+   * @returns {this} The instance of the router with the new route added.
    */
   createRouterRoute(
     path: string | RegExp | string[],
@@ -263,10 +255,9 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * Registers a routes to a specific router instance in the system.
-   * @param router {KoaRouter} Router to where the routes is to be applied.
-   * @returns { EcoSystemAPIBuilder } instance of EAcoSystemAPIBuilder.
-   * @memberof EcoSystemAPIBuilder
+   * Registers routes to the provided router based on the configuration set in this.routes.
+   * @param {Router} router - The router object to register routes to.
+   * @returns {this} The current instance of the class.
    */
   registerTo(router: Router): this {
     const { _ } = ecoFlow;
@@ -298,17 +289,17 @@ export class EcoSystemAPIBuilder implements IEcoSystemAPIBuilder {
   }
 
   /**
-   * @returns { Routes[] } returns a list of routes.
-   * @memberof EcoSystemAPIBuilder
+   * Getter method to retrieve the routes array.
+   * @returns {Routes[]} - An array of Routes objects.
    */
   get route(): Routes[] {
     return this.routes;
   }
 
   /**
-   * Registers a routes to the System API Router.
-   * @param routes { Routes[] } List of routes to be registered in the System Api Router.
-   * @memberof EcoSystemAPIBuilder
+   * Registers the provided routes with the system router.
+   * @param {Routes[]} routes - An array of route objects to register.
+   * @returns None
    */
   static register(routes: Routes[]): void {
     const { _, router } = ecoFlow;

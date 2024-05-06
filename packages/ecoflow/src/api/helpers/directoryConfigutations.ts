@@ -2,7 +2,12 @@ import path from "path";
 import fse from "fs-extra";
 import { configOptions } from "@ecoflow/types";
 
-// Directory Configutations
+/**
+ * Configures the directory settings based on the provided configuration request.
+ * @param {any} configRequest - The configuration request object.
+ * @returns {Promise<configOptions>} A promise that resolves to the configured options.
+ * @throws {string} Throws an error if any of the specified directories are invalid or do not exist.
+ */
 const directoryConfigutations = async (
   configRequest: any
 ): Promise<configOptions> => {

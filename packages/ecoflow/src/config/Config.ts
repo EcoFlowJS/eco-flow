@@ -134,10 +134,18 @@ export class Config implements IConfig {
     await this.saveConfig(cfg);
   }
 
+  /**
+   * Get the path of the directory containing the configuration file.
+   * @returns {string} The directory path of the configuration file.
+   */
   get getConfigPath(): string {
     return path.dirname(this.configFile);
   }
 
+  /**
+   * Get the base name of the configuration file.
+   * @returns The base name of the configuration file.
+   */
   get getConfigFileName(): string {
     return path.basename(this.configFile);
   }
@@ -217,6 +225,10 @@ export class Config implements IConfig {
     return this._config;
   }
 
+  /**
+   * Asynchronously creates a backup of the configuration file.
+   * @returns Promise<void>
+   */
   async createBackup(): Promise<void> {
     const { log } = ecoFlow;
 
