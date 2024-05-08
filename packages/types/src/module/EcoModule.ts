@@ -283,11 +283,11 @@ export type Response = { [key: string]: any };
 
 /**
  * Represents the options for the input type in the ModuleSpecsInputsType interface.
- * @property {string} [name] - The name of the Select picker type.
- * @property {string} [type] - The type of the input type.
+ * @property {string} [label] - The label of the Select picker type.
+ * @property {string} [value] - The value of the input type.
  */
 export interface ModuleSpecsInputsTypeOptions {
-  name: string;
+  label: string;
   value: string;
 }
 
@@ -332,6 +332,7 @@ export interface CurrentPackageDescription {
  * @property {string} name - The name of the input.
  * @property {string} label - The label for the input.
  * @property {ModuleSpecsInputsTypes} type - The type of the input.
+ * @property {string} hint - The hint for the input type.
  * @property {boolean} [required] - Indicates if the input is required.
  * @property {string} [codeLanguage] - The programming language for the input.
  * @property {API_METHODS[] | ((value?: {[key: string]: any;}) => API_METHODS[] | Promise<API_METHODS[]>)} [methods] - The methods for the input.
@@ -344,6 +345,7 @@ export interface ModuleSpecsInputs {
   name: string;
   label: string;
   type: ModuleSpecsInputsTypes;
+  hint?: string;
   required?: boolean;
   codeLanguage?: string;
   methods?:
