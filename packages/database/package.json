@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@ecoflow/helper": "^1.0.0",
-    "@ecoflow/types": "^0.0.18",
+    "@ecoflow/types": "^0.0.19",
     "@ecoflow/utils": "^0.0.1",
     "fs-extra": "^11.2.0",
     "knex": "^3.0.1",
