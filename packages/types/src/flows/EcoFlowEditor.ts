@@ -331,6 +331,7 @@ export interface FlowEditorSettingsConfigurations {
  * @interface FlowInputSpecs
  * @property {string} name - The name of the input.
  * @property {string} label - The label for the input.
+ * @property {string} hint - The hint for the input.
  * @property {ModuleSpecsInputsTypes} type - The type of the input.
  * @property {boolean} [required] - Indicates if the input is required.
  * @property {string} [codeLanguage] - The programming language for the input.
@@ -344,6 +345,7 @@ export interface FlowInputSpecs {
   name: string;
   label: string;
   type: ModuleSpecsInputsTypes;
+  hint?: string;
   required?: boolean;
   codeLanguage?: string;
   methods?: API_METHODS[];

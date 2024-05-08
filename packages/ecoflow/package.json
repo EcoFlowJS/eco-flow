@@ -26,7 +26,7 @@
     "@ecoflow/module": "^1.0.0",
     "@ecoflow/schema-editor": "^0.1.10",
     "@ecoflow/services": "^0.0.1",
-    "@ecoflow/types": "^0.0.18",
+    "@ecoflow/types": "^0.0.19",
     "@ecoflow/utils": "^0.0.1",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^11.0.2",

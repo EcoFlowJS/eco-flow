@@ -1,6 +1,7 @@
 import {
   API_METHODS,
   EcoContext,
+  EcoContextPayload,
   EcoAPIRouterBuilder as IEcoAPIRouterBuilder,
   MiddlewareStack,
   ModuleSpecs,
@@ -129,7 +130,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
                 if (!isNext && type === "Middleware") {
                   controllerResponse[id] = lastControllerID
                     ? controllerResponse[lastControllerID]
-                    : ecoContext.payload;
+                    : (ecoContext.payload as never);
                   lastControllerID = id;
                   continue;
                 }
