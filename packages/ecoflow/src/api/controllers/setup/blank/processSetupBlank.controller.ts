@@ -1,6 +1,7 @@
 import { Context } from "koa";
 import { ApiResponse, userTableCollection } from "@ecoflow/types";
 import systemDatabaseConfigutations from "../../../helpers/systemDatabaseConfigutations";
+import defaultModules from "../../../../defaults/defaultModules";
 
 interface TimeSpansSteup {
   initTimeSpan: Date;
@@ -16,7 +17,8 @@ interface TimeSpansSteup {
  * @returns None
  */
 const processSetupBlank = async (ctx: Context) => {
-  const { database, server, config, log, service } = ecoFlow;
+  const { database, server, config, log, service, ecoModule } = ecoFlow;
+  const { RoleService, UserService, AuditLogsService } = service;
 
   const timeSpans: TimeSpansSteup = Object.create({});
   timeSpans["initTimeSpan"] = new Date();
@@ -107,7 +109,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {object} permissions - The permissions object for the role.
    * @returns {object} An object containing the _id of the newly created role.
    */
-  const id: { _id: any } = (await service.RoleService.createRole(
+  const id: { _id: any } = (await RoleService.createRole(
     {
       name: "admin",
       isDefault: true,
@@ -132,9 +134,18 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {boolean} flag - A boolean flag indicating whether to perform a specific action.
    * @returns {Promise<Response>} A promise that resolves to the response of the user creation request.
    */
-  const response = await service.UserService.createUser(userCredentials, true);
+  const response = await UserService.createUser(userCredentials, true);
   log.info("User credentials created successfully");
   timeSpans["userCredentialsUpdated"] = new Date();
+
+  /**
+   * Asynchronously iterates over the defaultModules array and installs each module using ecoModule.
+   * @param {Array} defaultModules - An array of modules to be installed.
+   * @returns None
+   */
+  log.info("Installing default modules using ecoModule");
+  for await (const module of defaultModules)
+    await ecoModule.installModule(module);
 
   /**
    * Sets the response body with ApiResponse structure.
@@ -161,7 +172,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {string} logDetails.userID - The user ID associated with the log entry.
    * @returns None
    */
-  await service.AuditLogsService.addLog({
+  await AuditLogsService.addLog({
     timeSpan: timeSpans.initTimeSpan,
     message: `Server setup process started`,
     type: "Info",
@@ -177,7 +188,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {string} logData.userID - The user ID associated with the log entry.
    * @returns None
    */
-  await service.AuditLogsService.addLog({
+  await AuditLogsService.addLog({
     timeSpan: timeSpans.DB_UpdateTimeSpan,
     message: `Server database configuration validated and updated successfully`,
     type: "Info",
@@ -193,7 +204,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {string} logData.userID - The user ID associated with the log entry.
    * @returns None
    */
-  await service.AuditLogsService.addLog({
+  await AuditLogsService.addLog({
     timeSpan: timeSpans.userCredentialsStarts,
     message: `User credentials creation started`,
     type: "Info",
@@ -209,7 +220,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {string} logData.userID - The user ID associated with the log entry.
    * @returns None
    */
-  await service.AuditLogsService.addLog({
+  await AuditLogsService.addLog({
     timeSpan: timeSpans.userCredentialsUpdated,
     message: `User credentials created successfully`,
     type: "Info",
@@ -224,7 +235,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @param {string} logData.userID - The user ID associated with the log entry.
    * @returns None
    */
-  await service.AuditLogsService.addLog({
+  await AuditLogsService.addLog({
     message: `Restarting server`,
     type: "Info",
     userID: "SYSTEM_LOG",

@@ -46,8 +46,10 @@ const auditLogsModelMongoose = (
 const auditLogsModelKnex = async (
   connection: DriverKnex
 ): Promise<() => Knex.QueryBuilder<AuditLogSchemaStruct, any[]>> => {
-  if (!(await connection.schemaBuilder.hasTable("auditLogs")))
+  if (!(await connection.schemaBuilder.hasTable("auditLogs"))) {
+    await connection.schemaBuilder.hasTable("auditLogs");
     await connection.schemaBuilder.createTable("auditLogs", auditLogSchemaKnex);
+  }
 
   return () => connection.queryBuilder<AuditLogSchemaStruct>("auditLogs");
 };
