@@ -43,7 +43,7 @@ export class UserService implements IUserService {
      * @returns {boolean} Returns true if the connection is using Mongoose and the user model count is 0, otherwise false.
      */
     if (this.dataBase.isMongoose(this.connection))
-      (await userModelMongoose(this.connection).countDocuments()) === 0
+      return (await userModelMongoose(this.connection).countDocuments()) === 0
         ? true
         : false;
 
@@ -57,10 +57,12 @@ export class UserService implements IUserService {
       const countQuery = (
         await (await userModelKnex(this.connection))().count()
       )[0];
+
       const count = !_.isUndefined(countQuery["count(*)"])
         ? countQuery["count(*)"]
         : countQuery.count;
-      Number(count) === 0 ? true : false;
+
+      return Number(count) === 0 ? true : false;
     }
 
     return false;
