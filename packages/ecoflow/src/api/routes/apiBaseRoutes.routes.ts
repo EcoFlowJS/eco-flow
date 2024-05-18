@@ -12,6 +12,7 @@ import auditLogsRouter from "./auditLogs/auditLogs.routes";
 import testAPIRouter from "./testAPI/testAPI.routes";
 import moduleRouter from "./module/module.routes";
 import flowRouter from "./flow/flow.routes";
+import dashboardRouter from "./dashboard/dashboard.routes";
 
 /**
  * Creates a new instance of EcoSystemAPIBuilder to build APIs for the ecosystem.
@@ -34,6 +35,7 @@ apiBuilder
   .createRouterRoute("/auditLogs", auditLogsRouter)
   .createRouterRoute("/module", moduleRouter)
   .createRouterRoute("/flows", flowRouter)
+  .createRouterRoute("/dashboard", dashboardRouter)
   .createRouterRoute("/testAPI", testAPIRouter);
 
 /**
