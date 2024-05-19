@@ -13,6 +13,7 @@ import testAPIRouter from "./testAPI/testAPI.routes";
 import moduleRouter from "./module/module.routes";
 import flowRouter from "./flow/flow.routes";
 import dashboardRouter from "./dashboard/dashboard.routes";
+import directoryFetcher from "../controllers/base/directoryFetcher.controller";
 
 /**
  * Creates a new instance of EcoSystemAPIBuilder to build APIs for the ecosystem.
@@ -37,6 +38,14 @@ apiBuilder
   .createRouterRoute("/flows", flowRouter)
   .createRouterRoute("/dashboard", dashboardRouter)
   .createRouterRoute("/testAPI", testAPIRouter);
+
+/**
+ * Creates a POST route for the "/directoriesStatus" endpoint using the provided directoryFetcher function.
+ * @param {string} endpoint - The endpoint for the POST route.
+ * @param {Function} handler - The function that handles the POST request.
+ * @returns None
+ */
+apiBuilder.createPOSTRoute("/directoriesStatus", directoryFetcher);
 
 /**
  * Retrieves the base routes from the API builder and stores them in an array of Routes.
