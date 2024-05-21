@@ -92,6 +92,8 @@ const restoreBackupHelper = async (zip: AdmZip): Promise<void> => {
       config.setConfig(
         Helper.requireUncached(path.join(tempRestoreFileDir, "configs.json"))
       );
+
+    await fse.remove(tempRestoreFileDir);
   } catch (error) {
     throw error;
   }
