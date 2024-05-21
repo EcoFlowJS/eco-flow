@@ -7,7 +7,7 @@ import { ConnectionConfig, DB_Drivers, configOptions } from "@ecoflow/types";
  * @param {any} configRequest - The configuration request object containing database settings.
  * @returns {Promise<configOptions>} A promise that resolves to the configured database options.
  */
-const systemDatabaseConfigutations = async (
+const systemDatabaseConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -144,4 +144,4 @@ const systemDatabaseConfigutations = async (
   return configs;
 };
 
-export default systemDatabaseConfigutations;
+export default systemDatabaseConfigurations;

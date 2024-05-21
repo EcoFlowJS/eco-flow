@@ -21,10 +21,10 @@
  * If `prettyPrint` is set to `true`, the log messages will be formatted nicely.
  * If it's set to `false`
  * @default prettyPrint is `false`
- * @property {object} lable - The `lable` property in the `loggerOptions` type is defining an object
+ * @property {object} label - The `label` property in the `loggerOptions` type is defining an object
  * with two properties:
  *    1. `enable`: A boolean value that specifies whether this feature is enabled or not.
- *    2. `lable`: An optional string property that can hold a label value.
+ *    2. `label`: An optional string property that can hold a label value.
  * @property {boolean} console - The `console` property in the `loggerOptions` type specifies whether
  * logging to the console is enabled. If `console` is set to `true`, log messages will be output to the
  * console. If it's set to `false`, log messages will not be displayed on the console.
@@ -70,13 +70,13 @@ export type loggerOptions = {
    * @default prettyPrint is `false` */
   prettyPrint?: boolean;
   /**
-   * The `lable` property in the `loggerOptions` type is defining an object with two properties:
+   * The `label` property in the `loggerOptions` type is defining an object with two properties:
    * 1. `enable`: A boolean value that specifies whether this feature is enabled or not.
-   * 2. `lable`: An optional string property that can hold a label value.
+   * 2. `label`: An optional string property that can hold a label value.
    */
-  lable?: {
+  label?: {
     enable: boolean;
-    lable?: string;
+    label?: string;
   };
   /**
    * The `console` property in the `loggerOptions` type specifies whether

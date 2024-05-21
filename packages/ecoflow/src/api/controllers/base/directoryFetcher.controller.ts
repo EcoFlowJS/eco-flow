@@ -24,7 +24,6 @@ const directoryFetcher = async (ctx: Context) => {
         .replace(/\\/g, "/")
         .split(",")
         .sort(),
-      // .map((val) => `${val}/`),
     };
     return;
   }

@@ -643,6 +643,15 @@ export class EcoModule implements IEcoModule {
   }
 
   /**
+   * Asynchronously installs a module dependencies.
+   * @returns {Promise<void>}
+   */
+  async installModules(): Promise<void> {
+    if (await fse.exists(path.join(this.modulePath, "package.json")))
+      await Helper.installPackageDependencies(this.modulePath);
+  }
+
+  /**
    * Installs local modules from the specified module names array.
    * @param {string[]} moduleName - An array of module names to install locally.
    * @returns {Promise<ModuleSchema[]>} A promise that resolves to an array of ModuleSchema objects.

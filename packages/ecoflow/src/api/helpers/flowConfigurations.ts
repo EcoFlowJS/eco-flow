@@ -5,7 +5,7 @@ import { configOptions } from "@ecoflow/types";
  * @param {any} configRequest - The configuration request object.
  * @returns {Promise<configOptions>} A Promise that resolves to a configOptions object.
  */
-const flowConfigutations = async (
+const flowConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -41,4 +41,4 @@ const flowConfigutations = async (
   return configs;
 };
 
-export default flowConfigutations;
+export default flowConfigurations;

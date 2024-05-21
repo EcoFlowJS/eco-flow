@@ -14,6 +14,7 @@ import moduleRouter from "./module/module.routes";
 import flowRouter from "./flow/flow.routes";
 import dashboardRouter from "./dashboard/dashboard.routes";
 import directoryFetcher from "../controllers/base/directoryFetcher.controller";
+import backupRestoreRouter from "./backupRestore/backupRestore.routes";
 
 /**
  * Creates a new instance of EcoSystemAPIBuilder to build APIs for the ecosystem.
@@ -37,6 +38,7 @@ apiBuilder
   .createRouterRoute("/module", moduleRouter)
   .createRouterRoute("/flows", flowRouter)
   .createRouterRoute("/dashboard", dashboardRouter)
+  .createRouterRoute("/backupRestore", backupRestoreRouter)
   .createRouterRoute("/testAPI", testAPIRouter);
 
 /**

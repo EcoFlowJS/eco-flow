@@ -1,13 +1,13 @@
 import { configOptions } from "@ecoflow/types";
-import systemDatabaseConfigutations from "./systemDatabaseConfigutations";
+import systemDatabaseConfigurations from "./systemDatabaseConfigurations";
 import serverConfigurationParser from "./serverConfigurationParser";
 import corsConfigurationParser from "./corsConfigurationParser";
-import ecoFlowRouterConfigutations from "./ecoFlowRouterConfigutations";
-import apiRouterConfigutations from "./apiRouterConfigutations";
-import directoryConfigutations from "./directoryConfigutations";
-import flowConfigutations from "./flowConfigutations";
-import loggingConfigutations from "./loggingConfigutations";
-import editorConfigutations from "./editorConfigutations";
+import ecoFlowRouterConfigurations from "./ecoFlowRouterConfigurations";
+import apiRouterConfigurations from "./apiRouterConfigurations";
+import directoryConfigurations from "./directoryConfigurations";
+import flowConfigurations from "./flowConfigurations";
+import loggingConfigurations from "./loggingConfigurations";
+import editorConfigurations from "./editorConfigurations";
 import systemDatabaseMigration from "./systemDatabaseMigration";
 
 /**
@@ -21,7 +21,7 @@ const parseServerConfigHelper = async (
   const { userID, ...restConfigRequest } = configRequest;
   const { _, config } = ecoFlow;
   const database = config._config.database;
-  const updatedDatabase = await systemDatabaseConfigutations({
+  const updatedDatabase = await systemDatabaseConfigurations({
     ...restConfigRequest,
   });
 
@@ -31,12 +31,12 @@ const parseServerConfigHelper = async (
   return {
     ...(await serverConfigurationParser({ ...restConfigRequest })),
     ...(await corsConfigurationParser({ ...restConfigRequest })),
-    ...(await ecoFlowRouterConfigutations({ ...restConfigRequest })),
-    ...(await apiRouterConfigutations({ ...restConfigRequest })),
-    ...(await directoryConfigutations({ ...restConfigRequest })),
-    ...(await flowConfigutations({ ...restConfigRequest })),
-    ...(await loggingConfigutations({ ...restConfigRequest })),
-    ...(await editorConfigutations({ ...restConfigRequest })),
+    ...(await ecoFlowRouterConfigurations({ ...restConfigRequest })),
+    ...(await apiRouterConfigurations({ ...restConfigRequest })),
+    ...(await directoryConfigurations({ ...restConfigRequest })),
+    ...(await flowConfigurations({ ...restConfigRequest })),
+    ...(await loggingConfigurations({ ...restConfigRequest })),
+    ...(await editorConfigurations({ ...restConfigRequest })),
     ...updatedDatabase,
   };
 };
