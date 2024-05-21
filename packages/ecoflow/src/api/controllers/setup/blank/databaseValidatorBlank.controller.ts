@@ -1,6 +1,6 @@
 import { ApiResponse, configOptions } from "@ecoflow/types";
 import { Context } from "koa";
-import systemDatabaseConfigutations from "../../../helpers/systemDatabaseConfigutations";
+import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations";
 
 /**
  * Validates the database configuration based on the context provided.
@@ -21,7 +21,7 @@ const databaseValidatorBlank = async (ctx: Context) => {
    */
   if (!useDefault) {
     const config: configOptions = {
-      ...(await systemDatabaseConfigutations(ctx.request.body)),
+      ...(await systemDatabaseConfigurations(ctx.request.body)),
     };
 
     if (_.isUndefined(config.database)) {

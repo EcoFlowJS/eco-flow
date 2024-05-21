@@ -8,7 +8,7 @@ import { configOptions } from "@ecoflow/types";
  * @returns {Promise<configOptions>} A promise that resolves to the configured options.
  * @throws {string} Throws an error if any of the specified directories are invalid or do not exist.
  */
-const directoryConfigutations = async (
+const directoryConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -72,4 +72,4 @@ const directoryConfigutations = async (
   return configs;
 };
 
-export default directoryConfigutations;
+export default directoryConfigurations;

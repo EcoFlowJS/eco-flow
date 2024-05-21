@@ -13,7 +13,7 @@ const defaultConfig: configOptions = {
    *  - envDir
    *  - DB_DriverDir
    ******************************************************************************/
-  userDir: baseUserDir, // Base directory where all  directiory files are stored.
+  userDir: baseUserDir, // Base directory where all  directory files are stored.
   moduleDir: baseUserDir + "/modules", // Directory where all modules are installed and stored.
   flowDir: baseUserDir + "/flows",
   envDir: baseUserDir + "/environment", // Directory where all environment variables are stored.
@@ -109,10 +109,10 @@ const defaultConfig: configOptions = {
     level: LogLevel.INFO, //Logging level.
     format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
     prettyPrint: false, //Pretty print the logging output.
-    lable: {
-      //Global logging lable
-      enable: true, //Enable logging lable
-      lable: "Eco-FLow", //Logging lable text
+    label: {
+      //Global logging label
+      enable: true, //Enable logging label
+      label: "Eco-FLow", //Logging label text
     },
     console: true, //Logging Console Enable or Disable
     file: {

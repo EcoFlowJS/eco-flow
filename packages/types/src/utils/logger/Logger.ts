@@ -32,7 +32,7 @@ export interface Logger {
   /**
    * Logs a message to the logger at ERROR level.
    * @memberof Logger
-   * @param message contsa the message to be logged by the logger instance.
+   * @param message const the message to be logged by the logger instance.
    * @returns instance of Logger class.
    */
   error(message: any): Logger;
@@ -40,7 +40,7 @@ export interface Logger {
   /**
    * Logs a message to the logger at WARN level.
    * @memberof Logger
-   * @param message contsa the message to be logged by the logger instance.
+   * @param message const the message to be logged by the logger instance.
    * @returns instance of Logger class.
    */
   warn(message: any): Logger;
@@ -48,15 +48,15 @@ export interface Logger {
   /**
    * Logs a message to the logger at INFO level.
    * @memberof Logger
-   * @param message contsa the message to be logged by the logger instance.
+   * @param message const the message to be logged by the logger instance.
    * @returns instance of Logger class.
    */
   info(message: any): Logger;
 
   /**
-   * Logs a message to the logger at VERBSOE level.
+   * Logs a message to the logger at VERBOSE level.
    * @memberof Logger
-   * @param message contsa the message to be logged by the logger instance.
+   * @param message const the message to be logged by the logger instance.
    * @returns instance of Logger class.
    */
   verbose(message: any): Logger;
@@ -64,7 +64,7 @@ export interface Logger {
   /**
    * Logs a message to the logger at DEBUG level.
    * @memberof Logger
-   * @param message contsa the message to be logged by the logger instance.
+   * @param message const the message to be logged by the logger instance.
    * @returns instance of Logger class.
    */
   debug(message: any): Logger;

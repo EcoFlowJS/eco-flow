@@ -20,9 +20,9 @@ const defaultConfig: loggerOptions = {
   level: LogLevel.INFO,
   format: "`[ ${timestamp} ] : [ ${label} ] | [ ${level} ] : ${message}`",
   prettyPrint: false,
-  lable: {
+  label: {
     enable: false,
-    lable: "EcoFlow Logger",
+    label: "EcoFlow Logger",
   },
   console: false,
   file: {
@@ -61,7 +61,7 @@ export class Logger implements ILogger {
   private level!: number;
   private format!: string;
   private isLable!: boolean;
-  private lable!: string;
+  private label!: string;
   private isConsole!: boolean;
   private isPrettyPrint!: boolean;
   private isFile!: boolean;
@@ -115,15 +115,15 @@ export class Logger implements ILogger {
         : defaultConfig.format!;
 
     this.isLable =
-      typeof this.loggerConfig.lable?.enable === "boolean"
-        ? this.loggerConfig.lable.enable
-        : defaultConfig.lable!.enable;
+      typeof this.loggerConfig.label?.enable === "boolean"
+        ? this.loggerConfig.label.enable
+        : defaultConfig.label!.enable;
 
-    this.lable =
-      this.loggerConfig.lable?.enable === true &&
-      typeof this.loggerConfig.lable.lable === "string"
-        ? this.loggerConfig.lable.lable
-        : defaultConfig.lable!.lable!;
+    this.label =
+      this.loggerConfig.label?.enable === true &&
+      typeof this.loggerConfig.label.label === "string"
+        ? this.loggerConfig.label.label
+        : defaultConfig.label!.label!;
 
     this.isConsole =
       typeof this.loggerConfig.console !== "undefined"
@@ -194,7 +194,7 @@ export class Logger implements ILogger {
     this.logger.configure({
       level: LogLevelName[level],
       format: combine(
-        this.isLable ? label({ label: this.lable }) : label(),
+        this.isLable ? label({ label: this.label }) : label(),
         timestamp({
           format:
             new Date().toLocaleDateString().replace(/\//g, "-") +
@@ -215,7 +215,7 @@ export class Logger implements ILogger {
       this.logger.add(
         new transports.Console({
           format: combine(
-            this.isLable ? label({ label: this.lable }) : label(),
+            this.isLable ? label({ label: this.label }) : label(),
             timestamp({
               format:
                 new Date().toLocaleDateString().replace(/\//g, "-") +

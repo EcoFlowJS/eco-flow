@@ -54,6 +54,12 @@ export interface EcoModule {
   installModule(moduleName: string): Promise<ModuleSchema>;
 
   /**
+   * Asynchronously installs a module dependencies.
+   * @returns {Promise<void>}
+   */
+  installModules(): Promise<void>;
+
+  /**
    * Asynchronously installs a module with the specified name and version.
    * @param {string} moduleName - The name of the module to install.
    * @param {string} [version="latest"] - The version of the module to install.

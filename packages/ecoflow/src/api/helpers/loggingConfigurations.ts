@@ -8,7 +8,7 @@ import { configOptions } from "@ecoflow/types";
  * @param {any} configRequest - The configuration request object containing logging options.
  * @returns {Promise<configOptions>} A promise that resolves to a configOptions object with parsed logging configurations.
  */
-const loggingConfigutations = async (
+const loggingConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -19,8 +19,8 @@ const loggingConfigutations = async (
     loggingLevel,
     loggingFormat,
     loggingPrettyPrint,
-    loggingLableEnable,
-    loggingLableLable,
+    loggingLabelEnable: loggingLabelEnable,
+    loggingLabelLabel,
     loggingConsole,
     loggingFileEnabled,
     loggingFileLocation,
@@ -50,18 +50,18 @@ const loggingConfigutations = async (
         configs.logging!.prettyPrint = loggingPrettyPrint;
 
       if (
-        !_.isUndefined(loggingLableEnable) &&
-        _.isBoolean(loggingLableEnable)
+        !_.isUndefined(loggingLabelEnable) &&
+        _.isBoolean(loggingLabelEnable)
       ) {
-        configs.logging!.lable = Object.create({});
-        if (loggingLableEnable) {
-          configs.logging!.lable!.enable = true;
+        configs.logging!.label = Object.create({});
+        if (loggingLabelEnable) {
+          configs.logging!.label!.enable = true;
           if (
-            !_.isUndefined(loggingLableLable) &&
-            !_.isEmpty(loggingLableLable)
+            !_.isUndefined(loggingLabelLabel) &&
+            !_.isEmpty(loggingLabelLabel)
           )
-            configs.logging!.lable!.lable = loggingLableLable;
-        } else configs.logging!.lable!.enable = false;
+            configs.logging!.label!.label = loggingLabelLabel;
+        } else configs.logging!.label!.enable = false;
       }
     } else configs.logging!.enabled = false;
 
@@ -80,7 +80,7 @@ const loggingConfigutations = async (
             !(await fse.exists(loggingFileLocation)) ||
             !(await fse.lstat(loggingFileLocation)).isDirectory()
           )
-            throw "Logging File Directoty does not exist or is not a directory.";
+            throw "Logging File Directory does not exist or is not a directory.";
           configs.logging!.file!.location = path
             .join(loggingFileLocation)
             .replace(/\\/g, "/");
@@ -123,4 +123,4 @@ const loggingConfigutations = async (
   return configs;
 };
 
-export default loggingConfigutations;
+export default loggingConfigurations;

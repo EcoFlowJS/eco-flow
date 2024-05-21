@@ -28,7 +28,7 @@ export interface Config {
    * @param key string name of the configuration.
    * @returns {Object | String} containing configuration information.
    */
-  get(key: string): any;
+  get(key: keyof configOptions): any;
 
   /**
    * Configuration Settings to save or update to the config file in the config directory.

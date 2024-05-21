@@ -5,7 +5,7 @@ import { configOptions } from "@ecoflow/types";
  * @param {any} configRequest - The configuration request object.
  * @returns {Promise<configOptions>} A promise that resolves to the generated editor configuration object.
  */
-const editorConfigutations = async (
+const editorConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -30,4 +30,4 @@ const editorConfigutations = async (
   return configs;
 };
 
-export default editorConfigutations;
+export default editorConfigurations;

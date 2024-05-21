@@ -5,7 +5,7 @@ import { configOptions } from "@ecoflow/types";
  * @param {any} configRequest - The configuration request object containing router options.
  * @returns {Promise<configOptions>} A promise that resolves to the configured router options.
  */
-const ecoFlowRouterConfigutations = async (
+const ecoFlowRouterConfigurations = async (
   configRequest: any
 ): Promise<configOptions> => {
   const configs: configOptions = {};
@@ -81,4 +81,4 @@ const ecoFlowRouterConfigutations = async (
   return configs;
 };
 
-export default ecoFlowRouterConfigutations;
+export default ecoFlowRouterConfigurations;

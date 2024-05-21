@@ -17,6 +17,7 @@ import createHashHelper from "../helpers/createHashHelper";
 import xssFilterHelper from "../helpers/xssFilterHelper";
 import validatePasswordRegex from "../helpers/validatePasswordRegex";
 import requireUncached from "../helpers/requireUncached";
+import installPackageDependencies from "../helpers/installPackageDependencies";
 
 /**
  * Helper class with static methods for various utility functions.
@@ -60,6 +61,10 @@ export class Helper {
     packageNames: string | string[]
   ): Promise<void> {
     await installPackageHelper(installDir, packageNames);
+  }
+
+  static async installPackageDependencies(installDir: string): Promise<void> {
+    await installPackageDependencies(installDir);
   }
 
   /**

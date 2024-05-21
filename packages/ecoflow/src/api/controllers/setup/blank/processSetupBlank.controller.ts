@@ -1,6 +1,6 @@
 import { Context } from "koa";
 import { ApiResponse, userTableCollection } from "@ecoflow/types";
-import systemDatabaseConfigutations from "../../../helpers/systemDatabaseConfigutations";
+import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations";
 import defaultModules from "../../../../defaults/defaultModules";
 
 interface TimeSpansSteup {
@@ -49,7 +49,7 @@ const processSetupBlank = async (ctx: Context) => {
      * @returns An object containing the 'driver' and 'configuration' properties.
      */
     const { driver, configuration } = {
-      ...(await systemDatabaseConfigutations(databaseInfo)),
+      ...(await systemDatabaseConfigurations(databaseInfo)),
     }.database!;
 
     /**
