@@ -75,6 +75,7 @@ const restoreBackupHelper = async (zip: AdmZip): Promise<void> => {
         path.join(config.get("moduleDir"), "package.json")
       );
       await ecoModule.installModules();
+      await ecoModule.registerModules();
     }
 
     if (
@@ -92,6 +93,8 @@ const restoreBackupHelper = async (zip: AdmZip): Promise<void> => {
       config.setConfig(
         Helper.requireUncached(path.join(tempRestoreFileDir, "configs.json"))
       );
+
+    await fse.remove(tempRestoreFileDir);
   } catch (error) {
     throw error;
   }

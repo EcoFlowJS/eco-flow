@@ -759,6 +759,8 @@ export class EcoModule implements IEcoModule {
   async registerModules(): Promise<void> {
     const { log } = ecoFlow;
     try {
+      this.moduleSchema = [];
+      this.nodes = [];
       this.moduleSchema = await this.moduleBuilder.build(
         await this.installedModules
       );

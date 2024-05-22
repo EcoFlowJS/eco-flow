@@ -21,7 +21,7 @@ export class Upload implements IUpload {
   constructor(files: File | File[]) {
     const { config } = ecoFlow;
     this._files = (Array.isArray(files) ? files : [files]) || [];
-    this._uploadDirectory = path.join(config._config.userDir!, "uploads");
+    this._uploadDirectory = Upload.getUploadDirectory;
     this._prefix = "upload";
     this._dateformat = "DD-MM-YYYY";
     this._timeformat = "HH-mm-ss";
@@ -153,5 +153,10 @@ export class Upload implements IUpload {
     }
 
     return uploadedFiles;
+  }
+
+  static get getUploadDirectory(): string {
+    const { config } = ecoFlow;
+    return path.join(config.get("userDir"), "uploads");
   }
 }
