@@ -2,6 +2,7 @@ import { ApiResponse } from "@ecoflow/types";
 import AdmZip from "adm-zip";
 import { Context } from "koa";
 import restoreBackupHelper from "../../helpers/restoreBackupHelper";
+import { remove } from "fs-extra";
 
 const restoreBackup = async (ctx: Context) => {
   const { _, server } = ecoFlow;
@@ -13,6 +14,7 @@ const restoreBackup = async (ctx: Context) => {
     if (_.isArray(restoreFile)) throw "Please provide a single restore file.";
 
     await restoreBackupHelper(new AdmZip(restoreFile.filepath));
+    await remove(restoreFile.filepath);
 
     setTimeout(() => server.restartServer(), 10 * 1000);
     ctx.body = <ApiResponse>{
