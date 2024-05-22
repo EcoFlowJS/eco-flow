@@ -75,6 +75,7 @@ const restoreBackupHelper = async (zip: AdmZip): Promise<void> => {
         path.join(config.get("moduleDir"), "package.json")
       );
       await ecoModule.installModules();
+      await ecoModule.registerModules();
     }
 
     if (

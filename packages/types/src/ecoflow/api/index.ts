@@ -1,3 +1,4 @@
+export * from "./setup";
 /**
  * Interface for the API response object.
  * @interface ApiResponse

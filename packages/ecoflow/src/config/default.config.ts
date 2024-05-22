@@ -5,7 +5,7 @@ import path from "path";
 const baseUserDir =
   process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
-const defaultConfig: configOptions = {
+const defaultConfig: Required<configOptions> = {
   /*******************************************************************************
    * User Directory Settings
    *  - userDir

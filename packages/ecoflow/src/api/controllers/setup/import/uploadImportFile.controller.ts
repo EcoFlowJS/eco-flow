@@ -1,47 +1,34 @@
 import { Context } from "koa";
+import { Upload } from "@ecoflow/utils";
 import path from "path";
-import fse from "fs-extra";
+import processImport from "../../../helpers/processImport";
 
 const uploadImportFile = async (ctx: Context) => {
-  const { userDir } = ecoFlow.config._config;
-  const uploadDir = path.join(userDir!, "uploads");
+  const { _, config, server } = ecoFlow;
+
   try {
-    const importFile = ctx.request.files!.importFile as any;
+    if (_.isUndefined(ctx.request.files)) throw "Import file not defined.";
+    const { importFile } = ctx.request.files;
+    if (_.isArray(importFile)) throw "Select a single file to import from.";
+    const file = path.join(
+      Upload.getUploadDirectory,
+      (await new Upload(importFile).filterZips().upload())[0]
+    );
 
-    if (importFile.mimetype !== "application/x-zip-compressed") {
+    if (await processImport(file)) {
+      setTimeout(() => server.restartServer(), 5 * 1000);
       ctx.body = {
-        error: true,
-        payload: "Invalid import file type. Expected zip file type.",
+        success: true,
+        payload: {
+          msg: "File successfully imported.Restarting server in 5seconds...",
+          restart: true,
+        },
       };
-      return;
     }
-
-    const orginalFileName = importFile.originalFilename;
-    const filePath = path.join(importFile.filepath);
-
-    const name = `import_${new Date()
-      .toLocaleDateString()
-      .replace(/\//g, "-")}_${new Date()
-      .toLocaleTimeString("en-IN", {
-        hourCycle: "h23",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })
-      .replace(/\:/g, "-")}_${orginalFileName}`;
-
-    await fse.ensureDir(uploadDir);
-    await fse.copyFile(filePath, path.join(uploadDir, name));
-    await fse.unlink(filePath);
-
-    ctx.body = {
-      success: true,
-      payload: { msg: "File uploaded successful.", newFileName: name },
-    };
-  } catch (e) {
+  } catch (error) {
     ctx.body = {
       error: true,
-      payload: "Invalid import file type. Expected zip file type.",
+      payload: error,
     };
   }
 };

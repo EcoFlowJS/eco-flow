@@ -1,5 +1,6 @@
 import AdmZip from "adm-zip";
 import generateBackupZip from "./generateBackupZip";
+import { Builder } from "@ecoflow/utils";
 
 const exportProject = async (): Promise<Buffer> => {
   const { _, service } = ecoFlow;
@@ -36,7 +37,10 @@ const exportProject = async (): Promise<Buffer> => {
     2
   );
 
+  const systemEnvs = JSON.stringify(await Builder.ENV.getSystemEnv(), null, 2);
+
   zip.addFile("systemDB.json", Buffer.from(systemDB, "utf8"));
+  zip.addFile("systemEnvs.json", Buffer.from(systemEnvs, "utf8"));
 
   return zip.toBuffer();
 };
