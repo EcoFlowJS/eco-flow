@@ -14,7 +14,7 @@
   "dependencies": {
     "@ecoflow/module": "^1.0.0",
     "@ecoflow/types": "^0.0.20",
-    "@koa/router": "^11.0.2",
+    "@koa/router": "^12.0.1",
     "koa": "^2.15.3",
     "thread-promises": "^1.6.3"
   },

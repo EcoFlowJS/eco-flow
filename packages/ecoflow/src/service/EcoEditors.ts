@@ -39,7 +39,6 @@ export class EcoEditors implements IEcoEditors {
   /**
    * Initializes the editors router with the specified systemRouterOptions and envDir.
    * If systemRouterOptions is empty, it sets a default prefix of "/systemApi".
-   * It then sets the CLIENT_API_ENDPOINT environment variable and configures the Client API endpoint.
    * Finally, it creates and sets up the router for the system and adds it to the server middleware.
    * @returns Promise<void>
    */
@@ -54,24 +53,6 @@ export class EcoEditors implements IEcoEditors {
       systemRouterOptions.prefix = "/systemApi";
     }
 
-    const setEnv = async () => {
-      Builder.ENV.setSystemEnv(envDir!, [
-        {
-          name: "CLIENT_API_ENDPOINT",
-          value: this.server.baseUrl + systemRouterOptions!.prefix,
-        },
-      ]);
-      ecoFlow.log.info("Client API endpoint Configured...");
-      loadEnvironments();
-    };
-
-    if (_.isUndefined(process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT))
-      await setEnv();
-    else if (
-      process.env.ECOFLOW_SYS_CLIENT_API_ENDPOINT !==
-      this.server.baseUrl + systemRouterOptions!.prefix
-    )
-      await setEnv();
     const router = EcoRouter.createRouter(systemRouterOptions);
     this.router.systemRouter = router;
     this.server.use(router.routes()).use(router.allowedMethods());

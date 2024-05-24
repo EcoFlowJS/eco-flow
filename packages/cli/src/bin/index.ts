@@ -78,6 +78,15 @@ if (issetCommand("auth") && typeof commands.auth === "boolean")
   defaultsCliCommands.auth = commands.auth;
 
 /**
+ * Checks if the "dev" command is set and its type is boolean, then assigns it to defaultsCliCommands.dev.
+ * @param {string} issetCommand - A function that checks if a command is set.
+ * @param {boolean} commands.auth - The value of the "dev" command.
+ * @returns None
+ */
+if (issetCommand("dev") && typeof commands.dev === "boolean")
+  defaultsCliCommands.dev = commands.dev;
+
+/**
  * Checks if the "configDir" command is set, is a string, exists as a directory, and then sets it as the default value.
  * @returns None
  */

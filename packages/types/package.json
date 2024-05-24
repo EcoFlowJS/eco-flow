@@ -22,7 +22,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@koa/router": "^11.0.2",
+    "@koa/router": "^12.0.1",
     "@reactflow/core": "^11.11.0",
     "@types/koa": "^2.13.9",
     "@types/koa__cors": "^4.0.1",

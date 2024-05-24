@@ -29,7 +29,7 @@
     "@ecoflow/types": "^0.0.20",
     "@ecoflow/utils": "^0.0.1",
     "@koa/cors": "^5.0.0",
-    "@koa/router": "^11.0.2",
+    "@koa/router": "^12.0.1",
     "adm-zip": "^0.5.12",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",

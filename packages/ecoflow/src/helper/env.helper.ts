@@ -10,20 +10,85 @@ import { homedir } from "os";
  * @returns None
  */
 const loadEnvironments = () => {
-  const envDir = _.isEmpty(ecoFlow.config._config.envDir)
+  const { server, config } = ecoFlow;
+  const envDir = _.isEmpty(config.get("envDir"))
     ? process.env.configDir ||
       homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
-    : fse.existsSync(ecoFlow.config._config.envDir!)
-    ? fse.lstatSync(ecoFlow.config._config.envDir!).isDirectory()
-      ? ecoFlow.config._config.envDir
+    : fse.existsSync(config.get("envDir"))
+    ? fse.lstatSync(config.get("envDir")).isDirectory()
+      ? config.get("envDir")
       : process.env.configDir ||
         homedir().replace(/\\/g, "/") + "/.ecoflow/environment"
-    : fse.ensureDirSync(ecoFlow.config._config.envDir!);
+    : fse.ensureDirSync(config.get("envDir"));
 
   const ecosystemEnv = path.join(envDir!, "/ecoflow.environments.env");
   const userEnv = path.join(envDir!, "/user.environments.env");
   fse.ensureFileSync(ecosystemEnv);
   fse.ensureFileSync(userEnv);
+
+  // //Admin Panel EnvSettings
+  // fse.writeFileSync(
+  //   path.join(
+  //     path.dirname(
+  //       path.dirname(path.dirname(path.dirname(path.dirname(__filename))))
+  //     ),
+  //     "editors",
+  //     "admin-panel",
+  //     ".env"
+  //   ),
+  //   `VITE_CLIENT_API_ENDPOINT=${server.baseUrl}${
+  //     config.get("systemRouterOptions").prefix
+  //   }`,
+  //   "utf8"
+  // );
+
+  // //Base Panel EnvSettings
+  // fse.writeFileSync(
+  //   path.join(
+  //     path.dirname(
+  //       path.dirname(path.dirname(path.dirname(path.dirname(__filename))))
+  //     ),
+  //     "editors",
+  //     "base-panel",
+  //     ".env"
+  //   ),
+  //   `VITE_CLIENT_API_ENDPOINT=${server.baseUrl}${
+  //     config.get("systemRouterOptions").prefix
+  //   }`,
+  //   "utf8"
+  // );
+
+  // //Flow Panel EnvSettings
+  // fse.writeFileSync(
+  //   path.join(
+  //     path.dirname(
+  //       path.dirname(path.dirname(path.dirname(path.dirname(__filename))))
+  //     ),
+  //     "editors",
+  //     "flow-editor",
+  //     ".env"
+  //   ),
+  //   `VITE_CLIENT_API_ENDPOINT=${server.baseUrl}${
+  //     config.get("systemRouterOptions").prefix
+  //   }`,
+  //   "utf8"
+  // );
+
+  // //Schema Panel EnvSettings
+  // fse.writeFileSync(
+  //   path.join(
+  //     path.dirname(
+  //       path.dirname(path.dirname(path.dirname(path.dirname(__filename))))
+  //     ),
+  //     "editors",
+  //     "schema-editor",
+  //     ".env"
+  //   ),
+  //   `VITE_CLIENT_API_ENDPOINT=${server.baseUrl}${
+  //     config.get("systemRouterOptions").prefix
+  //   }`,
+  //   "utf8"
+  // );
 
   //import environments
   dotenv.config({ path: ecosystemEnv });

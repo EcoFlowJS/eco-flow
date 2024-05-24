@@ -10,6 +10,7 @@ import { loggerOptions } from "../../utils";
  * @property {string} [configName] - The name of the configuration.
  * @property {string} [userDir] - The directory for the user.
  * @property {loggerOptions} [logging] - Options for logging.
+ * @property {boolean} [dev] - Indicates if the startup is in development mode.
  */
 export interface ICommand {
   Host?: string;
@@ -19,4 +20,5 @@ export interface ICommand {
   configName?: string;
   userDir?: string;
   logging?: loggerOptions;
+  dev?: boolean;
 }
