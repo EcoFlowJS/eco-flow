@@ -13,6 +13,7 @@ baseCommand
   .addOption(new Option("-h, --host <address>", "Set a specific host binding"))
   .addOption(new Option("-p, --port <number>", "Port to listen on").env("PORT"))
   .addOption(new Option("--auth", "Set authentication to the flow"))
+  .addOption(new Option("-D, --dev", "Run in development mode."))
   .addOption(
     new Option(
       "-c, --configDir <string>",

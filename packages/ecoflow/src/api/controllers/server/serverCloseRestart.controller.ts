@@ -36,16 +36,16 @@ const serverCloseRestart = async (ctx: Context) => {
           userID: ctx.user,
         });
         server.restartServer();
-      }, 30 * 1000);
+      }, 5 * 1000);
 
       /**
        * Sets the response body to an ApiResponse object with a success status and a message indicating
-       * that the server will be restarted in 30 seconds.
+       * that the server will be restarted in 5 seconds.
        * @type {ApiResponse}
        */
       ctx.body = <ApiResponse>{
         success: true,
-        payload: "Server will be restart in 30 seconds",
+        payload: "Server will be restart in 5 seconds",
       };
 
       /**
@@ -81,7 +81,7 @@ const serverCloseRestart = async (ctx: Context) => {
           userID: ctx.user,
         });
         server.closeServer(true);
-      }, 30 * 1000);
+      }, 5 * 1000);
 
       /**
        * Sets the response body to an ApiResponse object with a success status and a message payload.

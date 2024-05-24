@@ -35,7 +35,7 @@ const defaultConfig: Required<configOptions> = {
    *  - https
    *  - httpCors
    ******************************************************************************/
-  Host: "127.0.0.1", // Server Host to where the server should be served at. Default is 0.0.0.0.
+  Host: "127.0.0.1", // Server Host to where the server should be served at. Default is 127.0.0.1.
   Port: process.env.PORT || 4000, //Port number at which the server to be served at. Default id 4000.
   https: {
     //HTTPS Configuration of the server

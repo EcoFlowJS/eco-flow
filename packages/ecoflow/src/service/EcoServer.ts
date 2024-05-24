@@ -189,7 +189,14 @@ export class EcoServer extends Koa implements IEcoServer {
     );
     log.info("====================================");
     return new Promise<void>((resolve, reject) => {
+      if (exit) {
+        resolve();
+        process.exit();
+      }
+
       this._server.closeAllConnections();
+      this.systemSocket.sockets.disconnectSockets(true);
+      this.socket.sockets.disconnectSockets(true);
       this._server.close((err) => {
         if (err) reject(err);
         this._serverStatus = "Offline";

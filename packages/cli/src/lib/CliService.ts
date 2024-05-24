@@ -49,11 +49,16 @@ export class CliService implements ICliService {
    * @param {ICommand} [args={}] - The command arguments to start the service with.
    * @returns None
    */
-  startService(args: ICommand = {}): void {
+  startService(args: ICommand = { dev: false }): void {
+    console.log(args.dev ? "development" : "production");
+
     this.args = args;
     this.process = spawn("node", ["-e", this.generatedExecutableCode], {
       cwd: process.cwd(),
-      env: Object.assign(process.env, { REBORN: 1 }),
+      env: Object.assign(process.env, {
+        REBORN: 1,
+        NODE_ENV: args.dev ? "development" : "production",
+      }),
       stdio: ["inherit", "inherit", "inherit", "ipc"],
     });
     this.process.on("spawn", () => {
