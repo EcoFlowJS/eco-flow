@@ -19,11 +19,11 @@
     "editor:start:admin": "cd ./editors/admin-panel && npm run dev",
     "editor:start:flow": "cd ./editors/flow-editor && npm run dev",
     "editor:start:schema": "cd ./editors/schema-editor && npm run dev",
-    "ediotr:start": "concurrently  \"npm run editor:start:base\" \"npm run editor:start:flow\" \"npm run editor:start:schema\" \"npm run editor:start:admin\"",
+    "editor:start": "concurrently  \"npm run editor:start:base\" \"npm run editor:start:flow\" \"npm run editor:start:schema\" \"npm run editor:start:admin\"",
     "prewatch": "npm run build",
     "watch": "concurrently \"npm run watch:cli\" \"npm run watch:types\" \"npm run watch:utils\" \"npm run watch:ecoflow\" \"npm run watch:api\" \"npm run watch:database\" \"npm run watch:helper\" \"npm run watch:module\" \"npm run watch:services\" \"npm run watch:editor:component\" \"npm run watch:flows\"",
     "dev:backend": "nodemon ./run.ts",
-    "dev:frontend": "npm run ediotr:start",
+    "dev:frontend": "npm run editor:start",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "start:Development": "concurrently \"npm run watch\" \" npm run dev\""
   },
