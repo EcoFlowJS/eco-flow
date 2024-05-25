@@ -96,11 +96,6 @@ export interface configOptions {
   httpCors?: httpCors;
 
   /**
-   * Optional configuration options for the system router.
-   */
-  systemRouterOptions?: RouterOptions;
-
-  /**
    * Optional configuration options for the API router.
    */
   apiRouterOptions?: RouterOptions;
@@ -256,11 +251,6 @@ export namespace configOptions {
    * @type {httpCors | undefined}
    */
   export let httpCors: httpCors | undefined;
-
-  /**
-   * Options for the system router.
-   */
-  export let systemRouterOptions: RouterOptions | undefined;
 
   /**
    * Options for the API router.

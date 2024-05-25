@@ -11,9 +11,8 @@ import {
 import _ from "lodash";
 import proxy from "koa-proxies";
 import { EcoRouter } from "./EcoRouter";
-import { Builder } from "@ecoflow/utils";
-import loadEnvironments from "../helper/env.helper";
 import editorsApiRoutes from "../api/editorsApiRoutes.routes";
+import { RouterOptions } from "@koa/router";
 
 /**
  * Class representing EcoEditors that implements EcoEditors interface.
@@ -37,21 +36,17 @@ export class EcoEditors implements IEcoEditors {
   }
 
   /**
-   * Initializes the editors router with the specified systemRouterOptions and envDir.
+   * Initializes the editors router.
    * If systemRouterOptions is empty, it sets a default prefix of "/systemApi".
    * Finally, it creates and sets up the router for the system and adds it to the server middleware.
    * @returns Promise<void>
    */
   private async initializeEditorsRouter(): Promise<void> {
-    let { systemRouterOptions, envDir } = ecoFlow.config._config;
-    if (_.isEmpty(systemRouterOptions)) {
-      systemRouterOptions = {};
-      systemRouterOptions.prefix = "/systemApi";
-    }
-
-    if (!ecoFlow._.has(systemRouterOptions, "prefix")) {
-      systemRouterOptions.prefix = "/systemApi";
-    }
+    const systemRouterOptions: RouterOptions = {
+      prefix: "/systemApi", //Prefix for all routes
+      methods: ["GET", "PUT", "POST", "DELETE", "PATCH"], //Methods which should be supported by the router.
+      strict: true, // Whether or not routes should matched strictly. [If strict matching is enabled, the trailing slash is taken into account when matching routes.]
+    };
 
     const router = EcoRouter.createRouter(systemRouterOptions);
     this.router.systemRouter = router;
