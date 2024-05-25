@@ -59,21 +59,10 @@ const defaultConfig: Required<configOptions> = {
 
   /*******************************************************************************
    * Router Settings
-   *  - systemRouterOptions
    *  - apiRouterOptions
    *  - httpStatic
    *  - httpStaticRoot
    ******************************************************************************/
-  systemRouterOptions: {
-    prefix: "/systemApi", //Prefix for all routes
-    methods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"], //Methods which should be supported by the router.
-    routerPath: "", //Path to the router which should be used for all routes
-    sensitive: false, //Whether or not routing should be case-sensitive.
-    strict: true, // Whether or not routes should matched strictly. [If strict matching is enabled, the trailing slash is taken into account when matching routes.]
-    exclusive: false, // Only run last matched route's controller when there are multiple matches
-    host: "", //Host for router match
-  },
-
   apiRouterOptions: {
     prefix: "/api", //Prefix for all routes. Default is /api
     methods: ["GET", "PUT", "POST", "DELETE"], //Methods which should be supported by the router.

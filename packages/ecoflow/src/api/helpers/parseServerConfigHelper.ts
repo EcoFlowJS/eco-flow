@@ -2,7 +2,6 @@ import { configOptions } from "@ecoflow/types";
 import systemDatabaseConfigurations from "./systemDatabaseConfigurations";
 import serverConfigurationParser from "./serverConfigurationParser";
 import corsConfigurationParser from "./corsConfigurationParser";
-import ecoFlowRouterConfigurations from "./ecoFlowRouterConfigurations";
 import apiRouterConfigurations from "./apiRouterConfigurations";
 import directoryConfigurations from "./directoryConfigurations";
 import flowConfigurations from "./flowConfigurations";
@@ -31,7 +30,6 @@ const parseServerConfigHelper = async (
   return {
     ...(await serverConfigurationParser({ ...restConfigRequest })),
     ...(await corsConfigurationParser({ ...restConfigRequest })),
-    ...(await ecoFlowRouterConfigurations({ ...restConfigRequest })),
     ...(await apiRouterConfigurations({ ...restConfigRequest })),
     ...(await directoryConfigurations({ ...restConfigRequest })),
     ...(await flowConfigurations({ ...restConfigRequest })),
