@@ -109,8 +109,8 @@ export class EcoEditors implements IEcoEditors {
       : this.isAuth
       ? true
       : editor.admin
-      ? false
-      : editor.admin;
+      ? true
+      : false;
 
     editor.flow = ecoFlow._.isUndefined(editor.flow) ? true : editor.flow;
     editor.schema = ecoFlow._.isUndefined(editor.schema) ? true : editor.schema;
