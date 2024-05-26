@@ -1,7 +1,6 @@
 {
   "name": "@ecoflow/helper",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.25",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -9,7 +8,7 @@
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
-  "author": "",
+  "author": "EcoFlowJS",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.10.2",
@@ -23,5 +22,14 @@
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.0",
     "nypm": "^0.3.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EcoFlowJS/eco-flow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EcoFlowJS/eco-flow/issues"
+  },
+  "homepage": "https://github.com/EcoFlowJS/eco-flow#readme",
+  "description": ""
 }
