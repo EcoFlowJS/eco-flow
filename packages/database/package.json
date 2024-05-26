@@ -1,7 +1,6 @@
 {
   "name": "@ecoflow/database",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.0.26",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -9,21 +8,34 @@
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
-  "author": "",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "author": "EcoFlowJS",
   "license": "ISC",
   "devDependencies": {
     "@types/knex": "^0.16.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@ecoflow/helper": "^1.0.0",
-    "@ecoflow/types": "^0.0.20",
-    "@ecoflow/utils": "^0.0.1",
+    "@ecoflow/helper": "^0.0.26",
+    "@ecoflow/types": "^0.0.25",
+    "@ecoflow/utils": "^0.0.26",
     "fs-extra": "^11.2.0",
     "knex": "^3.0.1",
     "mongoose": "^8.0.2",
     "mysql": "^2.18.1",
     "pg": "^8.11.3",
     "sqlite3": "^5.1.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EcoFlowJS/eco-flow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EcoFlowJS/eco-flow/issues"
+  },
+  "homepage": "https://github.com/EcoFlowJS/eco-flow#readme",
+  "description": ""
 }
