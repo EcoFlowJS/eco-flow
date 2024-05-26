@@ -8,6 +8,10 @@
     "watch": "tsc --watch",
     "cleanBuild": "tsc --build --clean && npm run build"
   },
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "author": "EcoFlowJS",
   "license": "ISC",
   "devDependencies": {
