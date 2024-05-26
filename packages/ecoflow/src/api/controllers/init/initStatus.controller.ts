@@ -47,10 +47,10 @@ const initStatus = async (ctx: Context) => {
         },
       ]);
 
-      user = "Administrator";
+      user = "admin";
       envLoadHelper();
     } else {
-      user = Token._id === "admin" ? "Administrator" : Token._id;
+      user = Token._id === "admin" ? "admin" : Token._id;
     }
   }
 

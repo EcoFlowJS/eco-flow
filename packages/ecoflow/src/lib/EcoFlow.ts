@@ -21,6 +21,7 @@ import { Server as SocketServer } from "socket.io";
 import EcoModule from "@ecoflow/module";
 import loadEnvironments from "../helper/env.helper";
 import { EcoFlowEditor } from "@ecoflow/flows";
+import defaultModules from "../defaults/defaultModules";
 
 interface ProcessCommands {
   STOP: string;
@@ -82,6 +83,20 @@ class EcoFlow implements IEcoFlow {
     loadEnvironments();
   }
 
+  private async installBaseModulesNoAuth(): Promise<void> {
+    /**
+     * Asynchronously iterates over the defaultModules array and installs each module using ecoModule
+     * if the authentication mode is disabled.
+     * @param {Array} defaultModules - An array of modules to be installed.
+     * @returns None
+     */
+    if (!this.isAuth) {
+      this.log.info("Installing default modules using ecoModule");
+      for await (const module of defaultModules)
+        await this.ecoModule.installModule(module);
+    }
+  }
+
   /**
    * Asynchronously starts the application by initializing various components and services.
    * Logs the start of the application and checks if an app needs to be created.
@@ -101,12 +116,14 @@ class EcoFlow implements IEcoFlow {
     await this.database.initConnection();
     await this.router.initRouter(this.server);
 
+    await this.installBaseModulesNoAuth();
     await this.ecoModule.registerModules();
     await this.flowEditor.initialize();
 
     await this.helper.loadEditor();
     await this.helper.loadSystemRoutes();
     await this.server.initializePassport();
+
     await this.server.startServer();
     this.log.info("Server Ready to use!!!");
     return this;

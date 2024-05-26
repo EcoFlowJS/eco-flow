@@ -3,6 +3,7 @@ import {
   Permissions,
   Role,
   RoleService,
+  UserPermissions,
   UserService,
 } from "@ecoflow/types";
 import { Context } from "koa";
@@ -29,8 +30,10 @@ const fetchRoleList = async (
 const fetchpermissionList = async (
   RoleService: RoleService,
   userRoles: any[]
-) => {
-  let roles = Object.create({});
+): Promise<UserPermissions> => {
+  const { isAuth } = ecoFlow;
+  if (!isAuth) return roleAdmin;
+  let roles: UserPermissions = Object.create({});
 
   for await (const userRole of userRoles) {
     const role: Role = ((await RoleService.fetchRole(userRole)) as Role[])[0];
@@ -61,7 +64,6 @@ const fetchPermissions = async (ctx: Context) => {
   try {
     const username = ctx.user;
     const payload = Object.create({});
-
     /**
      * Checks if the mode is undefined. If it is, fetches the user's roles and permissions
      * and adds them to the payload object.
