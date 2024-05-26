@@ -19,7 +19,6 @@ export class Upload implements IUpload {
    * can be either a single `File` object or an array of `File` objects.
    */
   constructor(files: File | File[]) {
-    const { config } = ecoFlow;
     this._files = (Array.isArray(files) ? files : [files]) || [];
     this._uploadDirectory = Upload.getUploadDirectory;
     this._prefix = "upload";
@@ -124,7 +123,9 @@ export class Upload implements IUpload {
    */
   filterZips(): IUpload {
     this._files = this._files.filter(
-      (file) => file.mimetype === "application/x-zip-compressed"
+      (file) =>
+        file.mimetype === "application/x-zip-compressed" ||
+        file.mimetype === "application/zip"
     );
 
     return this;
