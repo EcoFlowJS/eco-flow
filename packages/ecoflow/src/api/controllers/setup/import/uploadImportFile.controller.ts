@@ -28,7 +28,7 @@ const uploadImportFile = async (ctx: Context) => {
   } catch (error) {
     ctx.body = {
       error: true,
-      payload: error,
+      payload: _.isString(error) ? error : JSON.stringify(error),
     };
   }
 };
