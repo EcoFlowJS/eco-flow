@@ -13,7 +13,9 @@ const directoryFetcher = async (ctx: Context) => {
     ctx.body = <ApiResponse>{
       success: true,
       payload: (await list())
+        .filter((drive) => !drive.isVirtual)
         .map((drive) => drive.mountpoints)
+        .filter((drive) => !_.isEmpty(drive))
         .map((drive) =>
           drive.reduce(
             (acc, drive) => (acc ? acc + "," + drive.path : drive.path),
@@ -27,7 +29,6 @@ const directoryFetcher = async (ctx: Context) => {
     };
     return;
   }
-
   if (_.isUndefined(type)) type = "File";
 
   ctx.body = <ApiResponse>{
