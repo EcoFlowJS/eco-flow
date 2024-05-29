@@ -86,6 +86,12 @@ or clone recursively submodules.
   npm install --legacy-peer-deps
 ```
 
+### Install dependencies
+
+```bash
+  npm install --legacy-peer-deps
+```
+
 ### Build the project
 
 ```bash
@@ -103,7 +109,7 @@ Start the backend
 Start the frontend
 
 ```bash
-  npm run dev:frontend
+  npm run frontend
 ```
 
 \*_Note: This command will only works cloning submodules._
@@ -116,7 +122,7 @@ EcoFlowJS can be started using the command ecoflow. This command can take variou
 $ ecoflow [-?] [-h] [--configName config.json] [--userDir DIR] [--port PORT]
 
 # Still under developement.
-$ ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]
+$ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]
 ```
 
 ### Basic commands
@@ -145,6 +151,19 @@ sudo npm install -g @ecoflow/cli@latest
 ```
 
 If you are using Windows, do not start the command with `sudo`.
+
+## Documentation
+
+- [EcoFlowJS/Api](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/api/README.md)
+- [EcoFlowJS/Cli](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/cli/README.md)
+- [EcoFlowJS/Database](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/database/README.md)
+- [EcoFlowJS/Ecoflow](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/ecoflow/README.md)
+- [EcoFlowJS/Flows](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/flows/README.md)
+- [EcoFlowJS/Helper](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/helper/README.md)
+- [EcoFlowJS/Module](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/module/README.md)
+- [EcoFlowJS/Services](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/services/README.md)
+- [EcoFlowJS/Types](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/types/README.md)
+- [EcoFlowJS/Utils](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/utils/README.md)
 
 ## Creating Nodes
 
@@ -191,31 +210,11 @@ Nodes should:
 
   Wherever possible, nodes must catch errors or register error handlers for any asynchronous calls they make.
 
-## Documentation
-
-- [EcoFlowJS/Api](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/api/README.md)
-- [EcoFlowJS/Cli](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/cli/README.md)
-- [EcoFlowJS/Database](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/database/README.md)
-- [EcoFlowJS/Ecoflow](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/ecoflow/README.md)
-- [EcoFlowJS/Flows](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/flows/README.md)
-- [EcoFlowJS/Helper](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/helper/README.md)
-- [EcoFlowJS/Module](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/module/README.md)
-- [EcoFlowJS/Services](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/services/README.md)
-- [EcoFlowJS/Types](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/types/README.md)
-- [EcoFlowJS/Utils](https://github.com/EcoFlowJS/eco-flow/blob/main/packages/utils/README.md)
-
 ## Contributing
 
 Before raising a pull-request, please read our [contributing guide](https://github.com/EcoFlowJS/eco-flow/blob/main/CONTRIBUTING.md).
 
 This project adheres to the [Contributor Covenant 2](https://www.contributor-covenant.org/version/2/1/code_of_conduct/). By participating, you are expected to uphold this code. Please report unacceptable behavior to any of the project's core team at teams.ecoflow@gmail.com.
-
-## Features
-
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
 
 ## Support
 
