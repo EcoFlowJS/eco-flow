@@ -54,7 +54,7 @@ export class CliService implements ICliService {
 
     this.args = args;
     this.process = spawn("node", ["-e", this.generatedExecutableCode], {
-      cwd: process.cwd(),
+      cwd: __dirname,
       env: Object.assign(process.env, {
         REBORN: 1,
         NODE_ENV: args.dev ? "development" : "production",
