@@ -16,7 +16,7 @@
   "author": "EcoFlowJS",
   "license": "ISC",
   "dependencies": {
-    "@ecoflow/admin-panel": "^0.1.26",
+    "@ecoflow/admin-panel": "^0.1.27",
     "@ecoflow/api": "^0.0.27",
     "@ecoflow/base-panel": "^0.1.28",
     "@ecoflow/database": "^0.0.27",
