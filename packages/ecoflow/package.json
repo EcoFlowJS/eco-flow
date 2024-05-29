@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/ecoflow",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -16,7 +16,7 @@
   "author": "EcoFlowJS",
   "license": "ISC",
   "dependencies": {
-    "@ecoflow/admin-panel": "^0.1.26",
+    "@ecoflow/admin-panel": "^0.1.27",
     "@ecoflow/api": "^0.0.27",
     "@ecoflow/base-panel": "^0.1.28",
     "@ecoflow/database": "^0.0.27",
@@ -32,6 +32,7 @@
     "@koa/router": "^12.0.1",
     "adm-zip": "^0.5.12",
     "crypto": "^1.0.1",
+    "date-and-time": "^3.3.0",
     "dotenv": "^16.3.1",
     "drivelist": "^12.0.2",
     "fs-extra": "^11.1.1",
