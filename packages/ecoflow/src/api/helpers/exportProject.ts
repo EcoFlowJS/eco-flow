@@ -1,9 +1,11 @@
+import path from "path";
 import AdmZip from "adm-zip";
 import generateBackupZip from "./generateBackupZip";
 import { Builder } from "@ecoflow/utils";
+import { format } from "date-and-time";
 
 const exportProject = async (): Promise<Buffer> => {
-  const { _, service } = ecoFlow;
+  const { _, service, config } = ecoFlow;
   const { AuditLogsService, FlowSettingsService, RoleService, UserService } =
     service;
   const allBackups = await generateBackupZip(true, true, true, true, true);
@@ -41,6 +43,16 @@ const exportProject = async (): Promise<Buffer> => {
 
   zip.addFile("systemDB.json", Buffer.from(systemDB, "utf8"));
   zip.addFile("systemEnvs.json", Buffer.from(systemEnvs, "utf8"));
+  zip.writeZip(
+    path.join(
+      config.get("userDir"),
+      "exports",
+      `export_${format(new Date(), "DD-MM-YYYY")}_${format(
+        new Date(),
+        "HH-mm-ss"
+      )}.zip`
+    )
+  );
 
   return zip.toBuffer();
 };

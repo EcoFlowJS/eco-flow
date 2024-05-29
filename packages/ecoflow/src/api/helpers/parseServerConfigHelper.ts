@@ -1,6 +1,4 @@
 import { configOptions } from "@ecoflow/types";
-import fse from "fs-extra";
-import path from "path";
 import systemDatabaseConfigurations from "./systemDatabaseConfigurations";
 import serverConfigurationParser from "./serverConfigurationParser";
 import corsConfigurationParser from "./corsConfigurationParser";
@@ -11,7 +9,6 @@ import loggingConfigurations from "./loggingConfigurations";
 import editorConfigurations from "./editorConfigurations";
 import systemDatabaseMigration from "./systemDatabaseMigration";
 import exportProject from "./exportProject";
-import { format } from "date-and-time";
 import removeFlowDescription from "./removeFlowDescription";
 import removeModulesPackages from "./removeModulesPackages";
 import migrateToNew from "./migrateToNew";
@@ -43,18 +40,7 @@ const parseServerConfigHelper = async (
       !_.isEmpty(migrate.username) &&
       !_.isEmpty(migrate.password)
     ) {
-      await fse.ensureDir(path.join(config.get("userDir"), "exports"));
-      await fse.writeFile(
-        path.join(
-          config.get("userDir"),
-          "exports",
-          `export_${format(new Date(), "DD-MM-YYYY")}_${format(
-            new Date(),
-            "HH-mm-ss"
-          )}.zip`
-        ),
-        await exportProject()
-      );
+      await exportProject();
       await removeFlowDescription();
       await removeModulesPackages();
       await removeDBConnections();

@@ -8,8 +8,8 @@ import { Builder } from "@ecoflow/utils";
 import AdmZip from "adm-zip";
 import fse from "fs-extra";
 import path from "path";
-import getFiles from "./getFiles";
 import Helper from "@ecoflow/helper";
+import { format } from "date-and-time";
 
 const generateBackupZip = async (
   databaseConfigs: string[] | boolean,
@@ -100,6 +100,16 @@ const generateBackupZip = async (
       Buffer.from(JSON.stringify(configs, null, 2), "utf8")
     );
 
+  backupZip.writeZip(
+    path.join(
+      config.get("userDir"),
+      "backups",
+      `backup_${format(new Date(), "DD-MM-YYYY")}_${format(
+        new Date(),
+        "HH-mm-ss"
+      )}.zip`
+    )
+  );
   return backupZip.toBuffer();
 };
 
