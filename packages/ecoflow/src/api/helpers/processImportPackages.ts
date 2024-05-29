@@ -1,6 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import defaultModules from "../../defaults/defaultModules";
+import installDefaultModules from "./installDefaultModules";
 
 const processImportPackages = async (
   extractDirectory: string
@@ -29,8 +30,7 @@ const processImportPackages = async (
     return [true, "Packages installed successfully"];
   }
 
-  for await (const module of defaultModules)
-    await ecoModule.installModule(module);
+  await installDefaultModules();
   await ecoModule.registerModules();
 
   return [true, "Packages installed successfully"];

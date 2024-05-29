@@ -1,7 +1,7 @@
 import { Context } from "koa";
 import { ApiResponse, userTableCollection } from "@ecoflow/types";
 import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations";
-import defaultModules from "../../../../defaults/defaultModules";
+import installDefaultModules from "../../../helpers/installDefaultModules";
 
 interface TimeSpansSteup {
   initTimeSpan: Date;
@@ -144,8 +144,7 @@ const processSetupBlank = async (ctx: Context) => {
    * @returns None
    */
   log.info("Installing default modules using ecoModule");
-  for await (const module of defaultModules)
-    await ecoModule.installModule(module);
+  await installDefaultModules();
 
   /**
    * Sets the response body with ApiResponse structure.
