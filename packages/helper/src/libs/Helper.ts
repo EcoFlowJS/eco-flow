@@ -63,6 +63,11 @@ export class Helper {
     await installPackageHelper(installDir, packageNames);
   }
 
+  /**
+   * Asynchronously installs the dependencies into the given directory.
+   * @param {string} installDir - The directory where the packages dependencies will be installed.
+   * @returns A promise that resolves when the dependencies are successfully installed.
+   */
   static async installPackageDependencies(installDir: string): Promise<void> {
     await installPackageDependencies(installDir);
   }
