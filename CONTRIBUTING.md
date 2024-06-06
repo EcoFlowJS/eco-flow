@@ -5,11 +5,12 @@ We welcome contributions, but request you follow these guidelines.
 - [Raising issues](#raising-issues)
 - [Feature requests](#feature-requests)
 - [Pull-Requests](#pull-requests)
-  - [Contributor License Agreement](#contributor-license-agreement)
+  - [Code Branches](#code-branches)
+  - [Coding Standards](#coding-standards)
 
 This project follows the [Contributor Covenant 2](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 By participating, you are expected to uphold this code. Please report unacceptable
-behavior to the project's core team at team@nodered.org.
+behavior to the project's core team at teams.ecoflow@gmail.com.
 
 ## Raising issues
 
@@ -32,7 +33,7 @@ At a minimum, please include:
 
 ## Feature requests
 
-For feature requests, please raise them on the [Discord](https://discord.gg/vNnahQ72) at `request-feature` Channel.
+For feature requests, please raise them on the `request-feature` channel of [Discord](https://discord.gg/vNnahQ72).
 
 ## Pull-Requests
 
