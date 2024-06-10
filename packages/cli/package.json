@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/cli",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "bin": {
@@ -13,14 +13,15 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "keywords": [],
   "author": "EcoFlowJS",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@ecoflow/ecoflow": "^0.0.33",
-    "@ecoflow/types": "^0.0.25",
+    "@ecoflow/ecoflow": "^0.0.34",
+    "@ecoflow/types": "^0.0.26",
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
     "lodash": "^4.17.21"

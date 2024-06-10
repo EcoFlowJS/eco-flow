@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/types",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "main": "./index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -10,12 +10,13 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist",
     "index.js"
   ],
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "Package contains all types of EcoflowJS",
   "devDependencies": {
     "tslib": "^2.6.2",

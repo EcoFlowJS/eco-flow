@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/api",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -10,13 +10,14 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "author": "EcoFlowJS",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@ecoflow/module": "^0.0.27",
-    "@ecoflow/types": "^0.0.25",
+    "@ecoflow/module": "^0.0.28",
+    "@ecoflow/types": "^0.0.26",
     "@koa/router": "^12.0.1",
     "koa": "^2.15.3",
     "thread-promises": "^1.6.3"

@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/services",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -10,17 +10,18 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "devDependencies": {
     "typescript": "^5.3.3"
   },
   "author": "EcoFlowJS",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@ecoflow/database": "^0.0.27",
-    "@ecoflow/helper": "^0.0.27",
-    "@ecoflow/types": "^0.0.25",
+    "@ecoflow/database": "^0.0.28",
+    "@ecoflow/helper": "^0.0.28",
+    "@ecoflow/types": "^0.0.26",
     "mongoose": "^8.0.3"
   },
   "repository": {

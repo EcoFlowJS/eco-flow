@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/module",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -10,18 +10,19 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "keywords": [],
   "author": "EcoFlowJS",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/md5": "^2.3.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@ecoflow/helper": "^0.0.27",
-    "@ecoflow/types": "^0.0.25",
+    "@ecoflow/helper": "^0.0.28",
+    "@ecoflow/types": "^0.0.26",
     "fs-extra": "^11.2.0",
     "md5": "^2.3.0",
     "node-stream-zip": "^1.15.0",
