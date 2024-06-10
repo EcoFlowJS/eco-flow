@@ -1,9 +1,4 @@
-<h1><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0"><img src="./static/ecoflow.svg" width="50px"></td>
-    <td >EcoFlowJS</td>
-  </tr>
-</table></h1>
+# EcoFlowJS <img src="./static/ecoflow.svg" width="28px">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/EcoFlowJS/eco-flow/blob/main/LICENSE)
 
@@ -13,12 +8,7 @@ EcoFlowJS enables low-code programming for deploying RESTful APIs effortlessly.
 
 Follow this guide to install and run EcoFlowJS in minutes.
 
-<h3><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Prerequisites</td>
-    <td ><img src="./static/checkList.png" height="18px"></td>
-  </tr>
-</table></h3>
+### Prerequisites <img src="./static/checkList.png" height="18px">
 
 Ensure you have a [supported version of Node.js](https://nodejs.org/en/download) installed.
 
@@ -32,12 +22,7 @@ sudo npm install -g @ecoflow/cli@latest
 
 > **Note:** On Windows, omit `sudo`.
 
-<h2><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Running EcoFlowJS</td>
-    <td ><img src="./static/play.png" height="18px"></td>
-  </tr>
-</table></h2>
+## Running EcoFlowJS <img src="./static/play.png" height="18px">
 
 After installation, start EcoFlowJS with the `ecoflow` command:
 
@@ -113,12 +98,7 @@ npm run frontend
 
 > **Note:** Ensure you cloned with submodules for these commands to work.
 
-<h2><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Command-line Usage</td>
-    <td ><img src="./static/cli.png" width="30" /></td>
-  </tr>
-</table></h2>
+## Command-line Usage <img src="./static/cli.png" width="30" />
 
 EcoFlowJS can be started using the `ecoflow` command with various arguments:
 
@@ -143,12 +123,7 @@ ecoflow [-?] [-h] [--configName config.json] [--userDir DIR] [--port PORT]
 
 Currently under development.
 
-<h2><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Upgrading EcoFlowJS </td>
-    <td ><img src="./static/upgrade.png" width="22" /></td>
-  </tr>
-</table></h2>
+## Upgrading EcoFlowJS <img src="./static/upgrade.png" width="22" />
 
 To upgrade to the latest version:
 
@@ -162,12 +137,7 @@ sudo npm install -g @ecoflow/cli@latest
 
 Project documentation is available [here](https://eco-flow.in/docs/category/documentation)
 
-<h2><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Contributing</td>
-    <td ><img src="./static/contributing.png" width="28" /></td>
-  </tr>
-</table></h2>
+## Contributing <img src="./static/contributing.png" width="28" />
 
 Please review our [contributing guide](https://github.com/EcoFlowJS/eco-flow/blob/main/CONTRIBUTING.md) before submitting a pull request.
 
@@ -180,12 +150,7 @@ For support, email teams.ecoflow@gmail.com or join us on:
 - [Discord](https://discord.gg/arvbpxDUHb)
 - [Slack channel](https://join.slack.com/t/ecoflowjs/shared_invite/zt-2jpm9657q-dmugTuLg_udxo9jTtnwZjA).
 
-<h2><table style="border: none; padding:0; margin:0" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="border: none; padding:0; margin:0">Feedback</td>
-    <td ><img src="./static/feedback.png" width="20" /></td>
-  </tr>
-</table></h2>
+## Feedback <img src="./static/feedback.png" width="20" />
 
 We welcome your feedback at teams.ecoflow@gmail.com.
 
