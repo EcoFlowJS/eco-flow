@@ -10,18 +10,19 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "author": "EcoFlowJS",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/knex": "^0.16.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@ecoflow/helper": "^0.0.27",
-    "@ecoflow/types": "^0.0.25",
-    "@ecoflow/utils": "^0.0.27",
+    "@ecoflow/helper": "^0.0.28",
+    "@ecoflow/types": "^0.0.26",
+    "@ecoflow/utils": "^0.0.28",
     "fs-extra": "^11.2.0",
     "knex": "^3.0.1",
     "mongoose": "^8.0.2",
