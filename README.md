@@ -1,18 +1,18 @@
-# EcoFlowJS <img src="./static/ecoflow.svg" width="28px">
+# <img src="./static/ecoflow.svg" width="28px"> EcoFlowJS
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/EcoFlowJS/eco-flow/blob/main/LICENSE)
 
 EcoFlowJS enables low-code programming for deploying RESTful APIs effortlessly.
 
-## Quick Start 🚀
+## 🚀 Quick Start
 
 Follow this guide to install and run EcoFlowJS in minutes.
 
-### Prerequisites <img src="./static/checkList.png" height="18px">
+### <img src="./static/checkList.png" height="18px"> Prerequisites
 
 Ensure you have a [supported version of Node.js](https://nodejs.org/en/download) installed.
 
-### Installation ⬇️
+### ⬇️ Installation
 
 To install EcoFlowJS globally using npm:
 
@@ -22,7 +22,7 @@ sudo npm install -g @ecoflow/cli@latest
 
 > **Note:** On Windows, omit `sudo`.
 
-## Running EcoFlowJS <img src="./static/play.png" height="18px">
+## <img src="./static/play.png" height="18px"> Running EcoFlowJS
 
 After installation, start EcoFlowJS with the `ecoflow` command:
 
@@ -48,7 +48,7 @@ ecoflow
 
 Access the EcoFlowJS editor at [http://127.0.0.1:4000](http://127.0.0.1:4000).
 
-## Developer Guide 📃
+## 📃 Developer Guide
 
 To run the latest code from the repository, follow these steps:
 
@@ -98,7 +98,7 @@ npm run frontend
 
 > **Note:** Ensure you cloned with submodules for these commands to work.
 
-## Command-line Usage <img src="./static/cli.png" width="30" />
+## <img src="./static/cli.png" width="30" /> Command-line Usage
 
 EcoFlowJS can be started using the `ecoflow` command with various arguments:
 
@@ -123,7 +123,7 @@ ecoflow [-?] [-h] [--configName config.json] [--userDir DIR] [--port PORT]
 
 Currently under development.
 
-## Upgrading EcoFlowJS <img src="./static/upgrade.png" width="22" />
+## <img src="./static/upgrade.png" width="22" /> Upgrading EcoFlowJS
 
 To upgrade to the latest version:
 
@@ -133,34 +133,34 @@ sudo npm install -g @ecoflow/cli@latest
 
 > **Note:** On Windows, omit `sudo`.
 
-## Documentation 📜
+## 📜 Documentation
 
 Project documentation is available [here](https://eco-flow.in/docs/category/documentation)
 
-## Contributing <img src="./static/contributing.png" width="28" />
+## <img src="./static/contributing.png" width="28" /> Contributing
 
 Please review our [contributing guide](https://github.com/EcoFlowJS/eco-flow/blob/main/CONTRIBUTING.md) before submitting a pull request.
 
 This project follows the [Contributor Covenant 2](https://www.contributor-covenant.org/version/2/1/code_of_conduct/). Report any violations to teams.ecoflow@gmail.com.
 
-## Support 🤝
+## 🤝 Support
 
 For support, email teams.ecoflow@gmail.com or join us on:
 
 - [Discord](https://discord.gg/arvbpxDUHb)
 - [Slack channel](https://join.slack.com/t/ecoflowjs/shared_invite/zt-2jpm9657q-dmugTuLg_udxo9jTtnwZjA).
 
-## Feedback <img src="./static/feedback.png" width="20" />
+## <img src="./static/feedback.png" width="20" /> Feedback
 
 We welcome your feedback at teams.ecoflow@gmail.com.
 
-## License 🪪
+## 🪪 License
 
 Copyright (c) 2023 EcoFLowJS
 
 This project is licensed under the [MIT License](https://github.com/EcoFlowJS/eco-flow/blob/main/LICENSE).
 
-## Authors 🙍‍♂️
+## 🙍‍♂️ Authors
 
 _The Authors of this software are listed below:_
 
