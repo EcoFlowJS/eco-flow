@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/cli",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "bin": {
@@ -20,7 +20,7 @@
   "author": "EcoFlowJS",
   "license": "MIT",
   "dependencies": {
-    "@ecoflow/ecoflow": "^0.0.36",
+    "@ecoflow/ecoflow": "^0.0.37",
     "@ecoflow/types": "^0.0.26",
     "chalk": "^4.1.2",
     "commander": "^11.0.0",

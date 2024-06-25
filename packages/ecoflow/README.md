@@ -8,7 +8,7 @@ EcoFlowJS enables low-code programming for deploying RESTful APIs effortlessly.
 
 Follow this guide to install and run EcoFlowJS in minutes.
 
-### Prerequisites <img src="./static/checkList.png" height="18px">
+### <img src="./static/checkList.png" height="18px"> Prerequisites
 
 Ensure you have a [supported version of Node.js](https://nodejs.org/en/download) installed.
 
