@@ -22,7 +22,7 @@
     "@ecoflow/api": "^0.0.28",
     "@ecoflow/base-panel": "^0.1.31",
     "@ecoflow/database": "^0.0.28",
-    "@ecoflow/flow-editor": "^0.1.31",
+    "@ecoflow/flow-editor": "^0.1.32",
     "@ecoflow/flows": "^0.0.28",
     "@ecoflow/helper": "^0.0.28",
     "@ecoflow/module": "^0.0.28",
