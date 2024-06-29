@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/ecoflow",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -18,15 +18,15 @@
   "author": "EcoFlowJS",
   "license": "MIT",
   "dependencies": {
-    "@ecoflow/admin-panel": "^0.1.30",
+    "@ecoflow/admin-panel": "^0.1.31",
     "@ecoflow/api": "^0.0.28",
-    "@ecoflow/base-panel": "^0.1.31",
+    "@ecoflow/base-panel": "^0.1.32",
     "@ecoflow/database": "^0.0.28",
-    "@ecoflow/flow-editor": "^0.1.32",
+    "@ecoflow/flow-editor": "^0.1.33",
     "@ecoflow/flows": "^0.0.28",
     "@ecoflow/helper": "^0.0.28",
     "@ecoflow/module": "^0.0.28",
-    "@ecoflow/schema-editor": "^0.1.30",
+    "@ecoflow/schema-editor": "^0.1.31",
     "@ecoflow/services": "^0.0.28",
     "@ecoflow/types": "^0.0.26",
     "@ecoflow/utils": "^0.0.28",
