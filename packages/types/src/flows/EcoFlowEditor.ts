@@ -208,17 +208,17 @@ export interface FlowConfigurations {
  * Interface for defining a mapping of flow keys to descriptions.
  */
 export interface FlowsDescription {
-  [key: string]: Describtions;
+  [key: string]: Descriptions;
 }
 
 /**
  * Interface representing descriptions containing definitions, connections, and configurations.
- * @interface Describtions
+ * @interface Descriptions
  * @property {Nodes} definitions - The nodes definitions.
  * @property {Edge<FlowsEdgeDataTypes>[]} connections - The connections between nodes.
  * @property {NodeConfiguration[]} configurations - The configurations of the nodes.
  */
-export interface Describtions {
+export interface Descriptions {
   definitions: Nodes;
   connections: Edge<FlowsEdgeDataTypes>[];
   configurations: NodeConfiguration[];

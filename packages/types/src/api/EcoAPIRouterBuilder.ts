@@ -53,6 +53,8 @@ export type NodeRequestController =
   | string
   | RouterRequestControllerBuilderOptions;
 
+export type NodeEventListenerController = string | ((...args: any[]) => void);
+
 /**
  * MiddlewareController type definition.
  * This type is used to represent a middleware controller in the application.
@@ -114,4 +116,12 @@ export interface EcoContext extends Context {
   moduleDatas?: FlowsNodeDataTypes;
   inputs?: { [key: string]: any };
   next: () => void;
+}
+
+export interface EcoEvent {
+  payload: EcoContextPayload;
+  moduleDatas?: FlowsNodeDataTypes;
+  inputs?: { [key: string]: any };
+  next: () => void;
+  [key: string]: any;
 }

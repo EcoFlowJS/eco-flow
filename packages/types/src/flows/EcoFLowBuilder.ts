@@ -68,6 +68,12 @@ export interface EcoFLowBuilder {
   get consoleNodes(): Nodes;
 
   /**
+   * Getter method to retrieve the emitter nodes.
+   * @returns Nodes - The emitter nodes.
+   */
+  get emitterNodes(): Nodes;
+
+  /**
    * Builds a stack of nodes based on the given flow configurations.
    * @param {FlowsDescription} flowConfigurations - The flow configurations to build the stack from.
    * @returns {Promise<[NodesStack, NodeConfiguration[]]>} A promise that resolves to an array containing the nodes stack and node configurations.
