@@ -20,6 +20,7 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   private _startingNodes: Nodes;
   private _responseNodes: Nodes;
   private _consoleNodes: Nodes;
+  private _emitterNodes: Nodes;
 
   /**
    * Constructor for a graph object.
@@ -35,6 +36,7 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
     this._startingNodes = [];
     this._responseNodes = [];
     this._consoleNodes = [];
+    this._emitterNodes = [];
   }
 
   /**
@@ -67,7 +69,10 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
        */
       nodes.push(
         ...flowDescription[flow].definitions.filter(
-          (node) => node.type !== "Request" && !node.data.disabled
+          (node) =>
+            node.type !== "Request" &&
+            node.type !== "EventListener" &&
+            !node.data.disabled
         )
       );
 
@@ -92,7 +97,9 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
        * @returns {Array} An array of starting nodes that meet the filter criteria.
        */
       this._startingNodes = flowDescription[flow].definitions.filter(
-        (node) => node.type === "Request" && !node.data.disabled
+        (node) =>
+          (node.type === "Request" || node.type === "EventListener") &&
+          !node.data.disabled
       );
 
       /**
@@ -116,6 +123,10 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
         (node) => node.type === "Debug" && !node.data.disabled
       );
 
+      this._emitterNodes = flowDescription[flow].definitions.filter(
+        (node) => node.type === "EventEmitter" && !node.data.disabled
+      );
+
       /**
        * Maps over the starting nodes and creates a connection list for each node.
        * Each connection list contains only the starting node.
@@ -135,10 +146,10 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
       configurations.push(...flowDescription[flow].configurations);
     });
 
-    this._nodes = nodes;
-    this._edges = edges;
+    this._nodes = nodes.map((node) => ({ ...node, selected: false }));
+    this._edges = edges.map((edge) => ({ ...edge, selected: false }));
     this._configurations = configurations;
-    return [nodes, edges, configurations, connectionLists];
+    return [this._nodes, this._edges, configurations, connectionLists];
   };
 
   /**
@@ -277,5 +288,13 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
    */
   get consoleNodes(): Nodes {
     return this._consoleNodes;
+  }
+
+  /**
+   * Getter method to retrieve the emitter nodes.
+   * @returns {Nodes} The emitter nodes.
+   */
+  get emitterNodes(): Nodes {
+    return this._emitterNodes;
   }
 }

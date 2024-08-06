@@ -8,6 +8,9 @@ import { Node } from "@reactflow/core";
  */
 const isEndNode = (
   node: Node<FlowsNodeDataTypes, ModuleTypes | string | undefined>
-): boolean => node.type === "Response" || node.type === "Debug";
+): boolean =>
+  node.type === "Response" ||
+  node.type === "Debug" ||
+  node.type === "EventEmitter";
 
 export default isEndNode;
