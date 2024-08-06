@@ -1,4 +1,4 @@
-import { EcoContext, UserControllers } from "@ecoflow/types";
+import { EcoContext, EcoEvent, UserControllers } from "@ecoflow/types";
 
 /**
  * Debug controller function that sets the debug payload in the EcoContext, calls the userControllers function,
@@ -9,16 +9,14 @@ import { EcoContext, UserControllers } from "@ecoflow/types";
  * @returns {Promise<void>} A Promise that resolves when the userControllers function is called.
  */
 const debugController = async (
-  ecoContext: EcoContext,
+  ecoContext: EcoContext | EcoEvent,
   controllerResponse: any,
-  userControllers: () => Promise<UserControllers>
+  userControllers: (ctx: EcoContext | EcoEvent) => Promise<UserControllers>
 ): Promise<void> => {
   ecoContext.debugPayload = controllerResponse;
-  await new Promise((resolve, reject) => {
-    const userController = userControllers.call(ecoContext);
-    if (userController instanceof Promise) userController.then(resolve, reject);
-    resolve(userController);
-  });
+  await new Promise((resolve, reject) =>
+    userControllers.call(ecoContext, ecoContext).then(resolve, reject)
+  );
 
   delete ecoContext.debugPayload;
 };

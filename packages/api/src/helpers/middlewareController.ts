@@ -1,4 +1,4 @@
-import { EcoContext, UserControllers } from "@ecoflow/types";
+import { EcoContext, EcoEvent, UserControllers } from "@ecoflow/types";
 
 /**
  * Middleware controller function that handles asynchronous operations for a given ID and EcoContext.
@@ -10,15 +10,13 @@ import { EcoContext, UserControllers } from "@ecoflow/types";
  */
 const middlewareController = async (
   id: string,
-  ecoContext: EcoContext,
-  userControllers: () => Promise<UserControllers>,
+  ecoContext: EcoContext | EcoEvent,
+  userControllers: (ctx: EcoContext | EcoEvent) => Promise<UserControllers>,
   controllerResponse: { [key: string]: any }
 ): Promise<void> => {
-  await new Promise((resolve, reject) => {
-    const userController = userControllers.call(ecoContext);
-    if (userController instanceof Promise) userController.then(resolve, reject);
-    resolve(userController);
-  });
+  await new Promise((resolve, reject) =>
+    userControllers.call(ecoContext, ecoContext).then(resolve, reject)
+  );
 
   controllerResponse[id] = ecoContext.payload || {};
 };
