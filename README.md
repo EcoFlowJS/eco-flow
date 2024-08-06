@@ -108,7 +108,7 @@ For more detailed instructions, refer to our [Getting Started Guide](https://doc
 
 - [ ] Implement admin CLI commands
 - [ ] Enhance normal CLI commands
-- [ ] Integrate Socket.io as request and emitter nodes
+- [x] Integrate Socket.io as request and emitter nodes
 - [ ] Implement file manipulation operations
 - [ ] Add more official packages
 - [ ] Create an official registry on top of npm registry
