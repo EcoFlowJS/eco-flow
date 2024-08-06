@@ -38,6 +38,8 @@ export interface ExtractedRawNodes {
   middlewareNodes: ModuleNodes[];
   responseNodes: ModuleNodes[];
   consoleNodes: ModuleNodes[];
+  eventListenerNodes: ModuleNodes[];
+  eventEmitterNodes: ModuleNodes[];
 }
 
 /**

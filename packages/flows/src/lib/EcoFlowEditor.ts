@@ -6,7 +6,7 @@ import {
   EcoFlowEditor as IEcoFlowEditor,
   EcoFLowBuilder as IEcoFLowBuilder,
   configOptions,
-  Describtions,
+  Descriptions,
   NodeConfiguration,
   Node,
   NodeConnections,
@@ -539,8 +539,12 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       if (!(await this.isFlow(flowName))) return {};
       const result: FlowsDescription = Object.create({});
       result[flowName] = {
-        definitions: (await this.getFlowDefinitions(flowName))[flowName],
-        connections: (await this.getFlowConnections(flowName))[flowName],
+        definitions: (await this.getFlowDefinitions(flowName))[flowName].map(
+          (definition) => ({ ...definition, selected: false })
+        ),
+        connections: (await this.getFlowConnections(flowName))[flowName].map(
+          (connection) => ({ ...connection, selected: false })
+        ),
         configurations: (await this.getFlowConfigurations(flowName))[flowName],
       };
       return result;
@@ -561,9 +565,9 @@ export class EcoFlowEditor implements IEcoFlowEditor {
   async initialize(): Promise<this> {
     const { _, log } = ecoFlow;
     log.info("Initializing the existing flow...");
-    const flowDescribtions = await this.flowsDescription();
+    const flowDescriptions = await this.flowsDescription();
     try {
-      await this.deploy(flowDescribtions);
+      await this.deploy(flowDescriptions);
     } catch (error: string | any) {
       _.isString(error) ? log.error(error) : log.error(error.msg);
     }
@@ -582,7 +586,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     const nodes: Nodes = [];
     Object.keys(definitions).map((key) => {
       if (_.has(definitions[key], "definitions"))
-        nodes.push(...(<Describtions>definitions[key]).definitions);
+        nodes.push(...(<Descriptions>definitions[key]).definitions);
       else nodes.push(...(<Nodes>definitions[key]));
     });
 

@@ -1,11 +1,10 @@
 import {
   API_METHODS,
-  EcoContext,
-  EcoContextPayload,
   EcoAPIRouterBuilder as IEcoAPIRouterBuilder,
   MiddlewareStack,
   ModuleSpecs,
   NodeConfiguration,
+  NodeEventListenerController,
   NodeRequestController,
   NodesStack,
   RequestStack,
@@ -14,12 +13,8 @@ import {
 } from "@ecoflow/types";
 import buildRouterPath from "../helpers/buildRouterPath";
 import { Context } from "koa";
-import TPromise from "thread-promises";
-import responseController from "../helpers/responseController";
-import middlewareController from "../helpers/middlewareController";
-import buildUserControllers from "../helpers/buildUserControllers";
-import debugController from "../helpers/debugController";
 import EcoModule from "@ecoflow/module";
+import buildController from "../helpers/buildController";
 
 /**
  * A class that builds an Eco API router based on the provided node stack and configurations.
@@ -81,97 +76,15 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
           .getModuleSchema(new EcoModule.IDBuilders(controller.split(".")[0]))
           .getController(controller.split(".")[1])
       : controller ||
-        function (this: RouterRequestControllerBuilderOptions) {
+        async function (this: RouterRequestControllerBuilderOptions) {
           return this;
         };
 
     return buildRouterPath(
-      await new Promise((resolve, reject) => {
-        const apiConfigs = nodeController.call(inputs);
-        if (apiConfigs instanceof Promise) apiConfigs.then(resolve, reject);
-        else resolve(apiConfigs);
-      })
+      await new Promise((resolve, reject) =>
+        nodeController.call(inputs).then(resolve, reject)
+      )
     );
-  }
-
-  /**
-   * Builds a Koa controller function with the given middlewares.
-   * @param {NodesStack} [middlewares=[]] - An array of middleware functions to be executed.
-   * @returns {Promise<void>} A Koa controller function that handles the middleware execution.
-   */
-  private async buildKoaController(middlewares: NodesStack = []) {
-    return async (ctx: Context) => {
-      const { _ } = ecoFlow;
-      const controllerResponse = Object.create({});
-      const middlewareResponse = Object.create({});
-      const concurrentMiddlewares: TPromise<Array<void>, void, void>[] =
-        middlewares.map(
-          (middleware) =>
-            new TPromise<Array<void>, void, void>(async (resolve) => {
-              const controllers = await buildUserControllers(
-                middleware,
-                this._configurations
-              );
-              let isNext = true;
-              let lastControllerID: string | null = null;
-
-              const ecoContext: EcoContext = {
-                ...ctx,
-                payload: { msg: (<any>ctx.request).body || {} },
-                next() {
-                  isNext = true;
-                },
-              };
-
-              for await (const controller of controllers) {
-                const [id, type, datas, inputs, userControllers] = controller;
-                if (_.has(controllerResponse, id)) continue;
-
-                if (!isNext && type === "Middleware") {
-                  controllerResponse[id] = lastControllerID
-                    ? controllerResponse[lastControllerID]
-                    : (ecoContext.payload as never);
-                  lastControllerID = id;
-                  continue;
-                }
-                isNext = false;
-                ecoContext.inputs = inputs;
-                ecoContext.moduleDatas = datas;
-
-                if (type === "Middleware")
-                  await middlewareController(
-                    id,
-                    ecoContext,
-                    userControllers,
-                    controllerResponse
-                  );
-
-                if (type === "Response")
-                  await responseController(
-                    ecoContext,
-                    ctx,
-                    userControllers,
-                    middlewareResponse
-                  );
-
-                if (type === "Debug")
-                  await debugController(
-                    ecoContext,
-                    lastControllerID
-                      ? controllerResponse[lastControllerID]
-                      : {},
-                    userControllers
-                  );
-
-                lastControllerID = id;
-              }
-              resolve();
-            })
-        );
-
-      await Promise.all(concurrentMiddlewares);
-      if (!_.isEmpty(middlewareResponse)) ctx.body = middlewareResponse;
-    };
   }
 
   /**
@@ -186,8 +99,9 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
   ): Promise<[API_METHODS, string, (ctx: Context) => void][]> {
     let result: [API_METHODS, string, (ctx: Context) => void][] = [];
     this._isDuplicateRoutes = {};
+
     for await (const node of requestStack) {
-      const { ecoModule } = ecoFlow;
+      const { ecoModule, _ } = ecoFlow;
       const { type, controller } = (await ecoModule.getNodes(
         node.data.moduleID._id
       ))!;
@@ -208,8 +122,11 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       }
       this._isDuplicateRoutes[checkPath] = [node.id];
 
-      const koaController = await this.buildKoaController(
-        middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
+      const koaController = await buildController(
+        _.cloneDeep(
+          middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
+        ),
+        _.cloneDeep(this._configurations)
       );
       result.push([method, requestPath, koaController]);
     }
@@ -236,6 +153,61 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
     return result;
   }
 
+  private async buildEventListener(
+    controller: ModuleSpecs["controller"],
+    inputs?: NodeConfiguration["configs"],
+    callback?: (...args: any[]) => void
+  ): Promise<any> {
+    const { _, ecoModule } = ecoFlow;
+
+    const nodeController: (
+      inputs?: {
+        [key: string]: any;
+      },
+      callback?: (...args: any[]) => void
+    ) => Promise<NodeEventListenerController> = _.isString(controller)
+      ? ecoModule
+          .getModuleSchema(new EcoModule.IDBuilders(controller.split(".")[0]))
+          .getController(controller.split(".")[1])
+      : controller || async function () {};
+
+    return await new Promise((resolve, reject) =>
+      nodeController.call(inputs, inputs, callback).then(resolve, reject)
+    );
+  }
+
+  private async initEventConfigs(
+    requestStack: RequestStack,
+    middlewareStack: MiddlewareStack
+  ): Promise<void> {
+    const { socket } = ecoFlow;
+    socket.disconnectSockets(true);
+    socket.sockets.removeAllListeners();
+
+    for await (const node of requestStack) {
+      const { ecoModule, _ } = ecoFlow;
+
+      const { type, controller } = (await ecoModule.getNodes(
+        node.data.moduleID._id
+      ))!;
+
+      const inputs = this._configurations.find(
+        (configuration) => configuration.nodeID === node.id
+      )?.configs;
+
+      if (type !== "EventListener") continue;
+
+      const eventController = await buildController(
+        _.cloneDeep(
+          middlewareStack.find((mStack) => mStack[0].id === node.id)?.[1]
+        ),
+        _.cloneDeep(this._configurations),
+        "EVENT"
+      );
+      await this.buildEventListener(controller, inputs, eventController);
+    }
+  }
+
   /**
    * Asynchronously initializes the Eco API Router Builder by generating route configurations
    * based on the request and middleware stacks. It then maps the generated route configurations
@@ -249,6 +221,8 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
       requestStack,
       middlewareStack
     );
+
+    await this.initEventConfigs(requestStack, middlewareStack);
 
     this._routes = routesSchema.map((configs) => {
       const [method, path, controller] = configs;

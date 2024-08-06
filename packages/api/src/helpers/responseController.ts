@@ -17,18 +17,17 @@ import { Context } from "koa";
 const responseController = async (
   ecoContext: EcoContext,
   koaContext: Context,
-  userControllers: () => Promise<UserControllers>,
+  userControllers: (ctx: EcoContext) => Promise<UserControllers>,
   middlewareResponse: { [key: string]: any }
 ): Promise<void> => {
   const [id, response]: ResponseController = await new Promise(
-    (resolve, reject) => {
-      const userController = userControllers.call(
-        ecoContext
-      ) as Promise<ResponseController>;
-      if (userController instanceof Promise)
-        userController.then(resolve, reject);
-      resolve(userController);
-    }
+    (resolve, reject) =>
+      (
+        userControllers.call(
+          ecoContext,
+          ecoContext
+        ) as Promise<ResponseController>
+      ).then(resolve, reject)
   );
 
   middlewareResponse[id] = response;

@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/database",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -20,9 +20,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@ecoflow/helper": "^0.0.28",
-    "@ecoflow/types": "^0.0.26",
-    "@ecoflow/utils": "^0.0.28",
+    "@ecoflow/helper": "^0.0.29",
+    "@ecoflow/types": "^0.0.27",
+    "@ecoflow/utils": "^0.0.29",
     "fs-extra": "^11.2.0",
     "knex": "^3.0.1",
     "mongoose": "^8.0.2",

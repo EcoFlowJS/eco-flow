@@ -72,6 +72,8 @@ const buildUserControllers = async (
         ? "Debug"
         : middleware.type === "Response"
         ? "Response"
+        : middleware.type === "EventEmitter"
+        ? "EventEmitter"
         : "Request";
 
     /**

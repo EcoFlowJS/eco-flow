@@ -244,7 +244,13 @@ export interface ModuleResults {
 /**
  * Defines the possible types of modules: Request, Middleware, Response, Debug.
  */
-export type ModuleTypes = "Request" | "Middleware" | "Response" | "Debug";
+export type ModuleTypes =
+  | "Request"
+  | "Middleware"
+  | "Response"
+  | "Debug"
+  | "EventListener"
+  | "EventEmitter";
 
 export type ModuleSpecsInputsTypes =
   | "Route" // Default value for Request Node Types
