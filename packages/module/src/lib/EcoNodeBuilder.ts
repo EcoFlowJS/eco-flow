@@ -50,11 +50,21 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     );
     const consoleNodes: ModuleNodes[] = nodes.filter((n) => n.type === "Debug");
 
+    const eventListenerNodes: ModuleNodes[] = nodes.filter(
+      (n) => n.type === "EventListener"
+    );
+
+    const eventEmitterNodes: ModuleNodes[] = nodes.filter(
+      (n) => n.type === "EventEmitter"
+    );
+
     return {
       requestNodes,
       middlewareNodes,
       responseNodes,
       consoleNodes,
+      eventListenerNodes,
+      eventEmitterNodes,
     };
   }
 
@@ -228,6 +238,92 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     });
   }
 
+  private buildEventListenerNodes(
+    eventListenerNodes: ModuleNodes[]
+  ): ModuleNodes[] {
+    if (eventListenerNodes.length === 0) return [];
+
+    const { _ } = ecoFlow;
+
+    const isInputEventChannel = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "eventChannel").length > 0;
+
+    const isInputListenerMode = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "listenerMode").length > 0;
+
+    return eventListenerNodes.map((node) => {
+      if (_.isUndefined(node.inputs)) node.inputs = [];
+
+      if (!isInputEventChannel(node.inputs))
+        node.inputs = [
+          {
+            name: "eventChannel",
+            label: "Event Channel",
+            type: "String",
+            required: true,
+          },
+          ...node.inputs,
+        ];
+
+      if (!isInputListenerMode(node.inputs))
+        node.inputs = [
+          {
+            name: "listenerMode",
+            label: "Listener Mode",
+            type: "SelectPicker",
+            pickerOptions: ["ON", "ONCE", "ANY"],
+            required: true,
+            defaultValue: "ON",
+          },
+          ...node.inputs,
+        ];
+
+      return node;
+    });
+  }
+
+  private buildEventEmitterNodes(
+    eventListenerNodes: ModuleNodes[]
+  ): ModuleNodes[] {
+    if (eventListenerNodes.length === 0) return [];
+
+    const { _ } = ecoFlow;
+
+    const isInputEventChannel = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "eventChannel").length > 0;
+
+    const isInputEmitterPayload = (inputs: ModuleSpecsInputs[]) =>
+      inputs.filter((input) => input.name === "emitterPayload").length > 0;
+
+    return eventListenerNodes.map((node) => {
+      if (_.isUndefined(node.inputs)) node.inputs = [];
+
+      if (!isInputEmitterPayload(node.inputs))
+        node.inputs = [
+          {
+            name: "emitterPayload",
+            label: "Emitter Payload",
+            type: "String",
+            required: true,
+          },
+          ...node.inputs,
+        ];
+
+      if (!isInputEventChannel(node.inputs))
+        node.inputs = [
+          {
+            name: "eventChannel",
+            label: "Event Channel",
+            type: "String",
+            required: true,
+          },
+          ...node.inputs,
+        ];
+
+      return node;
+    });
+  }
+
   /**
    * Builds and modifies response nodes for a given array of ModuleNodes.
    * @param {ModuleNodes[]} responseNodes - An array of ModuleNodes representing response nodes.
@@ -271,8 +367,14 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
    */
   async buildNodes(): Promise<ModuleNodes[]> {
     const { _, server, ecoModule } = ecoFlow;
-    const { requestNodes, middlewareNodes, responseNodes, consoleNodes } =
-      this.extractNodes;
+    const {
+      requestNodes,
+      middlewareNodes,
+      responseNodes,
+      consoleNodes,
+      eventListenerNodes,
+      eventEmitterNodes,
+    } = this.extractNodes;
 
     /**
      * Builds an array of nodes by concatenating the arrays of request nodes, middleware nodes,
@@ -288,6 +390,8 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
       ...this.buildMiddlewareNodes(middlewareNodes),
       ...this.buildResponseNode(responseNodes),
       ...this.buildDebugNodes(consoleNodes),
+      ...this.buildEventListenerNodes(eventListenerNodes),
+      ...this.buildEventEmitterNodes(eventEmitterNodes),
     ];
 
     /**

@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/module",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -21,8 +21,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@ecoflow/helper": "^0.0.28",
-    "@ecoflow/types": "^0.0.26",
+    "@ecoflow/helper": "^0.0.29",
+    "@ecoflow/types": "^0.0.27",
     "fs-extra": "^11.2.0",
     "md5": "^2.3.0",
     "node-stream-zip": "^1.15.0",
