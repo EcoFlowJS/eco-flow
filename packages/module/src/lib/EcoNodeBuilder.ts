@@ -39,21 +39,55 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
    */
   private get extractNodes(): ExtractedRawNodes {
     const nodes: ModuleNodes[] = this.getSchemaNodes;
+
+    /**
+     * Filters an array of nodes to only include nodes of type "Request".
+     * @param {ModuleNodes[]} nodes - The array of nodes to filter.
+     * @returns {ModuleNodes[]} An array of nodes that are of type "Request".
+     */
     const requestNodes: ModuleNodes[] = nodes.filter(
       (n) => n.type === "Request"
     );
+
+    /**
+     * Filters an array of nodes to only include those of type "Middleware".
+     * @param {ModuleNodes[]} nodes - The array of nodes to filter.
+     * @returns {ModuleNodes[]} An array of nodes that are of type "Middleware".
+     */
     const middlewareNodes: ModuleNodes[] = nodes.filter(
       (n) => n.type === "Middleware"
     );
+
+    /**
+     * Filters an array of nodes to only include those of type "Response".
+     * @param {ModuleNodes[]} nodes - The array of nodes to filter.
+     * @returns {ModuleNodes[]} An array of nodes that are of type "Response".
+     */
     const responseNodes: ModuleNodes[] = nodes.filter(
       (n) => n.type === "Response"
     );
+
+    /**
+     * Filters an array of nodes to only include nodes of type "Debug".
+     * @param {ModuleNodes[]} nodes - An array of ModuleNodes to filter.
+     * @returns {ModuleNodes[]} An array of ModuleNodes of type "Debug".
+     */
     const consoleNodes: ModuleNodes[] = nodes.filter((n) => n.type === "Debug");
 
+    /**
+     * Filters an array of nodes to only include those of type "EventListener".
+     * @param {ModuleNodes[]} nodes - The array of nodes to filter.
+     * @returns {ModuleNodes[]} An array of nodes that are of type "EventListener".
+     */
     const eventListenerNodes: ModuleNodes[] = nodes.filter(
       (n) => n.type === "EventListener"
     );
 
+    /**
+     * Filters an array of nodes to only include those of type "EventEmitter".
+     * @param {ModuleNodes[]} nodes - The array of nodes to filter.
+     * @returns {ModuleNodes[]} An array of nodes that are of type "EventEmitter".
+     */
     const eventEmitterNodes: ModuleNodes[] = nodes.filter(
       (n) => n.type === "EventEmitter"
     );
@@ -66,6 +100,43 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
       eventListenerNodes,
       eventEmitterNodes,
     };
+  }
+
+  /**
+   * Builds an array of ModuleNodes based on the module configurations in ecoFlow.
+   * @returns {ModuleNodes[]} An array of ModuleNodes containing the module name and nodes.
+   */
+  private buildConfigurationsNodes(): ModuleNodes[] {
+    /**
+     * Destructures the _ and moduleConfigurations properties from the ecoFlow object.
+     * @param {Object} ecoFlow - The ecoFlow object containing _ and moduleConfigurations properties.
+     * @returns None
+     */
+    const { _, moduleConfigurations } = ecoFlow;
+
+    /**
+     * An array of ModuleNodes, representing nodes in a module.
+     * @type {ModuleNodes[]}
+     */
+    const moduleNodes: ModuleNodes[] = [];
+
+    this._moduleSchema
+      .map((m) => ({
+        moduleName: m.module?.name || m.name,
+        nodes: m.module?.nodes || [],
+      }))
+      .forEach(({ moduleName, nodes }) => {
+        if (nodes.filter((n) => n.type === "Configuration").length === 0)
+          return null;
+
+        moduleConfigurations[moduleName] = [];
+
+        nodes
+          .filter((n) => n.type === "Configuration")
+          .forEach((node) => moduleNodes.push(node));
+      });
+
+    return moduleNodes;
   }
 
   /**
@@ -238,16 +309,36 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     });
   }
 
+  /**
+   * Builds event listener nodes by adding necessary inputs if they are missing.
+   * @param {ModuleNodes[]} eventListenerNodes - An array of module nodes representing event listeners.
+   * @returns {ModuleNodes[]} - An array of module nodes with updated inputs.
+   */
   private buildEventListenerNodes(
     eventListenerNodes: ModuleNodes[]
   ): ModuleNodes[] {
+    /**
+     * Check if the length of eventListenerNodes array is 0, if true, return an empty array.
+     * @param {Array} eventListenerNodes - The array of event listener nodes to check.
+     * @returns {Array} An empty array if eventListenerNodes length is 0.
+     */
     if (eventListenerNodes.length === 0) return [];
 
     const { _ } = ecoFlow;
 
+    /**
+     * Checks if the given array of ModuleSpecsInputs contains an input with the name "eventChannel".
+     * @param {ModuleSpecsInputs[]} inputs - The array of ModuleSpecsInputs to check.
+     * @returns {boolean} True if the array contains an input with the name "eventChannel", false otherwise.
+     */
     const isInputEventChannel = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "eventChannel").length > 0;
 
+    /**
+     * Checks if the given array of ModuleSpecsInputs contains an input with the name "listenerMode".
+     * @param {ModuleSpecsInputs[]} inputs - The array of ModuleSpecsInputs to check.
+     * @returns {boolean} True if an input with the name "listenerMode" is found, false otherwise.
+     */
     const isInputListenerMode = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "listenerMode").length > 0;
 
@@ -282,16 +373,36 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
     });
   }
 
+  /**
+   * Builds event emitter nodes by adding necessary inputs to each node in the provided array of event listener nodes.
+   * @param {ModuleNodes[]} eventListenerNodes - An array of ModuleNodes representing event listener nodes.
+   * @returns {ModuleNodes[]} - An array of ModuleNodes with added inputs for emitterPayload and eventChannel.
+   */
   private buildEventEmitterNodes(
     eventListenerNodes: ModuleNodes[]
   ): ModuleNodes[] {
+    /**
+     * Check if the length of eventListenerNodes array is 0 and return an empty array if true.
+     * @param {Array} eventListenerNodes - The array of event listener nodes to check.
+     * @returns {Array} An empty array if eventListenerNodes length is 0, otherwise returns the eventListenerNodes array.
+     */
     if (eventListenerNodes.length === 0) return [];
 
     const { _ } = ecoFlow;
 
+    /**
+     * Checks if the given array of ModuleSpecsInputs contains an input with the name "eventChannel".
+     * @param {ModuleSpecsInputs[]} inputs - The array of ModuleSpecsInputs to check.
+     * @returns {boolean} True if the array contains an input with the name "eventChannel", false otherwise.
+     */
     const isInputEventChannel = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "eventChannel").length > 0;
 
+    /**
+     * Checks if the given array of ModuleSpecsInputs contains an input with the name "emitterPayload".
+     * @param {ModuleSpecsInputs[]} inputs - The array of ModuleSpecsInputs to check.
+     * @returns {boolean} True if an input with the name "emitterPayload" is found, false otherwise.
+     */
     const isInputEmitterPayload = (inputs: ModuleSpecsInputs[]) =>
       inputs.filter((input) => input.name === "emitterPayload").length > 0;
 
@@ -386,6 +497,7 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
      * @returns {Array} An array of nodes containing all the concatenated nodes.
      */
     const nodes = [
+      ...this.buildConfigurationsNodes(),
       ...this.buildRequestNodes(requestNodes),
       ...this.buildMiddlewareNodes(middlewareNodes),
       ...this.buildResponseNode(responseNodes),

@@ -43,6 +43,10 @@ export interface EcoOptions {
   [key: string]: any;
 }
 
+export interface EcoModuleConfigurations {
+  [key: string]: { [key: string]: any };
+}
+
 /**
  * Defines a type 'loadedEcoFlow' that includes all required properties of the 'EcoFlow' type.
  */
@@ -83,6 +87,8 @@ export interface EcoFlow {
    * @type {EcoContainer}
    */
   container: EcoContainer;
+
+  moduleConfigurations: EcoModuleConfigurations;
 
   /**
    * Getter method to retrieve the configuration object.

@@ -11,12 +11,14 @@ import {
   Node,
   NodeConnections,
   Nodes,
+  ConfigNodesStack,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 import { EcoAPIBuilder, EcoAPIRouterBuilder } from "@ecoflow/api";
+import generateConfigNode from "../helpers/generateConfigNode";
 
 /**
  * Represents an EcoFlowEditor class that implements IEcoFlowEditor interface.
@@ -252,6 +254,106 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     );
 
     return this;
+  }
+
+  /**
+   * Registers node configurations based on the provided ConfigNodesStack.
+   * @param {ConfigNodesStack} configStack - The stack of node configurations to register.
+   * @returns {Promise<string[]>} - A promise that resolves to an array of error node IDs.
+   */
+  private async registerNodeConfigurations(
+    configStack: ConfigNodesStack
+  ): Promise<string[]> {
+    /**
+     * Destructures the ecoFlow object to extract the _ and ecoModule properties.
+     * Resets the moduleConfigurations property of ecoFlow to an empty object.
+     * @param {Object} ecoFlow - The ecoFlow object containing _ and ecoModule properties.
+     * @returns None
+     */
+    const { _, ecoModule } = ecoFlow;
+    let { moduleConfigurations } = ecoFlow;
+    moduleConfigurations = {};
+
+    /**
+     * Retrieves an array of keys from the configStack object.
+     * @returns An array containing the keys of the configStack object.
+     */
+    const modules = Object.keys(configStack);
+
+    /**
+     * An array of string values representing error node IDs.
+     */
+    const errorNodeIDs: string[] = [];
+
+    /**
+     * Asynchronously iterates over modules and their nodes to generate configuration nodes.
+     * @param {Array} modules - An array of modules to iterate over.
+     * @returns None
+     */
+    for await (const module of modules) {
+      const nodeInfo = await ecoModule.getNodes(module);
+
+      /**
+       * If the nodeInfo is falsy, skip the current iteration and continue to the next one.
+       */
+      if (!nodeInfo) continue;
+
+      /**
+       * Destructures the 'controller' property from the 'nodeInfo' object.
+       * @param {Object} nodeInfo - The object containing the 'controller' property.
+       * @returns The 'controller' property from the 'nodeInfo' object.
+       */
+      const { controller } = nodeInfo;
+
+      /**
+       * Generates a configuration node based on the provided controller.
+       * @param {Controller} controller - The controller object to generate the configuration node from.
+       * @returns {Promise<ConfigNode>} A promise that resolves to the generated configuration node.
+       */
+      const configController = await generateConfigNode(controller);
+
+      /**
+       * Asynchronously iterates over the nodes in the configStack for a specific module,
+       * extracts necessary data, and calls the configController with the extracted data.
+       * Any errors encountered during the process are added to the errorNodeIDs array.
+       * @param {Object} configStack - The configuration stack object containing nodes and configurations.
+       * @param {string} module - The module to iterate over in the configStack.
+       * @param {Object} moduleConfigurations - The configurations specific to the module.
+       * @param {Array} errorNodeIDs - An array to store the IDs of nodes that encountered errors.
+       * @param {Function} configController - The function responsible for handling configuration data.
+       * @returns None
+       */
+      for await (const node of configStack[module].nodes) {
+        const { id, data } = node;
+        const { label, moduleID } = data;
+        const configs = configStack[module].configurations.find(
+          (config) => config.nodeID === id
+        );
+
+        try {
+          configController.call(
+            {
+              id,
+              global: moduleConfigurations,
+              label,
+              moduleID,
+              inputs: configs?.configs,
+            } || {},
+            {
+              id,
+              global: moduleConfigurations,
+              label,
+              moduleID,
+              inputs: configs?.configs,
+            } || {}
+          );
+        } catch {
+          errorNodeIDs.push(id);
+        }
+      }
+    }
+
+    return errorNodeIDs;
   }
 
   /**
@@ -610,7 +712,10 @@ export class EcoFlowEditor implements IEcoFlowEditor {
    * @returns {Promise<boolean>} A promise that resolves to true if the deployment is successful.
    * @throws {Error} If there is an error during the deployment process.
    */
-  async deploy(flowDescription: FlowsDescription): Promise<boolean> {
+  async deploy(
+    flowDescription: FlowsDescription,
+    current: boolean = false
+  ): Promise<boolean> {
     const { _, log } = ecoFlow;
     /**
      * Asynchronously builds a stack, registers an API router builder, empties the flow directory,
@@ -628,6 +733,37 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       const [stack, configurations] = await this.fLowBuilder.buildStack({
         ...flowDescription,
       });
+
+      /**
+       * Asynchronously builds configuration nodes using the provided flow description.
+       * @param {Object} flowDescription - The description of the flow to build configuration nodes for.
+       * @returns {Promise} A promise that resolves with the configuration node configurations.
+       */
+      const configNodeConfigurations = await this.fLowBuilder.buildConfigNodes({
+        ...flowDescription,
+      });
+
+      /**
+       * Registers node configurations for error handling.
+       * @param {ConfigNode[]} configNodeConfigurations - An array of node configurations to register.
+       * @returns {Promise<Node[]>} - A promise that resolves to an array of registered error nodes.
+       */
+      const errorNodes = await this.registerNodeConfigurations(
+        configNodeConfigurations
+      );
+
+      /**
+       * Throws an error if there are any error nodes present during configuration registration.
+       * @param {Array} errorNodes - An array of error nodes.
+       * @throws {Object} An object containing the error message and the IDs of the error nodes.
+       */
+      if (errorNodes.length > 0)
+        throw {
+          msg: `Error registering configurations for nodes: ${errorNodes.join(
+            ", "
+          )}`,
+          nodesID: errorNodes,
+        };
 
       /**
        * Initializes a new instance of EcoAPIRouterBuilder with the given stack and configurations,
@@ -649,11 +785,11 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       EcoAPIBuilder.register(apiRouterBuilder);
 
       /**
-       * Empties the directory at the specified path by deleting all its contents.
-       * @param {string} path - The path of the directory to be emptied.
-       * @returns Promise<void>
+       * If the 'current' variable is falsy, empties the directory located at 'this.flowDir'.
+       * @param {any} current - The variable to check for falsy value.
+       * @returns None
        */
-      await fse.emptyDir(path.join(this.flowDir));
+      if (!current) await fse.emptyDir(path.join(this.flowDir));
 
       /**
        * Asynchronously updates the flow node definitions, connections, and configurations

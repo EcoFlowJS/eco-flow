@@ -1,4 +1,5 @@
 import {
+  ConfigNodesStack,
   FlowsDescription,
   EcoFLowBuilder as IEcoFLowBuilder,
   NodeConfiguration,
@@ -7,6 +8,7 @@ import {
   NodesStack,
 } from "@ecoflow/types";
 import stackNodes from "../helpers/stackNodes";
+import stackConfigNodes from "../helpers/stackConfigNodes";
 
 /**
  * Class representing an EcoFlowBuilder that builds and manages a flow of nodes and connections.
@@ -17,6 +19,8 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   private _configurations: NodeConfiguration[];
   private _stack: NodesStack;
   private _stacksConfigurations: NodeConfiguration[];
+  private _stacksConfigNodesConfigurations: NodeConfiguration[];
+  private _configNodes: Nodes;
   private _startingNodes: Nodes;
   private _responseNodes: Nodes;
   private _consoleNodes: Nodes;
@@ -33,6 +37,8 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
     this._configurations = [];
     this._stack = [];
     this._stacksConfigurations = [];
+    this._stacksConfigNodesConfigurations = [];
+    this._configNodes = [];
     this._startingNodes = [];
     this._responseNodes = [];
     this._consoleNodes = [];
@@ -153,6 +159,20 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   };
 
   /**
+   * Asynchronously builds configuration nodes based on the provided flow configurations.
+   * @param {FlowsDescription} flowConfigurations - The flow configurations to build nodes from.
+   * @returns {Promise<ConfigNodesStack>} A promise that resolves to a stack of configuration nodes.
+   */
+  async buildConfigNodes(
+    flowConfigurations: FlowsDescription
+  ): Promise<ConfigNodesStack> {
+    const { _ } = ecoFlow;
+    this._stacksConfigNodesConfigurations = [];
+
+    return await stackConfigNodes(this.extractContents(flowConfigurations));
+  }
+
+  /**
    * Builds a stack of nodes based on the given flow configurations.
    * @param {FlowsDescription} flowConfigurations - The flow configurations to build the stack from.
    * @returns {Promise<[NodesStack, NodeConfiguration[]]>} A promise that resolves to an array containing the nodes stack and node configurations.
@@ -243,6 +263,14 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
   }
 
   /**
+   * Getter method to retrieve the configurations of nodes in the stacks configuration.
+   * @returns {NodeConfiguration[]} An array of node configurations in the stacks configuration.
+   */
+  get stacksConfigNodesConfigurations(): NodeConfiguration[] {
+    return this.stacksConfigNodesConfigurations;
+  }
+
+  /**
    * Getter method to access the Nodes property of the class.
    * @returns {Nodes} The Nodes property of the class.
    */
@@ -264,6 +292,10 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
    */
   get configurations(): NodeConfiguration[] {
     return this._configurations;
+  }
+
+  get configNodes(): Nodes {
+    return this._configNodes;
   }
 
   /**

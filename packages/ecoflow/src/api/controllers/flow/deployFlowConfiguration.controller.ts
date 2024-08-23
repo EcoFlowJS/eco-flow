@@ -18,7 +18,7 @@ const deployFlowConfiguration = async (ctx: Context) => {
    * or if there is an error deploying the flow configuration.
    */
   try {
-    const { flowconfigurations } = ctx.request.body;
+    const { flowconfigurations, current } = ctx.request.body;
     /**
      * Checks if the flow configurations object is undefined or empty. If it is, throws an error.
      * @param {any} flowconfigurations - The flow configurations object to check.
@@ -41,7 +41,7 @@ const deployFlowConfiguration = async (ctx: Context) => {
      * @param {FlowConfiguration[]} flowconfigurations - An array of flow configurations to deploy.
      * @throws {string} Throws an error message if there is an issue deploying the flow configurations.
      */
-    if (!(await flowEditor.deploy(flowconfigurations)))
+    if (!(await flowEditor.deploy(flowconfigurations, current)))
       throw "Error deploying flow configuration";
 
     /**

@@ -15,7 +15,10 @@ const debugController = async (
 ): Promise<void> => {
   ecoContext.debugPayload = controllerResponse;
   await new Promise((resolve, reject) =>
-    userControllers.call(ecoContext, ecoContext).then(resolve, reject)
+    Promise.resolve(userControllers.call(ecoContext, ecoContext)).then(
+      resolve,
+      reject
+    )
   );
 
   delete ecoContext.debugPayload;
