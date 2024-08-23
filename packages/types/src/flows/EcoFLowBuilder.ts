@@ -3,7 +3,7 @@ import {
   NodeConfiguration,
   NodeConnections,
 } from "./EcoFlowEditor";
-import { Nodes } from "../module";
+import { Node, Nodes } from "../module";
 export type NodesStack = Nodes[];
 
 /**
@@ -24,6 +24,13 @@ export interface EcoFLowBuilder {
    * @returns {NodesStack} The NodesStack object.
    */
   get stack(): NodesStack;
+
+  /**
+   * Getter method to retrieve an array of NodeConfiguration objects representing
+   * the configurations of stack nodes.
+   * @returns An array of NodeConfiguration objects representing stack nodes configurations.
+   */
+  get stacksConfigNodesConfigurations(): NodeConfiguration[];
 
   /**
    * Getter method to retrieve the stack configurations.
@@ -48,6 +55,12 @@ export interface EcoFLowBuilder {
    * @returns {NodeConfiguration[]} - An array of NodeConfiguration objects representing the configurations of the node.
    */
   get configurations(): NodeConfiguration[];
+
+  /**
+   * Getter method to retrieve the configuration nodes.
+   * @returns Nodes - The configuration nodes.
+   */
+  get configNodes(): Nodes;
 
   /**
    * Getter method to retrieve the starting nodes of a graph.
@@ -83,6 +96,15 @@ export interface EcoFLowBuilder {
   ): Promise<[NodesStack, NodeConfiguration[]]>;
 
   /**
+   * Builds configuration nodes for the given flow configurations.
+   * @param {FlowsDescription} flowConfigurations - The flow configurations to build nodes for.
+   * @returns A promise that resolves to a tuple containing the nodes stack and an array of node configurations.
+   */
+  buildConfigNodes(
+    flowConfigurations: FlowsDescription
+  ): Promise<ConfigNodesStack>;
+
+  /**
    * Retrieves the configurations for a specific node based on the node ID.
    * @param {string} nodeID - The ID of the node to retrieve configurations for.
    * @returns {NodeConfiguration["configs"] | {}} - The configurations for the specified node, or an empty object if no configurations are found.
@@ -95,4 +117,13 @@ export interface EcoFLowBuilder {
    * @returns {NodeConfiguration["configs"] | {}} The configurations for the specified node, or an empty object if no configurations are found.
    */
   getStackNodeConfigurations(nodeID: string): NodeConfiguration["configs"] | {};
+}
+
+export interface ConfigNodesStack {
+  [moduleID: string]: ConfigNodesStackDefinition;
+}
+
+export interface ConfigNodesStackDefinition {
+  nodes: Nodes;
+  configurations: NodeConfiguration[];
 }

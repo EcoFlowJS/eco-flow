@@ -13,6 +13,7 @@ import {
 } from "./EcoNodeBuilder";
 import { Node as ReactFlowNode } from "@reactflow/core";
 import { FlowsNodeDataTypes } from "../flows";
+import { CSSProperties } from "react";
 
 /**
  * Interface for managing EcoModules in an application.
@@ -245,6 +246,7 @@ export interface ModuleResults {
  * Defines the possible types of modules: Request, Middleware, Response, Debug.
  */
 export type ModuleTypes =
+  | "Configuration"
   | "Request"
   | "Middleware"
   | "Response"
@@ -412,13 +414,14 @@ export interface ModuleSpecsInputs {
  * @interface ModuleSpecs
  * @property {string} name - The name of the module.
  * @property {ModuleTypes} type - The type of the module.
- * @property {string} [describtion] - The description of the module (optional).
+ * @property {string} ["@ecoflow/ecoflow": "^0.0.39"] - The description of the module (optional).
  * @property {string} [controller] - The controller of the module (optional).
  */
 export interface ModuleSpecs {
   name: string;
   type: ModuleTypes;
-  describtion?: string;
+  color?: CSSProperties["backgroundColor"];
+  description?: string;
   controller?: string;
 }
 

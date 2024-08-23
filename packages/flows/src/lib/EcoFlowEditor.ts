@@ -11,6 +11,7 @@ import {
   Node,
   NodeConnections,
   Nodes,
+  ConfigNodesStack,
 } from "@ecoflow/types";
 import { glob } from "glob";
 import path from "path";
@@ -252,6 +253,12 @@ export class EcoFlowEditor implements IEcoFlowEditor {
     );
 
     return this;
+  }
+
+  private async registerNodeConfigurations(
+    configStack: ConfigNodesStack
+  ): Promise<void> {
+    console.log(configStack);
   }
 
   /**
@@ -628,6 +635,17 @@ export class EcoFlowEditor implements IEcoFlowEditor {
       const [stack, configurations] = await this.fLowBuilder.buildStack({
         ...flowDescription,
       });
+
+      /**
+       * Asynchronously builds configuration nodes using the provided flow description.
+       * @param {Object} flowDescription - The description of the flow to build configuration nodes for.
+       * @returns {Promise} A promise that resolves with the configuration node configurations.
+       */
+      const configNodeConfigurations = await this.fLowBuilder.buildConfigNodes({
+        ...flowDescription,
+      });
+
+      await this.registerNodeConfigurations(configNodeConfigurations);
 
       /**
        * Initializes a new instance of EcoAPIRouterBuilder with the given stack and configurations,

@@ -7,6 +7,7 @@ import {
   Logger as ILogger,
   EcoOptions,
   ICommand,
+  EcoModuleConfigurations,
 } from "@ecoflow/types";
 import _ from "lodash";
 import { Logger } from "@ecoflow/utils";
@@ -23,8 +24,18 @@ import loadEnvironments from "../helper/env.helper";
 import { EcoFlowEditor } from "@ecoflow/flows";
 import defaultModules from "../defaults/defaultModules";
 
+/**
+ * Defines an interface for process commands with two properties: STOP and RESTART.
+ */
 interface ProcessCommands {
+  /**
+   * Represents the "STOP" string constant.
+   */
   STOP: string;
+
+  /**
+   * Constant variable representing the "RESTART" string.
+   */
   RESTART: string;
 }
 
@@ -35,12 +46,48 @@ interface ProcessCommands {
 class EcoFlow implements IEcoFlow {
   private helper: EcoHelper;
 
+  /**
+   * A boolean flag indicating whether the user is authenticated or not.
+   */
   isAuth: boolean = false;
+
+  /**
+   * Assigns the underscore (_) to a variable of the same name.
+   * @param {typeof _} _ - The underscore (_) object.
+   * @returns The assigned underscore (_) object.
+   */
   _: typeof _ = _;
+
+  /**
+   * Represents an instance of an EcoServer.
+   * @type {EcoServer} server - The EcoServer instance.
+   */
+
   server: EcoServer;
+
+  /**
+   * Represents a socket server instance.
+   * @type {SocketServer}
+   */
   socket: SocketServer;
+
+  /**
+   * Represents an instance of an EcoRouter.
+   */
   router: EcoRouter;
+
+  /**
+   * Represents a container for Eco objects.
+   * @type {EcoContainer}
+   */
   container: EcoContainer;
+
+  /**
+   * Initializes an empty object for EcoModuleConfigurations using Object.create().
+   * @type {EcoModuleConfigurations}
+   */
+
+  moduleConfigurations: EcoModuleConfigurations = Object.create({});
 
   /**
    * Constructor for the EcoOptions class.

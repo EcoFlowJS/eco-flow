@@ -8,7 +8,7 @@ import {
   Node,
   Nodes,
 } from "../module";
-import { FC, HTMLAttributes } from "react";
+import { CSSProperties, FC, HTMLAttributes } from "react";
 import { EcoFLowBuilder } from "./EcoFLowBuilder";
 
 /**
@@ -274,6 +274,7 @@ export interface FlowsNodeDataTypes {
   disabled: boolean;
   description: string;
   appearance: NodeAppearanceConfigurations;
+  color?: CSSProperties["backgroundColor"];
   icon?: FC<HTMLAttributes<SVGElement>>;
   isConnectable?: number | boolean;
   isError?: boolean;
