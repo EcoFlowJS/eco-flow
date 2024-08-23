@@ -15,7 +15,10 @@ const middlewareController = async (
   controllerResponse: { [key: string]: any }
 ): Promise<void> => {
   await new Promise((resolve, reject) =>
-    userControllers.call(ecoContext, ecoContext).then(resolve, reject)
+    Promise.resolve(userControllers.call(ecoContext, ecoContext)).then(
+      resolve,
+      reject
+    )
   );
 
   controllerResponse[id] = ecoContext.payload || {};

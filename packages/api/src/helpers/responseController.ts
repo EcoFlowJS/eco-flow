@@ -22,7 +22,7 @@ const responseController = async (
 ): Promise<void> => {
   const [id, response]: ResponseController = await new Promise(
     (resolve, reject) =>
-      (
+      Promise.resolve(
         userControllers.call(
           ecoContext,
           ecoContext

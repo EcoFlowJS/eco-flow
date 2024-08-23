@@ -5,7 +5,10 @@ const eventEmitterController = async (
   userControllers: (ctx: EcoEvent) => Promise<UserControllers>
 ): Promise<void> => {
   await new Promise((resolve, reject) =>
-    userControllers.call(ecoContext, ecoContext).then(resolve, reject)
+    Promise.resolve(userControllers.call(ecoContext, ecoContext)).then(
+      resolve,
+      reject
+    )
   );
 };
 

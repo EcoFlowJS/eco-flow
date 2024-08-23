@@ -108,7 +108,7 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
      */
     return buildRouterPath(
       await new Promise((resolve, reject) =>
-        nodeController.call(inputs).then(resolve, reject)
+        Promise.resolve(nodeController.call(inputs)).then(resolve, reject)
       )
     );
   }
@@ -282,7 +282,10 @@ export class EcoAPIRouterBuilder implements IEcoAPIRouterBuilder {
      * @returns {Promise} A promise that resolves with the result of the function call or rejects with an error.
      */
     return await new Promise((resolve, reject) =>
-      nodeController.call(inputs, inputs, callback).then(resolve, reject)
+      Promise.resolve(nodeController.call(inputs, inputs, callback)).then(
+        resolve,
+        reject
+      )
     );
   }
 
