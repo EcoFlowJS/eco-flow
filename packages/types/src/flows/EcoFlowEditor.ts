@@ -164,6 +164,14 @@ export interface EcoFlowEditor {
    * @throws {Error} If there is an error during the deployment process.
    */
   deploy(flowDescription: FlowsDescription): Promise<boolean>;
+
+  /**
+   * Deploys the flow described in the FlowsDescription object.
+   * @param {FlowsDescription} flowDescription - The description of the flow to deploy.
+   * @param {boolean} current - A boolean indicating whether the flow is the current one.
+   * @returns A Promise that resolves to a boolean indicating the success of the deployment.
+   */
+  deploy(flowDescription: FlowsDescription, current: boolean): Promise<boolean>;
 }
 
 /**

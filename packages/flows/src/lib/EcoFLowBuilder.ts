@@ -158,6 +158,11 @@ export class EcoFLowBuilder implements IEcoFLowBuilder {
     return [this._nodes, this._edges, configurations, connectionLists];
   };
 
+  /**
+   * Asynchronously builds configuration nodes based on the provided flow configurations.
+   * @param {FlowsDescription} flowConfigurations - The flow configurations to build nodes from.
+   * @returns {Promise<ConfigNodesStack>} A promise that resolves to a stack of configuration nodes.
+   */
   async buildConfigNodes(
     flowConfigurations: FlowsDescription
   ): Promise<ConfigNodesStack> {

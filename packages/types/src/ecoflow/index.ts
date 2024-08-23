@@ -44,7 +44,7 @@ export interface EcoOptions {
 }
 
 export interface EcoModuleConfigurations {
-  [key: string]: any[];
+  [key: string]: { [key: string]: any };
 }
 
 /**
