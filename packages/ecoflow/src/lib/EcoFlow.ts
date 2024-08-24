@@ -1,5 +1,6 @@
 import { Config } from "../config";
 import {
+  ModuleConfigs as IModuleConfigs,
   EcoFlowEditor as IEcoFlowEditor,
   EcoModule as IEcoModule,
   Service as IService,
@@ -7,7 +8,6 @@ import {
   Logger as ILogger,
   EcoOptions,
   ICommand,
-  EcoModuleConfigurations,
 } from "@ecoflow/types";
 import _ from "lodash";
 import { Logger } from "@ecoflow/utils";
@@ -23,6 +23,7 @@ import EcoModule from "@ecoflow/module";
 import loadEnvironments from "../helper/env.helper";
 import { EcoFlowEditor } from "@ecoflow/flows";
 import defaultModules from "../defaults/defaultModules";
+import { ModuleConfigs } from "./ModuleConfigs";
 
 /**
  * Defines an interface for process commands with two properties: STOP and RESTART.
@@ -83,13 +84,6 @@ class EcoFlow implements IEcoFlow {
   container: EcoContainer;
 
   /**
-   * Initializes an empty object for EcoModuleConfigurations using Object.create().
-   * @type {EcoModuleConfigurations}
-   */
-
-  moduleConfigurations: EcoModuleConfigurations = Object.create({});
-
-  /**
    * Constructor for the EcoOptions class.
    * @param {EcoOptions} [args={}] - An object containing optional arguments.
    * @returns None
@@ -115,6 +109,7 @@ class EcoFlow implements IEcoFlow {
 
     this.container = new EcoContainer();
     this.container
+      .register("moduleConfigs", new ModuleConfigs())
       .register("config", new Config(configDir, configName, configCli))
       .register("logger", new Logger())
       .register("database", new Database())
@@ -174,6 +169,14 @@ class EcoFlow implements IEcoFlow {
     await this.server.startServer();
     this.log.info("Server Ready to use!!!");
     return this;
+  }
+
+  /**
+   * Getter method to retrieve the module configurations from the container.
+   * @returns {IModuleConfigs} The module configurations obtained from the container.
+   */
+  get moduleConfigs(): IModuleConfigs {
+    return this.container.get("moduleConfigs");
   }
 
   /**

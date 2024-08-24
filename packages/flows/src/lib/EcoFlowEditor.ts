@@ -271,8 +271,7 @@ export class EcoFlowEditor implements IEcoFlowEditor {
      * @returns None
      */
     const { _, ecoModule } = ecoFlow;
-    let { moduleConfigurations } = ecoFlow;
-    moduleConfigurations = {};
+    let { moduleConfigs } = ecoFlow;
 
     /**
      * Retrieves an array of keys from the configStack object.
@@ -310,7 +309,25 @@ export class EcoFlowEditor implements IEcoFlowEditor {
        * @param {Controller} controller - The controller object to generate the configuration node from.
        * @returns {Promise<ConfigNode>} A promise that resolves to the generated configuration node.
        */
-      const configController = await generateConfigNode(controller);
+      const [packageName, configController] = await generateConfigNode(
+        controller
+      );
+
+      /**
+       * Check if the packageName is null, and if so, continue to the next iteration of the loop.
+       */
+      if (packageName === null) continue;
+
+      /**
+       * Selects a configuration manager for a given package name and clears its configuration.
+       * @param {string} packageName - The name of the package to select the configuration manager for.
+       * @throws {string} Throws an error if a configuration manager for the package is not found.
+       * @returns None
+       */
+      const configManager = moduleConfigs.selectPackage(packageName);
+      if (!configManager)
+        throw "Could not find a config manager for the package";
+      configManager.clear();
 
       /**
        * Asynchronously iterates over the nodes in the configStack for a specific module,
@@ -324,29 +341,58 @@ export class EcoFlowEditor implements IEcoFlowEditor {
        * @returns None
        */
       for await (const node of configStack[module].nodes) {
+        /**
+         * Destructures the 'id' and 'data' properties from the 'node' object.
+         * @param {Object} node - The object from which to destructure 'id' and 'data' properties.
+         * @returns None
+         */
         const { id, data } = node;
+
+        /**
+         * Destructures the 'data' object to extract the 'label' and 'moduleID' properties.
+         * @param {object} data - The object containing the properties to destructure.
+         * @returns None
+         */
         const { label, moduleID } = data;
+
+        /**
+         * Find a configuration in the configurations array of a specific module based on the nodeID.
+         * @param {string} module - The module to search for the configuration in.
+         * @param {string} id - The nodeID to match for the configuration.
+         * @returns The configuration object if found, otherwise undefined.
+         */
         const configs = configStack[module].configurations.find(
           (config) => config.nodeID === id
         );
 
         try {
-          configController.call(
-            {
-              id,
-              global: moduleConfigurations,
-              label,
-              moduleID,
-              inputs: configs?.configs,
-            } || {},
-            {
-              id,
-              global: moduleConfigurations,
-              label,
-              moduleID,
-              inputs: configs?.configs,
-            } || {}
+          /**
+           * Asynchronously resolves the configuration object by calling the configController with the provided configurations.
+           * @param {Object} configs - The configurations object.
+           * @returns {Promise<Object>} A promise that resolves to the configuration object.
+           */
+          const config = await Promise.resolve(
+            configController.call(
+              { ...configs?.configs } || {},
+
+              { ...configs?.configs } || {}
+            )
           );
+
+          /**
+           * Sets the configuration for a specific node in the config manager.
+           * @param {string} id - The ID of the node.
+           * @param {string} moduleID - The ID of the module associated with the node.
+           * @param {string} label - The label of the node.
+           * @param {object} config - The configuration object for the node.
+           * @returns None
+           */
+          configManager.set(id, {
+            nodeID: id,
+            moduleID: moduleID,
+            label: label,
+            configs: config,
+          });
         } catch {
           errorNodeIDs.push(id);
         }

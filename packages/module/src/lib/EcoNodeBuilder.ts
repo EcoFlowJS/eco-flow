@@ -108,18 +108,16 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
    */
   private buildConfigurationsNodes(): ModuleNodes[] {
     /**
-     * Destructures the _ and moduleConfigurations properties from the ecoFlow object.
-     * @param {Object} ecoFlow - The ecoFlow object containing _ and moduleConfigurations properties.
-     * @returns None
-     */
-    const { _, moduleConfigurations } = ecoFlow;
-
-    /**
      * An array of ModuleNodes, representing nodes in a module.
      * @type {ModuleNodes[]}
      */
     const moduleNodes: ModuleNodes[] = [];
 
+    /**
+     * Maps the module schema to extract module names and nodes, then filters out nodes
+     * that are not of type "Configuration" and adds them to the moduleNodes array.
+     * @returns None
+     */
     this._moduleSchema
       .map((m) => ({
         moduleName: m.module?.name || m.name,
@@ -128,8 +126,6 @@ export class EcoNodeBuilder implements IEcoNodeBuilder {
       .forEach(({ moduleName, nodes }) => {
         if (nodes.filter((n) => n.type === "Configuration").length === 0)
           return null;
-
-        moduleConfigurations[moduleName] = [];
 
         nodes
           .filter((n) => n.type === "Configuration")
