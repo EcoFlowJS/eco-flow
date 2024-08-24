@@ -9,9 +9,11 @@ import { EcoModule } from "../module";
 import { Service } from "../services";
 import type { Server } from "socket.io";
 import { EcoFlowEditor } from "../flows";
+import { ModuleConfigs } from "./ModuleConfigs";
 
 export * from "./config";
 export * from "./EcoContainer";
+export * from "./ModuleConfigs";
 export * from "./service";
 export * from "./api";
 
@@ -41,10 +43,6 @@ export interface EcoOptions {
    * with string keys and any corresponding values.
    */
   [key: string]: any;
-}
-
-export interface EcoModuleConfigurations {
-  [key: string]: { [key: string]: any };
 }
 
 /**
@@ -88,7 +86,11 @@ export interface EcoFlow {
    */
   container: EcoContainer;
 
-  moduleConfigurations: EcoModuleConfigurations;
+  /**
+   * A variable that holds the module configurations.
+   * @type {ModuleConfigs}
+   */
+  get moduleConfigs(): ModuleConfigs;
 
   /**
    * Getter method to retrieve the configuration object.
