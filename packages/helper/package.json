@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/helper",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -20,7 +20,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@ecoflow/utils": "^0.0.29",
+    "@ecoflow/utils": "^0.0.30",
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "fs-extra": "^11.2.0",
