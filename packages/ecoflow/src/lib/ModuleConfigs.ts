@@ -60,6 +60,10 @@ class ModuleConfig implements IModuleConfig {
     return this._configs.delete(id);
   }
 
+  keys(): IterableIterator<string> {
+    return this._configs.keys();
+  }
+
   /**
    * Getter method to retrieve all configurations stored in a Map.
    * @returns {Map<string, EcoModuleConfigurations>} - A Map containing all configurations.

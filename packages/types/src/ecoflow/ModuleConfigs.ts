@@ -11,6 +11,7 @@ export interface ModuleConfig {
   set(id: string, value: EcoModuleConfigurations): void;
   delete(id: string): boolean;
   clear(): void;
+  keys(): IterableIterator<string>;
 
   get allConfigs(): Map<string, EcoModuleConfigurations>;
 }
