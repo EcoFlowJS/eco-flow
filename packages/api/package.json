@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/api",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -16,8 +16,8 @@
   "author": "EcoFlowJS",
   "license": "MIT",
   "dependencies": {
-    "@ecoflow/module": "^0.0.29",
-    "@ecoflow/types": "^0.0.27",
+    "@ecoflow/module": "^0.0.30",
+    "@ecoflow/types": "^0.0.28",
     "@koa/router": "^12.0.1",
     "koa": "^2.15.3",
     "thread-promises": "^1.6.3"
