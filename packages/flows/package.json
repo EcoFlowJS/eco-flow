@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/flows",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
@@ -16,9 +16,9 @@
   "author": "EcoFlowJS",
   "license": "MIT",
   "dependencies": {
-    "@ecoflow/api": "^0.0.29",
-    "@ecoflow/module": "^0.0.29",
-    "@ecoflow/types": "^0.0.27",
+    "@ecoflow/api": "^0.0.30",
+    "@ecoflow/module": "^0.0.30",
+    "@ecoflow/types": "^0.0.28",
     "fs-extra": "^11.2.0",
     "glob": "^10.3.12"
   },
