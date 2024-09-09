@@ -1,11 +1,22 @@
 import { homedir } from "os";
 import { configOptions } from "@ecoflow/types";
-import { LogLevel } from "@ecoflow/utils";
+import { LogLevel } from "@ecoflow/utils/logger";
 import path from "path";
-const baseUserDir =
-  process.env.userDir || homedir().replace(/\\/g, "/") + "/.ecoflow";
 
-const defaultConfig: Required<configOptions> = {
+/**
+ * The default base directory path for EcoFlow.
+ * @returns The default base directory path as a string.
+ */
+export const defaultBaseDir = path.join(homedir(), ".ecoflow");
+
+/**
+ * Builds a default configuration object with the provided base user directory.
+ * @param {string} [baseUserDir=defaultBaseDir] - The base user directory path.
+ * @returns {Required<configOptions>} - The required configuration options object.
+ */
+export const defaultConfigBuilder: (
+  baseUserDir?: string
+) => Required<configOptions> = (baseUserDir = defaultBaseDir) => ({
   /*******************************************************************************
    * User Directory Settings
    *  - userDir
@@ -14,10 +25,10 @@ const defaultConfig: Required<configOptions> = {
    *  - DB_DriverDir
    ******************************************************************************/
   userDir: baseUserDir, // Base directory where all  directory files are stored.
-  moduleDir: baseUserDir + "/modules", // Directory where all modules are installed and stored.
-  flowDir: baseUserDir + "/flows",
-  envDir: baseUserDir + "/environment", // Directory where all environment variables are stored.
-  DB_Directory: path.join(baseUserDir, "Database").replace(/\\/g, "/"), // Directory where all Database Connection files are stored.
+  moduleDir: path.join(baseUserDir, "modules"), // Directory where all modules are installed and stored.
+  flowDir: path.join(baseUserDir, "flows"),
+  envDir: path.join(baseUserDir, "environment"), // Directory where all environment variables are stored.
+  DB_Directory: path.join(baseUserDir, "Database"), // Directory where all Database Connection files are stored.
 
   /*******************************************************************************
    * Flow File Settings
@@ -134,11 +145,21 @@ const defaultConfig: Required<configOptions> = {
   database: {
     driver: "SQLite",
     configuration: {
-      filename: path
-        .join(baseUserDir, "Database", "DB_connections", "ecoflowDB.sqlite")
-        .replace(/\\/g, "/"),
+      filename: path.join(
+        baseUserDir,
+        "Database",
+        "DB_connections",
+        "ecoflowDB.sqlite"
+      ),
     },
   },
-};
+});
+
+/**
+ * Builds a default configuration object using the user directory from the environment variables.
+ * @param {string} userDir - The user directory obtained from the environment variables.
+ * @returns The default configuration object.
+ */
+const defaultConfig = defaultConfigBuilder(process.env.userDir);
 
 export default defaultConfig;

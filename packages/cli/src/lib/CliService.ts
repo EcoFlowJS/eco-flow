@@ -58,6 +58,7 @@ export class CliService implements ICliService {
       env: Object.assign(process.env, {
         REBORN: 1,
         NODE_ENV: args.dev ? "development" : "production",
+        ECOFLOW_CWD: process.cwd(),
       }),
       stdio: ["inherit", "inherit", "inherit", "ipc"],
     });
@@ -82,13 +83,18 @@ export class CliService implements ICliService {
           chalk.white(" ]") +
           " : Starting up EcoFlow services"
       );
-      if (typeof this.process !== "undefined")
+
+      if (typeof this.process !== "undefined") {
         this.process
           .on("message", (msg) => {
-            if (msg === EcoFlow.processCommands.STOP) this.stopService();
-
-            if (msg === EcoFlow.processCommands.RESTART)
-              this.restartService(args);
+            switch (msg) {
+              case EcoFlow.processCommands.STOP:
+                this.stopService();
+                break;
+              case EcoFlow.processCommands.RESTART:
+                this.restartService(args);
+                break;
+            }
           })
           .on("exit", (code) => {
             this.setserviceStatus = "Stopped";
@@ -117,6 +123,7 @@ export class CliService implements ICliService {
                   )
               );
           });
+      }
     });
   }
 

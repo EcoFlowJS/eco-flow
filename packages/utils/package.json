@@ -3,6 +3,28 @@
   "version": "0.0.30",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./logger": {
+      "require": "./dist/logger/index.js",
+      "import": "./dist/logger/index.js",
+      "types": "./dist/types/logger/index.d.ts"
+    },
+    "./builder": {
+      "require": "./dist/builder/index.js",
+      "import": "./dist/builder/index.js",
+      "types": "./dist/types/builder/index.d.ts"
+    },
+    "./upload": {
+      "require": "./dist/Upload/index.js",
+      "import": "./dist/Upload/index.js",
+      "types": "./dist/types/Upload/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc --build --force",
     "watch": "tsc --watch",

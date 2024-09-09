@@ -15,21 +15,12 @@ baseCommand
   .addOption(new Option("--auth", "Set authentication to the flow"))
   .addOption(new Option("-D, --dev", "Run in development mode."))
   .addOption(
-    new Option(
-      "-c, --configDir <string>",
-      "use specified configuration file location"
-    ).env("configDir")
-  )
-  .addOption(
-    new Option(
-      "-cn, --configName <string>",
-      "use specified configuration file name. \n\t\t\t\t\b\b[ NOTE: Extention will be automatically added to the config file name. ]"
+    new Option("-c, --config <string>", "use specified configuration file").env(
+      "config"
     )
   )
   .addOption(
-    new Option("-u, --user <string>", "use specified user directory").env(
-      "userDir"
-    )
+    new Option("-l, --local", "Set local directory as the working directory.")
   )
   .addOption(new Option("-v, --verbose", "Enable verbose output"))
   .helpOption("-?, --help", "Show this help message");

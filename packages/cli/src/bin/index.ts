@@ -16,8 +16,8 @@ const Commander = new CommanderCli();
  * @returns The parsed command line arguments.
  */
 const commands = Commander.usesMsgs(
-  `[-?] [-h] [--settings settings.js] [--userDir DIR]
-               [--port PORT] [--title TITLE] [--safe] [flows.json]
+  `[-?] [-h] [--config settings.js]
+               [--port PORT] [--auth] [--dev] [--local]
 
        ecoflow admin <command> [args] [-?] [--userDir DIR] [--json]`
 ).parseArgs().args;
@@ -87,39 +87,25 @@ if (issetCommand("dev") && typeof commands.dev === "boolean")
   defaultsCliCommands.dev = commands.dev;
 
 /**
- * Checks if the "configDir" command is set, is a string, exists as a directory, and then sets it as the default value.
+ * Checks if the "config" command is set, is a string, exists as a directory, and then sets it as the default value.
  * @returns None
  */
 if (
-  issetCommand("configDir") &&
-  typeof commands.configDir === "string" &&
-  fs.existsSync(commands.configDir) &&
-  fs.lstatSync(commands.configDir).isDirectory()
+  issetCommand("config") &&
+  typeof commands.config === "string" &&
+  fs.existsSync(commands.config)
 )
-  defaultsCliCommands.configDir = commands.configDir;
+  defaultsCliCommands.config = commands.config;
 
 /**
- * Checks if the "configName" command is set and is of type string, then assigns it to defaultsCliCommands.configName.
+ * Checks if the "local" command is set and is of type string, then assigns it to defaultsCliCommands.configName.
  * @param {string} issetCommand - A function that checks if a command is set.
  * @param {object} commands - An object containing the commands.
  * @param {object} defaultsCliCommands - An object containing the default CLI commands.
  * @returns None
  */
-if (issetCommand("configName") && typeof commands.configName === "string")
-  defaultsCliCommands.configName = commands.configName;
-
-/**
- * Checks if the "user" command is set, is a string, exists as a directory, and then sets the "userDir" property in defaultsCliCommands.
- * @param {string} commands.user - The value of the "user" command.
- * @returns None
- */
-if (
-  issetCommand("user") &&
-  typeof commands.user === "string" &&
-  fs.existsSync(commands.user) &&
-  fs.lstatSync(commands.user).isDirectory()
-)
-  defaultsCliCommands.userDir = commands.user;
+if (issetCommand("local") && typeof commands.local === "boolean")
+  defaultsCliCommands.local = commands.local;
 
 /**
  * Checks if the "verbose" command is set and its value is a boolean. If both conditions are met,

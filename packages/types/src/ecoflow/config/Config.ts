@@ -59,3 +59,9 @@ export interface Config {
    */
   deleteConfigFile(ConfigFileName: string): Promise<string[]>;
 }
+
+export interface ConfigParams {
+  configFile?: string;
+  local?: boolean;
+  configs?: configOptions;
+}

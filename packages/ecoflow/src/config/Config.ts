@@ -3,8 +3,12 @@ import fse from "fs-extra";
 import { glob } from "glob";
 import { homedir } from "os";
 import { merge } from "lodash";
-import defaultConfig from "./default.config";
-import { configOptions, Config as IConfig } from "@ecoflow/types";
+import defaultConfig, {
+  defaultBaseDir,
+  defaultConfigBuilder,
+} from "./default.config";
+import { configOptions, ConfigParams, Config as IConfig } from "@ecoflow/types";
+import EcoFlow from "../lib/EcoFlow";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment
@@ -20,30 +24,35 @@ export class Config implements IConfig {
   //Global configuration settings of the application.
   _config: configOptions = {};
 
-  constructor(Directory?: string, Name?: string, tempConfig?: configOptions) {
-    if (
-      typeof Directory !== "undefined" &&
-      fse.existsSync(Directory) &&
-      fse.lstatSync(Directory).isDirectory()
-    )
-      this.configDir = Directory;
+  constructor({ configFile, local = false, configs = {} }: ConfigParams) {
+    const { _ } = ecoFlow;
 
-    if (typeof Name !== "undefined") {
-      Name = Name + ".json";
-      this.configFile = path.join(this.configDir, Name);
+    if (!_.isUndefined(configFile)) {
+      if (
+        fse.existsSync(configFile) &&
+        fse.lstatSync(configFile).isFile() &&
+        path.extname(configFile) === ".json"
+      ) {
+        this.configFile = configFile;
+        this.configDir = path.dirname(configFile);
+      }
+    }
+
+    if (local) {
+      this.configDir = path.join(EcoFlow.EcoFlowCWD, "config");
+      this.configFile = path.join(this.configDir, "ecoflow.json");
     }
 
     this.loadConfig();
-    if (typeof tempConfig !== "undefined") this.tempConfigUpdate(tempConfig);
-    return this;
+    if (typeof configs !== "undefined") this.tempConfigUpdate(configs);
   }
 
   /**
    * Update the configuration of the application based on the temporary configuration.
-   * @param tempConfig temporary configuration options object containing the configuration settings to update the configuration.
+   * @param configs temporary configuration options object containing the configuration settings to update the configuration.
    */
-  private tempConfigUpdate(tempConfig: configOptions) {
-    merge(this._config, tempConfig);
+  private tempConfigUpdate(configs: configOptions) {
+    merge(this._config, configs);
   }
 
   /**
@@ -75,17 +84,17 @@ export class Config implements IConfig {
     isTypedArray: boolean = false
   ): any {
     if (isTypedArray) object = object.config;
-    const elems = Array.isArray(key) ? key : key.split(".");
-    const name = elems[0];
+    const elements = Array.isArray(key) ? key : key.split(".");
+    const name = elements[0];
     const value = object[name];
-    if (elems.length <= 1) {
+    if (elements.length <= 1) {
       return value;
     }
     // Note that typeof null === 'object'
     if (value === null || typeof value !== "object") {
       return undefined;
     }
-    return this.getConfig(value, elems.slice(1));
+    return this.getConfig(value, elements.slice(1));
   }
 
   /**
@@ -104,7 +113,7 @@ export class Config implements IConfig {
   }
 
   /**
-   * Create the Base or Default Configuration file in the configutation directory.
+   * Create the Base or Default Configuration file in the configuration directory.
    * @memberof Config
    */
   private createDefaultConfigFile(): void {
@@ -112,7 +121,13 @@ export class Config implements IConfig {
       fse.ensureDirSync(this.configDir);
       fse.writeFileSync(
         this.configFile,
-        JSON.stringify(defaultConfig, null, 2),
+        JSON.stringify(
+          defaultBaseDir === path.resolve(path.dirname(this.configDir))
+            ? defaultConfig
+            : defaultConfigBuilder(path.resolve(path.dirname(this.configDir))),
+          null,
+          2
+        ),
         {
           encoding: "utf8",
         }

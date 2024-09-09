@@ -16,9 +16,9 @@ export interface ICommand {
   Host?: string;
   Port?: number;
   auth?: boolean;
-  configDir?: string;
-  configName?: string;
-  userDir?: string;
+  config?: string;
   logging?: loggerOptions;
+  local?: boolean;
+  dir?: string;
   dev?: boolean;
 }

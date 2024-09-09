@@ -10,6 +10,7 @@ import {
   ICommand,
 } from "@ecoflow/types";
 import _ from "lodash";
+import path from "path";
 import { Logger } from "@ecoflow/utils";
 import EcoContainer from "./EcoContainer";
 import { EcoFlow as IEcoFlow } from "@ecoflow/types";
@@ -93,24 +94,22 @@ class EcoFlow implements IEcoFlow {
     let cliArgs: ICommand = {};
     if (this._.has(args, "cli")) cliArgs = { ...args.cli };
 
-    if (!this._.has(cliArgs, "configDir")) {
-      if (this._.has(process.env, "configDir"))
-        cliArgs.configDir = process.env.configDir;
+    if (!this._.has(cliArgs, "config")) {
+      if (this._.has(process.env, "config"))
+        cliArgs.config = process.env.config;
     }
 
-    let configDir = undefined;
-    let configName = undefined;
+    const configFile: string = cliArgs.config?.startsWith(".")
+      ? path.join(EcoFlow.EcoFlowCWD, cliArgs.config || "")
+      : cliArgs.config || "";
 
     if (this._.isBoolean(cliArgs.auth) && cliArgs.auth)
       this.isAuth = cliArgs.auth!;
-    if (!this._.isEmpty(cliArgs.configDir)) configDir = cliArgs.configDir;
-    if (!this._.isEmpty(cliArgs.configName)) configName = cliArgs.configName;
-    const configCli = this._.omit(cliArgs, ["configDir", "configName", "auth"]);
 
     this.container = new EcoContainer();
     this.container
       .register("moduleConfigs", new ModuleConfigs())
-      .register("config", new Config(configDir, configName, configCli))
+      .register("config", new Config({ configFile, local: cliArgs.local }))
       .register("logger", new Logger())
       .register("database", new Database())
       .register("module", new EcoModule())
@@ -254,6 +253,10 @@ class EcoFlow implements IEcoFlow {
       STOP: "stop",
       RESTART: "restart",
     };
+  }
+
+  static get EcoFlowCWD(): string {
+    return process.env.ECOFLOW_CWD || "";
   }
 }
 
