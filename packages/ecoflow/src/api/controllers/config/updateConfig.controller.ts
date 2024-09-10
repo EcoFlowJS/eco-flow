@@ -57,6 +57,8 @@ const updateConfig = async (ctx: Context) => {
       userID: ctx.user,
     });
   } catch (error) {
+    console.log(error);
+
     ctx.body = {
       error: true,
       payload: error,

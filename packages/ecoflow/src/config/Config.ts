@@ -70,7 +70,7 @@ export class Config implements IConfig {
           .readFileSync(this.configFile, "utf8")
           .replace(
             /(%%ECOFLOW_LOCAL_BASE%%)/g,
-            EcoFlow.EcoFlowCWD.replace(/\\/g, "\\\\")
+            EcoFlow.EcoFlowCWD.replace(/\\/g, "/")
           )
       ),
     };
@@ -115,9 +115,27 @@ export class Config implements IConfig {
 
     await fse.ensureDir(this.configDir);
     log.info("Writing new configuration ");
-    await fse.writeFile(this.configFile, JSON.stringify(cfg, null, 2), {
+    const finalConfig = JSON.stringify(cfg, null, 2).replace(
+      new RegExp(
+        `(${path.resolve(EcoFlow.EcoFlowCWD).replace(/\\/g, "/")})`,
+        "g"
+      ),
+      "%%ECOFLOW_LOCAL_BASE%%"
+    );
+    await fse.writeFile(this.configFile, finalConfig, {
       encoding: "utf8",
     });
+    log.info("Writing new configuration completed successfully.");
+  }
+
+  private directoryParser(dir: string) {
+    return dir.replace(
+      new RegExp(
+        `(${path.resolve(EcoFlow.EcoFlowCWD).replace(/\\/g, "/")})`,
+        "g"
+      ),
+      "%%ECOFLOW_LOCAL_BASE%%"
+    );
   }
 
   /**
