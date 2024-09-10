@@ -1,4 +1,4 @@
-import { ApiResponse, userTableCollection } from "@ecoflow/types";
+import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 
 /**

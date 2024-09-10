@@ -1,6 +1,6 @@
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
-import generateBackupZip from "../../helpers/generateBackupZip";
+import generateBackupZip from "../../helpers/generateBackupZip.js";
 import { Readable } from "stream";
 
 const generateBackupFile = async (ctx: Context) => {

@@ -2,12 +2,12 @@ import { SetupImportStatus, configOptions } from "@ecoflow/types";
 import path from "path";
 import fse from "fs-extra";
 import AdmZip from "adm-zip";
-import processImportEnvs from "./processImportEnvs";
-import processImportConfigs from "./processImportConfigs";
-import processImportUsers from "./processImportUsers";
-import processImportPackages from "./processImportPackages";
-import processImportDatabase from "./processImportDatabase";
-import processImportFlow from "./processImportFlow";
+import processImportEnvs from "./processImportEnvs.js";
+import processImportConfigs from "./processImportConfigs.js";
+import processImportUsers from "./processImportUsers.js";
+import processImportPackages from "./processImportPackages.js";
+import processImportDatabase from "./processImportDatabase.js";
+import processImportFlow from "./processImportFlow.js";
 
 const processImport = async (file: string): Promise<boolean> => {
   const { _, config, database, server } = ecoFlow;

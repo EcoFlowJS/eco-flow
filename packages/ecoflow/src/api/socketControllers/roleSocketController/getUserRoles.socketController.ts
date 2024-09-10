@@ -1,6 +1,6 @@
 import { Permissions, Role } from "@ecoflow/types";
 import { Server } from "socket.io";
-import roleAdmin from "../../../defaults/roleAdmin.default";
+import roleAdmin from "../../../defaults/roleAdmin.default.js";
 
 /**
  * Retrieves user roles for a given room ID and emits a role update response to the specified socket.io server.

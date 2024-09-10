@@ -1,21 +1,21 @@
-import { ICommand } from "../cli";
-import { EcoRouter, EcoServer } from "./service";
-import { Logger } from "../utils";
-import { Config } from "./config";
+import { ICommand } from "../cli/index.js";
+import { EcoRouter, EcoServer } from "./service/index.js";
+import { Logger } from "../utils/index.js";
+import { Config } from "./config/index.js";
 import type _ from "lodash";
-import { EcoContainer } from "./EcoContainer";
-import { Database } from "../database";
-import { EcoModule } from "../module";
-import { Service } from "../services";
+import { EcoContainer } from "./EcoContainer.js";
+import { Database } from "../database/index.js";
+import { EcoModule } from "../module/index.js";
+import { Service } from "../services/index.js";
 import type { Server } from "socket.io";
-import { EcoFlowEditor } from "../flows";
-import { ModuleConfigs } from "./ModuleConfigs";
+import { EcoFlowEditor } from "../flows/index.js";
+import { ModuleConfigs } from "./ModuleConfigs.js";
 
-export * from "./config";
-export * from "./EcoContainer";
-export * from "./ModuleConfigs";
-export * from "./service";
-export * from "./api";
+export * from "./config/index.js";
+export * from "./EcoContainer.js";
+export * from "./ModuleConfigs.js";
+export * from "./service/index.js";
+export * from "./api/index.js";
 
 /**
  * Interface for a class type that defines a constructor function and its prototype.

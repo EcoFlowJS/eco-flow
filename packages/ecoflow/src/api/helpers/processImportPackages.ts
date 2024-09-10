@@ -1,7 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import defaultModules from "../../defaults/defaultModules";
-import installDefaultModules from "./installDefaultModules";
+import installDefaultModules from "./installDefaultModules.js";
 
 const processImportPackages = async (
   extractDirectory: string

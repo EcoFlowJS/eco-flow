@@ -1,6 +1,6 @@
 import Router from "@koa/router";
 import { DefaultContext, DefaultState } from "koa";
-import { Routes } from "./common";
+import { Routes } from "./common.js";
 
 /**
  * Interface for building API routes in an ecosystem.

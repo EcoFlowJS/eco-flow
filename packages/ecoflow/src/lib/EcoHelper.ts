@@ -1,7 +1,7 @@
-import EcoFlow from "./EcoFlow";
-import isCreateApp from "../helper/isCreateApp.helper";
-import generateFiles from "../helper/generateFiles.helper";
-import { EcoEditors } from "../service/EcoEditors";
+import EcoFlow from "./EcoFlow.js";
+import isCreateApp from "../helper/isCreateApp.helper.js";
+import generateFiles from "../helper/generateFiles.helper.js";
+import { EcoEditors } from "../service/EcoEditors.js";
 
 export class EcoHelper {
   private context: EcoFlow;

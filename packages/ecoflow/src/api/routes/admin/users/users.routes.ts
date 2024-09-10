@@ -1,10 +1,10 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import createUser from "../../../controllers/user/createUser.controller";
-import fetchUserDetails from "../../../controllers/user/fetchUserDetails.controller";
-import fetchUserUsernames from "../../../controllers/user/fetchUserUsernames.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
-import toggleUser from "../../../controllers/user/toggleUser.controller";
-import updateUser from "../../../controllers/user/updateUser.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import createUser from "../../../controllers/user/createUser.controller.js";
+import fetchUserDetails from "../../../controllers/user/fetchUserDetails.controller.js";
+import fetchUserUsernames from "../../../controllers/user/fetchUserUsernames.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
+import toggleUser from "../../../controllers/user/toggleUser.controller.js";
+import updateUser from "../../../controllers/user/updateUser.controller.js";
 
 const adminUsersRouter = EcoRouter.createRouter();
 export default adminUsersRouter;

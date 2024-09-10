@@ -1,6 +1,6 @@
 import { DriverKnex, DriverMongoose, Knex, Role } from "@ecoflow/types";
 import mongoose, { Model } from "mongoose";
-import { RoleSchemaKnex, RoleSchemaMongoose } from "../schema/RoleSchema";
+import { RoleSchemaKnex, RoleSchemaMongoose } from "../schema/RoleSchema.js";
 
 /**
  * Creates a Mongoose model for the Role schema using the provided Mongoose connection.

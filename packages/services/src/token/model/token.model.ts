@@ -1,6 +1,9 @@
 import { DriverKnex, DriverMongoose, Knex, Tokens } from "@ecoflow/types";
 import { Model, Document } from "mongoose";
-import { TokenSchemaKnex, TokenSchemaMongoose } from "../schema/token.schema";
+import {
+  TokenSchemaKnex,
+  TokenSchemaMongoose,
+} from "../schema/token.schema.js";
 
 /**
  * Creates a Mongoose model for the Tokens collection based on the provided Mongoose connection.

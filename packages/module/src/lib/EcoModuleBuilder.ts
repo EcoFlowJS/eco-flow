@@ -2,7 +2,7 @@ import {
   EcoModuleBuilder as IEcoModuleBuilder,
   ModuleSchema as IModuleSchema,
 } from "@ecoflow/types";
-import { ModuleSchema } from "./ModuleSchema";
+import { ModuleSchema } from "./ModuleSchema.js";
 
 /**
  * A class that implements the IEcoModuleBuilder interface to build Eco modules.

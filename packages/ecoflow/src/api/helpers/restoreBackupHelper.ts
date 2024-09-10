@@ -2,7 +2,7 @@ import path from "path";
 import AdmZip from "adm-zip";
 import fse from "fs-extra";
 import Helper from "@ecoflow/helper";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 
 const restoreBackupHelper = async (zip: AdmZip): Promise<void> => {
   const { _, log, config, ecoModule, database, flowEditor } = ecoFlow;

@@ -1,6 +1,6 @@
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
-import fetchBackupFiles from "../../helpers/fetchBackupFiles";
+import fetchBackupFiles from "../../helpers/fetchBackupFiles.js";
 
 const backedFilesFetch = async (ctx: Context) => {
   try {

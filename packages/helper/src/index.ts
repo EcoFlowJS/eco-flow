@@ -3,7 +3,7 @@
  * It also exports all other exports from the "libs" module.
  * @module Helper
  */
-import { Helper } from "./libs";
-export * from "./libs";
+import { Helper } from "./libs/index.js";
+export * from "./libs/index.js";
 
 export default Helper;

@@ -1,5 +1,5 @@
 import { ApiResponse } from "@ecoflow/types";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import { Context } from "koa";
 
 const dashboardStatus = async (ctx: Context) => {

@@ -1,8 +1,8 @@
 import _ from "lodash";
 import path from "path";
 import fs from "fs";
-import functionToString from "./helpers/functionToString.helper";
-import stringToFunction from "./helpers/stringToFunction.helper";
+import functionToString from "./helpers/functionToString.helper.js";
+import stringToFunction from "./helpers/stringToFunction.helper.js";
 
 /* The `JsonBuilder` class in TypeScript provides methods for stringifying, parsing, and working with
 JSON data, including writing JSON data to a file and reading JSON data from a file. */

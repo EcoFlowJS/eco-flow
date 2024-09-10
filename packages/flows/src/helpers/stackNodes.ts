@@ -5,7 +5,7 @@ import {
   NodesStack,
 } from "@ecoflow/types";
 import { Edge, Node } from "@reactflow/core";
-import isEndNode from "./isEndNode";
+import isEndNode from "./isEndNode.js";
 
 /**
  * Stack nodes based on the given connection lists, nodes, and edges.

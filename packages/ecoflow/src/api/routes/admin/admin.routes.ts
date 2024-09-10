@@ -1,7 +1,7 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import adminConfigRouter from "./config/config.routes";
-import environmentRouter from "./environment/environment.routes";
-import adminUsersRouter from "./users/users.routes";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import adminConfigRouter from "./config/config.routes.js";
+import environmentRouter from "./environment/environment.routes.js";
+import adminUsersRouter from "./users/users.routes.js";
 
 const adminRouter = EcoRouter.createRouter();
 export default adminRouter;

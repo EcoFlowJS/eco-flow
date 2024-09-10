@@ -1,4 +1,4 @@
-import { ModuleSchema } from "./ModuleSchema";
+import { ModuleSchema } from "./ModuleSchema.js";
 
 /**
  * Interface for an EcoModuleBuilder that defines multiple build methods to create ModuleSchema objects.

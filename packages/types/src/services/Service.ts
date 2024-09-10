@@ -1,9 +1,9 @@
-import { FlowSettingsService } from "./FlowSettings/FlowSettingsService";
-import { SchemaEditorService } from "./SchemaEditor/SchemaEditorService";
-import { AuditLogsService } from "./auditLogs/AuditLogsService";
-import { RoleService } from "./role/RoleService";
-import { TokenServices } from "./token/tokenServices";
-import { UserService } from "./user/UserService";
+import { FlowSettingsService } from "./FlowSettings/FlowSettingsService.js";
+import { SchemaEditorService } from "./SchemaEditor/SchemaEditorService.js";
+import { AuditLogsService } from "./auditLogs/AuditLogsService.js";
+import { RoleService } from "./role/RoleService.js";
+import { TokenServices } from "./token/tokenServices.js";
+import { UserService } from "./user/UserService.js";
 
 /**
  * Interface representing a service that provides access to various services.
@@ -53,4 +53,4 @@ export {
   RoleService,
   FlowSettingsService,
 };
-export * from "./auditLogs/AuditLogsService";
+export * from "./auditLogs/AuditLogsService.js";

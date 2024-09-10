@@ -1,21 +1,21 @@
 import { Routes } from "@ecoflow/types";
-import authRouter from "./auth/auth.routes";
+import authRouter from "./auth/auth.routes.js";
 import { EcoSystemAPIBuilder } from "@ecoflow/api";
-import initRouter from "./init/index.routes";
-import schemaRouter from "./schema/schema.routes";
-import adminRouter from "./admin/admin.routes";
-import serverRouter from "./server/server.routes";
-import setupRouter from "./setup/setup.routes";
-import roleRouter from "./role/role.routes";
-import userRouter from "./users/user.routes";
-import auditLogsRouter from "./auditLogs/auditLogs.routes";
-import testAPIRouter from "./testAPI/testAPI.routes";
-import moduleRouter from "./module/module.routes";
-import flowRouter from "./flow/flow.routes";
-import dashboardRouter from "./dashboard/dashboard.routes";
-import directoryFetcher from "../controllers/base/directoryFetcher.controller";
-import backupRestoreRouter from "./backupRestore/backupRestore.routes";
-import exportRouter from "./export/export.routes";
+import initRouter from "./init/index.routes.js";
+import schemaRouter from "./schema/schema.routes.js";
+import adminRouter from "./admin/admin.routes.js";
+import serverRouter from "./server/server.routes.js";
+import setupRouter from "./setup/setup.routes.js";
+import roleRouter from "./role/role.routes.js";
+import userRouter from "./users/user.routes.js";
+import auditLogsRouter from "./auditLogs/auditLogs.routes.js";
+import testAPIRouter from "./testAPI/testAPI.routes.js";
+import moduleRouter from "./module/module.routes.js";
+import flowRouter from "./flow/flow.routes.js";
+import dashboardRouter from "./dashboard/dashboard.routes.js";
+import directoryFetcher from "../controllers/base/directoryFetcher.controller.js";
+import backupRestoreRouter from "./backupRestore/backupRestore.routes.js";
+import exportRouter from "./export/export.routes.js";
 
 /**
  * Creates a new instance of EcoSystemAPIBuilder to build APIs for the ecosystem.

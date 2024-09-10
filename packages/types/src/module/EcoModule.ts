@@ -1,18 +1,18 @@
 import { PackageSearchResult, Person } from "query-registry";
-import { EcoModuleBuilder } from "./EcoModuleBuilder";
+import { EcoModuleBuilder } from "./EcoModuleBuilder.js";
 /**
  * Interface for an EcoModuleBuilder that defines multiple build methods to create ModuleSchema objects.
  */
-import { EcoModuleID } from "./Builders/EcoModuleID";
-import { ModuleSchema } from "./ModuleSchema";
+import { EcoModuleID } from "./Builders/EcoModuleID.js";
+import { ModuleSchema } from "./ModuleSchema.js";
 import {
   EcoNodeBuilder,
   ModuleNodes,
   EcoNode,
   EcoNodes,
-} from "./EcoNodeBuilder";
+} from "./EcoNodeBuilder.js";
 import { Node as ReactFlowNode } from "@reactflow/core";
-import { FlowsNodeDataTypes } from "../flows";
+import { FlowsNodeDataTypes } from "../flows/index.js";
 import { CSSProperties } from "react";
 
 /**

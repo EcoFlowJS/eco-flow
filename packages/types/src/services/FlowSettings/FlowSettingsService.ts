@@ -1,4 +1,4 @@
-import { FlowEditorSettingsConfigurations } from "../../flows";
+import { FlowEditorSettingsConfigurations } from "../../flows/index.js";
 
 export interface FlowSettingsService {
   /**

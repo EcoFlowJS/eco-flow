@@ -6,7 +6,7 @@ import {
   StrategyOptionsWithoutRequest,
 } from "passport-jwt";
 import passport from "koa-passport";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 
 /**
  * Represents a Passport class that handles authentication using JWT tokens.

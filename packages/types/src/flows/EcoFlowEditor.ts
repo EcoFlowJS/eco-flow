@@ -1,5 +1,5 @@
 import type { Edge } from "@reactflow/core";
-import { configOptions } from "../ecoflow";
+import { configOptions } from "../ecoflow/index.js";
 import {
   API_METHODS,
   EcoModuleID,
@@ -7,9 +7,9 @@ import {
   ModuleSpecsInputsTypes,
   Node,
   Nodes,
-} from "../module";
+} from "../module/index.js";
 import { CSSProperties, FC, HTMLAttributes } from "react";
-import { EcoFLowBuilder } from "./EcoFLowBuilder";
+import { EcoFLowBuilder } from "./EcoFLowBuilder.js";
 
 /**
  * Interface for EcoFlowEditor that provides methods for managing flows, flow configurations,

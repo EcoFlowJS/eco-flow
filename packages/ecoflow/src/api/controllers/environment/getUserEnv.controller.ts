@@ -1,4 +1,4 @@
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import { Context } from "koa";
 
 /**

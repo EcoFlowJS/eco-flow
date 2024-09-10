@@ -8,7 +8,7 @@ import {
   ModuleSpecs,
   PackageJSON,
 } from "@ecoflow/types";
-import { EcoModule } from "./EcoModule";
+import { EcoModule } from "./EcoModule.js";
 import fse from "fs-extra";
 import Helper from "@ecoflow/helper";
 

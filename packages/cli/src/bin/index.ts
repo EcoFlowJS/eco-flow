@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 import fs from "fs";
 import { ICommand } from "@ecoflow/types";
-import { CommanderCli } from "../";
-import { LogLevel } from "@ecoflow/utils";
+import { CommanderCli } from "../index.js";
+import { LogLevel } from "@ecoflow/utils/logger";
 import { has } from "lodash";
 
 /**

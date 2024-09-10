@@ -1,5 +1,5 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import uploadImportFile from "../../../controllers/setup/import/uploadImportFile.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import uploadImportFile from "../../../controllers/setup/import/uploadImportFile.controller.js";
 
 const setupImportRouter = EcoRouter.createRouter();
 export default setupImportRouter;

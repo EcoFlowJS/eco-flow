@@ -7,8 +7,8 @@ import {
   Nodes,
   NodesStack,
 } from "@ecoflow/types";
-import stackNodes from "../helpers/stackNodes";
-import stackConfigNodes from "../helpers/stackConfigNodes";
+import stackNodes from "../helpers/stackNodes.js";
+import stackConfigNodes from "../helpers/stackConfigNodes.js";
 
 /**
  * Class representing an EcoFlowBuilder that builds and manages a flow of nodes and connections.

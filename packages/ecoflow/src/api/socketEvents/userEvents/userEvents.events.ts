@@ -1,5 +1,5 @@
 import { SocketServer } from "@ecoflow/types";
-import getUserRoleList from "../../socketControllers/userSocketController/getUserRoleList.socketController";
+import getUserRoleList from "../../socketControllers/userSocketController/getUserRoleList.socketController.js";
 
 /**
  * Sets up user events for the socket server.

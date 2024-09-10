@@ -1,5 +1,5 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import userRouter from "./users/authUser.routes";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import userRouter from "./users/authUser.routes.js";
 
 const authRouter = EcoRouter.createRouter();
 export default authRouter;

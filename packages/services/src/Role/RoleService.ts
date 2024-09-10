@@ -5,7 +5,7 @@ import {
   Permissions,
   Role,
 } from "@ecoflow/types";
-import { RoleModelKnex, RoleModelMongoose } from "./model/RoleModel";
+import { RoleModelKnex, RoleModelMongoose } from "./model/RoleModel.js";
 import { Types } from "mongoose";
 
 /**

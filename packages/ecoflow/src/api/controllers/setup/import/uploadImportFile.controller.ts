@@ -1,7 +1,7 @@
 import { Context } from "koa";
-import { Upload } from "@ecoflow/utils";
+import { Upload } from "@ecoflow/utils/upload";
 import path from "path";
-import processImport from "../../../helpers/processImport";
+import processImport from "../../../helpers/processImport.js";
 
 const uploadImportFile = async (ctx: Context) => {
   const { _, config, server } = ecoFlow;

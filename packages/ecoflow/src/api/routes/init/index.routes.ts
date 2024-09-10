@@ -1,5 +1,5 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import initStatus from "../../controllers/init/initStatus.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import initStatus from "../../controllers/init/initStatus.controller.js";
 
 const initRouter = EcoRouter.createRouter();
 export default initRouter;

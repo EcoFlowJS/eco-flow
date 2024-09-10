@@ -1,7 +1,7 @@
 import { Context } from "koa";
 import { ApiResponse, userTableCollection } from "@ecoflow/types";
-import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations";
-import installDefaultModules from "../../../helpers/installDefaultModules";
+import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations.js";
+import installDefaultModules from "../../../helpers/installDefaultModules.js";
 
 interface TimeSpansSteup {
   initTimeSpan: Date;

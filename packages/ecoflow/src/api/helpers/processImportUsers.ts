@@ -8,7 +8,7 @@ import {
   userTableCollection,
 } from "@ecoflow/types";
 import Helper from "@ecoflow/helper";
-import prepareDBMigration from "./prepareDBMigration";
+import prepareDBMigration from "./prepareDBMigration.js";
 import TPromise from "thread-promises";
 
 interface UsersConfig {
@@ -71,7 +71,7 @@ const processImportUsers = async (
       Helper.requireUncached(path.join(extractDirectory, "systemDB.json"));
 
     const auditLogMigration = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           for await (const auditLog of auditLogs) {
             const migrateAuditLog = _.has(auditLog, "_doc")
@@ -93,7 +93,7 @@ const processImportUsers = async (
       });
 
     const flowSettingsMigration = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           for await (const flowSetting of flowSettings) {
             const migrateFlowSetting = _.has(flowSetting, "_doc") ? { ...(<
@@ -121,7 +121,7 @@ const processImportUsers = async (
       });
 
     const rolesUserMigrations = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           const newRoleIDs: { [key: string]: string } = Object.create({});
           for await (const role of userRoles) {

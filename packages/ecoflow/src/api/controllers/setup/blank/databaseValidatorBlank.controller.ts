@@ -1,6 +1,6 @@
 import { ApiResponse, configOptions } from "@ecoflow/types";
 import { Context } from "koa";
-import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations";
+import systemDatabaseConfigurations from "../../../helpers/systemDatabaseConfigurations.js";
 
 /**
  * Validates the database configuration based on the context provided.

@@ -1,7 +1,11 @@
 import { Context, Middleware } from "koa";
-import { FlowsNodeDataTypes, NodeConfiguration, NodesStack } from "../flows";
-import { API_METHODS, Node, Nodes } from "../module";
-import { Routes } from "./common";
+import {
+  FlowsNodeDataTypes,
+  NodeConfiguration,
+  NodesStack,
+} from "../flows/index.js";
+import { API_METHODS, Node, Nodes } from "../module/index.js";
+import { Routes } from "./common.js";
 
 /**
  * Interface for building an EcoAPI router.

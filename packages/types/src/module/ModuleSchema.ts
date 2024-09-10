@@ -1,4 +1,4 @@
-import { Module } from "./EcoModule";
+import { Module } from "./EcoModule.js";
 
 export interface ModuleSchema {
   /**

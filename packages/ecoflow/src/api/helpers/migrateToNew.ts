@@ -1,5 +1,5 @@
 import { configOptions, userTableCollection } from "@ecoflow/types";
-import prepareDBMigration from "./prepareDBMigration";
+import prepareDBMigration from "./prepareDBMigration.js";
 import { Service } from "@ecoflow/services";
 
 const migrateToNew = async (

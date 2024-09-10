@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { configOptions } from "@ecoflow/types";
 import Helper from "@ecoflow/helper";
-import defaultConfig from "../../config/default.config";
+import defaultConfig from "../../config/default.config.js";
 
 const processImportConfigs = async (
   extractDirectory: string

@@ -4,7 +4,7 @@ import {
   Knex,
   userTableCollection,
 } from "@ecoflow/types";
-import { knexSchema, mongooseSchema } from "../schema/userSchema";
+import { knexSchema, mongooseSchema } from "../schema/userSchema.js";
 import mongoose, { Model } from "mongoose";
 
 /**

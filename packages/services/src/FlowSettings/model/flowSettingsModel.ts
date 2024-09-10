@@ -8,7 +8,7 @@ import mongoose, { Model } from "mongoose";
 import {
   knexFlowEditorSettingsSchema,
   mongooseFlowEditorSettingsSchema,
-} from "../schema/flowSettingsSchema";
+} from "../schema/flowSettingsSchema.js";
 export const flowEditorSettingsModelMongoose = <
   T extends Partial<FlowEditorSettingsConfigurations> & {
     _id?: string;

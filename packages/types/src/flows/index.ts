@@ -1,2 +1,2 @@
-export * from "./EcoFlowEditor";
-export * from "./EcoFLowBuilder";
+export * from "./EcoFlowEditor.js";
+export * from "./EcoFLowBuilder.js";

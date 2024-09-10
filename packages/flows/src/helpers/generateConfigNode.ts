@@ -1,5 +1,4 @@
 import EcoModule from "@ecoflow/module";
-import { Node, NodeConfiguration } from "@ecoflow/types";
 
 const generateConfigNode = async (
   controller?: string

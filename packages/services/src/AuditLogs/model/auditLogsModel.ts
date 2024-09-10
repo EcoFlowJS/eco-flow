@@ -8,7 +8,7 @@ import { Model, Document } from "mongoose";
 import {
   auditLogSchemaKnex,
   auditLogSchemaMongoose,
-} from "../schema/auditLogSchema";
+} from "../schema/auditLogSchema.js";
 
 /**
  * Creates or retrieves the Mongoose model for audit logs based on the provided connection.

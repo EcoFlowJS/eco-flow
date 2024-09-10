@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import fetchAuditLogs from "../../controllers/auditLogs/fetchAuditLogs.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import fetchAuditLogs from "../../controllers/auditLogs/fetchAuditLogs.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const auditLogsRouter = EcoRouter.createRouter();
 export default auditLogsRouter;

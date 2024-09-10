@@ -1,4 +1,4 @@
-import { configOptions } from "./config.default";
+import { configOptions } from "./config.default.js";
 
 export interface Config {
   //Global configuration settings of the application.

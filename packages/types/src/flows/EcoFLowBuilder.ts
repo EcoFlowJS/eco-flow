@@ -2,8 +2,8 @@ import {
   FlowsDescription,
   NodeConfiguration,
   NodeConnections,
-} from "./EcoFlowEditor";
-import { Node, Nodes } from "../module";
+} from "./EcoFlowEditor.js";
+import { Node, Nodes } from "../module/index.js";
 export type NodesStack = Nodes[];
 
 /**

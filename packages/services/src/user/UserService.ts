@@ -8,7 +8,7 @@ import {
   UserInfo,
   userTableCollection,
 } from "@ecoflow/types";
-import { userModelKnex, userModelMongoose } from "./model/userModel";
+import { userModelKnex, userModelMongoose } from "./model/userModel.js";
 import Helper from "@ecoflow/helper";
 import { Types } from "mongoose";
 

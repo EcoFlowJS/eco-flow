@@ -1,12 +1,12 @@
 import { Command, CommandOptions, Option } from "commander";
-import baseCommand from "../commands/command";
-import adminCommand from "../commands/admin";
+import baseCommand from "../commands/command.js";
+import adminCommand from "../commands/admin.js";
 import EcoFlow from "@ecoflow/ecoflow";
 import {
   CliService as ICliService,
   CommanderCli as ICommanderCli,
 } from "@ecoflow/types";
-import { CliService } from "./CliService";
+import { CliService } from "./CliService.js";
 
 /**
  * CommanderCli class that implements CommanderCli interface.

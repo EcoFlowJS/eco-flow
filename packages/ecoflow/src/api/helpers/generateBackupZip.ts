@@ -4,7 +4,7 @@ import {
   FlowsDescription,
   configOptions,
 } from "@ecoflow/types";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import AdmZip from "adm-zip";
 import fse from "fs-extra";
 import path from "path";

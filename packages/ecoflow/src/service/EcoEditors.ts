@@ -10,8 +10,8 @@ import {
 } from "@ecoflow/types";
 import _ from "lodash";
 import proxy from "koa-proxies";
-import { EcoRouter } from "./EcoRouter";
-import editorsApiRoutes from "../api/editorsApiRoutes.routes";
+import { EcoRouter } from "./EcoRouter.js";
+import editorsApiRoutes from "../api/editorsApiRoutes.routes.js";
 import { RouterOptions } from "@koa/router";
 
 /**

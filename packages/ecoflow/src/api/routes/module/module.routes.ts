@@ -1,15 +1,15 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import fetchInstalledModule from "../../controllers/module/fetchInstalledModule.controller";
-import fetchInstalledModuleDescription from "../../controllers/module/fetchInstalledModuleDescription.controller";
-import fetchModule from "../../controllers/module/fetchModule.controller";
-import fetchSearchPackagesCount from "../../controllers/module/fetchSearchPackagesCount.controller";
-import importEcoPackages from "../../controllers/module/importEcoPackages.controller";
-import installEcoPackages from "../../controllers/module/installEcoPackages.controller";
-import removeEcoPackage from "../../controllers/module/removeEcoPackage.controller";
-import searchPackages from "../../controllers/module/searchPackages.controller";
-import upgradeDowngradePackage from "../../controllers/module/upgradeDowngradePackage.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
-import moduleNodeRouter from "./node/node.routes";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import fetchInstalledModule from "../../controllers/module/fetchInstalledModule.controller.js";
+import fetchInstalledModuleDescription from "../../controllers/module/fetchInstalledModuleDescription.controller.js";
+import fetchModule from "../../controllers/module/fetchModule.controller.js";
+import fetchSearchPackagesCount from "../../controllers/module/fetchSearchPackagesCount.controller.js";
+import importEcoPackages from "../../controllers/module/importEcoPackages.controller.js";
+import installEcoPackages from "../../controllers/module/installEcoPackages.controller.js";
+import removeEcoPackage from "../../controllers/module/removeEcoPackage.controller.js";
+import searchPackages from "../../controllers/module/searchPackages.controller.js";
+import upgradeDowngradePackage from "../../controllers/module/upgradeDowngradePackage.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
+import moduleNodeRouter from "./node/node.routes.js";
 
 const moduleRouter = EcoRouter.createRouter();
 export default moduleRouter;

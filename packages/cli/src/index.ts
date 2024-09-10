@@ -1,3 +1,3 @@
-export * from "./commands/admin";
-export * from "./commands/command";
-export * from "./lib/CommanderCli";
+export * from "./commands/admin.js";
+export * from "./commands/command.js";
+export * from "./lib/CommanderCli.js";

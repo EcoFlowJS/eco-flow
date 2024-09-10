@@ -2,7 +2,7 @@ import { list } from "drivelist";
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
 import fse from "fs-extra";
-import folderHasReadPermission from "../../../helper/folderHasReadPermission.helper";
+import folderHasReadPermission from "../../../helper/folderHasReadPermission.helper.js";
 
 const directoryFetcher = async (ctx: Context) => {
   const { _ } = ecoFlow;

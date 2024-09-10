@@ -2,7 +2,7 @@ import { ApiResponse } from "@ecoflow/types";
 import AdmZip from "adm-zip";
 import { Context } from "koa";
 import path from "path";
-import restoreBackupHelper from "../../helpers/restoreBackupHelper";
+import restoreBackupHelper from "../../helpers/restoreBackupHelper.js";
 import { remove } from "fs-extra";
 
 const restoreBackup = async (ctx: Context) => {

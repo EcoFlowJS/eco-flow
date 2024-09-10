@@ -1,4 +1,4 @@
-export * from "./setup";
+export * from "./setup/index.js";
 /**
  * Interface for the API response object.
  * @interface ApiResponse

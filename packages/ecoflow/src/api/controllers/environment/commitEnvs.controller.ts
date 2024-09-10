@@ -1,7 +1,7 @@
 import { Context } from "koa";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import { ApiResponse } from "@ecoflow/types";
-import loadEnvironments from "../../../helper/env.helper";
+import loadEnvironments from "../../../helper/env.helper.js";
 
 /**
  * Commits the environment variables based on the type specified in the context.

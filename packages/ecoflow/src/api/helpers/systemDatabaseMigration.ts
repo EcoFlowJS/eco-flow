@@ -7,7 +7,7 @@ import {
   configOptions,
   userTableCollection,
 } from "@ecoflow/types";
-import prepareDBMigration from "./prepareDBMigration";
+import prepareDBMigration from "./prepareDBMigration.js";
 import TPromise from "thread-promises";
 
 /**
@@ -94,7 +94,7 @@ async function migrate(this: configOptions["database"], userID: string) {
     } = new Service("_migrationDB");
 
     const auditLogMigration = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           for await (const auditLog of auditLogs) {
             const migrateAuditLog = _.has(auditLog, "_doc")
@@ -121,7 +121,7 @@ async function migrate(this: configOptions["database"], userID: string) {
       });
 
     const flowSettingsMigration = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           for await (const flowSetting of flowSettings) {
             const migrateFlowSetting = _.has(flowSetting, "_doc") ? { ...(<
@@ -149,7 +149,7 @@ async function migrate(this: configOptions["database"], userID: string) {
       });
 
     const rolesUserMigrations = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           const newRoleIDs: { [key: string]: string } = Object.create({});
           for await (const role of roles) {
@@ -198,7 +198,7 @@ async function migrate(this: configOptions["database"], userID: string) {
       });
 
     const tokensMigration = () =>
-      new TPromise<unknown[], void, any>(async (resolve, reject) => {
+      new TPromise.default<unknown[], void, any>(async (resolve, reject) => {
         try {
           for await (const token of tokens) {
             const migrateToken = _.has(token, "_doc")

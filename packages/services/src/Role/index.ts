@@ -1,1 +1,1 @@
-export * from "./RoleService";
+export * from "./RoleService.js";

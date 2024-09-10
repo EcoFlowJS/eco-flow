@@ -1,5 +1,5 @@
 import { ConnectionDefinations } from "@ecoflow/types";
-import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
+import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails.js";
 import { Context } from "koa";
 
 /**

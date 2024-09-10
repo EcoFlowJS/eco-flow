@@ -1,7 +1,7 @@
 import koaCors from "@koa/cors";
-import { loggerOptions } from "../../utils/logger";
+import { loggerOptions } from "../../utils/logger/index.js";
 import { RouterOptions } from "@koa/router";
-import { ConnectionConfig, DB_Drivers } from "../../database";
+import { ConnectionConfig, DB_Drivers } from "../../database/index.js";
 
 /**
  * Extends the koaCors.Options interface to include an additional property 'enabled' of type boolean.

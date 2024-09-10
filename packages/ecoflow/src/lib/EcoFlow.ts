@@ -1,4 +1,4 @@
-import { Config } from "../config";
+import { Config } from "../config/index.js";
 import {
   ModuleConfigs as IModuleConfigs,
   EcoFlowEditor as IEcoFlowEditor,
@@ -11,20 +11,20 @@ import {
 } from "@ecoflow/types";
 import _ from "lodash";
 import path from "path";
-import { Logger } from "@ecoflow/utils";
-import EcoContainer from "./EcoContainer";
+import { Logger } from "@ecoflow/utils/logger";
+import EcoContainer from "./EcoContainer.js";
 import { EcoFlow as IEcoFlow } from "@ecoflow/types";
-import { EcoServer } from "../service/EcoServer";
-import { EcoRouter } from "../service/EcoRouter";
-import { EcoHelper } from "./EcoHelper";
+import { EcoServer } from "../service/EcoServer.js";
+import { EcoRouter } from "../service/EcoRouter.js";
+import { EcoHelper } from "./EcoHelper.js";
 import { Database } from "@ecoflow/database";
 import { Service } from "@ecoflow/services";
 import { Server as SocketServer } from "socket.io";
 import EcoModule from "@ecoflow/module";
-import loadEnvironments from "../helper/env.helper";
+import loadEnvironments from "../helper/env.helper.js";
 import { EcoFlowEditor } from "@ecoflow/flows";
-import defaultModules from "../defaults/defaultModules";
-import { ModuleConfigs } from "./ModuleConfigs";
+import defaultModules from "../defaults/defaultModules.js";
+import { ModuleConfigs } from "./ModuleConfigs.js";
 
 /**
  * Defines an interface for process commands with two properties: STOP and RESTART.

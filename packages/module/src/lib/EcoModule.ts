@@ -28,9 +28,9 @@ import {
   Packument,
   PackageSearchResult,
 } from "query-registry";
-import { EcoModuleBuilder } from "./EcoModuleBuilder";
-import { EcoModuleID } from "./Builders/EcoModuleID";
-import { EcoNodeBuilder } from "./EcoNodeBuilder";
+import { EcoModuleBuilder } from "./EcoModuleBuilder.js";
+import { EcoModuleID } from "./Builders/EcoModuleID.js";
+import { EcoNodeBuilder } from "./EcoNodeBuilder.js";
 import TPromise from "thread-promises";
 import StreamZip from "node-stream-zip";
 
@@ -533,7 +533,7 @@ export class EcoModule implements IEcoModule {
        * @returns None
        */
       for await (const { package: searchResult } of searchResults) {
-        const packument = new TPromise<unknown[], Packument, void>(
+        const packument = new TPromise.default<unknown[], Packument, void>(
           (resolve, reject) =>
             this.getPackument(searchResult.name).then(resolve, reject)
         );

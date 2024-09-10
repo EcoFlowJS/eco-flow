@@ -1,4 +1,4 @@
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import { EcoFlow } from "@ecoflow/types";
 import path from "path";
 import fse from "fs-extra";

@@ -1,9 +1,9 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import commitEnvs from "../../../controllers/environment/commitEnvs.controller";
-import getEnv from "../../../controllers/environment/getEnv.controller";
-import getSystemEnv from "../../../controllers/environment/getSystemEnv.controller";
-import getUserEnv from "../../../controllers/environment/getUserEnv.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import commitEnvs from "../../../controllers/environment/commitEnvs.controller.js";
+import getEnv from "../../../controllers/environment/getEnv.controller.js";
+import getSystemEnv from "../../../controllers/environment/getSystemEnv.controller.js";
+import getUserEnv from "../../../controllers/environment/getUserEnv.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
 
 const environmentRouter = EcoRouter.createRouter();
 export default environmentRouter;

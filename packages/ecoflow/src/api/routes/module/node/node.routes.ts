@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import getNodes from "../../../controllers/nodes/getNodes.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import getNodes from "../../../controllers/nodes/getNodes.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
 
 const moduleNodeRouter = EcoRouter.createRouter();
 export default moduleNodeRouter;

@@ -1,5 +1,5 @@
 import { ApiResponse, ModuleSchema } from "@ecoflow/types";
-import { Upload } from "@ecoflow/utils";
+import { Upload } from "@ecoflow/utils/upload";
 import { Context } from "koa";
 
 /**

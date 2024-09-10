@@ -1,4 +1,4 @@
-import { configOptions } from "../../ecoflow";
+import { configOptions } from "../../ecoflow/index.js";
 
 export interface Logger {
   /**

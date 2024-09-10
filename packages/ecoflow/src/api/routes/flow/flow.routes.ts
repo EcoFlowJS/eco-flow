@@ -1,9 +1,9 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import deployFlowConfiguration from "../../controllers/flow/deployFlowConfiguration.controller";
-import getFlows from "../../controllers/flow/getFlows.controller";
-import getSettings from "../../controllers/flow/getSettings.controller";
-import updateSettings from "../../controllers/flow/updateSettings.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import deployFlowConfiguration from "../../controllers/flow/deployFlowConfiguration.controller.js";
+import getFlows from "../../controllers/flow/getFlows.controller.js";
+import getSettings from "../../controllers/flow/getSettings.controller.js";
+import updateSettings from "../../controllers/flow/updateSettings.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const flowRouter = EcoRouter.createRouter();
 export default flowRouter;

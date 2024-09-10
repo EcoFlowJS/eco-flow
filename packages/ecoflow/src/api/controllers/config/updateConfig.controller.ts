@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import parseServerConfigHelper from "../../helpers/parseServerConfigHelper";
+import parseServerConfigHelper from "../../helpers/parseServerConfigHelper.js";
 
 /**
  * Updates the configuration settings based on the request body and user ID in the context.

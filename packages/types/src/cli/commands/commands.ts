@@ -1,4 +1,4 @@
-import { loggerOptions } from "../../utils";
+import { loggerOptions } from "../../utils/index.js";
 
 /**
  * Interface representing a command with optional properties.

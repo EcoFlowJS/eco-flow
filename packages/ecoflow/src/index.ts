@@ -1,4 +1,4 @@
-import EcoFlow from "./lib/EcoFlow";
+import EcoFlow from "./lib/EcoFlow.js";
 
 export type * from "@ecoflow/types";
 

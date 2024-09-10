@@ -7,7 +7,7 @@ import {
 import {
   flowEditorSettingsModelKnex,
   flowEditorSettingsModelMongoose,
-} from "./model/flowSettingsModel";
+} from "./model/flowSettingsModel.js";
 
 /**
  * A service class for managing flow settings in the database.

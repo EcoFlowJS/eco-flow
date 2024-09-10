@@ -1,9 +1,9 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import createRole from "../../controllers/role/createRole.controller";
-import fetchRole from "../../controllers/role/fetchRole.controller";
-import removeRole from "../../controllers/role/removeRole.controller";
-import updateRole from "../../controllers/role/updateRole.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import createRole from "../../controllers/role/createRole.controller.js";
+import fetchRole from "../../controllers/role/fetchRole.controller.js";
+import removeRole from "../../controllers/role/removeRole.controller.js";
+import updateRole from "../../controllers/role/updateRole.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const roleRouter = EcoRouter.createRouter();
 export default roleRouter;

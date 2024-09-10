@@ -11,10 +11,10 @@ import {
   RouterRequestControllerBuilderOptions,
   Routes,
 } from "@ecoflow/types";
-import buildRouterPath from "../helpers/buildRouterPath";
+import buildRouterPath from "../helpers/buildRouterPath.js";
 import { Context } from "koa";
 import EcoModule from "@ecoflow/module";
-import buildController from "../helpers/buildController";
+import buildController from "../helpers/buildController.js";
 
 /**
  * A class that builds an Eco API router based on the provided node stack and configurations.

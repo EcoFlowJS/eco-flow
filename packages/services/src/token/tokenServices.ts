@@ -5,7 +5,7 @@ import {
   Tokens,
 } from "@ecoflow/types";
 import Helper from "@ecoflow/helper";
-import { TokenModelKnex, TokenModelMongoose } from "./model/token.model";
+import { TokenModelKnex, TokenModelMongoose } from "./model/token.model.js";
 import { Database as EcoDB } from "@ecoflow/database";
 
 /**

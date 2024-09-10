@@ -6,11 +6,11 @@ import {
 } from "@ecoflow/types";
 import { Context } from "koa";
 import TPromise from "thread-promises";
-import buildUserControllers from "./buildUserControllers";
-import debugController from "./debugController";
-import eventEmitterController from "./eventEmitterController";
-import middlewareController from "./middlewareController";
-import responseController from "./responseController";
+import buildUserControllers from "./buildUserControllers.js";
+import debugController from "./debugController.js";
+import eventEmitterController from "./eventEmitterController.js";
+import middlewareController from "./middlewareController.js";
+import responseController from "./responseController.js";
 
 const generateContext = (
   ctx: Context | any[],
@@ -50,10 +50,10 @@ const buildController = async (
     const { _ } = ecoFlow;
     const controllerResponse = Object.create({});
     const middlewareResponse = Object.create({});
-    const concurrentMiddlewares: TPromise<Array<void>, void, void>[] =
+    const concurrentMiddlewares: TPromise.default<Array<void>, void, void>[] =
       middlewares.map(
         (middleware) =>
-          new TPromise<Array<void>, void, void>(async (resolve) => {
+          new TPromise.default<Array<void>, void, void>(async (resolve) => {
             const controllers = await buildUserControllers(
               middleware,
               nodeConfiguration

@@ -6,9 +6,9 @@ import { merge } from "lodash";
 import defaultConfig, {
   defaultBaseDir,
   defaultConfigBuilder,
-} from "./default.config";
+} from "./default.config.js";
 import { configOptions, ConfigParams, Config as IConfig } from "@ecoflow/types";
-import EcoFlow from "../lib/EcoFlow";
+import EcoFlow from "../lib/EcoFlow.js";
 
 /**
  * Configuration for the application environment that will be used to configure the application environment

@@ -1,23 +1,23 @@
-import stringToFunction from "../helpers/stringToFunction";
-import functionToString from "../helpers/functionToString";
-import installPackageHelper from "../helpers/installPackage";
-import removePackageHelper from "../helpers/removePackage";
-import fetchFromEnv from "../helpers/fetchFromEnv";
-import getRandomInt from "../helpers/getRandomInt";
-import generateJwtToken from "../helpers/generateJwtToken";
+import stringToFunction from "../helpers/stringToFunction.js";
+import functionToString from "../helpers/functionToString.js";
+import installPackageHelper from "../helpers/installPackage.js";
+import removePackageHelper from "../helpers/removePackage.js";
+import fetchFromEnv from "../helpers/fetchFromEnv.js";
+import getRandomInt from "../helpers/getRandomInt.js";
+import generateJwtToken from "../helpers/generateJwtToken.js";
 import { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken";
-import verifyJwtToken from "../helpers/verifyJwtToken";
+import verifyJwtToken from "../helpers/verifyJwtToken.js";
 import type { Context } from "koa";
-import setCookieHelper from "../helpers/setCookieHelper";
+import setCookieHelper from "../helpers/setCookieHelper.js";
 import { SetOption } from "@ecoflow/types";
-import listAllCookies from "../helpers/listAllCookies";
-import getCookieHelper from "../helpers/getCookieHelper";
-import compareHashHelper from "../helpers/compareHashHelper";
-import createHashHelper from "../helpers/createHashHelper";
-import xssFilterHelper from "../helpers/xssFilterHelper";
-import validatePasswordRegex from "../helpers/validatePasswordRegex";
-import requireUncached from "../helpers/requireUncached";
-import installPackageDependencies from "../helpers/installPackageDependencies";
+import listAllCookies from "../helpers/listAllCookies.js";
+import getCookieHelper from "../helpers/getCookieHelper.js";
+import compareHashHelper from "../helpers/compareHashHelper.js";
+import createHashHelper from "../helpers/createHashHelper.js";
+import xssFilterHelper from "../helpers/xssFilterHelper.js";
+import validatePasswordRegex from "../helpers/validatePasswordRegex.js";
+import requireUncached from "../helpers/requireUncached.js";
+import installPackageDependencies from "../helpers/installPackageDependencies.js";
 
 /**
  * Helper class with static methods for various utility functions.

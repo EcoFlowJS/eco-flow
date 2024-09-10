@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import setupBlankRouter from "./blank/blank.routes";
-import setupImportRouter from "./import/import.routes";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import setupBlankRouter from "./blank/blank.routes.js";
+import setupImportRouter from "./import/import.routes.js";
 
 const setupRouter = EcoRouter.createRouter();
 export default setupRouter;

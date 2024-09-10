@@ -1,10 +1,10 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import backedFilesFetch from "../../controllers/backupRestore/backedFilesFetch.controller";
-import backupRestoreStatus from "../../controllers/backupRestore/backupRestoreStatus.controller";
-import generateBackupFile from "../../controllers/backupRestore/generateBackupFile.controller";
-import removeBackedFile from "../../controllers/backupRestore/removeBackedFile.controller";
-import restoreBackup from "../../controllers/backupRestore/restoreBackup.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import backedFilesFetch from "../../controllers/backupRestore/backedFilesFetch.controller.js";
+import backupRestoreStatus from "../../controllers/backupRestore/backupRestoreStatus.controller.js";
+import generateBackupFile from "../../controllers/backupRestore/generateBackupFile.controller.js";
+import removeBackedFile from "../../controllers/backupRestore/removeBackedFile.controller.js";
+import restoreBackup from "../../controllers/backupRestore/restoreBackup.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const backupRestoreRouter = EcoRouter.createRouter();
 export default backupRestoreRouter;

@@ -1,4 +1,4 @@
-import defaultModules from "../../defaults/defaultModules";
+import defaultModules from "../../defaults/defaultModules.js";
 
 const installDefaultModules = async (): Promise<void> => {
   const { ecoModule } = ecoFlow;

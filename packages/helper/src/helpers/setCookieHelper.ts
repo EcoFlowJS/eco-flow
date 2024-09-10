@@ -1,6 +1,6 @@
 import { SetOption } from "@ecoflow/types";
 import { Context } from "koa";
-import { Helper } from "../libs";
+import { Helper } from "../libs/index.js";
 
 /**
  * Sets a cookie in the context with the given name, value, and options.

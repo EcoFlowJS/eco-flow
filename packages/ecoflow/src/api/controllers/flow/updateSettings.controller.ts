@@ -1,6 +1,6 @@
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
-import defaultFlowEditorSettings from "../../../defaults/defaultFlowEditorSettings.default";
+import defaultFlowEditorSettings from "../../../defaults/defaultFlowEditorSettings.default.js";
 
 /**
  * Updates the settings for a given user's flow based on the provided context.

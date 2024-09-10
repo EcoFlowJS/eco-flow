@@ -1,5 +1,5 @@
 import { Environment } from "@ecoflow/types";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 
 /**
  * Fetches a value from either the user or system environment based on the provided environment variable.

@@ -1,7 +1,7 @@
 import path from "path";
 import AdmZip from "adm-zip";
-import generateBackupZip from "./generateBackupZip";
-import { Builder } from "@ecoflow/utils";
+import generateBackupZip from "./generateBackupZip.js";
+import { Builder } from "@ecoflow/utils/builder";
 import { format } from "date-and-time";
 
 const exportProject = async (): Promise<Buffer> => {

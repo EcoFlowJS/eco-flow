@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import databaseValidatorBlank from "../../../controllers/setup/blank/databaseValidatorBlank.controller";
-import processSetupBlank from "../../../controllers/setup/blank/processSetupBlank.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import databaseValidatorBlank from "../../../controllers/setup/blank/databaseValidatorBlank.controller.js";
+import processSetupBlank from "../../../controllers/setup/blank/processSetupBlank.controller.js";
 
 const setupBlankRouter = EcoRouter.createRouter();
 export default setupBlankRouter;

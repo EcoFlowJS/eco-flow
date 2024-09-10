@@ -1,7 +1,7 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import getConfigs from "../../../controllers/config/getConfigs.controller";
-import updateConfig from "../../../controllers/config/updateConfig.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import getConfigs from "../../../controllers/config/getConfigs.controller.js";
+import updateConfig from "../../../controllers/config/updateConfig.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
 
 const adminConfigRouter = EcoRouter.createRouter();
 export default adminConfigRouter;

@@ -1,4 +1,4 @@
-import { CliService } from "./CliService";
+import { CliService } from "./CliService.js";
 
 /**
  * Interface for a Commander CLI object that provides methods for parsing arguments,

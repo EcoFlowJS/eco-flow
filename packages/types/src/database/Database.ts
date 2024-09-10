@@ -1,5 +1,5 @@
 import { MongooseOptions } from "mongoose";
-import { DriverKnex, DriverMongoose, KnexDB_Driver } from "./drivers";
+import { DriverKnex, DriverMongoose, KnexDB_Driver } from "./drivers/index.js";
 
 /**
  * Interface for managing database connections.

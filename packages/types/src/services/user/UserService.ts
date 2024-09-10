@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { ApiResponse } from "../../ecoflow";
+import { ApiResponse } from "../../ecoflow/index.js";
 
 /**
  * Interface for UserService that defines various methods related to user management.

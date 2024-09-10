@@ -1,9 +1,9 @@
 import fse from "fs-extra";
 import path from "path";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 import Helper from "@ecoflow/helper";
 import { Environment } from "@ecoflow/types";
-import loadEnvironments from "../../helper/env.helper";
+import loadEnvironments from "../../helper/env.helper.js";
 
 const processImportEnvs = async (
   extractDirectory: string

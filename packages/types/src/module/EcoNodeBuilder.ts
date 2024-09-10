@@ -1,6 +1,6 @@
-import { FlowInputSpecs } from "../flows";
-import { EcoModuleID } from "./Builders";
-import { ModuleSpecs } from "./EcoModule";
+import { FlowInputSpecs } from "../flows/index.js";
+import { EcoModuleID } from "./Builders/index.js";
+import { ModuleSpecs } from "./EcoModule.js";
 
 /**
  * Interface for an EcoNodeBuilder that defines a method to build nodes asynchronously.

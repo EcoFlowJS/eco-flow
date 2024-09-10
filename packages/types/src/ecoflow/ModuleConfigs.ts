@@ -1,4 +1,4 @@
-import { EcoModuleID } from "../module";
+import { EcoModuleID } from "../module/index.js";
 
 export interface ModuleConfigs {
   selectPackage(packageName: string): ModuleConfig | undefined;

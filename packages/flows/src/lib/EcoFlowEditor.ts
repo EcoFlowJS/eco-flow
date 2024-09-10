@@ -16,9 +16,9 @@ import {
 import { glob } from "glob";
 import path from "path";
 import fse from "fs-extra";
-import { EcoFLowBuilder } from "./EcoFLowBuilder";
+import { EcoFLowBuilder } from "./EcoFLowBuilder.js";
 import { EcoAPIBuilder, EcoAPIRouterBuilder } from "@ecoflow/api";
-import generateConfigNode from "../helpers/generateConfigNode";
+import generateConfigNode from "../helpers/generateConfigNode.js";
 
 /**
  * Represents an EcoFlowEditor class that implements IEcoFlowEditor interface.

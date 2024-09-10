@@ -1,4 +1,4 @@
-import { joinRoom } from "../../socketControllers/base.socketController";
+import { joinRoom } from "../../socketControllers/base.socketController.js";
 import { SocketServer } from "@ecoflow/types";
 
 /**

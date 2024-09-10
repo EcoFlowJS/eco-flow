@@ -1,4 +1,4 @@
-import { ICommand } from "./commands";
+import { ICommand } from "./commands/index.js";
 
 /**
  * Interface for a CLI service that provides methods to interact with a service.

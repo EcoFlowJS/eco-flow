@@ -21,7 +21,7 @@ import {
   alterSqliteColumn,
   processColumnBuilder,
   processTable,
-} from "./helper/commitSaveTableColumn.helper";
+} from "./helper/commitSaveTableColumn.helper.js";
 import {
   dateTimeFormat,
   getcolumnDefaultValue,
@@ -29,10 +29,10 @@ import {
   processType,
   processTypeAlias,
   textFormat,
-} from "./helper/getTableColumnInfo.helper";
-import insertDatabaseDataMongoProcessor from "./helper/insertDatabaseDataMongoProcessor.helper";
+} from "./helper/getTableColumnInfo.helper.js";
+import insertDatabaseDataMongoProcessor from "./helper/insertDatabaseDataMongoProcessor.helper.js";
 import mongoose from "mongoose";
-import dataProcessorMongo from "./helper/getDatabaseData.helper";
+import dataProcessorMongo from "./helper/getDatabaseData.helper.js";
 import { Database as EcoDB } from "@ecoflow/database";
 
 /**

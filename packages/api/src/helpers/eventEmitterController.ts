@@ -1,4 +1,4 @@
-import { EcoContext, EcoEvent, UserControllers } from "@ecoflow/types";
+import { EcoEvent, UserControllers } from "@ecoflow/types";
 
 const eventEmitterController = async (
   ecoContext: EcoEvent,

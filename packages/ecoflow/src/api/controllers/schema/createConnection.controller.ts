@@ -1,6 +1,6 @@
 import { Context } from "koa";
 import { ConnectionDefinations } from "@ecoflow/types";
-import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails";
+import getConnectionsDetails from "../../helpers/getDatabaseConnectionsDetails.js";
 
 /**
  * Creates a new database connection based on the provided context.

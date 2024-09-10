@@ -7,7 +7,7 @@ import {
   UserService,
 } from "@ecoflow/types";
 import { Context } from "koa";
-import roleAdmin from "../../../defaults/roleAdmin.default";
+import roleAdmin from "../../../defaults/roleAdmin.default.js";
 
 /**
  * Fetches the role list for a given user from the UserService.

@@ -1,1 +1,1 @@
-export * from "./EcoModuleID";
+export * from "./EcoModuleID.js";

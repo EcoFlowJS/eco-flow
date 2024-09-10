@@ -4,7 +4,7 @@ import {
   DatabaseTableTypes,
   DriverKnex,
   DriverMongoose,
-} from "../../database";
+} from "../../database/index.js";
 
 /**
  * Interface for a Schema Editor that provides methods to interact with database collections or tables.

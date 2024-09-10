@@ -1,5 +1,5 @@
 import path from "path";
-import fse, { promises } from "fs-extra";
+import fse from "fs-extra";
 import _ from "lodash";
 import { Environment } from "@ecoflow/types";
 

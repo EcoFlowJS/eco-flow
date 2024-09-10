@@ -11,10 +11,10 @@ import {
 } from "@ecoflow/types";
 import fse from "fs-extra";
 import path from "path";
-import { DriverKnex, DriverMongoose } from "../drivers";
+import { DriverKnex, DriverMongoose } from "../drivers/index.js";
 import _ from "lodash";
 import Helper from "@ecoflow/helper";
-import { Builder } from "@ecoflow/utils";
+import { Builder } from "@ecoflow/utils/builder";
 
 /**
  * Represents a Database class that implements the Database interface.

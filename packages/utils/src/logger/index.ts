@@ -1,2 +1,2 @@
-export * from "./lib/Logger";
-export * from "./lib/logLevels";
+export * from "./lib/Logger.js";
+export * from "./lib/logLevels.js";

@@ -1,4 +1,4 @@
-import getUserRoles from "../../socketControllers/roleSocketController/getUserRoles.socketController";
+import getUserRoles from "../../socketControllers/roleSocketController/getUserRoles.socketController.js";
 import { SocketServer } from "@ecoflow/types";
 
 /**

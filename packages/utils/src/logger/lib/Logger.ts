@@ -7,8 +7,8 @@ import {
 } from "@ecoflow/types";
 import { homedir } from "os";
 import fs from "fs";
-import { LogLevelName } from "./logger.const";
-import { LogLevel } from "./logLevels";
+import { LogLevelName } from "./logger.const.js";
+import { LogLevel } from "./logLevels.js";
 
 /**
  * Default configuration for logging output. This configuration is used by the logging

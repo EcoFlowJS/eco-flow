@@ -1,4 +1,3 @@
-import Helper from "@ecoflow/helper";
 import { Context } from "koa";
 
 const testAPIController = async (ctx: Context) => {

@@ -21,7 +21,7 @@ import mongoose, {
   SchemaType,
   VirtualType,
 } from "mongoose";
-import processCollectionInfo from "./collectionInfo.helper";
+import processCollectionInfo from "./collectionInfo.helper.js";
 
 /**
  * A class that implements the DriverMongoose interface and provides methods for interacting with MongoDB using

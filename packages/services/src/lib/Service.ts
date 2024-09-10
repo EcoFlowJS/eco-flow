@@ -8,12 +8,12 @@ import {
   FlowSettingsService as IFlowSettingsService,
   DatabaseConnection,
 } from "@ecoflow/types";
-import { UserService } from "../user";
-import { TokenServices } from "../token";
-import { SchemaEditorService } from "../SchemaEditor/SchemaEditorService";
-import { RoleService } from "../Role";
-import { AuditLogsService } from "../AuditLogs";
-import { FlowSettingsService } from "../FlowSettings";
+import { UserService } from "../user/index.js";
+import { TokenServices } from "../token/index.js";
+import { SchemaEditorService } from "../SchemaEditor/SchemaEditorService.js";
+import { RoleService } from "../Role/index.js";
+import { AuditLogsService } from "../AuditLogs/index.js";
+import { FlowSettingsService } from "../FlowSettings/index.js";
 
 /**
  * Represents a service class that provides access to various services related to the application.

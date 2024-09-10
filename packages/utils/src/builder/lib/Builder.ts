@@ -1,5 +1,5 @@
-import { EnvBuilder } from "../builders/env/env.builder";
-import { JsonBuilder } from "../builders/json/json.builder";
+import { EnvBuilder } from "../builders/env/env.builder.js";
+import { JsonBuilder } from "../builders/json/json.builder.js";
 
 /* The Builder class provides static methods to access different types of builders such
 as JSON and ENV. */

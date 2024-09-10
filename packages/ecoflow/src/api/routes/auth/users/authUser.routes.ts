@@ -1,8 +1,8 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import refreshToken from "../../../controllers/user/refreshToken.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
-import userLogin from "../../../controllers/user/userLogin.controller";
-import userLogout from "../../../controllers/user/userLogout.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import refreshToken from "../../../controllers/user/refreshToken.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
+import userLogin from "../../../controllers/user/userLogin.controller.js";
+import userLogout from "../../../controllers/user/userLogout.controller.js";
 
 const authUserRouter = EcoRouter.createRouter();
 export default authUserRouter;

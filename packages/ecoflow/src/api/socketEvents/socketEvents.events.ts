@@ -1,7 +1,7 @@
 import { SocketServer } from "@ecoflow/types";
-import baseEvents from "./baseEvents/baseEvents.events";
-import roleEvents from "./roleEvents/roleEvents.events";
-import userEvents from "./userEvents/userEvents.events";
+import baseEvents from "./baseEvents/baseEvents.events.js";
+import roleEvents from "./roleEvents/roleEvents.events.js";
+import userEvents from "./userEvents/userEvents.events.js";
 
 /**
  * Sets up socket events for the given SocketServer by calling baseEvents, roleEvents, and userEvents.

@@ -1,7 +1,7 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import isServerOnline from "../../controllers/server/isServerOnline.controller";
-import serverCloseRestart from "../../controllers/server/serverCloseRestart.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import isServerOnline from "../../controllers/server/isServerOnline.controller.js";
+import serverCloseRestart from "../../controllers/server/serverCloseRestart.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const serverRouter = EcoRouter.createRouter();
 export default serverRouter;

@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../../service/EcoRouter";
-import fetchPermissions from "../../../controllers/user/fetchPermissions.controller";
-import isAuthenticated from "../../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../../service/EcoRouter.js";
+import fetchPermissions from "../../../controllers/user/fetchPermissions.controller.js";
+import isAuthenticated from "../../../controllers/user/isAuthenticated.controller.js";
 
 const userPermissionsRouter = EcoRouter.createRouter();
 export default userPermissionsRouter;

@@ -7,10 +7,10 @@ import { Server, Socket } from "socket.io";
 import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@ecoflow/types";
-import { Passport } from "./Passport";
+import { Passport } from "./Passport.js";
 import { StrategyOptionsWithoutRequest } from "passport-jwt";
-import EcoFlow from "../lib/EcoFlow";
-import socketEvents from "../api/socketEvents/socketEvents.events";
+import EcoFlow from "../lib/EcoFlow.js";
+import socketEvents from "../api/socketEvents/socketEvents.events.js";
 
 /**
  * Represents an EcoServer that extends Koa and implements EcoServer interface.
@@ -108,7 +108,7 @@ export class EcoServer extends Koa implements IEcoServer {
       this._server = httpsServer.createServer(this._https!, this.callback());
     this.use(koaCors(this._httpCors));
     this.use(
-      koaBody({
+      koaBody.koaBody({
         multipart: true,
       })
     );

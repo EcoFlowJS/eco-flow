@@ -1,1 +1,1 @@
-export * from "./FlowSettingsService";
+export * from "./FlowSettingsService.js";

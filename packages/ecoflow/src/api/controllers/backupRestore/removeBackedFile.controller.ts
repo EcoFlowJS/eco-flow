@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { Context } from "koa";
 import { ApiResponse } from "@ecoflow/types";
-import fetchBackupFiles from "../../helpers/fetchBackupFiles";
+import fetchBackupFiles from "../../helpers/fetchBackupFiles.js";
 
 const removeBackedFile = async (ctx: Context) => {
   const { fileName } = ctx.params;

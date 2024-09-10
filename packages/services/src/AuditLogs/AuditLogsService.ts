@@ -10,7 +10,7 @@ import {
 import {
   auditLogsModelKnex,
   auditLogsModelMongoose,
-} from "./model/auditLogsModel";
+} from "./model/auditLogsModel.js";
 
 /**
  * Service class for handling audit logs in the system.

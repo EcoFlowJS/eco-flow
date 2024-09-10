@@ -1,6 +1,6 @@
 import { ApiResponse, FlowEditorSettingsConfigurations } from "@ecoflow/types";
 import { Context } from "koa";
-import defaultFlowEditorSettings from "../../../defaults/defaultFlowEditorSettings.default";
+import defaultFlowEditorSettings from "../../../defaults/defaultFlowEditorSettings.default.js";
 
 /**
  * Retrieves the settings for a given context asynchronously.

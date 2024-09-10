@@ -1,8 +1,8 @@
 import { ApiResponse } from "@ecoflow/types";
 import { Context } from "koa";
-import exportTemplate from "../../helpers/exportTemplate";
+import exportTemplate from "../../helpers/exportTemplate.js";
 import { Readable } from "stream";
-import exportProject from "../../helpers/exportProject";
+import exportProject from "../../helpers/exportProject.js";
 
 const exportController = async (ctx: Context) => {
   const { _ } = ecoFlow;

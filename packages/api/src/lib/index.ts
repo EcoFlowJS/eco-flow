@@ -1,3 +1,3 @@
-export * from "./EcoAPIBuilder";
-export * from "./EcoAPIRouterBuilder";
-export * from "./EcoSystemAPIBuilder";
+export * from "./EcoAPIBuilder.js";
+export * from "./EcoAPIRouterBuilder.js";
+export * from "./EcoSystemAPIBuilder.js";

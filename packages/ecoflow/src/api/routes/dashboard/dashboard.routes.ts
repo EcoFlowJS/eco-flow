@@ -1,6 +1,6 @@
-import { EcoRouter } from "../../../service/EcoRouter";
-import dashboardStatus from "../../controllers/dashboard/dashboardStatus.controller";
-import isAuthenticated from "../../controllers/user/isAuthenticated.controller";
+import { EcoRouter } from "../../../service/EcoRouter.js";
+import dashboardStatus from "../../controllers/dashboard/dashboardStatus.controller.js";
+import isAuthenticated from "../../controllers/user/isAuthenticated.controller.js";
 
 const dashboardRouter = EcoRouter.createRouter();
 export default dashboardRouter;

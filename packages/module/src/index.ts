@@ -1,4 +1,4 @@
-import { EcoModule } from "./lib/EcoModule";
+import { EcoModule } from "./lib/EcoModule.js";
 
 export default EcoModule;
 

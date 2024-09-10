@@ -1,3 +1,3 @@
-export * from "./loggingConfig";
-export * from "./logLevels";
-export * from "./Logger";
+export * from "./loggingConfig.js";
+export * from "./logLevels.js";
+export * from "./Logger.js";
