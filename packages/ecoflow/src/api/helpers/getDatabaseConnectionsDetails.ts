@@ -4,7 +4,6 @@ import {
   ConnectionDefinations,
   DB_Drivers,
 } from "@ecoflow/types";
-import _ from "lodash";
 import fse from "fs-extra";
 import path from "path";
 
@@ -16,6 +15,7 @@ import path from "path";
 const getConnectionsDetails = (
   connections: ConnectionDefinations
 ): [string, DB_Drivers, ConnectionConfig] => {
+  const { _ } = ecoFlow;
   const name = Helper.xssFilterHelper(connections.ConnectionName);
   let Driver: DB_Drivers;
   let Connections: ConnectionConfig = {};

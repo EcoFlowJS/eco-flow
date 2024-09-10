@@ -1,7 +1,6 @@
 import Helper from "@ecoflow/helper";
 import { Context, Next } from "koa";
 import passport from "koa-passport";
-import _ from "lodash";
 
 /**
  * Middleware function to check if the user is authenticated.
@@ -10,7 +9,7 @@ import _ from "lodash";
  * @returns None
  */
 const isAuthenticated = async (ctx: Context, next: Next) => {
-  const { isAuth, service } = ecoFlow;
+  const { _, isAuth, service } = ecoFlow;
   /**
    * Authenticates the user using the "_ecoFlowPassport" strategy and handles different scenarios based on the result.
    * @param {Object} ctx - The context object representing the state of the server.

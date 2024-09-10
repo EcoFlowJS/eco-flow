@@ -4,7 +4,6 @@ import passport from "koa-passport";
 import httpServer, { Server as HttpServer } from "http";
 import httpsServer, { Server as HttpsServer } from "https";
 import { Server, Socket } from "socket.io";
-import _ from "lodash";
 import koaCors from "@koa/cors";
 import { EcoServer as IEcoServer, configOptions } from "@ecoflow/types";
 import { Passport } from "./Passport.js";
@@ -86,7 +85,8 @@ export class EcoServer extends Koa implements IEcoServer {
    * @returns None
    */
   private processConfig() {
-    const { https, Host, Port, httpCors } = ecoFlow.config._config;
+    const { _, config } = ecoFlow;
+    const { https, Host, Port, httpCors } = config._config;
     if (!_.isEmpty(https) && https.enabled) {
       if (
         _.has(https, "key") &&

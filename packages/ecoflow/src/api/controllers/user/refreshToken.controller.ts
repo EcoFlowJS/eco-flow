@@ -1,15 +1,13 @@
 import Helper from "@ecoflow/helper";
-import { Context, Next } from "koa";
-import _ from "lodash";
+import { Context } from "koa";
 
 /**
  * Refreshes the authentication token for the user.
  * @param {Context} ctx - The Koa context object.
- * @param {Next} next - The next middleware function in the Koa middleware stack.
  * @returns None
  */
-const refreshToken = async (ctx: Context, next: Next) => {
-  const { isAuth } = ecoFlow;
+const refreshToken = async (ctx: Context) => {
+  const { isAuth, _ } = ecoFlow;
   if (!isAuth) {
     ctx.status = 200;
     ctx.body = {

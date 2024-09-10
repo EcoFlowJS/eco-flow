@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { glob } from "glob";
 import { homedir } from "os";
-import { merge } from "lodash";
+import merge from "lodash/merge.js";
 import defaultConfig, {
   defaultBaseDir,
   defaultConfigBuilder,
@@ -63,8 +63,16 @@ export class Config implements IConfig {
     if (!fse.existsSync(this.configFile)) {
       this.createDefaultConfigFile();
     }
+
     let config = {
-      ...JSON.parse(fse.readFileSync(this.configFile, "utf8")),
+      ...JSON.parse(
+        fse
+          .readFileSync(this.configFile, "utf8")
+          .replace(
+            /(%%ECOFLOW_LOCAL_BASE%%)/g,
+            EcoFlow.EcoFlowCWD.replace(/\\/g, "\\\\")
+          )
+      ),
     };
 
     this._config = config;
@@ -124,7 +132,7 @@ export class Config implements IConfig {
         JSON.stringify(
           defaultBaseDir === path.resolve(path.dirname(this.configDir))
             ? defaultConfig
-            : defaultConfigBuilder(path.resolve(path.dirname(this.configDir))),
+            : defaultConfigBuilder("%%ECOFLOW_LOCAL_BASE%%"),
           null,
           2
         ),

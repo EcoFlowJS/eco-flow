@@ -1,4 +1,3 @@
-import _ from "lodash";
 import path from "path";
 import fse from "fs-extra";
 import dotenv from "dotenv";
@@ -10,7 +9,7 @@ import { homedir } from "os";
  * @returns None
  */
 const loadEnvironments = () => {
-  const { server, config } = ecoFlow;
+  const { _, config } = ecoFlow;
   const envDir = _.isEmpty(config.get("envDir"))
     ? process.env.configDir ||
       homedir().replace(/\\/g, "/") + "/.ecoflow/environment"

@@ -822,8 +822,6 @@ export class SchemaEditorService implements SchemaEditor {
         };
 
       throw `Could delete Record in database collection ${collectionORtableName} with id : ${dataID}`;
-
-      console.log(dataID);
     }
 
     throw "Invalid database connection specified";

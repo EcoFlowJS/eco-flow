@@ -2,6 +2,8 @@ import EcoFlow from "@ecoflow/ecoflow";
 import { CliService as ICliService, ICommand } from "@ecoflow/types";
 import { spawn, ChildProcess } from "child_process";
 import chalk from "chalk";
+import path from "path";
+import { fileURLToPath } from "url";
 
 /**
  * A class that implements the CliService interface and provides methods to start, stop, and restart a service.
@@ -19,7 +21,7 @@ export class CliService implements ICliService {
   private get generatedExecutableCode(): string {
     return `
     "use strict";
-    const EcoFlow = require("@ecoflow/ecoflow").default;
+    import EcoFlow from "@ecoflow/ecoflow";
     (async () => {
       await new EcoFlow({ cli: JSON.parse(\`${JSON.stringify(
         this.args
@@ -50,18 +52,26 @@ export class CliService implements ICliService {
    * @returns None
    */
   startService(args: ICommand = { dev: false }): void {
-    console.log(args.dev ? "development" : "production");
+    console.log(
+      `EcoFlow is running in${
+        args.dev ? "development" : "production"
+      } environment.`
+    );
 
     this.args = args;
-    this.process = spawn("node", ["-e", this.generatedExecutableCode], {
-      cwd: __dirname,
-      env: Object.assign(process.env, {
-        REBORN: 1,
-        NODE_ENV: args.dev ? "development" : "production",
-        ECOFLOW_CWD: process.cwd(),
-      }),
-      stdio: ["inherit", "inherit", "inherit", "ipc"],
-    });
+    this.process = spawn(
+      "node",
+      ["-e", this.generatedExecutableCode, "--input-type", "module"],
+      {
+        cwd: path.dirname(fileURLToPath(import.meta.url)),
+        env: Object.assign(process.env, {
+          REBORN: 1,
+          NODE_ENV: args.dev ? "development" : "production",
+          ECOFLOW_CWD: process.cwd(),
+        }),
+        stdio: ["inherit", "inherit", "inherit", "ipc"],
+      }
+    );
     this.process.on("spawn", () => {
       this.setserviceStatus = "Running";
       console.log(

@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 /**
  * Sanitize input string to prevent Cross-Site Scripting (XSS) attacks by replacing
  * special characters with their corresponding HTML entities.

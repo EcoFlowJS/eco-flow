@@ -27,7 +27,7 @@
     "fs-extra": "^11.2.0",
     "md5": "^2.3.0",
     "node-stream-zip": "^1.15.0",
-    "query-registry": "^2.6.0",
+    "query-registry": "^3.0.1",
     "thread-promises": "^1.6.3"
   },
   "repository": {

@@ -9,7 +9,7 @@ import AdmZip from "adm-zip";
 import fse from "fs-extra";
 import path from "path";
 import Helper from "@ecoflow/helper";
-import { format } from "date-and-time";
+import dateTimeFormatter from "date-and-time";
 
 const generateBackupZip = async (
   databaseConfigs: string[] | boolean,
@@ -104,10 +104,10 @@ const generateBackupZip = async (
     path.join(
       config.get("userDir"),
       "backups",
-      `backup_${format(new Date(), "DD-MM-YYYY")}_${format(
+      `backup_${dateTimeFormatter.format(
         new Date(),
-        "HH-mm-ss"
-      )}.zip`
+        "DD-MM-YYYY"
+      )}_${dateTimeFormatter.format(new Date(), "HH-mm-ss")}.zip`
     )
   );
   return backupZip.toBuffer();

@@ -3,7 +3,7 @@ import fs from "fs";
 import { ICommand } from "@ecoflow/types";
 import { CommanderCli } from "../index.js";
 import { LogLevel } from "@ecoflow/utils/logger";
-import { has } from "lodash";
+import has from "lodash/has.js";
 
 /**
  * Instantiates a new instance of the CommanderCli class.

@@ -4,24 +4,27 @@ import {
   collectionInfoOptions,
 } from "@ecoflow/types";
 import mongoose, {
-  createConnection as mongooseCreateConnection,
+  Connection,
+  Model,
   ApplySchemaOptions,
   CompileModelOptions,
   ConnectOptions,
-  Connection,
-  Model,
   ObtainDocumentType,
   ResolveSchemaOptions,
   SchemaDefinition,
   SchemaOptions,
+} from "mongoose";
+import processCollectionInfo from "./collectionInfo.helper.js";
+
+const {
+  createConnection: mongooseCreateConnection,
   Schema,
   Document,
   Query,
   Aggregate,
   SchemaType,
   VirtualType,
-} from "mongoose";
-import processCollectionInfo from "./collectionInfo.helper.js";
+} = mongoose;
 
 /**
  * A class that implements the DriverMongoose interface and provides methods for interacting with MongoDB using

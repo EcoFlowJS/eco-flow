@@ -1,4 +1,4 @@
-import { PackageSearchResult, Person } from "query-registry";
+import { PackageManifest, SearchResults } from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder.js";
 /**
  * Interface for an EcoModuleBuilder that defines multiple build methods to create ModuleSchema objects.
@@ -30,7 +30,9 @@ export interface EcoModule {
    * @param {PackageSearchResult} moduleName - The PackageSearchResult object.
    * @returns {Promise<boolean>} A promise that resolves to true if the module is an EcoFlow module, false otherwise.
    */
-  isEcoModule(moduleName: PackageSearchResult): Promise<boolean>;
+  isEcoModule(
+    moduleName: SearchResults["objects"][0]["package"]
+  ): Promise<boolean>;
 
   /**
    * Checks if a given module is an EcoFlow module by examining its keywords.
@@ -233,7 +235,7 @@ export interface ModuleSearchResults {
  */
 export interface ModuleResults {
   name: string;
-  author?: Person | string;
+  author?: string | SearchResults["objects"][0]["package"]["author"];
   versions: string[];
   isInstalled: boolean;
   inUsed: boolean;
@@ -320,7 +322,7 @@ export interface InstalledPackagesDescription {
   name: string;
   currentVersion: string;
   latestVersion: string;
-  author: string | Person;
+  author: string | SearchResults["objects"][0]["package"]["author"];
   download: number | string;
   isInUse: boolean;
   isLocalPackage: boolean;

@@ -11,28 +11,26 @@ import {
   CurrentPackageDescription,
   ModuleSearchResults,
   ModuleResults,
+  PackageJSON,
 } from "@ecoflow/types";
 import { homedir } from "node:os";
 import path from "path";
 import fse from "fs-extra";
 import Helper from "@ecoflow/helper";
-import {
-  PackageJSON,
-  PackageManifest,
-  SearchResult,
-  SearchResults,
-  getPackageDownloads,
-  getPackageManifest,
-  searchPackages,
-  getPackument,
-  Packument,
-  PackageSearchResult,
-} from "query-registry";
 import { EcoModuleBuilder } from "./EcoModuleBuilder.js";
 import { EcoModuleID } from "./Builders/EcoModuleID.js";
 import { EcoNodeBuilder } from "./EcoNodeBuilder.js";
 import TPromise from "thread-promises";
 import StreamZip from "node-stream-zip";
+import {
+  getPackageDownloads,
+  getPackageManifest,
+  getPackument,
+  PackageManifest,
+  Packument,
+  searchPackages,
+  SearchResults,
+} from "query-registry";
 
 /**
  * Represents an EcoModule that implements the EcoModule interface.
@@ -111,7 +109,7 @@ export class EcoModule implements IEcoModule {
     moduleName: string
   ): Promise<PackageManifest | null> {
     try {
-      return await getPackageManifest({ name: moduleName, cached: true });
+      return await getPackageManifest(moduleName);
     } catch {
       return null;
     }
@@ -123,10 +121,7 @@ export class EcoModule implements IEcoModule {
    * @returns {Promise<Packument>} A promise that resolves to the packument of the specified package.
    */
   private async getPackument(packageName: string): Promise<Packument> {
-    return await getPackument({
-      name: packageName,
-      cached: true,
-    });
+    return await getPackument(packageName);
   }
 
   /**
@@ -137,12 +132,7 @@ export class EcoModule implements IEcoModule {
    */
   private async getDownloadCount(moduleName: string): Promise<string | number> {
     try {
-      return (
-        await getPackageDownloads({
-          name: moduleName,
-          cached: true,
-        })
-      ).downloads;
+      return (await getPackageDownloads(moduleName, "last-month")).downloads;
     } catch {
       return "N/A";
     }
@@ -156,14 +146,11 @@ export class EcoModule implements IEcoModule {
   private async searchPackages(moduleName: string): Promise<SearchResults> {
     const result = {
       ...(await searchPackages({
-        query: {
-          text: `${moduleName} keywords:EcoFlow EcoFlowModule`,
-        },
-        cached: true,
+        text: `${moduleName} keywords:EcoFlow EcoFlowModule`,
       })),
     };
 
-    const newObject: SearchResult[] = [];
+    const newObject: SearchResults["objects"] = [];
     for await (const object of result.objects) {
       if (await this.isEcoModule(object.package)) newObject.push(object);
     }
@@ -385,7 +372,7 @@ export class EcoModule implements IEcoModule {
    * @returns {Promise<boolean>} A promise that resolves to true if the module is an EcoFlow module, false otherwise.
    */
   async isEcoModule(
-    moduleName: string | PackageSearchResult
+    moduleName: string | SearchResults["objects"][0]["package"]
   ): Promise<boolean> {
     const { _ } = ecoFlow;
 
@@ -505,6 +492,7 @@ export class EcoModule implements IEcoModule {
    * detailed information about the searched module.
    */
   async searchModule(moduleName: string): Promise<ModuleSearchResults> {
+    const { _ } = ecoFlow;
     const { objects: searchResults, total } = await this.searchPackages(
       moduleName
     );
@@ -556,12 +544,15 @@ export class EcoModule implements IEcoModule {
           resultPayload.inUsed = installedModule[0].isInUse;
         }
 
-        const { distTags, versions, gitRepository } = await packument;
+        const pkg = await packument;
+        const { versions, repository } = pkg;
 
         resultPayload.versions = Object.keys(versions);
-        resultPayload.latestVersion = distTags.latest;
-        resultPayload.gitRepository = gitRepository
-          ? gitRepository.url
+        resultPayload.latestVersion = pkg["dist-tags"].latest;
+        resultPayload.gitRepository = repository
+          ? _.isString(repository)
+            ? repository
+            : repository.url
           : undefined;
 
         modules.push(resultPayload);
@@ -779,7 +770,7 @@ export class EcoModule implements IEcoModule {
   get availablePackagesCounts(): Promise<Number> {
     return new Promise<Number>(async (resolve, reject) => {
       searchPackages({
-        query: { text: "keywords:EcoFlow EcoFlowModule" },
+        text: "keywords:EcoFlow EcoFlowModule",
       }).then(({ total }) => resolve(total), reject);
     });
   }

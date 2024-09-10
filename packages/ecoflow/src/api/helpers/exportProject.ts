@@ -2,7 +2,7 @@ import path from "path";
 import AdmZip from "adm-zip";
 import generateBackupZip from "./generateBackupZip.js";
 import { Builder } from "@ecoflow/utils/builder";
-import { format } from "date-and-time";
+import dateTimeFormatter from "date-and-time";
 
 const exportProject = async (): Promise<Buffer> => {
   const { _, service, config } = ecoFlow;
@@ -47,10 +47,10 @@ const exportProject = async (): Promise<Buffer> => {
     path.join(
       config.get("userDir"),
       "exports",
-      `export_${format(new Date(), "DD-MM-YYYY")}_${format(
+      `export_${dateTimeFormatter.format(
         new Date(),
-        "HH-mm-ss"
-      )}.zip`
+        "DD-MM-YYYY"
+      )}_${dateTimeFormatter.format(new Date(), "HH-mm-ss")}.zip`
     )
   );
 

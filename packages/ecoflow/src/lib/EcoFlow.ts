@@ -25,6 +25,8 @@ import loadEnvironments from "../helper/env.helper.js";
 import { EcoFlowEditor } from "@ecoflow/flows";
 import defaultModules from "../defaults/defaultModules.js";
 import { ModuleConfigs } from "./ModuleConfigs.js";
+import { createRequire } from "module";
+import fse from "fs-extra";
 
 /**
  * Defines an interface for process commands with two properties: STOP and RESTART.
@@ -231,8 +233,7 @@ class EcoFlow implements IEcoFlow {
    * @returns The version number as a string.
    */
   get Version(): string {
-    let packageVersion: string = require("../../package.json").version;
-    return packageVersion;
+    return "packageJSON.version";
   }
 
   /**
@@ -240,8 +241,7 @@ class EcoFlow implements IEcoFlow {
    * @returns The version of the package as a string.
    */
   static get Version(): string {
-    let packageVersion: string = require("../../package.json").version;
-    return packageVersion;
+    return "packageJSON.version";
   }
 
   /**

@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import { format } from "date-and-time";
+import dateTimeFormatter from "date-and-time";
 
 const exportTemplate = async (): Promise<Buffer> => {
   const { ecoModule, flowEditor, config } = ecoFlow;
@@ -32,10 +32,10 @@ const exportTemplate = async (): Promise<Buffer> => {
     path.join(
       config.get("userDir"),
       "exports",
-      `export_${format(new Date(), "DD-MM-YYYY")}_${format(
+      `export_${dateTimeFormatter.format(
         new Date(),
-        "HH-mm-ss"
-      )}.json`
+        "DD-MM-YYYY"
+      )}_${dateTimeFormatter.format(new Date(), "HH-mm-ss")}.json`
     ),
     template,
     "utf8"

@@ -2,7 +2,7 @@ import { Upload as IUpload } from "@ecoflow/types";
 import type { File } from "formidable";
 import path from "path";
 import fse from "fs-extra";
-import { format } from "date-and-time";
+import dateTimeFormatter from "date-and-time";
 
 /* The Upload class provides methods for filtering and uploading files to a specified
 directory with customizable naming conventions. */
@@ -142,10 +142,13 @@ export class Upload implements IUpload {
 
     for await (const file of this._files) {
       const { originalFilename, filepath } = file;
-      const name = `${this._prefix}_${format(
+      const name = `${this._prefix}_${dateTimeFormatter.format(
         new Date(),
         this._dateformat
-      )}_${format(new Date(), this._timeformat)}_${originalFilename}`;
+      )}_${dateTimeFormatter.format(
+        new Date(),
+        this._timeformat
+      )}_${originalFilename}`;
 
       await fse.ensureDir(this._uploadDirectory);
       await fse.copyFile(filepath, path.join(this._uploadDirectory, name));
